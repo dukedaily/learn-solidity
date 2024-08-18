@@ -8,6 +8,13 @@
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
+we are using:  `1.79.0`
+
+```sh
+➜  source_code git:(main) rustc --version
+rustc 1.79.0 (129f3b996 2024-06-10)
+```
+
 ### Solana cli
 
 ```sh
@@ -15,14 +22,30 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 sh -c "$(curl -sSfL https://release.solana.com/stable/install)"
 ```
 
-### Anchor
+we are using: `1.18.18`
 
 ```sh
-# install anchor
+➜  source_code git:(main) solana --version
+solana-cli 1.18.18 (src:83047136; feat:4215500110, client:SolanaLabs)
+```
+
+### Anchor
+
+install anchor:
+
+```sh
+
 cargo install --git https://github.com/coral-xyz/anchor avm --locked --force
 
 avm install latest
 avm use latest
+```
+
+we are using: `0.30.1`
+
+```sh
+➜  source_code git:(main) anchor --version
+anchor-cli 0.30.1
 ```
 
 ## Create Project
@@ -62,8 +85,6 @@ pub mod day_1 {
 #[derive(Accounts)]
 pub struct Initialize {}
 ```
-
-
 
 ### Config Solana network
 
@@ -123,8 +144,6 @@ solana-install init 1.18.18
 
 >  solana is too new, chat-gpt won't help much sometimes, still needs to google online.
 
-
-
 ### Create a new wallet
 
 ```sh
@@ -149,7 +168,14 @@ solana-keygen pubkey ~/.config/solana/id.json
 HjU6xSZme7ER6Qhk841nczwXijBZ9e1GWLqdPxW6gS9w
 ```
 
+or by command:
 
+```sh
+solana address
+
+# output:
+HjU6xSZme7ER6Qhk841nczwXijBZ9e1GWLqdPxW6gS9w
+```
 
 ### Sol Airdrop
 
@@ -169,15 +195,11 @@ Signature: xTrkhn7tad5tMMS9dn3ZA12EtR5LsoLaUYrUjN8gjQZYMkBTs55LVGQS3dLuKbRmMoXoW
 
 ![image-20240720122344088](./assets/image-20240720122344088.png)
 
-
-
 ## Key Takeaways
 
 - Cargo：rust package managem tool
 - Rustc：rust complier
 - Anchor：[solana framework](https://www.anchor-lang.com/)
-
-
 
 ## Links
 

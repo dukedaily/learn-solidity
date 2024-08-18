@@ -16,3 +16,18 @@
 ## Library
 
 1. solana-web3.js: https://solana-labs.github.io/solana-web3.js/, similiar to ether.js in solidity
+
+
+
+## Anchor Cmds
+
+```sh
+anchor idl init -f <target/idl/xxx.json>
+```
+
+
+
+## Tips
+
+1. The program id is generated during `anchor build`, you may need to run `anchor kyes sync ` after build.
+2. 
