@@ -3,7 +3,9 @@
 1. 本教程可以理解为个人知识笔记，仅用于学习使用，不做商业用途；
 2. 部分内容参考了其他博主的创作，涉及引用时会附上原文链接，如有侵权，欢迎指出。
 
+## Star History
 
+[![Star History Chart](https://api.star-history.com/svg?repos=dukedaily/solidity-expert&type=Date)](https://star-history.com/#dukedaily/solidity-expert&Date)
 
 ## 项目概述
 
