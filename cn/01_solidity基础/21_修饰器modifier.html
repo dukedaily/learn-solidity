@@ -36,6 +36,10 @@
                 
             
                 
+                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
+                
+            
+                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3024,56 +3028,56 @@
 <li>参数校验</li>
 <li>防止重入攻击等</li>
 </ol>
-<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
-pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
+<pre><code class="lang-js">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.13;
 
 contract FunctionModifier {
-    <span class="hljs-comment">// We will use these variables to demonstrate how to use modifiers.</span>
+    // We will use these variables to demonstrate how to use modifiers.
     address public owner;
-    uint public x = <span class="hljs-number">10</span>;
+    uint public x = 10;
     bool public locked;
 
-    <span class="hljs-function"><span class="hljs-title">constructor</span>(<span class="hljs-params"></span>)</span> {
-        <span class="hljs-comment">// Set the transaction sender as the owner of the contract.</span>
+    constructor() {
+        // Set the transaction sender as the owner of the contract.
         owner = msg.sender;
     }
 
-    <span class="hljs-comment">// 1. Modifier to check that the caller is the owner of the contract.</span>
-    modifier <span class="hljs-function"><span class="hljs-title">onlyOwner</span>(<span class="hljs-params"></span>)</span> {
-        <span class="hljs-built_in">require</span>(msg.sender == owner, <span class="hljs-string">&quot;Not owner&quot;</span>);
-        <span class="hljs-comment">// Underscore is a special character only used inside</span>
-        <span class="hljs-comment">// a function modifier and it tells Solidity to</span>
-        <span class="hljs-comment">// execute the rest of the code.</span>
+    // 1. Modifier to check that the caller is the owner of the contract.
+    modifier onlyOwner() {
+        require(msg.sender == owner, &quot;Not owner&quot;);
+        // Underscore is a special character only used inside
+        // a function modifier and it tells Solidity to
+        // execute the rest of the code.
         _;
     }
 
-    <span class="hljs-comment">// 2. Modifiers can take inputs. This modifier checks that the</span>
-    <span class="hljs-comment">// address passed in is not the zero address.</span>
-    modifier <span class="hljs-function"><span class="hljs-title">validAddress</span>(<span class="hljs-params">address _addr</span>)</span> {
-        <span class="hljs-built_in">require</span>(_addr != address(<span class="hljs-number">0</span>), <span class="hljs-string">&quot;Not valid address&quot;</span>);
+    // 2. Modifiers can take inputs. This modifier checks that the
+    // address passed in is not the zero address.
+    modifier validAddress(address _addr) {
+        require(_addr != address(0), &quot;Not valid address&quot;);
         _;
     }
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">changeOwner</span>(<span class="hljs-params">address _newOwner</span>) <span class="hljs-title">public</span> <span class="hljs-title">onlyOwner</span> <span class="hljs-title">validAddress</span>(<span class="hljs-params">_newOwner</span>) </span>{
+    function changeOwner(address _newOwner) public onlyOwner validAddress(_newOwner) {
         owner = _newOwner;
     }
 
-    <span class="hljs-comment">// Modifiers can be called before and / or after a function.</span>
-    <span class="hljs-comment">// This modifier prevents a function from being called while</span>
-    <span class="hljs-comment">// it is still executing.</span>
-    modifier <span class="hljs-function"><span class="hljs-title">noReentrancy</span>(<span class="hljs-params"></span>)</span> {
-        <span class="hljs-built_in">require</span>(!locked, <span class="hljs-string">&quot;No reentrancy&quot;</span>);
+    // Modifiers can be called before and / or after a function.
+    // This modifier prevents a function from being called while
+    // it is still executing.
+    modifier noReentrancy() {
+        require(!locked, &quot;No reentrancy&quot;);
 
-        locked = <span class="hljs-literal">true</span>;
+        locked = true;
         _;
-        locked = <span class="hljs-literal">false</span>;
+        locked = false;
     }
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">decrement</span>(<span class="hljs-params">uint i</span>) <span class="hljs-title">public</span> <span class="hljs-title">noReentrancy</span> </span>{
+    function decrement(uint i) public noReentrancy {
         x -= i;
 
-        <span class="hljs-keyword">if</span> (i &gt; <span class="hljs-number">1</span>) {
-            decrement(i - <span class="hljs-number">1</span>);
+        if (i &gt; 1) {
+            decrement(i - 1);
         }
     }
 }
@@ -3105,7 +3109,7 @@ contract FunctionModifier {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第21节:修饰器modifier","level":"1.8.21","depth":2,"next":{"title":"第22节:事件Event","level":"1.8.22","depth":2,"path":"01_solidity基础/22_事件Event.md","ref":"01_solidity基础/22_事件Event.md","articles":[]},"previous":{"title":"第20节:error","level":"1.8.20","depth":2,"path":"01_solidity基础/20_error.md","ref":"01_solidity基础/20_error.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"01_solidity基础/21_修饰器modifier.md","mtime":"2023-09-23T13:08:20.019Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-19T22:08:50.792Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第21节:修饰器modifier","level":"1.8.21","depth":2,"next":{"title":"第22节:事件Event","level":"1.8.22","depth":2,"path":"01_solidity基础/22_事件Event.md","ref":"01_solidity基础/22_事件Event.md","articles":[]},"previous":{"title":"第20节:error","level":"1.8.20","depth":2,"path":"01_solidity基础/20_error.md","ref":"01_solidity基础/20_error.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"01_solidity基础/21_修饰器modifier.md","mtime":"2023-09-23T13:08:20.019Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3188,6 +3192,14 @@ contract FunctionModifier {
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

@@ -36,6 +36,10 @@
                 
             
                 
+                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
+                
+            
+                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3026,47 +3030,47 @@
 </li>
 <li>攻击案例：<a href="https://halborn.com/explained-the-qubit-hack-january-2022/" target="_blank">QBridege安全事件</a></li>
 </ol>
-<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
-pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
+<pre><code class="lang-js">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.13;
 
-<span class="hljs-keyword">import</span> <span class="hljs-string">&quot;hardhat/console.sol&quot;</span>;
+import &quot;hardhat/console.sol&quot;;
 
 contract Test {        
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">TestEOA</span>(<span class="hljs-params">uint _num</span>) <span class="hljs-title">public</span> <span class="hljs-title">payable</span> </span>{
-      address EOA = <span class="hljs-number">0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2</span>;
+    function TestEOA(uint _num) public payable {
+      address EOA = 0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2;
       (bool success, bytes memory data) = address(EOA).call(
-        abi.encodeWithSignature(<span class="hljs-string">&quot;mint(uint256)&quot;</span>, _num)
+        abi.encodeWithSignature(&quot;mint(uint256)&quot;, _num)
       );
 
-            <span class="hljs-comment">// 这个居然是true，这个存在攻击可能</span>
-      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;result:&quot;</span>, success);
+            // 这个居然是true，这个存在攻击可能
+      console.log(&quot;result:&quot;, success);
     }
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">TestNotExist</span>(<span class="hljs-params">uint _num</span>) <span class="hljs-title">public</span> <span class="hljs-title">payable</span> </span>{
-      (bool success, bytes memory data) = address(<span class="hljs-built_in">this</span>).call(
-        abi.encodeWithSignature(<span class="hljs-string">&quot;notExist(uint256)&quot;</span>, _num)
+    function TestNotExist(uint _num) public payable {
+      (bool success, bytes memory data) = address(this).call(
+        abi.encodeWithSignature(&quot;notExist(uint256)&quot;, _num)
       );
 
-            <span class="hljs-comment">// true，因为执行了fallback</span>
-            <span class="hljs-comment">// 如果fallback不存在，则返回false，但是不会抛异常</span>
-      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;result:&quot;</span>, success);  
+            // true，因为执行了fallback
+            // 如果fallback不存在，则返回false，但是不会抛异常
+      console.log(&quot;result:&quot;, success);  
     }
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">TestExist</span>(<span class="hljs-params">uint _num</span>) <span class="hljs-title">public</span> <span class="hljs-title">payable</span> </span>{
-      (bool success, bytes memory data) = address(<span class="hljs-built_in">this</span>).call(
-          abi.encodeWithSignature(<span class="hljs-string">&quot;mint(uint256)&quot;</span>, _num)
+    function TestExist(uint _num) public payable {
+      (bool success, bytes memory data) = address(this).call(
+          abi.encodeWithSignature(&quot;mint(uint256)&quot;, _num)
       );
 
-      <span class="hljs-comment">// true</span>
-      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;result:&quot;</span>, success);
+      // true
+      console.log(&quot;result:&quot;, success);
     }
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">mint</span>(<span class="hljs-params">uint _num</span>) <span class="hljs-title">public</span> <span class="hljs-title">payable</span> </span>{
-        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;mint called:&quot;</span>, _num);
+    function mint(uint _num) public payable {
+        console.log(&quot;mint called:&quot;, _num);
     }
 
     fallback() external payable {
-      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;fallback called!&quot;</span>);
+      console.log(&quot;fallback called!&quot;);
     }
 }
 </code></pre>
@@ -3102,7 +3106,7 @@ contract Test {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第17节:安全事故7-用EOA来call方法攻击","level":"1.11.11","depth":2,"next":{"title":"第18节:安全事故8-可燃烧代币攻击","level":"1.11.12","depth":2,"path":"04_合约攻击/18_安全事故8-可燃烧代币攻击.md","ref":"04_合约攻击/18_安全事故8-可燃烧代币攻击.md","articles":[]},"previous":{"title":"第16节:安全事故6-msgvalue持久化问题","level":"1.11.10","depth":2,"path":"04_合约攻击/16_安全事故6-msgvalue持久化问题.md","ref":"04_合约攻击/16_安全事故6-msgvalue持久化问题.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"04_合约攻击/17_安全事故7-用EOA来call方法攻击.md","mtime":"2023-03-21T14:01:27.000Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-19T22:08:50.792Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第17节:安全事故7-用EOA来call方法攻击","level":"1.11.11","depth":2,"next":{"title":"第18节:安全事故8-可燃烧代币攻击","level":"1.11.12","depth":2,"path":"04_合约攻击/18_安全事故8-可燃烧代币攻击.md","ref":"04_合约攻击/18_安全事故8-可燃烧代币攻击.md","articles":[]},"previous":{"title":"第16节:安全事故6-msgvalue持久化问题","level":"1.11.10","depth":2,"path":"04_合约攻击/16_安全事故6-msgvalue持久化问题.md","ref":"04_合约攻击/16_安全事故6-msgvalue持久化问题.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"04_合约攻击/17_安全事故7-用EOA来call方法攻击.md","mtime":"2023-03-21T14:01:27.000Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3185,6 +3189,14 @@ contract Test {
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

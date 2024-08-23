@@ -36,6 +36,10 @@
                 
             
                 
+                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
+                
+            
+                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3025,26 +3029,26 @@
 </ul>
 </li>
 </ol>
-<pre><code class="lang-sh">    describe(<span class="hljs-string">&apos;Create Offer&apos;</span>, () =&gt; {
-        it.only(<span class="hljs-string">&apos;should faild to call createOffer directly&apos;</span>, async () =&gt; {
-            <span class="hljs-built_in">let</span> last = await getOffer(lastOffer)
-            await expect(last.createOffer(tokens, info)).to.revertedWith(<span class="hljs-string">&quot;Bazaar: permission denied&quot;</span>)
+<pre><code class="lang-sh">    describe(&apos;Create Offer&apos;, () =&gt; {
+        it.only(&apos;should faild to call createOffer directly&apos;, async () =&gt; {
+            let last = await getOffer(lastOffer)
+            await expect(last.createOffer(tokens, info)).to.revertedWith(&quot;Bazaar: permission denied&quot;)
         })
     })
 </code></pre>
 <ol>
 <li>测试单个文件</li>
 </ol>
-<pre><code class="lang-sh">npx hardhat <span class="hljs-built_in">test</span> <span class="hljs-built_in">test</span>/xxx.spec.ts
+<pre><code class="lang-sh">npx hardhat test test/xxx.spec.ts
 </code></pre>
 <ol>
 <li>如果测试过程中需要改变块高</li>
 </ol>
-<pre><code class="lang-sh">async <span class="hljs-keyword">function</span> mineBlocks(blockNumber) {
-  <span class="hljs-keyword">while</span> (blockNumber &gt; 0) {
+<pre><code class="lang-sh">async function mineBlocks(blockNumber) {
+  while (blockNumber &gt; 0) {
     blockNumber--;
     await hre.network.provider.request({
-      method: <span class="hljs-string">&quot;evm_mine&quot;</span>,
+      method: &quot;evm_mine&quot;,
     });
   }
 }
@@ -3055,24 +3059,22 @@
 <li><p>Sometimes when we run <code>test</code>, it takes very long to execute why?  （network issue, disconnect the network may work）</p>
 </li>
 <li><p><strong>Be sure never call any function(make any assignment) out side of beforeEach or a describe</strong> or it will fail</p>
-<pre><code class="lang-js">describe(<span class="hljs-string">&quot;Rivers&quot;</span>, <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
-  <span class="hljs-keyword">let</span> accounts: SignerWithAddress[]
-  <span class="hljs-keyword">let</span> compIns: Comp
-  <span class="hljs-keyword">let</span> unitrollerIns: Unitroller
-  <span class="hljs-keyword">let</span> comptrollerIns: Comptroller
-  <span class="hljs-keyword">let</span> sPriceOracleIns: SimplePriceOracle
-  <span class="hljs-keyword">let</span> container: Box[] = [];
-  <span class="hljs-comment">// accounts = await hre.ethers.getSigners();  &lt;-- error</span>
+<pre><code class="lang-js">describe(&quot;Rivers&quot;, async function () {
+  let accounts: SignerWithAddress[]
+  let compIns: Comp
+  let unitrollerIns: Unitroller
+  let comptrollerIns: Comptroller
+  let sPriceOracleIns: SimplePriceOracle
+  let container: Box[] = [];
+  // accounts = await hre.ethers.getSigners();  <-- error beforeeach(async ()> {
+    console.log(&quot;begin beforeEach&quot;);
+    accounts = await hre.ethers.getSigners();
+    console.log(&quot;accounts len: &quot;, accounts.length);
 
-  beforeEach(<span class="hljs-keyword">async</span> () =&gt; {
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;begin beforeEach&quot;</span>);
-    accounts = <span class="hljs-keyword">await</span> hre.ethers.getSigners();
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;accounts len: &quot;</span>, accounts.length);
-
-    <span class="hljs-keyword">await</span> loadFixture(deployOpenEdenFixture);
+    await loadFixture(deployOpenEdenFixture);
   })
 })
-</code></pre>
+</--></code></pre>
 </li>
 </ol>
 
@@ -3102,7 +3104,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第2节:单元测试","level":"1.12.2","depth":2,"next":{"title":"第3节:fork主网","level":"1.12.3","depth":2,"path":"05_hardhat框架/03_fork主网.md","ref":"05_hardhat框架/03_fork主网.md","articles":[]},"previous":{"title":"第1节:QuickStart","level":"1.12.1","depth":2,"path":"05_hardhat框架/01_QuickStart.md","ref":"05_hardhat框架/01_QuickStart.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"05_hardhat框架/02_单元测试.md","mtime":"2023-09-23T13:26:29.372Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-19T22:08:50.792Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第2节:单元测试","level":"1.12.2","depth":2,"next":{"title":"第3节:fork主网","level":"1.12.3","depth":2,"path":"05_hardhat框架/03_fork主网.md","ref":"05_hardhat框架/03_fork主网.md","articles":[]},"previous":{"title":"第1节:QuickStart","level":"1.12.1","depth":2,"path":"05_hardhat框架/01_QuickStart.md","ref":"05_hardhat框架/01_QuickStart.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"05_hardhat框架/02_单元测试.md","mtime":"2023-09-23T13:26:29.372Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3185,6 +3187,14 @@
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

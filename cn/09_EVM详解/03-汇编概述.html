@@ -36,6 +36,10 @@
                 
             
                 
+                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
+                
+            
+                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3038,17 +3042,17 @@ a b add
 <li>stringutils：<a href="https://github.com/Arachnid/solidity-stringutils/blob/master/src/strings.sol" target="_blank">https://github.com/Arachnid/solidity-stringutils/blob/master/src/strings.sol</a></li>
 </ol>
 <h2 id="节约gas">节约gas</h2>
-<pre><code class="lang-js"> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addAssembly</span>(<span class="hljs-params">uint x, uint y</span>) <span class="hljs-title">public</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint</span>) </span>{
+<pre><code class="lang-js"> function addAssembly(uint x, uint y) public pure returns (uint) {
       assembly {
-          <span class="hljs-comment">// Add some code here</span>
-          <span class="hljs-keyword">let</span> result := add(x, y)
-          mstore(<span class="hljs-number">0x0</span>, result)
-          <span class="hljs-keyword">return</span>(<span class="hljs-number">0x0</span>, <span class="hljs-number">32</span>)
+          // Add some code here
+          let result := add(x, y)
+          mstore(0x0, result)
+          return(0x0, 32)
       }
   }
 
-  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addSolidity</span>(<span class="hljs-params">uint x, uint y</span>) <span class="hljs-title">public</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint</span>) </span>{
-      <span class="hljs-keyword">return</span> x + y;
+  function addSolidity(uint x, uint y) public pure returns (uint) {
+      return x + y;
   }
 </code></pre>
 <h2 id="增强功能">增强功能</h2>
@@ -3062,56 +3066,56 @@ a b add
 <p>使用时需要注意：每个操作码是有参数的，例如指定内存地址，起始位置，偏移量等，这些在solidity中不需要指定。</p>
 <h2 id="1-引入汇编">1. 引入汇编</h2>
 <pre><code class="lang-js">assembly {
- <span class="hljs-comment">// some assembly code here</span>
+ // some assembly code here
 }
 </code></pre>
 <p>在assembly块内的开发语言为Yul，且多个代码块之前的变量不共享，各自独立。</p>
 <pre><code class="lang-js">assembly { 
-    <span class="hljs-keyword">let</span> x := <span class="hljs-number">2</span>
+    let x := 2
 }
 
 assembly {
-    <span class="hljs-keyword">let</span> y := x          <span class="hljs-comment">// Error</span>
+    let y := x          // Error
 }
-<span class="hljs-comment">// DeclarationError: identifier not found</span>
-<span class="hljs-comment">// let y := x</span>
-<span class="hljs-comment">// ^</span>
+// DeclarationError: identifier not found
+// let y := x
+// ^
 </code></pre>
 <h2 id="2-简单汇编示例">2. 简单汇编示例</h2>
-<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addition</span>(<span class="hljs-params">uint x, uint y</span>) <span class="hljs-title">public</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint</span>) </span>{
+<pre><code class="lang-js">function addition(uint x, uint y) public pure returns (uint) {
  assembly {
-    <span class="hljs-keyword">let</span> result := add(x, y)   <span class="hljs-comment">// x + y</span>
-    mstore(<span class="hljs-number">0x0</span>, result)       <span class="hljs-comment">// 在内存中保存结果</span>
-    <span class="hljs-keyword">return</span>(<span class="hljs-number">0x0</span>, <span class="hljs-number">32</span>)           <span class="hljs-comment">// 从内存中返回32字节</span>
+    let result := add(x, y)   // x + y
+    mstore(0x0, result)       // 在内存中保存结果
+    return(0x0, 32)           // 从内存中返回32字节
  }
 }
 </code></pre>
 <p>详解：</p>
-<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addition</span>(<span class="hljs-params">uint x, uint y</span>) <span class="hljs-title">public</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint</span>) </span>{ 
+<pre><code class="lang-js">function addition(uint x, uint y) public pure returns (uint) { 
  assembly { 
-     <span class="hljs-comment">// 创建一个新的变量 result</span>
-     <span class="hljs-comment">//     -&gt; 使用add操作码计算x+y</span>
-     <span class="hljs-comment">//     -&gt; 将计算结果赋值给变量result </span>
-     <span class="hljs-keyword">let</span> result := add(x, y)   <span class="hljs-comment">// x + y </span>
+     // 创建一个新的变量 result
+     //     -&gt; 使用add操作码计算x+y
+     //     -&gt; 将计算结果赋值给变量result 
+     let result := add(x, y)   // x + y 
 
-     <span class="hljs-comment">// 使用mstore操作码</span>
-     <span class="hljs-comment">//     -&gt; 将result变量的值存入内存</span>
-     <span class="hljs-comment">//     -&gt; 指定内存地址 0x0 </span>
-     mstore(<span class="hljs-number">0x0</span>, result)       <span class="hljs-comment">// 将结果存入内存</span>
+     // 使用mstore操作码
+     //     -&gt; 将result变量的值存入内存
+     //     -&gt; 指定内存地址 0x0 
+     mstore(0x0, result)       // 将结果存入内存
 
-     <span class="hljs-comment">// 从内存地址0x返回32字节</span>
-     <span class="hljs-keyword">return</span>(<span class="hljs-number">0x0</span>, <span class="hljs-number">32</span>) 
+     // 从内存地址0x返回32字节
+     return(0x0, 32) 
  }
 }
 </code></pre>
 <h2 id="3-定义变量与赋值">3. 定义变量与赋值</h2>
 <p>使用let定义变量，使用 := 进行赋值，自动初始化为0</p>
 <pre><code class="lang-js">assembly {
-    <span class="hljs-keyword">let</span> x := <span class="hljs-number">7</span> 
-     <span class="hljs-keyword">let</span> y := add(x, <span class="hljs-number">3</span>)
-  <span class="hljs-comment">// 对从0x00开始，20个字节的内容进行hash处理</span>
-     <span class="hljs-keyword">let</span> z := add(keccak256(<span class="hljs-number">0x0</span>, <span class="hljs-number">0x20</span>), div(slength, <span class="hljs-number">32</span>)) 
-     <span class="hljs-keyword">let</span> n  <span class="hljs-comment">// 自动初始化为 n = 0</span>
+    let x := 7 
+     let y := add(x, 3)
+  // 对从0x00开始，20个字节的内容进行hash处理
+     let z := add(keccak256(0x0, 0x20), div(slength, 32)) 
+     let n  // 自动初始化为 n = 0
 }
 </code></pre>
 <h2 id="4let指令的作用">4.let指令的作用</h2>
@@ -3126,35 +3130,35 @@ assembly {
 <h2 id="6-汇编中的字面量">6. 汇编中的字面量</h2>
 <p>字符串字面量最多包含32字符。（每个字符1byte，所以最大为32byte，正好时一个槽位）</p>
 <pre><code class="lang-js">assembly { 
- <span class="hljs-keyword">let</span> a := <span class="hljs-number">0x123</span>             <span class="hljs-comment">// 16进制</span>
- <span class="hljs-keyword">let</span> b := <span class="hljs-number">42</span>                <span class="hljs-comment">// 10进制</span>
- <span class="hljs-keyword">let</span> c := <span class="hljs-string">&quot;hello world&quot;</span>     <span class="hljs-comment">// 字符串</span>
+ let a := 0x123             // 16进制
+ let b := 42                // 10进制
+ let c := &quot;hello world&quot;     // 字符串
 
- <span class="hljs-keyword">let</span> d := <span class="hljs-string">&quot;very long string more than 32 bytes&quot;</span> <span class="hljs-comment">// 超长字符串，出错！</span>
+ let d := &quot;very long string more than 32 bytes&quot; // 超长字符串，出错！
 }
 
-<span class="hljs-comment">// TypeError: String literal too long (35 &lt; 32)</span>
-<span class="hljs-comment">// let d := &quot;really long string more than 32 bytes&quot;</span>
-<span class="hljs-comment">//</span>
+// TypeError: String literal too long (35 &lt; 32)
+// let d := &quot;really long string more than 32 bytes&quot;
+//
 </code></pre>
 <h2 id="7-块和作用域">7. 块和作用域</h2>
 <pre><code class="lang-js">assembly { 
- <span class="hljs-keyword">let</span> x := <span class="hljs-number">3</span>          <span class="hljs-comment">// x在各处可见</span>
+ let x := 3          // x在各处可见
 
- <span class="hljs-comment">// Scope 1 </span>
+ // Scope 1 
  { 
- <span class="hljs-keyword">let</span> y := x     <span class="hljs-comment">// ok </span>
- }  <span class="hljs-comment">// 到此处会销毁y</span>
+ let y := x     // ok 
+ }  // 到此处会销毁y
 
- <span class="hljs-comment">// Scope 2 </span>
+ // Scope 2 
  { 
- <span class="hljs-keyword">let</span> z := y     <span class="hljs-comment">// Error </span>
- } <span class="hljs-comment">// 到此处会销毁z</span>
+ let z := y     // Error 
+ } // 到此处会销毁z
 }
 
-<span class="hljs-comment">// DeclarationError: identifier not found</span>
-<span class="hljs-comment">// let z := y</span>
-<span class="hljs-comment">// ^</span>
+// DeclarationError: identifier not found
+// let z := y
+// ^
 </code></pre>
 
                                 
@@ -3183,7 +3187,7 @@ assembly {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第3节:汇编概述","level":"1.16.3","depth":2,"next":{"title":"第十章:EVM反汇编","level":"1.17","depth":1,"path":"10_EVM反汇编/README.md","ref":"10_EVM反汇编/README.md","articles":[{"title":"第1节:反汇编初步了解","level":"1.17.1","depth":2,"path":"10_EVM反汇编/01_反汇编初步了解.md","ref":"10_EVM反汇编/01_反汇编初步了解.md","articles":[]},{"title":"第2节:合约部署都做了啥","level":"1.17.2","depth":2,"path":"10_EVM反汇编/02_合约部署都做了啥.md","ref":"10_EVM反汇编/02_合约部署都做了啥.md","articles":[]},{"title":"第3节:各种类型是如何存储的","level":"1.17.3","depth":2,"path":"10_EVM反汇编/03_各种类型是如何存储的.md","ref":"10_EVM反汇编/03_各种类型是如何存储的.md","articles":[]},{"title":"第4节:五种程序终止命令介绍","level":"1.17.4","depth":2,"path":"10_EVM反汇编/04_五种程序终止命令介绍.md","ref":"10_EVM反汇编/04_五种程序终止命令介绍.md","articles":[]},{"title":"第5节:function执行流程","level":"1.17.5","depth":2,"path":"10_EVM反汇编/05_function执行流程.md","ref":"10_EVM反汇编/05_function执行流程.md","articles":[]},{"title":"第6节:智能合约Layout分析","level":"1.17.6","depth":2,"path":"10_EVM反汇编/06_智能合约Layout分析.md","ref":"10_EVM反汇编/06_智能合约Layout分析.md","articles":[]},{"title":"第7节:合约间调用","level":"1.17.7","depth":2,"path":"10_EVM反汇编/07_合约间调用.md","ref":"10_EVM反汇编/07_合约间调用.md","articles":[]}]},"previous":{"title":"第2节:EVM-PUZZLES挑战","level":"1.16.2","depth":2,"path":"09_EVM详解/02-evm-puzzles.md","ref":"09_EVM详解/02-evm-puzzles.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"09_EVM详解/03-汇编概述.md","mtime":"2023-03-21T14:01:27.000Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-19T22:08:50.792Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第3节:汇编概述","level":"1.16.3","depth":2,"next":{"title":"第十章:EVM反汇编","level":"1.17","depth":1,"path":"10_EVM反汇编/README.md","ref":"10_EVM反汇编/README.md","articles":[{"title":"第1节:反汇编初步了解","level":"1.17.1","depth":2,"path":"10_EVM反汇编/01_反汇编初步了解.md","ref":"10_EVM反汇编/01_反汇编初步了解.md","articles":[]},{"title":"第2节:合约部署都做了啥","level":"1.17.2","depth":2,"path":"10_EVM反汇编/02_合约部署都做了啥.md","ref":"10_EVM反汇编/02_合约部署都做了啥.md","articles":[]},{"title":"第3节:各种类型是如何存储的","level":"1.17.3","depth":2,"path":"10_EVM反汇编/03_各种类型是如何存储的.md","ref":"10_EVM反汇编/03_各种类型是如何存储的.md","articles":[]},{"title":"第4节:五种程序终止命令介绍","level":"1.17.4","depth":2,"path":"10_EVM反汇编/04_五种程序终止命令介绍.md","ref":"10_EVM反汇编/04_五种程序终止命令介绍.md","articles":[]},{"title":"第5节:function执行流程","level":"1.17.5","depth":2,"path":"10_EVM反汇编/05_function执行流程.md","ref":"10_EVM反汇编/05_function执行流程.md","articles":[]},{"title":"第6节:智能合约Layout分析","level":"1.17.6","depth":2,"path":"10_EVM反汇编/06_智能合约Layout分析.md","ref":"10_EVM反汇编/06_智能合约Layout分析.md","articles":[]},{"title":"第7节:合约间调用","level":"1.17.7","depth":2,"path":"10_EVM反汇编/07_合约间调用.md","ref":"10_EVM反汇编/07_合约间调用.md","articles":[]}]},"previous":{"title":"第2节:EVM-PUZZLES挑战","level":"1.16.2","depth":2,"path":"09_EVM详解/02-evm-puzzles.md","ref":"09_EVM详解/02-evm-puzzles.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"09_EVM详解/03-汇编概述.md","mtime":"2023-03-21T14:01:27.000Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3266,6 +3270,14 @@ assembly {
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

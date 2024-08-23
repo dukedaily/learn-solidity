@@ -36,6 +36,10 @@
                 
             
                 
+                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
+                
+            
+                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3029,80 +3033,80 @@
 </ol>
 </li>
 </ol>
-<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
-pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
+<pre><code class="lang-js">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.13;
 
-<span class="hljs-comment">// 1. 只有internal方法，会内嵌到调用合约中</span>
+// 1. 只有internal方法，会内嵌到调用合约中
 library SafeMath {
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">add</span>(<span class="hljs-params">uint x, uint y</span>) <span class="hljs-title">internal</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint</span>) </span>{
+    function add(uint x, uint y) internal pure returns (uint) {
         uint z = x + y;
-        <span class="hljs-built_in">require</span>(z &gt;= x, <span class="hljs-string">&quot;uint overflow&quot;</span>);
+        require(z &gt;= x, &quot;uint overflow&quot;);
 
-        <span class="hljs-keyword">return</span> z;
+        return z;
     }
 }
 
-library <span class="hljs-built_in">Math</span> {
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sqrt</span>(<span class="hljs-params">uint y</span>) <span class="hljs-title">internal</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint z</span>) </span>{
-        <span class="hljs-keyword">if</span> (y &gt; <span class="hljs-number">3</span>) {
+library Math {
+    function sqrt(uint y) internal pure returns (uint z) {
+        if (y &gt; 3) {
             z = y;
-            uint x = y / <span class="hljs-number">2</span> + <span class="hljs-number">1</span>;
-            <span class="hljs-keyword">while</span> (x &lt; z) {
+            uint x = y / 2 + 1;
+            while (x &lt; z) {
                 z = x;
-                x = (y / x + x) / <span class="hljs-number">2</span>;
+                x = (y / x + x) / 2;
             }
-        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (y != <span class="hljs-number">0</span>) {
-            z = <span class="hljs-number">1</span>;
+        } else if (y != 0) {
+            z = 1;
         }
-        <span class="hljs-comment">// else z = 0 (default value)</span>
+        // else z = 0 (default value)
     }
 }
 
 contract TestSafeMath {
-      <span class="hljs-comment">// 对uint类型增加SafeMath的方法，</span>
-      <span class="hljs-comment">// 1. 后续定义的uint变量就会自动绑定SafeMath提供的方法: uint x;</span>
-      <span class="hljs-comment">// 2. 这个变量会作为第一个参数传递给函数: x.add(y);</span>
-    using SafeMath <span class="hljs-keyword">for</span> uint;
+      // 对uint类型增加SafeMath的方法，
+      // 1. 后续定义的uint变量就会自动绑定SafeMath提供的方法: uint x;
+      // 2. 这个变量会作为第一个参数传递给函数: x.add(y);
+    using SafeMath for uint;
 
-    uint public MAX_UINT = <span class="hljs-number">2</span>**<span class="hljs-number">256</span> - <span class="hljs-number">1</span>;
+    uint public MAX_UINT = 2**256 - 1;
 
-      <span class="hljs-comment">// 用法1：x.方法(y)</span>
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">testAdd</span>(<span class="hljs-params">uint x, uint y</span>) <span class="hljs-title">public</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint</span>) </span>{
-        <span class="hljs-keyword">return</span> x.add(y);
+      // 用法1：x.方法(y)
+    function testAdd(uint x, uint y) public pure returns (uint) {
+        return x.add(y);
     }
 
-      <span class="hljs-comment">// 用法2：库.方法(x)</span>
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">testSquareRoot</span>(<span class="hljs-params">uint x</span>) <span class="hljs-title">public</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint</span>) </span>{
-        <span class="hljs-keyword">return</span> <span class="hljs-built_in">Math</span>.sqrt(x);
+      // 用法2：库.方法(x)
+    function testSquareRoot(uint x) public pure returns (uint) {
+        return Math.sqrt(x);
     }
 }
 
-<span class="hljs-comment">// 2. 存在public方法时，会单独部署库合约，并且第一个参数是状态变量类型</span>
-library <span class="hljs-built_in">Array</span> {
-      <span class="hljs-comment">// 修改调用者状态变量的方式，第一个参数是状态变量本身</span>
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">remove</span>(<span class="hljs-params">uint[] storage arr, uint index</span>) <span class="hljs-title">public</span> </span>{
-        <span class="hljs-comment">// Move the last element into the place to delete</span>
-        <span class="hljs-built_in">require</span>(arr.length &gt; <span class="hljs-number">0</span>, <span class="hljs-string">&quot;Can&apos;t remove from empty array&quot;</span>);
-        arr[index] = arr[arr.length - <span class="hljs-number">1</span>];
+// 2. 存在public方法时，会单独部署库合约，并且第一个参数是状态变量类型
+library Array {
+      // 修改调用者状态变量的方式，第一个参数是状态变量本身
+    function remove(uint[] storage arr, uint index) public {
+        // Move the last element into the place to delete
+        require(arr.length &gt; 0, &quot;Can&apos;t remove from empty array&quot;);
+        arr[index] = arr[arr.length - 1];
         arr.pop();
     }
 }
 
 contract TestArray {
-    using <span class="hljs-built_in">Array</span> <span class="hljs-keyword">for</span> uint[];
+    using Array for uint[];
 
     uint[] public arr;
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">testArrayRemove</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> </span>{
-        <span class="hljs-keyword">for</span> (uint i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">3</span>; i++) {
+    function testArrayRemove() public {
+        for (uint i = 0; i &lt; 3; i++) {
             arr.push(i);
         }
 
-        arr.remove(<span class="hljs-number">1</span>);
+        arr.remove(1);
 
-        assert(arr.length == <span class="hljs-number">2</span>);
-        assert(arr[<span class="hljs-number">0</span>] == <span class="hljs-number">0</span>);
-        assert(arr[<span class="hljs-number">1</span>] == <span class="hljs-number">2</span>);
+        assert(arr.length == 2);
+        assert(arr[0] == 0);
+        assert(arr[1] == 2);
     }
 }
 </code></pre>
@@ -3157,7 +3161,7 @@ contract TestArray {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第29节:library","level":"1.8.29","depth":2,"next":{"title":"第30节:传递结构体","level":"1.8.30","depth":2,"path":"01_solidity基础/30_传递结构体.md","ref":"01_solidity基础/30_传递结构体.md","articles":[]},"previous":{"title":"第28节:interface","level":"1.8.28","depth":2,"path":"01_solidity基础/28_interface.md","ref":"01_solidity基础/28_interface.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"01_solidity基础/29_library.md","mtime":"2023-09-23T13:09:06.372Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-19T22:08:50.792Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第29节:library","level":"1.8.29","depth":2,"next":{"title":"第30节:传递结构体","level":"1.8.30","depth":2,"path":"01_solidity基础/30_传递结构体.md","ref":"01_solidity基础/30_传递结构体.md","articles":[]},"previous":{"title":"第28节:interface","level":"1.8.28","depth":2,"path":"01_solidity基础/28_interface.md","ref":"01_solidity基础/28_interface.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"01_solidity基础/29_library.md","mtime":"2023-09-23T13:09:06.372Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3240,6 +3244,14 @@ contract TestArray {
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

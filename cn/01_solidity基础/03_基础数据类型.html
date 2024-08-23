@@ -36,6 +36,10 @@
                 
             
                 
+                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
+                
+            
+                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3026,42 +3030,42 @@
 <li>定长字节：bytes1~bytes32</li>
 <li>地址：address（20个字节，40个16进制字符，共160位），如：0x5B38Da6a701c568545dCfcB03FcB875f56beddC4</li>
 </ul>
-<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
-pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
+<pre><code class="lang-js">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.13;
 
 contract Primitives {
-    bool public flag = <span class="hljs-literal">true</span>;
+    bool public flag = true;
 
-    <span class="hljs-comment">/*
+    /*
     uint stands for unsigned integer, meaning non negative integers
     different sizes are available
         uint8   ranges from 0` to 2 ** 8 - 1
         uint16  ranges from 0 to 2 ** 16 - 1
         ...
         uint256 ranges from 0 to 2 ** 256 - 1
-    */</span>
-    uint8 public u8 = <span class="hljs-number">1</span>;
-    uint public u256 = <span class="hljs-number">456</span>;
-    uint public u = <span class="hljs-number">123</span>; <span class="hljs-comment">// uint is an alias for uint256</span>
+    */
+    uint8 public u8 = 1;
+    uint public u256 = 456;
+    uint public u = 123; // uint is an alias for uint256
 
-    <span class="hljs-comment">/*
+    /*
     Negative numbers are allowed for int types.
     Like uint, different ranges are available from int8 to int256
 
     int256 ranges from -2 ** 255 to 2 ** 255 - 1
     int128 ranges from -2 ** 127 to 2 ** 127 - 1
-    */</span>
-    int8 public i8 = -<span class="hljs-number">1</span>;
-    int public i256 = <span class="hljs-number">456</span>;
-    int public i = -<span class="hljs-number">123</span>; <span class="hljs-comment">// int is same as int256</span>
+    */
+    int8 public i8 = -1;
+    int public i256 = 456;
+    int public i = -123; // int is same as int256
 
-    <span class="hljs-comment">// minimum and maximum of int</span>
+    // minimum and maximum of int
     int public minInt = type(int).min;
     int public maxInt = type(int).max;
 
-    address public addr = <span class="hljs-number">0xCA35b7d915458EF540aDe6068dFe2F44E8fa733c</span>;
+    address public addr = 0xCA35b7d915458EF540aDe6068dFe2F44E8fa733c;
 
-    <span class="hljs-comment">/*
+    /*
     In Solidity, the data type byte represent a sequence of bytes. 
     Solidity presents two type of bytes types :
 
@@ -3070,16 +3074,16 @@ contract Primitives {
 
      The term bytes in Solidity represents a dynamic array of bytes. 
      It’s a shorthand for byte[] .
-    */</span>
-    bytes1 a = <span class="hljs-number">0xb5</span>; <span class="hljs-comment">//  [10110101]</span>
-    bytes1 b = <span class="hljs-number">0x56</span>; <span class="hljs-comment">//  [01010110]</span>
+    */
+    bytes1 a = 0xb5; //  [10110101]
+    bytes1 b = 0x56; //  [01010110]
 
-    <span class="hljs-comment">// Default values</span>
-    <span class="hljs-comment">// Unassigned variables have a default value</span>
-    bool public defaultBoo; <span class="hljs-comment">// false</span>
-    uint public defaultUint; <span class="hljs-comment">// 0</span>
-    int public defaultInt; <span class="hljs-comment">// 0</span>
-    address public defaultAddr; <span class="hljs-comment">// 0x0000000000000000000000000000000000000000</span>
+    // Default values
+    // Unassigned variables have a default value
+    bool public defaultBoo; // false
+    uint public defaultUint; // 0
+    int public defaultInt; // 0
+    address public defaultAddr; // 0x0000000000000000000000000000000000000000
 }
 </code></pre>
 
@@ -3109,7 +3113,7 @@ contract Primitives {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第3节:基础数据类型","level":"1.8.3","depth":2,"next":{"title":"第4节:变量variables","level":"1.8.4","depth":2,"path":"01_solidity基础/04_变量variables.md","ref":"01_solidity基础/04_变量variables.md","articles":[]},"previous":{"title":"第2节:第一个dapp","level":"1.8.2","depth":2,"path":"01_solidity基础/02_第一个dapp.md","ref":"01_solidity基础/02_第一个dapp.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"01_solidity基础/03_基础数据类型.md","mtime":"2023-09-23T13:06:53.215Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-19T22:08:50.792Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第3节:基础数据类型","level":"1.8.3","depth":2,"next":{"title":"第4节:变量variables","level":"1.8.4","depth":2,"path":"01_solidity基础/04_变量variables.md","ref":"01_solidity基础/04_变量variables.md","articles":[]},"previous":{"title":"第2节:第一个dapp","level":"1.8.2","depth":2,"path":"01_solidity基础/02_第一个dapp.md","ref":"01_solidity基础/02_第一个dapp.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"01_solidity基础/03_基础数据类型.md","mtime":"2023-09-23T13:06:53.215Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3192,6 +3196,14 @@ contract Primitives {
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

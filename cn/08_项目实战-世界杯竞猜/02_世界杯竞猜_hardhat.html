@@ -36,6 +36,10 @@
                 
             
                 
+                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
+                
+            
+                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3043,25 +3047,25 @@
 <li>集成WorldCup合约，完成部署、verify、单元测试</li>
 </ol>
 <h2 id="创建hardhat项目">创建hardhat项目</h2>
-<pre><code class="lang-Bash"><span class="hljs-comment">#创建npm空项目</span>
+<pre><code class="lang-Bash">#创建npm空项目
 npm init 
 
-<span class="hljs-comment">#安装命令，对照两个版本的差异性</span>
-npm install --save-dev hardhat@2.11.1 <span class="hljs-comment"># 新案例，新工具包</span>
+#安装命令，对照两个版本的差异性
+npm install --save-dev hardhat@2.11.1 # 新案例，新工具包
 npm install --save-dev hardhat@2.9.7
 
-<span class="hljs-comment">#创建工程</span>
+#创建工程
 npx hardhat-》选择高级ts项目
 </code></pre>
 <h2 id="目录结构">目录结构</h2>
 <p><img src="assets/image-20221008083733891.png" alt="image-20221008083733891"></p>
 <h2 id="运行测试">运行测试</h2>
 <pre><code class="lang-sh">
-<span class="hljs-comment">#编译合约</span>
+#编译合约
 npx hardhat compile
 
-<span class="hljs-comment">#单元测试</span>
-npx hardhat <span class="hljs-built_in">test</span>
+#单元测试
+npx hardhat test
 </code></pre>
 <p>执行效果如下：</p>
 <p><img src="assets/image-20221008085748424.png" alt="image-20221008085748424"></p>
@@ -3072,34 +3076,34 @@ npx hardhat <span class="hljs-built_in">test</span>
 <ol>
 <li>创建test/WorldCup.ts，用于编写测试文件，首先引入测试工具包：</li>
 </ol>
-<pre><code class="lang-js"><span class="hljs-keyword">import</span> { time, loadFixture } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@nomicfoundation/hardhat-network-helpers&quot;</span>;
-<span class="hljs-keyword">import</span> { anyValue } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@nomicfoundation/hardhat-chai-matchers/withArgs&quot;</span>;
-<span class="hljs-keyword">import</span> { expect } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;chai&quot;</span>;
-<span class="hljs-keyword">import</span> { ethers } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;hardhat&quot;</span>;
-<span class="hljs-keyword">import</span> hre <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;hardhat&quot;</span>;
-<span class="hljs-keyword">import</span> { WorldCup } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;../typechain-types&quot;</span>;
+<pre><code class="lang-js">import { time, loadFixture } from &quot;@nomicfoundation/hardhat-network-helpers&quot;;
+import { anyValue } from &quot;@nomicfoundation/hardhat-chai-matchers/withArgs&quot;;
+import { expect } from &quot;chai&quot;;
+import { ethers } from &quot;hardhat&quot;;
+import hre from &quot;hardhat&quot;;
+import { WorldCup } from &quot;../typechain-types&quot;;
 </code></pre>
 <ol>
 <li>合约初始化部署</li>
 </ol>
-<pre><code class="lang-js">describe(<span class="hljs-string">&quot;WorldCup&quot;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
-      <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">deployWorldcupFixture</span>(<span class="hljs-params"></span>) </span>{
+<pre><code class="lang-js">describe(&quot;WorldCup&quot;, function () {
+      async function deployWorldcupFixture() {
 
-                <span class="hljs-comment">// 获取第一个钱包对象，用于发起交易</span>
-        <span class="hljs-keyword">const</span> [owner, otherAccount] = <span class="hljs-keyword">await</span> ethers.getSigners();
+                // 获取第一个钱包对象，用于发起交易
+        const [owner, otherAccount] = await ethers.getSigners();
 
-          <span class="hljs-comment">// 获取合约对象</span>
-        <span class="hljs-keyword">const</span> WorldCup = <span class="hljs-keyword">await</span> ethers.getContractFactory(<span class="hljs-string">&quot;WorldCup&quot;</span>);
-        <span class="hljs-keyword">const</span> deadline = (<span class="hljs-keyword">await</span> time.latest()) + TWO_WEEKS_IN_SECS;
+          // 获取合约对象
+        const WorldCup = await ethers.getContractFactory(&quot;WorldCup&quot;);
+        const deadline = (await time.latest()) + TWO_WEEKS_IN_SECS;
 
-          <span class="hljs-comment">// 部署合约</span>
-        <span class="hljs-keyword">const</span> worldcup = <span class="hljs-keyword">await</span> WorldCup.deploy(deadline);
-        <span class="hljs-keyword">return</span> { worldcup, deadline, owner, otherAccount };
+          // 部署合约
+        const worldcup = await WorldCup.deploy(deadline);
+        return { worldcup, deadline, owner, otherAccount };
     }
 
-    <span class="hljs-built_in">this</span>.beforeEach(<span class="hljs-keyword">async</span> () =&gt; {
-          <span class="hljs-comment">// 从内存中获取合约状态快照（仅用于测试），执行每个单元测试的时候，状态都会回到最初</span>
-        <span class="hljs-keyword">const</span> { worldcup, owner, otherAccount, deadline } = <span class="hljs-keyword">await</span> loadFixture(deployWorldcupFixture);
+    this.beforeEach(async () =&gt; {
+          // 从内存中获取合约状态快照（仅用于测试），执行每个单元测试的时候，状态都会回到最初
+        const { worldcup, owner, otherAccount, deadline } = await loadFixture(deployWorldcupFixture);
         worldcupIns = worldcup
         ownerAddr = owner.address
         otherAccountAddr = otherAccount.address
@@ -3110,19 +3114,19 @@ npx hardhat <span class="hljs-built_in">test</span>
 <ol>
 <li>编写测试逻辑</li>
 </ol>
-<pre><code class="lang-js">    describe(<span class="hljs-string">&quot;Deployment&quot;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
-          <span class="hljs-comment">// 检查部署后，owner是否正确</span>
-        it(<span class="hljs-string">&quot;Should set the right owner&quot;</span>, <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
-            <span class="hljs-keyword">const</span> { worldcup, owner } = <span class="hljs-keyword">await</span> loadFixture(deployWorldcupFixture);
-            expect(<span class="hljs-keyword">await</span> worldcupIns.admin()).to.equal(ownerAddr);
+<pre><code class="lang-js">    describe(&quot;Deployment&quot;, function () {
+          // 检查部署后，owner是否正确
+        it(&quot;Should set the right owner&quot;, async function () {
+            const { worldcup, owner } = await loadFixture(deployWorldcupFixture);
+            expect(await worldcupIns.admin()).to.equal(ownerAddr);
         });
 
-          <span class="hljs-comment">// 检查部署时，如果传入参数不满足，是否会抛出异常</span>
-        it(<span class="hljs-string">&quot;Should fail if the deadline is not in the future&quot;</span>, <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
-            <span class="hljs-keyword">const</span> latestTime = <span class="hljs-keyword">await</span> time.latest();
-            <span class="hljs-keyword">const</span> WorldCup = <span class="hljs-keyword">await</span> ethers.getContractFactory(<span class="hljs-string">&quot;WorldCup&quot;</span>);
-            <span class="hljs-keyword">await</span> expect(WorldCup.deploy(latestTime)).to.be.revertedWith(
-                <span class="hljs-string">&quot;WorldCupLottery: invalid deadline!&quot;</span>
+          // 检查部署时，如果传入参数不满足，是否会抛出异常
+        it(&quot;Should fail if the deadline is not in the future&quot;, async function () {
+            const latestTime = await time.latest();
+            const WorldCup = await ethers.getContractFactory(&quot;WorldCup&quot;);
+            await expect(WorldCup.deploy(latestTime)).to.be.revertedWith(
+                &quot;WorldCupLottery: invalid deadline!&quot;
             );
         });
 </code></pre>
@@ -3131,107 +3135,107 @@ npx hardhat <span class="hljs-built_in">test</span>
 <p>单元测试至此告一段落，接下来我们开始考虑将代码部署到区块链网络中。</p>
 <h2 id="部署到本地网络">部署到本地网络</h2>
 <p>hardhat内部实现了一个本地evm，可以运行一个本地节点，开发过程，我们可以选择启动节点，并在上面部署，具体如下：</p>
-<pre><code class="lang-sh"><span class="hljs-comment">#运行脚本，部署合约</span>
+<pre><code class="lang-sh">#运行脚本，部署合约
 npx hardhat run scripts/deploy.ts
 
-<span class="hljs-comment">#启动节点node</span>
+#启动节点node
 npx hardhat node
 
-<span class="hljs-comment">#部署合约到本地node节点</span>
+#部署合约到本地node节点
 npx hardhat run scripts/deploy.ts --network localhost
 </code></pre>
 <p>效果如下，方便快速验证合约及脚本<img src="assets/image-20221008091848377.png" alt="image-20221008091848377"></p>
 <h2 id="修改配置文件">修改配置文件</h2>
 <p>如果想部署到真实的测试网络，我们需要修改一下配置文件：hardhat.config.ts，具体如下：</p>
-<pre><code class="lang-JavaScript"><span class="hljs-keyword">import</span> { HardhatUserConfig } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;hardhat/config&quot;</span>;
-<span class="hljs-keyword">import</span> <span class="hljs-string">&quot;@nomicfoundation/hardhat-toolbox&quot;</span>;
+<pre><code class="lang-JavaScript">import { HardhatUserConfig } from &quot;hardhat/config&quot;;
+import &quot;@nomicfoundation/hardhat-toolbox&quot;;
 
-<span class="hljs-comment">// 在配置文件中引用，</span>
-<span class="hljs-comment">// 需要单独安装：npm install dotenv</span>
-<span class="hljs-built_in">require</span>(<span class="hljs-string">&apos;dotenv&apos;</span>).config()
+// 在配置文件中引用，
+// 需要单独安装：npm install dotenv
+require(&apos;dotenv&apos;).config()
 
-<span class="hljs-keyword">let</span> ALCHEMY_KEY = process.env.ALCHEMY_KEY || <span class="hljs-string">&apos;&apos;</span>
-<span class="hljs-keyword">let</span> INFURA_KEY = process.env.INFURA_KEY || <span class="hljs-string">&apos;&apos;</span>
-<span class="hljs-keyword">let</span> PRIVATE_KEY = process.env.PRIVATE_KEY || <span class="hljs-string">&apos;&apos;</span>
-<span class="hljs-keyword">let</span> ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || <span class="hljs-string">&apos;&apos;</span>
+let ALCHEMY_KEY = process.env.ALCHEMY_KEY || &apos;&apos;
+let INFURA_KEY = process.env.INFURA_KEY || &apos;&apos;
+let PRIVATE_KEY = process.env.PRIVATE_KEY || &apos;&apos;
+let ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || &apos;&apos;
 
-<span class="hljs-built_in">console</span>.log(ALCHEMY_KEY);
-<span class="hljs-built_in">console</span>.log(INFURA_KEY);
-<span class="hljs-built_in">console</span>.log(PRIVATE_KEY);
-<span class="hljs-built_in">console</span>.log(ETHERSCAN_API_KEY);
+console.log(ALCHEMY_KEY);
+console.log(INFURA_KEY);
+console.log(PRIVATE_KEY);
+console.log(ETHERSCAN_API_KEY);
 
-<span class="hljs-keyword">const</span> config: HardhatUserConfig = {
-    <span class="hljs-comment">// solidity: &quot;0.8.9&quot;,</span>
-    <span class="hljs-comment">// 配置网络 kovan, bsc, mainnet</span>
-    <span class="hljs-attr">networks</span>: {
-        <span class="hljs-attr">hardhat</span>: {
+const config: HardhatUserConfig = {
+    // solidity: &quot;0.8.9&quot;,
+    // 配置网络 kovan, bsc, mainnet
+    networks: {
+        hardhat: {
         },
-          <span class="hljs-comment">// 配置goerli网络</span>
-        <span class="hljs-attr">goerli</span>: {
-            <span class="hljs-attr">url</span>: <span class="hljs-string">`https://eth-goerli.alchemyapi.io/v2/<span class="hljs-subst">${ALCHEMY_KEY}</span>`</span>,
-            <span class="hljs-attr">accounts</span>: [PRIVATE_KEY]
+          // 配置goerli网络
+        goerli: {
+            url: `https://eth-goerli.alchemyapi.io/v2/${ALCHEMY_KEY}`,
+            accounts: [PRIVATE_KEY]
         },
-        <span class="hljs-attr">kovan</span>: {
-            <span class="hljs-attr">url</span>: <span class="hljs-string">`https://kovan.infura.io/v3/<span class="hljs-subst">${INFURA_KEY}</span>`</span>,
-            <span class="hljs-attr">accounts</span>: [PRIVATE_KEY]
+        kovan: {
+            url: `https://kovan.infura.io/v3/${INFURA_KEY}`,
+            accounts: [PRIVATE_KEY]
         }
     },
-    <span class="hljs-comment">// 配置自动化verify相关</span>
-    <span class="hljs-attr">etherscan</span>: {
-        <span class="hljs-attr">apiKey</span>: {
-            <span class="hljs-attr">goerli</span>: ETHERSCAN_API_KEY
+    // 配置自动化verify相关
+    etherscan: {
+        apiKey: {
+            goerli: ETHERSCAN_API_KEY
         }
     },
-    <span class="hljs-comment">// 配置编译器版本</span>
-    <span class="hljs-attr">solidity</span>: {
-        <span class="hljs-attr">version</span>: <span class="hljs-string">&quot;0.8.9&quot;</span>,
-        <span class="hljs-attr">settings</span>: {
-            <span class="hljs-attr">optimizer</span>: {
-                <span class="hljs-attr">enabled</span>: <span class="hljs-literal">true</span>,
-                <span class="hljs-attr">runs</span>: <span class="hljs-number">200</span>
+    // 配置编译器版本
+    solidity: {
+        version: &quot;0.8.9&quot;,
+        settings: {
+            optimizer: {
+                enabled: true,
+                runs: 200
             }
         }
     },
 };
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> config;
+export default config;
 </code></pre>
 <h2 id="修改部署脚本">修改部署脚本</h2>
 <p>修改scripts/deploy.ts</p>
-<pre><code class="lang-JavaScript"><span class="hljs-keyword">import</span> { ethers } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;hardhat&quot;</span>;
+<pre><code class="lang-JavaScript">import { ethers } from &quot;hardhat&quot;;
 
-<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">main</span>(<span class="hljs-params"></span>) </span>{
-  <span class="hljs-keyword">const</span> TWO_WEEKS_IN_SECS = <span class="hljs-number">14</span> * <span class="hljs-number">24</span> * <span class="hljs-number">60</span> * <span class="hljs-number">60</span>;
-  <span class="hljs-keyword">const</span> timestamp = <span class="hljs-built_in">Math</span>.floor(<span class="hljs-built_in">Date</span>.now() / <span class="hljs-number">1000</span>)
-  <span class="hljs-keyword">const</span> deadline = timestamp + TWO_WEEKS_IN_SECS;
-  <span class="hljs-built_in">console</span>.log(timestamp)
+async function main() {
+  const TWO_WEEKS_IN_SECS = 14 * 24 * 60 * 60;
+  const timestamp = Math.floor(Date.now() / 1000)
+  const deadline = timestamp + TWO_WEEKS_IN_SECS;
+  console.log(timestamp)
 
-  <span class="hljs-comment">// 获取对象</span>
-  <span class="hljs-keyword">const</span> WorldCup = <span class="hljs-keyword">await</span> ethers.getContractFactory(<span class="hljs-string">&quot;WorldCup&quot;</span>);
-  <span class="hljs-comment">// 部署</span>
-  <span class="hljs-keyword">const</span> worldcup = <span class="hljs-keyword">await</span> WorldCup.deploy(deadline);
-    <span class="hljs-comment">// 等待部署完成</span>
-  <span class="hljs-keyword">await</span> worldcup.deployed();
+  // 获取对象
+  const WorldCup = await ethers.getContractFactory(&quot;WorldCup&quot;);
+  // 部署
+  const worldcup = await WorldCup.deploy(deadline);
+    // 等待部署完成
+  await worldcup.deployed();
 
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`new worldcup deployed to <span class="hljs-subst">${worldcup.address}</span>`</span>);
+  console.log(`new worldcup deployed to ${worldcup.address}`);
 }
 
-main().catch(<span class="hljs-function">(<span class="hljs-params">error</span>) =&gt;</span> {
-  <span class="hljs-built_in">console</span>.error(error);
-  process.exitCode = <span class="hljs-number">1</span>;
+main().catch((error) =&gt; {
+  console.error(error);
+  process.exitCode = 1;
 });
 </code></pre>
 <p>部署到goerli网络：</p>
-<pre><code class="lang-sh"><span class="hljs-comment"># npx hardhat run scripts/deploy.ts --network &lt;netWorkName&gt; </span>
-npx hardhat run scripts/deploy.ts --network goerli  <span class="hljs-comment">#在配置文件中已经配置了</span>
+<pre><code class="lang-sh"># npx hardhat run scripts/deploy.ts --network <networkname> 
+npx hardhat run scripts/deploy.ts --network goerli  #在配置文件中已经配置了
 
-<span class="hljs-comment"># 得到地址如下：0xD0f85823D7e118BB7fa4D460A25851fCf99f7Fa9</span>
-</code></pre>
+# 得到地址如下：0xD0f85823D7e118BB7fa4D460A25851fCf99f7Fa9
+</networkname></code></pre>
 <p><img src="assets/image-20221008094344213.png" alt="image-20221008094344213"></p>
 <p>自动验证代码：</p>
-<pre><code class="lang-sh"><span class="hljs-comment"># npx hardhat verify &lt;contractAddr&gt; [para1] [para2] ...  --network goerli</span>
+<pre><code class="lang-sh"># npx hardhat verify <contractaddr> [para1] [para2] ...  --network goerli
 npx hardhat verify 0xD0f85823D7e118BB7fa4D460A25851fCf99f7Fa9 1665193342  --network goerli
-</code></pre>
+</contractaddr></code></pre>
 <p>效果如下：</p>
 <p><img src="assets/image-20221008094819715.png" alt="image-20221008094819715"></p>
 <h2 id="小结">小结</h2>
@@ -3278,7 +3282,7 @@ npx hardhat verify 0xD0f85823D7e118BB7fa4D460A25851fCf99f7Fa9 1665193342  --netw
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第2节:世界杯竞猜_hardhat","level":"1.15.6","depth":2,"next":{"title":"第3节:世界杯竞猜_ERC20","level":"1.15.7","depth":2,"path":"08_项目实战-世界杯竞猜/03_世界杯竞猜_ERC20.md","ref":"08_项目实战-世界杯竞猜/03_世界杯竞猜_ERC20.md","articles":[]},"previous":{"title":"第1节:世界杯竞猜_solidity","level":"1.15.5","depth":2,"path":"08_项目实战-世界杯竞猜/01_世界杯竞猜_solidity.md","ref":"08_项目实战-世界杯竞猜/01_世界杯竞猜_solidity.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"08_项目实战-世界杯竞猜/02_世界杯竞猜_hardhat.md","mtime":"2023-09-23T13:48:35.110Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-19T22:08:50.792Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第2节:世界杯竞猜_hardhat","level":"1.15.6","depth":2,"next":{"title":"第3节:世界杯竞猜_ERC20","level":"1.15.7","depth":2,"path":"08_项目实战-世界杯竞猜/03_世界杯竞猜_ERC20.md","ref":"08_项目实战-世界杯竞猜/03_世界杯竞猜_ERC20.md","articles":[]},"previous":{"title":"第1节:世界杯竞猜_solidity","level":"1.15.5","depth":2,"path":"08_项目实战-世界杯竞猜/01_世界杯竞猜_solidity.md","ref":"08_项目实战-世界杯竞猜/01_世界杯竞猜_solidity.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"08_项目实战-世界杯竞猜/02_世界杯竞猜_hardhat.md","mtime":"2023-09-23T13:48:35.110Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3361,6 +3365,14 @@ npx hardhat verify 0xD0f85823D7e118BB7fa4D460A25851fCf99f7Fa9 1665193342  --netw
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

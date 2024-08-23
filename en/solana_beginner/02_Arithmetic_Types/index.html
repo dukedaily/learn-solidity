@@ -36,6 +36,10 @@
                 
             
                 
+                <link rel="stylesheet" href="../../../gitbook/honkit-plugin-mermaid/mermaid.css">
+                
+            
+                
                 <link rel="stylesheet" href="../../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -456,13 +460,13 @@
     event Result(uint256);
     event Who(string, address);
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">doSomeMath</span>(<span class="hljs-params">uint256 a, uint256 b</span>) <span class="hljs-title">public</span> </span>{
+    function doSomeMath(uint256 a, uint256 b) public {
         uint256 result = a + b;
         emit Result(result);
     }
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sayHelloToMe</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> </span>{
-        emit Who(<span class="hljs-string">&quot;Hello World&quot;</span>, msg.sender);
+    function sayHelloToMe() public {
+        emit Who(&quot;Hello World&quot;, msg.sender);
     }
 }
 </code></pre>
@@ -495,130 +499,130 @@
 </code></pre>
 <h2 id="basic-types">Basic Types</h2>
 <h3 id="update-day2librs">update day_2/lib.rs</h3>
-<pre><code class="lang-rust"><span class="hljs-keyword">use</span> anchor_lang::prelude::*;
+<pre><code class="lang-rust">use anchor_lang::prelude::*;
 
-declare_id!(<span class="hljs-string">&quot;F6jicE4vCRP3yggTvoLyebh59pm8RnpcZ8rZRiJe9JQW&quot;</span>);
+declare_id!(&quot;F6jicE4vCRP3yggTvoLyebh59pm8RnpcZ8rZRiJe9JQW&quot;);
 
-<span class="hljs-meta">#[program]</span>
-<span class="hljs-keyword">pub</span> <span class="hljs-keyword">mod</span> day_2 {
-    <span class="hljs-keyword">use</span> super::*;
+#[program]
+pub mod day_2 {
+    use super::*;
 
-      <span class="hljs-comment">// test1: u64/string</span>
-    <span class="hljs-keyword">pub</span> <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">initialize2</span></span>(ctx: Context&lt;Initialize&gt;, a: <span class="hljs-built_in">u64</span>, b: <span class="hljs-built_in">u64</span>, message: <span class="hljs-built_in">String</span>) -&gt; <span class="hljs-built_in">Result</span>&lt;()&gt; {
-        <span class="hljs-comment">// msg!(&quot;Greetings from: {:?}&quot;, ctx.program_id);</span>
-        msg!(<span class="hljs-string">&quot;message: {:?}&quot;</span>, message);
-        msg!(<span class="hljs-string">&quot;You sent {} and {}&quot;</span>, a, b);
-        <span class="hljs-literal">Ok</span>(())
+      // test1: u64/string
+    pub fn initialize2(ctx: Context<initialize>, a: u64, b: u64, message: String) -&gt; Result<()> {
+        // msg!(&quot;Greetings from: {:?}&quot;, ctx.program_id);
+        msg!(&quot;message: {:?}&quot;, message);
+        msg!(&quot;You sent {} and {}&quot;, a, b);
+        Ok(())
     }
 
-      <span class="hljs-comment">// test2: Vec</span>
-    <span class="hljs-keyword">pub</span> <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">array</span></span>(ctx: Context&lt;Initialize&gt;, arr: <span class="hljs-built_in">Vec</span>&lt;<span class="hljs-built_in">u64</span>&gt;) -&gt; <span class="hljs-built_in">Result</span>&lt;()&gt; {
-        msg!(<span class="hljs-string">&quot;Your array {:?}&quot;</span>, arr);
-        <span class="hljs-literal">Ok</span>(())
+      // test2: Vec
+    pub fn array(ctx: Context<initialize>, arr: Vec<u64>) -&gt; Result<()> {
+        msg!(&quot;Your array {:?}&quot;, arr);
+        Ok(())
     }
 }
 
-<span class="hljs-meta">#[derive(Accounts)]</span>
-<span class="hljs-keyword">pub</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Initialize</span></span> {}
-</code></pre>
+#[derive(Accounts)]
+pub struct Initialize {}
+</()></u64></initialize></()></initialize></code></pre>
 <h3 id="create-new-test-file">create new test file</h3>
-<pre><code class="lang-js"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> anchor <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@coral-xyz/anchor&quot;</span>;
-<span class="hljs-keyword">import</span> { Program } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@coral-xyz/anchor&quot;</span>;
-<span class="hljs-keyword">import</span> { Day2 } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;../target/types/day_2&quot;</span>;
+<pre><code class="lang-js">import * as anchor from &quot;@coral-xyz/anchor&quot;;
+import { Program } from &quot;@coral-xyz/anchor&quot;;
+import { Day2 } from &quot;../target/types/day_2&quot;;
 
-describe(<span class="hljs-string">&quot;day_2&quot;</span>, <span class="hljs-function">() =&gt;</span> {
-  <span class="hljs-comment">// Configure the client to use the local cluster.</span>
+describe(&quot;day_2&quot;, () =&gt; {
+  // Configure the client to use the local cluster.
   anchor.setProvider(anchor.AnchorProvider.env());
 
-  <span class="hljs-keyword">const</span> program = anchor.workspace.Day2 <span class="hljs-keyword">as</span> Program&lt;Day2&gt;;
+  const program = anchor.workspace.Day2 as Program<day2>;
 
-  it(<span class="hljs-string">&quot;Is initialized!&quot;</span>, <span class="hljs-keyword">async</span> () =&gt; {
-    <span class="hljs-comment">// Add your test here.</span>
-    <span class="hljs-keyword">const</span> tx = <span class="hljs-keyword">await</span> program.methods.initialize2(
-      <span class="hljs-keyword">new</span> anchor.BN(<span class="hljs-number">777</span>),
-      <span class="hljs-keyword">new</span> anchor.BN(<span class="hljs-number">888</span>),
-      <span class="hljs-string">&quot;hello world&quot;</span>
+  it(&quot;Is initialized!&quot;, async () =&gt; {
+    // Add your test here.
+    const tx = await program.methods.initialize2(
+      new anchor.BN(777),
+      new anchor.BN(888),
+      &quot;hello world&quot;
     ).rpc();
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;Your transaction signature&quot;</span>, tx);
+    console.log(&quot;Your transaction signature&quot;, tx);
   });
 
-  it.only(<span class="hljs-string">&quot;Initializes with vector&quot;</span>, <span class="hljs-keyword">async</span> () =&gt; {
-    <span class="hljs-keyword">const</span> tx = <span class="hljs-keyword">await</span> program.methods.array([<span class="hljs-keyword">new</span> anchor.BN(<span class="hljs-number">777</span>),
-    <span class="hljs-keyword">new</span> anchor.BN(<span class="hljs-number">888</span>)]).rpc();
+  it.only(&quot;Initializes with vector&quot;, async () =&gt; {
+    const tx = await program.methods.array([new anchor.BN(777),
+    new anchor.BN(888)]).rpc();
 
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;Your transaction signature&quot;</span>, tx);
+    console.log(&quot;Your transaction signature&quot;, tx);
   });
 });
-</code></pre>
+</day2></code></pre>
 <p>build and test, all should be good!</p>
 <h2 id="overflow">Overflow</h2>
 <p>add two more functions</p>
-<pre><code class="lang-rust">    <span class="hljs-keyword">pub</span> <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">overflow_unsafe</span></span>(ctx: Context&lt;Initialize&gt;, a: <span class="hljs-built_in">u64</span>, b: <span class="hljs-built_in">u64</span>) -&gt; <span class="hljs-built_in">Result</span>&lt;()&gt; {
-        <span class="hljs-comment">// test1: overflow silently</span>
-        <span class="hljs-keyword">let</span> x_unsafe: <span class="hljs-built_in">u64</span> = a - b;
+<pre><code class="lang-rust">    pub fn overflow_unsafe(ctx: Context<initialize>, a: u64, b: u64) -&gt; Result<()> {
+        // test1: overflow silently
+        let x_unsafe: u64 = a - b;
 
-        msg!(<span class="hljs-string">&quot;x_unsafe: {}&quot;</span>, x_unsafe);
-        <span class="hljs-literal">Ok</span>(())
+        msg!(&quot;x_unsafe: {}&quot;, x_unsafe);
+        Ok(())
     }
 
-    <span class="hljs-keyword">pub</span> <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">overflow_safe</span></span>(ctx: Context&lt;Initialize&gt;, a: <span class="hljs-built_in">u64</span>, b: <span class="hljs-built_in">u64</span>) -&gt; <span class="hljs-built_in">Result</span>&lt;()&gt; {
-        <span class="hljs-keyword">let</span> x_safe: <span class="hljs-built_in">u64</span> = a.checked_sub(b).unwrap();
-        msg!(<span class="hljs-string">&quot;x_safe: {}&quot;</span>, x_safe);
-        <span class="hljs-literal">Ok</span>(())
+    pub fn overflow_safe(ctx: Context<initialize>, a: u64, b: u64) -&gt; Result<()> {
+        let x_safe: u64 = a.checked_sub(b).unwrap();
+        msg!(&quot;x_safe: {}&quot;, x_safe);
+        Ok(())
     }
-</code></pre>
+</()></initialize></()></initialize></code></pre>
 <p>udpate day_2.ts</p>
-<pre><code class="lang-ts">  <span class="hljs-comment">// when overflow-checks = false</span>
-  it.only(<span class="hljs-string">&quot;should not overflow on 100 - 200&quot;</span>, <span class="hljs-keyword">async</span> () =&gt; {
-    <span class="hljs-keyword">const</span> tx = <span class="hljs-keyword">await</span> program.methods.overflowUnsafe(
-      <span class="hljs-keyword">new</span> anchor.BN(<span class="hljs-number">100</span>),
-      <span class="hljs-keyword">new</span> anchor.BN(<span class="hljs-number">200</span>)).rpc();
+<pre><code class="lang-ts">  // when overflow-checks = false
+  it.only(&quot;should not overflow on 100 - 200&quot;, async () =&gt; {
+    const tx = await program.methods.overflowUnsafe(
+      new anchor.BN(100),
+      new anchor.BN(200)).rpc();
 
-    <span class="hljs-comment">// output:</span>
-    <span class="hljs-comment">// Program log: Instruction: OverflowUnsafe</span>
-    <span class="hljs-comment">// Program log: x_unsafe: 18446744073709551516</span>
+    // output:
+    // Program log: Instruction: OverflowUnsafe
+    // Program log: x_unsafe: 18446744073709551516
   });
 
-  <span class="hljs-comment">// when overflow-checks = true</span>
-  it.only(<span class="hljs-string">&quot;should overflow on 100 - 200&quot;</span>, <span class="hljs-keyword">async</span> () =&gt; {
-    <span class="hljs-keyword">const</span> tx = <span class="hljs-keyword">await</span> program.methods.overflowUnsafe(
-      <span class="hljs-keyword">new</span> anchor.BN(<span class="hljs-number">100</span>),
-      <span class="hljs-keyword">new</span> anchor.BN(<span class="hljs-number">200</span>)).rpc();
+  // when overflow-checks = true
+  it.only(&quot;should overflow on 100 - 200&quot;, async () =&gt; {
+    const tx = await program.methods.overflowUnsafe(
+      new anchor.BN(100),
+      new anchor.BN(200)).rpc();
   });
-  <span class="hljs-comment">// output:</span>
-  <span class="hljs-comment">//   should overflow on 100 - 200:</span>
-  <span class="hljs-comment">//   Error: Simulation failed.</span>
-  <span class="hljs-comment">// Message: Transaction simulation failed: Error processing Instruction 0: Program failed to complete.</span>
+  // output:
+  //   should overflow on 100 - 200:
+  //   Error: Simulation failed.
+  // Message: Transaction simulation failed: Error processing Instruction 0: Program failed to complete.
 
-  it.only(<span class="hljs-string">&quot;should panic when overflow&quot;</span>, <span class="hljs-keyword">async</span> () =&gt; {
-    <span class="hljs-keyword">const</span> tx = <span class="hljs-keyword">await</span> program.methods.overflowSafe(
-      <span class="hljs-keyword">new</span> anchor.BN(<span class="hljs-number">0</span>),
-      <span class="hljs-keyword">new</span> anchor.BN(<span class="hljs-number">1</span>)).rpc();
+  it.only(&quot;should panic when overflow&quot;, async () =&gt; {
+    const tx = await program.methods.overflowSafe(
+      new anchor.BN(0),
+      new anchor.BN(1)).rpc();
 
-    <span class="hljs-comment">// output:</span>
-    <span class="hljs-comment">// Program log: Instruction: OverflowSafe</span>
-    <span class="hljs-comment">// Program log: panicked at programs/day_2/src/lib.rs:30:44:</span>
-    <span class="hljs-comment">// called `Option::unwrap()` on a `None` value</span>
+    // output:
+    // Program log: Instruction: OverflowSafe
+    // Program log: panicked at programs/day_2/src/lib.rs:30:44:
+    // called `Option::unwrap()` on a `None` value
   });
 </code></pre>
 <p>Change the flag: <code>overflow-checks = false</code> and see the difference.</p>
-<pre><code class="lang-toml"><span class="hljs-section">[workspace]</span>
-<span class="hljs-attr">members</span> = [<span class="hljs-string">&quot;programs/*&quot;</span>]
-<span class="hljs-attr">resolver</span> = <span class="hljs-string">&quot;2&quot;</span>
+<pre><code class="lang-toml">[workspace]
+members = [&quot;programs/*&quot;]
+resolver = &quot;2&quot;
 
-<span class="hljs-section">[profile.release]</span>
-<span class="hljs-comment"># will check globaly, and throw error during the compilation, gas costly</span>
-<span class="hljs-attr">overflow-checks</span> = <span class="hljs-literal">true</span> 
+[profile.release]
+# will check globaly, and throw error during the compilation, gas costly
+overflow-checks = true 
 
-<span class="hljs-comment"># won&apos;t check, and would need to add protection within the code, but gas efficiency</span>
-<span class="hljs-comment"># overflow-checks = false  </span>
+# won&apos;t check, and would need to add protection within the code, but gas efficiency
+# overflow-checks = false  
 
-<span class="hljs-attr">lto</span> = <span class="hljs-string">&quot;fat&quot;</span>
-<span class="hljs-attr">codegen-units</span> = <span class="hljs-number">1</span>
-<span class="hljs-section">[profile.release.build-override]</span>
-<span class="hljs-attr">opt-level</span> = <span class="hljs-number">3</span>
-<span class="hljs-attr">incremental</span> = <span class="hljs-literal">false</span>
-<span class="hljs-attr">codegen-units</span> = <span class="hljs-number">1</span>
+lto = &quot;fat&quot;
+codegen-units = 1
+[profile.release.build-override]
+opt-level = 3
+incremental = false
+codegen-units = 1
 </code></pre>
 <h2 id="key-takeaways">Key Takeaways</h2>
 <h2 id="links">Links</h2>
@@ -654,7 +658,7 @@ describe(<span class="hljs-string">&quot;day_2&quot;</span>, <span class="hljs-f
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"02_Arithmetic_Types","level":"1.4","depth":1,"next":{"title":"03_Anchor_Program_IDL","level":"1.5","depth":1,"path":"solana_beginner/03_Anchor_Program_IDL/README.md","ref":"solana_beginner/03_Anchor_Program_IDL/README.md","articles":[]},"previous":{"title":"01_Helloworld","level":"1.3","depth":1,"path":"solana_beginner/01_Helloworld/README.md","ref":"solana_beginner/01_Helloworld/README.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"en","gitbook":"*"},"file":{"path":"solana_beginner/02_Arithmetic_Types/README.md","mtime":"2024-08-07T13:14:57.056Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-19T22:08:50.792Z"},"basePath":"../..","book":{"language":"en"}});
+            gitbook.page.hasChanged({"page":{"title":"02_Arithmetic_Types","level":"1.4","depth":1,"next":{"title":"03_Anchor_Program_IDL","level":"1.5","depth":1,"path":"solana_beginner/03_Anchor_Program_IDL/README.md","ref":"solana_beginner/03_Anchor_Program_IDL/README.md","articles":[]},"previous":{"title":"01_Helloworld","level":"1.3","depth":1,"path":"solana_beginner/01_Helloworld/README.md","ref":"solana_beginner/01_Helloworld/README.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"en","gitbook":"*"},"file":{"path":"solana_beginner/02_Arithmetic_Types/README.md","mtime":"2024-08-07T13:14:57.056Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"../..","book":{"language":"en"}});
         });
     </script>
 </div>
@@ -737,6 +741,14 @@ describe(<span class="hljs-string">&quot;day_2&quot;</span>, <span class="hljs-f
     
         
         <script src="../../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
+        
+    
+        
+        <script src="../../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
+        
+    
+        
+        <script src="../../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

@@ -36,6 +36,10 @@
                 
             
                 
+                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
+                
+            
+                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3017,17 +3021,17 @@
 <p><a href="https://medium.com/@TrustChain/reversing-and-debugging-ethereum-evm-smart-contracts-part-3-ebe032a08f97" target="_blank">Reversing and debugging EVM Smart contracts: How the storage layout works?-part3</a></p>
 <p>小的type会节约slot，但是会增加OPCODE步骤（增加mask步骤），所以不能滥用小byte，否则会适得其反。</p>
 <h2 id="1-simple-example">1. Simple example</h2>
-<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT </span>
-pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.0</span>;  
+<pre><code class="lang-js">// SPDX-License-Identifier: MIT 
+pragma solidity ^0.8.0;  
 contract Test {     
     uint balance;     
     uint balance2;     
     uint balance3;   
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">modify</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> </span>{         
-        balance = <span class="hljs-number">1</span>;         
-        balance2 = <span class="hljs-number">2</span>;         
-        balance3 = <span class="hljs-number">3</span>;     
+    function modify() external {         
+        balance = 1;         
+        balance2 = 2;         
+        balance3 = 3;     
     } 
 }
 </code></pre>
@@ -3037,20 +3041,20 @@ contract Test {
 <li>所以最终存储事实为：Slot0: 1、Slot1: 2、Slot2: 3，天经地义！</li>
 </ul>
 <h2 id="2-using-uint8-instead-of-uint256">2. using uint8 instead of uint256</h2>
-<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT </span>
-pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.0</span>;  
+<pre><code class="lang-js">// SPDX-License-Identifier: MIT 
+pragma solidity ^0.8.0;  
 contract Test {     
     uint8 balance;     
     uint8 balance2;
     uint8 balance3; 
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">modify</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> </span>{
-         balance = <span class="hljs-number">1</span>; 
-         balance2 = <span class="hljs-number">2</span>; 
-         balance3 = <span class="hljs-number">3</span>;    
+    function modify() external {
+         balance = 1; 
+         balance2 = 2; 
+         balance3 = 3;    
     } 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">modify2</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> </span>{   
-         balance2 = <span class="hljs-number">5</span>; 
+    function modify2() external {   
+         balance2 = 5; 
     } 
 }
 </code></pre>
@@ -3059,16 +3063,16 @@ contract Test {
 <li>所以最终存储为：使用一个slot0：<strong>030201</strong></li>
 </ul>
 <h2 id="3-using-different-types-of-data">3. Using different types of data</h2>
-<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT </span>
-pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.0</span>;  
+<pre><code class="lang-js">// SPDX-License-Identifier: MIT 
+pragma solidity ^0.8.0;  
 contract Test {     
     uint8 balance;     
     bytes4 data;     
     address addr;      
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">modify</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> </span>{         
-        balance = <span class="hljs-number">17</span>;        
-        data = <span class="hljs-number">0xaaaaaaaa</span>;       
-        addr = <span class="hljs-number">0x358AA13c52544ECCEF6B0ADD0f801012ADAD5eE3</span>;     
+    function modify() external {         
+        balance = 17;        
+        data = 0xaaaaaaaa;       
+        addr = 0x358AA13c52544ECCEF6B0ADD0f801012ADAD5eE3;     
     } 
 }
 </code></pre>
@@ -3078,16 +3082,16 @@ contract Test {
 <li>拆分为：<strong>0x358aa13c52544eccef6b0add0f801012adad5ee3</strong>, <strong>data = 0xaaaaaaaa</strong>, <strong>balance = 0x11</strong></li>
 </ul>
 <h2 id="4-does-the-placement-of-variables-count-">4. Does the placement of variables count ?</h2>
-<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT </span>
-pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.0</span>;  
+<pre><code class="lang-js">// SPDX-License-Identifier: MIT 
+pragma solidity ^0.8.0;  
 contract Test {     
     uint8 balance;
     address addr;
-    bytes4 data;      <span class="hljs-comment">// 这里的顺序变了</span>
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">modify</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> </span>{      
-        balance = <span class="hljs-number">17</span>;    
-        data = <span class="hljs-number">0xaaaaaaaa</span>;     
-        addr = <span class="hljs-number">0x358AA13c52544ECCEF6B0ADD0f801012ADAD5eE3</span>;   
+    bytes4 data;      // 这里的顺序变了
+    function modify() external {      
+        balance = 17;    
+        data = 0xaaaaaaaa;     
+        addr = 0x358AA13c52544ECCEF6B0ADD0f801012ADAD5eE3;   
    } 
 }
 </code></pre>
@@ -3095,8 +3099,8 @@ contract Test {
 <li>也是存储在一个slot0中，但是顺序有变化：<strong>aaaaaaaa358aa13c52544eccef6b0add0f801012adad5ee311</strong></li>
 </ul>
 <h2 id="5-how-are-stored-structs-">5. How are stored structs ?</h2>
-<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT </span>
-pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.0</span>;  
+<pre><code class="lang-js">// SPDX-License-Identifier: MIT 
+pragma solidity ^0.8.0;  
 contract Test {     
     struct Values {  
         uint8 balance;   
@@ -3104,52 +3108,52 @@ contract Test {
         bytes4 data;    
     }      
     Values value;      
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">modify</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> </span>{ 
-        value.balance = <span class="hljs-number">17</span>;  
-        value.addr = <span class="hljs-number">0x358AA13c52544ECCEF6B0ADD0f801012ADAD5eE3</span>;    
-        value.data = <span class="hljs-number">0xaaaaaaaa</span>;   
+    function modify() external { 
+        value.balance = 17;  
+        value.addr = 0x358AA13c52544ECCEF6B0ADD0f801012ADAD5eE3;    
+        value.data = 0xaaaaaaaa;   
      }
  }
-Here is the full disassembly <span class="hljs-keyword">of</span> the <span class="hljs-function"><span class="hljs-keyword">function</span>
-045 <span class="hljs-title">JUMPDEST</span> 
-046 <span class="hljs-title">PUSH1</span> 00 |0<span class="hljs-title">x00</span>|
-048 <span class="hljs-title">DUP1</span>     |0<span class="hljs-title">x00</span>|0<span class="hljs-title">x00</span>|
-049 <span class="hljs-title">SLOAD</span>    |0<span class="hljs-title">x00</span>|0<span class="hljs-title">x00</span>|
-050 <span class="hljs-title">PUSH1</span> 01 |0<span class="hljs-title">x01</span>|0<span class="hljs-title">x00</span>|0<span class="hljs-title">x00</span>|
-052 <span class="hljs-title">PUSH1</span> 01 |0<span class="hljs-title">x01</span>|0<span class="hljs-title">x01</span>|0<span class="hljs-title">x00</span>|0<span class="hljs-title">x00</span>|
-054 <span class="hljs-title">PUSH1</span> <span class="hljs-title">c8</span> |0<span class="hljs-title">xc8</span>|0<span class="hljs-title">x01</span>|0<span class="hljs-title">x01</span>|0<span class="hljs-title">x00</span>|0<span class="hljs-title">x00</span>|
-056 <span class="hljs-title">SHL</span>      |0<span class="hljs-title">x00</span>.50<span class="hljs-title">zeros</span>.0100...00|0<span class="hljs-title">x01</span>|0<span class="hljs-title">x00</span>|0<span class="hljs-title">x00</span>|
-057 <span class="hljs-title">SUB</span>      |0<span class="hljs-title">x00</span>.15<span class="hljs-title">zeros0tttffff</span>.49<span class="hljs-title">f</span>.<span class="hljs-title">fffff</span>|0<span class="hljs-title">x00</span>|0<span class="hljs-title">x00</span>|
-058 <span class="hljs-title">NOT</span>      |0<span class="hljs-title">xfffffffffffffff00</span>..49<span class="hljs-title">zeros</span>..00|0<span class="hljs-title">x00</span>|0<span class="hljs-title">x00</span>|
-059 <span class="hljs-title">AND</span>      |0<span class="hljs-title">x00</span>|0<span class="hljs-title">x00</span>|
-060 <span class="hljs-title">PUSH25</span> <span class="hljs-title">aaaaaaaa358aa13c52544eccef6b0add0f801012adad5ee311</span> |0<span class="hljs-title">x00</span>...00358<span class="hljs-title">aa13</span>...|0<span class="hljs-title">x00</span>|0<span class="hljs-title">x00</span>|
-086 <span class="hljs-title">OR</span>       |0<span class="hljs-title">x00</span>...00358<span class="hljs-title">aa13</span>...|0<span class="hljs-title">x00</span>|
-087 <span class="hljs-title">SWAP1</span>    |0<span class="hljs-title">x00</span>|0<span class="hljs-title">x00</span>...00358<span class="hljs-title">aa13</span>...|
-088 <span class="hljs-title">SSTORE</span>   ||
-089 <span class="hljs-title">STOP</span>     ||
-</span></code></pre>
+Here is the full disassembly of the function
+045 JUMPDEST 
+046 PUSH1 00 |0x00|
+048 DUP1     |0x00|0x00|
+049 SLOAD    |0x00|0x00|
+050 PUSH1 01 |0x01|0x00|0x00|
+052 PUSH1 01 |0x01|0x01|0x00|0x00|
+054 PUSH1 c8 |0xc8|0x01|0x01|0x00|0x00|
+056 SHL      |0x00.50zeros.0100...00|0x01|0x00|0x00|
+057 SUB      |0x00.15zeros0tttffff.49f.fffff|0x00|0x00|
+058 NOT      |0xfffffffffffffff00..49zeros..00|0x00|0x00|
+059 AND      |0x00|0x00|
+060 PUSH25 aaaaaaaa358aa13c52544eccef6b0add0f801012adad5ee311 |0x00...00358aa13...|0x00|0x00|
+086 OR       |0x00...00358aa13...|0x00|
+087 SWAP1    |0x00|0x00...00358aa13...|
+088 SSTORE   ||
+089 STOP     ||
+</code></pre>
 <ul>
 <li>与普通的layout没有任何区别</li>
 </ul>
 <h2 id="6-what-about-arrays-">6. What about arrays ?</h2>
-<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT </span>
-pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.0</span>;  
+<pre><code class="lang-js">// SPDX-License-Identifier: MIT 
+pragma solidity ^0.8.0;  
 contract Test1 { 
     uint[] values;
-    <span class="hljs-comment">// uint value2 in comment </span>
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">modify</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> </span>{   
-        values.push(<span class="hljs-number">7</span>);   
-        values.push(<span class="hljs-number">8</span>);  
+    // uint value2 in comment 
+    function modify() external {   
+        values.push(7);   
+        values.push(8);  
     } 
 }
 
 contract Test2 { 
-        uint value2 <span class="hljs-keyword">in</span> comment 
+        uint value2 in comment 
     uint[] values;
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">modify</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> </span>{   
-        values.push(<span class="hljs-number">7</span>);   
-        values.push(<span class="hljs-number">8</span>);  
+    function modify() external {   
+        values.push(7);   
+        values.push(8);  
     } 
 }
 </code></pre>
@@ -3160,13 +3164,13 @@ contract Test2 {
 </ul>
 <p><img src="assets/image-20221101145037962.png" alt="image-20221101145037962"></p>
 <h2 id="7-how-are-stored-mapping-">7. How are stored mapping ?</h2>
-<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT </span>
-pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.0</span>;  
+<pre><code class="lang-js">// SPDX-License-Identifier: MIT 
+pragma solidity ^0.8.0;  
 contract Test {     
-    mapping(<span class="hljs-function"><span class="hljs-params">address</span> =&gt;</span> uint) balances;      
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">modify</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> </span>{                  
-      balances[<span class="hljs-number">0xbc5D291D2165f130375B94c62211f594dB48fEF2</span>] = <span class="hljs-number">15</span>;             
-      balances[<span class="hljs-number">0x9a8af21Ac492D5055eA7e1e49bD91BC9b5549334</span>] = <span class="hljs-number">55</span>; 
+    mapping(address =&gt; uint) balances;      
+    function modify() external {                  
+      balances[0xbc5D291D2165f130375B94c62211f594dB48fEF2] = 15;             
+      balances[0x9a8af21Ac492D5055eA7e1e49bD91BC9b5549334] = 55; 
     } 
 }
 </code></pre>
@@ -3208,7 +3212,7 @@ contract Test {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第3节:各种类型是如何存储的","level":"1.17.3","depth":2,"next":{"title":"第4节:五种程序终止命令介绍","level":"1.17.4","depth":2,"path":"10_EVM反汇编/04_五种程序终止命令介绍.md","ref":"10_EVM反汇编/04_五种程序终止命令介绍.md","articles":[]},"previous":{"title":"第2节:合约部署都做了啥","level":"1.17.2","depth":2,"path":"10_EVM反汇编/02_合约部署都做了啥.md","ref":"10_EVM反汇编/02_合约部署都做了啥.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"10_EVM反汇编/03_各种类型是如何存储的.md","mtime":"2023-03-21T14:01:27.000Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-19T22:08:50.792Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第3节:各种类型是如何存储的","level":"1.17.3","depth":2,"next":{"title":"第4节:五种程序终止命令介绍","level":"1.17.4","depth":2,"path":"10_EVM反汇编/04_五种程序终止命令介绍.md","ref":"10_EVM反汇编/04_五种程序终止命令介绍.md","articles":[]},"previous":{"title":"第2节:合约部署都做了啥","level":"1.17.2","depth":2,"path":"10_EVM反汇编/02_合约部署都做了啥.md","ref":"10_EVM反汇编/02_合约部署都做了啥.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"10_EVM反汇编/03_各种类型是如何存储的.md","mtime":"2023-03-21T14:01:27.000Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3291,6 +3295,14 @@ contract Test {
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

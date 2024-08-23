@@ -36,6 +36,10 @@
                 
             
                 
+                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
+                
+            
+                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3028,8 +3032,8 @@
 <li><strong>msg.data</strong>：表示调用这笔交易的信息，由函数签名和函数参数（16进制字符串），组成代理模式时常用msg.data（后续讲解）。</li>
 </ol>
 <h2 id="msgsender">msg.sender</h2>
-<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
-pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
+<pre><code class="lang-js">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.13;
 
 contract MsgSender {
 
@@ -3037,69 +3041,69 @@ contract MsgSender {
     uint256 public value;
     address public caller;
 
-    <span class="hljs-function"><span class="hljs-title">constructor</span>(<span class="hljs-params"></span>)</span> {
-        <span class="hljs-comment">//在部署合约的时候，设置一个全局唯一的合约所有者，后面可以使用权限控制</span>
+    constructor() {
+        //在部署合约的时候，设置一个全局唯一的合约所有者，后面可以使用权限控制
         owner = msg.sender;
     }
 
-    <span class="hljs-comment">//1. 对与合约而言，msg.sender是一个可以改变的值，并不一定是合约的创造者</span>
-    <span class="hljs-comment">//2. 任何人调用了合约的方法，那么这笔交易中的from就是当前合约中的msg.sender</span>
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setValue</span>(<span class="hljs-params">uint256 input</span>) <span class="hljs-title">public</span> </span>{
+    //1. 对与合约而言，msg.sender是一个可以改变的值，并不一定是合约的创造者
+    //2. 任何人调用了合约的方法，那么这笔交易中的from就是当前合约中的msg.sender
+    function setValue(uint256 input) public {
         value = input;
         caller = msg.sender;
     }
 }
 </code></pre>
 <h2 id="msgvalue">msg.value</h2>
-<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
-pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
+<pre><code class="lang-js">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.13;
 
 contract MsgValue {
 
-    <span class="hljs-comment">// uint256 public money;</span>
+    // uint256 public money;
 
-    mapping(<span class="hljs-function"><span class="hljs-params">address</span>=&gt;</span> uint256) public personToMoney;
+    mapping(address=&gt; uint256) public personToMoney;
 
-    <span class="hljs-comment">// 函数里面使用了msg.value，那么函数要修饰为payable</span>
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">play</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> <span class="hljs-title">payable</span> </span>{
+    // 函数里面使用了msg.value，那么函数要修饰为payable
+    function play() public payable {
 
-        <span class="hljs-comment">// 如果转账不是100wei，那么参与失败</span>
-        <span class="hljs-comment">// 否则成功，并且添加到维护的mapping中</span>
-        <span class="hljs-built_in">require</span>(msg.value == <span class="hljs-number">100</span>, <span class="hljs-string">&quot;should equal to 100!&quot;</span>);
+        // 如果转账不是100wei，那么参与失败
+        // 否则成功，并且添加到维护的mapping中
+        require(msg.value == 100, &quot;should equal to 100!&quot;);
         personToMoney[msg.sender] = msg.value;
     }
 
-    <span class="hljs-comment">// 查询当前合约的余额</span>
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getBalance</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span>(<span class="hljs-params">uint256</span>) </span>{
-        <span class="hljs-keyword">return</span> address(<span class="hljs-built_in">this</span>).balance;
+    // 查询当前合约的余额
+    function getBalance() public view returns(uint256) {
+        return address(this).balance;
     }
 }
 </code></pre>
 <h2 id="msgdata">msg.data</h2>
-<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
-pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
+<pre><code class="lang-js">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.13;
 
 contract MsgData {
     event Data(bytes data, bytes4 sig);
 
-    <span class="hljs-comment">// input0: addr: 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4</span>
-    <span class="hljs-comment">// input1: amt : 1</span>
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">transfer</span>(<span class="hljs-params">address addr, uint256 amt</span>) <span class="hljs-title">public</span> </span>{
+    // input0: addr: 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4
+    // input1: amt : 1
+    function transfer(address addr, uint256 amt) public {
         bytes memory data = msg.data;
 
-        <span class="hljs-comment">// msg.sig 表示当前方法函数签名（4字节）</span>
-        <span class="hljs-comment">// msg.sig 等价于 this.transfer.selector</span>
+        // msg.sig 表示当前方法函数签名（4字节）
+        // msg.sig 等价于 this.transfer.selector
         emit Data(data, msg.sig);
     }
 
-    <span class="hljs-comment">//output: </span>
-    <span class="hljs-comment">// - data: 0xa9059cbb0000000000000000000000005b38da6a701c568545dcfcb03fcb875f56beddc40000000000000000000000000000000000000000000000000000000000000001</span>
-    <span class="hljs-comment">// - sig: 0xa9059cbb</span>
+    //output: 
+    // - data: 0xa9059cbb0000000000000000000000005b38da6a701c568545dcfcb03fcb875f56beddc40000000000000000000000000000000000000000000000000000000000000001
+    // - sig: 0xa9059cbb
 
-    <span class="hljs-comment">// 对data进行分析：</span>
-    <span class="hljs-comment">// 0xa9059cbb //前四字节</span>
-    <span class="hljs-comment">// 0000000000000000000000005b38da6a701c568545dcfcb03fcb875f56beddc4 //第一个参数占位符（32字节）</span>
-    <span class="hljs-comment">// 0000000000000000000000000000000000000000000000000000000000000001 //第二个参数占位符（32字节）</span>
+    // 对data进行分析：
+    // 0xa9059cbb //前四字节
+    // 0000000000000000000000005b38da6a701c568545dcfcb03fcb875f56beddc4 //第一个参数占位符（32字节）
+    // 0000000000000000000000000000000000000000000000000000000000000001 //第二个参数占位符（32字节）
 }
 </code></pre>
 
@@ -3129,7 +3133,7 @@ contract MsgData {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第2节:msg三人组","level":"1.9.2","depth":2,"next":{"title":"第3节:payable","level":"1.9.3","depth":2,"path":"02_solidity进阶/03_payable.md","ref":"02_solidity进阶/03_payable.md","articles":[]},"previous":{"title":"第1节:全局变量","level":"1.9.1","depth":2,"path":"02_solidity进阶/01_全局变量.md","ref":"02_solidity进阶/01_全局变量.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"02_solidity进阶/02_msg三人组.md","mtime":"2023-09-23T13:09:47.205Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-19T22:08:50.792Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第2节:msg三人组","level":"1.9.2","depth":2,"next":{"title":"第3节:payable","level":"1.9.3","depth":2,"path":"02_solidity进阶/03_payable.md","ref":"02_solidity进阶/03_payable.md","articles":[]},"previous":{"title":"第1节:全局变量","level":"1.9.1","depth":2,"path":"02_solidity进阶/01_全局变量.md","ref":"02_solidity进阶/01_全局变量.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"02_solidity进阶/02_msg三人组.md","mtime":"2023-09-23T13:09:47.205Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3212,6 +3216,14 @@ contract MsgData {
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

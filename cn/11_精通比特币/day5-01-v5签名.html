@@ -36,6 +36,10 @@
                 
             
                 
+                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
+                
+            
+                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3054,79 +3058,79 @@
 <li>私钥</li>
 </ul>
 <p><strong>无论是签名还是校验，一定要格外注意处理挖矿交易</strong></p>
-<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(tx *Transaction)</span> <span class="hljs-title">Sign</span><span class="hljs-params">(privateKey ecdsa.PrivateKey, prevTXs <span class="hljs-keyword">map</span>[<span class="hljs-keyword">string</span>]Transaction)</span></span> {
-    fmt.Println(<span class="hljs-string">&quot;begin Sign ...&quot;</span>)
-    <span class="hljs-comment">//挖矿交易不需要签名</span>
-    <span class="hljs-keyword">if</span> tx.IsCoinbase() {
-        <span class="hljs-keyword">return</span>
+<pre><code class="lang-go">func (tx *Transaction) Sign(privateKey ecdsa.PrivateKey, prevTXs map[string]Transaction) {
+    fmt.Println(&quot;begin Sign ...&quot;)
+    //挖矿交易不需要签名
+    if tx.IsCoinbase() {
+        return
     }
 
-    fmt.Printf(<span class="hljs-string">&quot;====== Sign tx : %x ======\n&quot;</span>, tx.TXID)
+    fmt.Printf(&quot;====== Sign tx : %x ======\n&quot;, tx.TXID)
 
-    <span class="hljs-comment">//确保引用的交易都是有效的，tx中的每个input都应该对应一条交易</span>
-    <span class="hljs-keyword">for</span> _, input := <span class="hljs-keyword">range</span> tx.TXInputs {
-        <span class="hljs-keyword">if</span> prevTXs[<span class="hljs-keyword">string</span>(input.TXID)].TXID == <span class="hljs-literal">nil</span> {
-            <span class="hljs-comment">//if prevTXs[hex.EncodeToString(input.TXID)].TXID == nil {</span>
-            log.Panic(<span class="hljs-string">&quot;Previous txs are not valid!&quot;</span>)
+    //确保引用的交易都是有效的，tx中的每个input都应该对应一条交易
+    for _, input := range tx.TXInputs {
+        if prevTXs[string(input.TXID)].TXID == nil {
+            //if prevTXs[hex.EncodeToString(input.TXID)].TXID == nil {
+            log.Panic(&quot;Previous txs are not valid!&quot;)
         }
     }
 
-    <span class="hljs-comment">//获取要签名的信息</span>
-    <span class="hljs-comment">//我们对把当前的交易签名，然后存放到Signature中。</span>
-    <span class="hljs-comment">//将当前的交易复制一份，然后做签名处理</span>
+    //获取要签名的信息
+    //我们对把当前的交易签名，然后存放到Signature中。
+    //将当前的交易复制一份，然后做签名处理
     txCopy := tx.TrimmedCopy()
 
-    <span class="hljs-comment">//再次强调一下我们要签名的三部分：</span>
-    <span class="hljs-comment">//- 欲使用的utxo中的pubKeyHash（这描述了付款人）</span>
-    <span class="hljs-comment">//- 新生成的utxo中的pubKeyHash（这描述了收款人）</span>
-    <span class="hljs-comment">//- 转账金额</span>
+    //再次强调一下我们要签名的三部分：
+    //- 欲使用的utxo中的pubKeyHash（这描述了付款人）
+    //- 新生成的utxo中的pubKeyHash（这描述了收款人）
+    //- 转账金额
 
-    <span class="hljs-comment">//注意，遍历的是txCopy，而不是tx本身</span>
-    <span class="hljs-keyword">for</span> index, input := <span class="hljs-keyword">range</span> txCopy.TXInputs {
-        prevTX := prevTXs[<span class="hljs-keyword">string</span>(input.TXID)]
+    //注意，遍历的是txCopy，而不是tx本身
+    for index, input := range txCopy.TXInputs {
+        prevTX := prevTXs[string(input.TXID)]
 
-        <span class="hljs-comment">//使用input的PublicKey字段暂时存储一下这个想要解锁的utxo的公钥哈希</span>
-        <span class="hljs-comment">//这里有个坑！！！</span>
-        <span class="hljs-comment">//我一直使用input.PublicKey来赋值，但是其实range会复制一个新的变量，而不会修改你遍历的的txCopy， 这里一定要小心！！！，所以下面的这就要修改如下：</span>
-        <span class="hljs-comment">//input.PublicKey = prevTX.TXOutputs[input.VoutIndex].PublicKeyHash</span>
+        //使用input的PublicKey字段暂时存储一下这个想要解锁的utxo的公钥哈希
+        //这里有个坑！！！
+        //我一直使用input.PublicKey来赋值，但是其实range会复制一个新的变量，而不会修改你遍历的的txCopy， 这里一定要小心！！！，所以下面的这就要修改如下：
+        //input.PublicKey = prevTX.TXOutputs[input.VoutIndex].PublicKeyHash
         txCopy.TXInputs[index].PublicKey = prevTX.TXOutputs[input.VoutIndex].PublicKeyHash
-        <span class="hljs-comment">//至此三个想要签名的数据都有了, 如何签名？签名一般对数据的哈希值进行签名</span>
-        <span class="hljs-comment">//要签名的哈希存放在txCopy.TXID中</span>
+        //至此三个想要签名的数据都有了, 如何签名？签名一般对数据的哈希值进行签名
+        //要签名的哈希存放在txCopy.TXID中
         txCopy.setHash()
-        <span class="hljs-comment">//一定要赋值为nil，下面交易签名还要用的，虽然不用这个input了，但是它会污染其他交易</span>
-        <span class="hljs-comment">//在校验过程时，也会生成txCopy，设置nil双方才能与生成一致的数据</span>
-        txCopy.TXInputs[index].PublicKey = <span class="hljs-literal">nil</span>
-        fmt.Printf(<span class="hljs-string">&quot;data to sign (TXID) : %x\n&quot;</span>, txCopy.TXID)
+        //一定要赋值为nil，下面交易签名还要用的，虽然不用这个input了，但是它会污染其他交易
+        //在校验过程时，也会生成txCopy，设置nil双方才能与生成一致的数据
+        txCopy.TXInputs[index].PublicKey = nil
+        fmt.Printf(&quot;data to sign (TXID) : %x\n&quot;, txCopy.TXID)
 
         r, s, err := ecdsa.Sign(rand.Reader, &amp;privateKey, txCopy.TXID)
-        <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
-            fmt.Println(<span class="hljs-string">&quot;ecdsa.Sign failed!&quot;</span>)
+        if err != nil {
+            fmt.Println(&quot;ecdsa.Sign failed!&quot;)
             log.Panic(err)
         }
 
-    <span class="hljs-comment">//将得到的r,s拼接成[]byte，放在signature中</span>
-        signature := <span class="hljs-built_in">append</span>(r.Bytes(), s.Bytes()...)
-        <span class="hljs-comment">//tx的索引和txCopy的是一致的</span>
+    //将得到的r,s拼接成[]byte，放在signature中
+        signature := append(r.Bytes(), s.Bytes()...)
+        //tx的索引和txCopy的是一致的
         tx.TXInputs[index].Signature = signature
-        fmt.Printf(<span class="hljs-string">&quot;signature : %x\n&quot;</span>, signature)
+        fmt.Printf(&quot;signature : %x\n&quot;, signature)
     }
 }
 </code></pre>
 <p>TrimmedCopy函数</p>
-<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(tx *Transaction)</span> <span class="hljs-title">TrimmedCopy</span><span class="hljs-params">()</span> <span class="hljs-title">Transaction</span></span> {
-    <span class="hljs-keyword">var</span> inputs []TXInput
-    <span class="hljs-keyword">var</span> outputs []TXOutput
+<pre><code class="lang-go">func (tx *Transaction) TrimmedCopy() Transaction {
+    var inputs []TXInput
+    var outputs []TXOutput
 
-    <span class="hljs-keyword">for</span> _, input := <span class="hljs-keyword">range</span> tx.TXInputs {
-        inputs = <span class="hljs-built_in">append</span>(inputs, TXInput{input.TXID, input.VoutIndex, <span class="hljs-literal">nil</span>, <span class="hljs-literal">nil</span>})
+    for _, input := range tx.TXInputs {
+        inputs = append(inputs, TXInput{input.TXID, input.VoutIndex, nil, nil})
     }
 
-    <span class="hljs-keyword">for</span> _, output := <span class="hljs-keyword">range</span> tx.TXOutputs {
-        outputs = <span class="hljs-built_in">append</span>(outputs, TXOutput{output.Value, output.PublicKeyHash})
+    for _, output := range tx.TXOutputs {
+        outputs = append(outputs, TXOutput{output.Value, output.PublicKeyHash})
     }
 
     txCopy := Transaction{tx.TXID, inputs, outputs}
-    <span class="hljs-keyword">return</span> txCopy
+    return txCopy
 }
 </code></pre>
 <p>在NewTransaction的最后，使用私钥对其进行签名。</p>
@@ -3134,19 +3138,19 @@
 <p>在SignTransaction内部再调用Sign函数。</p>
 <p><img src="assets/image-20221108142857808.png" alt="image-20221108142857808"></p>
 <h3 id="-signtransaction">- SignTransaction</h3>
-<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(bc *BlockChain)</span> <span class="hljs-title">SignTransaction</span><span class="hljs-params">(tx *Transaction, privateKey ecdsa.PrivateKey)</span></span> {
-    <span class="hljs-comment">//寻找所引用的交易数组</span>
-    <span class="hljs-comment">//调用tx.Sign进行签名</span>
+<pre><code class="lang-go">func (bc *BlockChain) SignTransaction(tx *Transaction, privateKey ecdsa.PrivateKey) {
+    //寻找所引用的交易数组
+    //调用tx.Sign进行签名
 
-    prevTXs := <span class="hljs-built_in">make</span>(<span class="hljs-keyword">map</span>[<span class="hljs-keyword">string</span>]Transaction)
-    <span class="hljs-keyword">for</span> _, input := <span class="hljs-keyword">range</span> tx.TXInputs {
+    prevTXs := make(map[string]Transaction)
+    for _, input := range tx.TXInputs {
         prevTX, err := bc.FindTransaction(input.TXID)
-        <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
+        if err != nil {
             log.Panic(err)
         }
 
-    <span class="hljs-comment">//这里一定要注意，不是tx.TXID，小心掉坑</span>
-        prevTXs[<span class="hljs-keyword">string</span>(prevTX.TXID)] = prevTX
+    //这里一定要注意，不是tx.TXID，小心掉坑
+        prevTXs[string(prevTX.TXID)] = prevTX
     }
 
     tx.Sign(privateKey, prevTXs)
@@ -3154,22 +3158,22 @@
 </code></pre>
 <h3 id="-findtransaction">- FindTransaction</h3>
 <p>通过交易id返回交易结构</p>
-<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(bc *BlockChain)</span> <span class="hljs-title">FindTransaction</span><span class="hljs-params">(txid []<span class="hljs-keyword">byte</span>)</span> <span class="hljs-params">(Transaction, error)</span></span> {
+<pre><code class="lang-go">func (bc *BlockChain) FindTransaction(txid []byte) (Transaction, error) {
     it := NewBlockChainIterator(bc)
-    <span class="hljs-keyword">for</span> {
+    for {
         block := it.GetBlockAndMoveLeft()
-        <span class="hljs-keyword">for</span> _, tx := <span class="hljs-keyword">range</span> block.Transactions {
-            <span class="hljs-keyword">if</span> bytes.Compare(txid, tx.TXID) == <span class="hljs-number">0</span> {
-                <span class="hljs-keyword">return</span> *tx, <span class="hljs-literal">nil</span>
+        for _, tx := range block.Transactions {
+            if bytes.Compare(txid, tx.TXID) == 0 {
+                return *tx, nil
             }
         }
 
-        <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(block.PrevBlockHash) == <span class="hljs-number">0</span> {
-            <span class="hljs-keyword">break</span>
+        if len(block.PrevBlockHash) == 0 {
+            break
         }
     }
 
-    <span class="hljs-keyword">return</span> Transaction{}, errors.New(<span class="hljs-string">&quot;Transaction not found!&quot;</span>)
+    return Transaction{}, errors.New(&quot;Transaction not found!&quot;)
 }
 </code></pre>
 <h3 id="-测试">- 测试</h3>
@@ -3189,114 +3193,114 @@
 </ul>
 <p>代码如下：</p>
 <p>校验函数原型如下，由于交易中已经存储了<code>数字签名</code>和<code>公钥</code>，所以只需要将引用的交易传递进来即可（为了获取引用输出的公钥哈希）</p>
-<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(tx *Transaction)</span> <span class="hljs-title">Verify</span><span class="hljs-params">(prevTXs <span class="hljs-keyword">map</span>[<span class="hljs-keyword">string</span>]Transaction)</span> <span class="hljs-title">bool</span></span> {
-    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>
+<pre><code class="lang-go">func (tx *Transaction) Verify(prevTXs map[string]Transaction) bool {
+    return true
 }
 </code></pre>
 <p>那这个交易由谁在何处调用呢？</p>
 <p>答案是：我们要在挖矿之前进行验证，确保只有正确有效的交易才会被打包</p>
-<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(bc *BlockChain)</span> <span class="hljs-title">AddBlock</span><span class="hljs-params">(txs []*Transaction)</span></span> {
+<pre><code class="lang-go">func (bc *BlockChain) AddBlock(txs []*Transaction) {
     ...
-    <span class="hljs-comment">//创建新区块</span>
+    //创建新区块
     newBlock := NewBlock(txs, lastBlockHash)
 
-    <span class="hljs-keyword">for</span> _, tx := <span class="hljs-keyword">range</span> txs {
-        <span class="hljs-keyword">if</span> !bc.VerifyTransaction(tx) {
-            log.Panic(<span class="hljs-string">&quot;Error : invalid transaction found!&quot;</span>)
+    for _, tx := range txs {
+        if !bc.VerifyTransaction(tx) {
+            log.Panic(&quot;Error : invalid transaction found!&quot;)
         }
     }
     ...
 }
 </code></pre>
 <p>交易函数很简单，同SignTransaction</p>
-<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(bc *BlockChain)</span> <span class="hljs-title">VerifyTransaction</span><span class="hljs-params">(tx *Transaction)</span> <span class="hljs-title">bool</span></span> {
-    <span class="hljs-comment">//必须加上这句校验，否则在FindTranction中就会报错，因为coinbase所引用的input的id为nil</span>
-    <span class="hljs-keyword">if</span> tx.IsCoinbase() {
-        fmt.Println(<span class="hljs-string">&quot;VerifyTransaction conibase found!&quot;</span>)
-        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>
+<pre><code class="lang-go">func (bc *BlockChain) VerifyTransaction(tx *Transaction) bool {
+    //必须加上这句校验，否则在FindTranction中就会报错，因为coinbase所引用的input的id为nil
+    if tx.IsCoinbase() {
+        fmt.Println(&quot;VerifyTransaction conibase found!&quot;)
+        return true
     }
 
-    prevTXs := <span class="hljs-built_in">make</span>(<span class="hljs-keyword">map</span>[<span class="hljs-keyword">string</span>]Transaction)
+    prevTXs := make(map[string]Transaction)
 
-    <span class="hljs-keyword">for</span> _, input := <span class="hljs-keyword">range</span> tx.TXInputs {
-        fmt.Printf(<span class="hljs-string">&quot;input.TXID: %x\n&quot;</span>, input.TXID)
+    for _, input := range tx.TXInputs {
+        fmt.Printf(&quot;input.TXID: %x\n&quot;, input.TXID)
         prevTX, err := bc.FindTransaction(input.TXID)
-        <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
+        if err != nil {
             log.Panic(err)
         }
 
-        prevTXs[<span class="hljs-keyword">string</span>(prevTX.TXID)] = prevTX
-        <span class="hljs-comment">//fmt.Printf(&quot;string(prevTX.TXID): %x&quot;, string(prevTX.TXID))</span>
+        prevTXs[string(prevTX.TXID)] = prevTX
+        //fmt.Printf(&quot;string(prevTX.TXID): %x&quot;, string(prevTX.TXID))
     }
 
-    <span class="hljs-keyword">return</span> tx.Verify(prevTXs)
+    return tx.Verify(prevTXs)
 }
 </code></pre>
 <p>编译一下，没有问题，接下来实现Verify函数</p>
 <h3 id="-verify">- Verify</h3>
-<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(tx *Transaction)</span> <span class="hljs-title">Verify</span><span class="hljs-params">(prevTXs <span class="hljs-keyword">map</span>[<span class="hljs-keyword">string</span>]Transaction)</span> <span class="hljs-title">bool</span></span> {
-    fmt.Println(<span class="hljs-string">&quot;begin Verify ...&quot;</span>)
-    <span class="hljs-keyword">if</span> tx.IsCoinbase() {
-        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>
+<pre><code class="lang-go">func (tx *Transaction) Verify(prevTXs map[string]Transaction) bool {
+    fmt.Println(&quot;begin Verify ...&quot;)
+    if tx.IsCoinbase() {
+        return true
     }
 
-    fmt.Printf(<span class="hljs-string">&quot;====== Verify tx : %x ======\n&quot;</span>, tx.TXID)
+    fmt.Printf(&quot;====== Verify tx : %x ======\n&quot;, tx.TXID)
 
-    <span class="hljs-keyword">for</span> _, input := <span class="hljs-keyword">range</span> tx.TXInputs {
-        <span class="hljs-keyword">if</span> prevTXs[<span class="hljs-keyword">string</span>(input.TXID)].TXID == <span class="hljs-literal">nil</span> {
-            log.Panic(<span class="hljs-string">&quot;previous transaction is not valid!&quot;</span>)
+    for _, input := range tx.TXInputs {
+        if prevTXs[string(input.TXID)].TXID == nil {
+            log.Panic(&quot;previous transaction is not valid!&quot;)
         }
     }
 
-    <span class="hljs-comment">//为了获取原始的签名数据</span>
+    //为了获取原始的签名数据
     txCopy := tx.TrimmedCopy()
 
-    <span class="hljs-comment">//获取签名的原始数据(一个哈希值)，与签名时步骤一样</span>
-    <span class="hljs-comment">//签名时对每一个引用的input都签名，校验也一定是对每一个input都校验</span>
-    <span class="hljs-comment">//这里要注意for循环的对象，应该是原始的inputs结构，而不应该是copy过来的那个</span>
-  <span class="hljs-comment">//与Sign时遍历的不同    </span>
-    <span class="hljs-keyword">for</span> index, input := <span class="hljs-keyword">range</span> tx.TXInputs {
-        prevTX := prevTXs[<span class="hljs-keyword">string</span>(input.TXID)]
-        <span class="hljs-comment">//这个可以为了确保为空再设置一次nil</span>
-        txCopy.TXInputs[index].Signature = <span class="hljs-literal">nil</span>
+    //获取签名的原始数据(一个哈希值)，与签名时步骤一样
+    //签名时对每一个引用的input都签名，校验也一定是对每一个input都校验
+    //这里要注意for循环的对象，应该是原始的inputs结构，而不应该是copy过来的那个
+  //与Sign时遍历的不同    
+    for index, input := range tx.TXInputs {
+        prevTX := prevTXs[string(input.TXID)]
+        //这个可以为了确保为空再设置一次nil
+        txCopy.TXInputs[index].Signature = nil
         txCopy.TXInputs[index].PublicKey = prevTX.TXOutputs[input.VoutIndex].PublicKeyHash
         txCopy.setHash()
 
-    <span class="hljs-comment">//这个也可以再次置空，不过不需要，因为每一个index对应的input只使用一次(这是错误的理解)</span>
-    <span class="hljs-comment">//之所尚未出错，因为我们现在都只引用一个交易就完成了，没校验多个input</span>
-    <span class="hljs-comment">//一定要设置，否则会影响其他交易的校验</span>
-        txCopy.TXInputs[index].PublicKey = <span class="hljs-literal">nil</span>
+    //这个也可以再次置空，不过不需要，因为每一个index对应的input只使用一次(这是错误的理解)
+    //之所尚未出错，因为我们现在都只引用一个交易就完成了，没校验多个input
+    //一定要设置，否则会影响其他交易的校验
+        txCopy.TXInputs[index].PublicKey = nil
 
-        <span class="hljs-comment">//处理签名</span>
+        //处理签名
         r := big.Int{}
         s := big.Int{}
 
-        sigLen := <span class="hljs-built_in">len</span>(input.Signature)
+        sigLen := len(input.Signature)
 
-    <span class="hljs-comment">//查看签名的原始数据</span>
-    fmt.Printf(<span class="hljs-string">&quot;data to Verify (TXID): %x\n&quot;</span>, txCopy.TXID)
-        <span class="hljs-comment">//确保签名是一致的</span>
-        fmt.Printf(<span class="hljs-string">&quot;verify Signature: %x\n&quot;</span>, input.Signature)
+    //查看签名的原始数据
+    fmt.Printf(&quot;data to Verify (TXID): %x\n&quot;, txCopy.TXID)
+        //确保签名是一致的
+        fmt.Printf(&quot;verify Signature: %x\n&quot;, input.Signature)
 
-        r.SetBytes(input.Signature[:(sigLen / <span class="hljs-number">2</span>)])
-        s.SetBytes(input.Signature[(sigLen / <span class="hljs-number">2</span>):])
+        r.SetBytes(input.Signature[:(sigLen / 2)])
+        s.SetBytes(input.Signature[(sigLen / 2):])
 
-        <span class="hljs-comment">//处理公钥</span>
+        //处理公钥
         x := big.Int{}
         y := big.Int{}
-        keyLen := <span class="hljs-built_in">len</span>(input.PublicKey)
-        x.SetBytes(input.PublicKey[:(keyLen / <span class="hljs-number">2</span>)])
-        y.SetBytes(input.PublicKey[(keyLen / <span class="hljs-number">2</span>):])
+        keyLen := len(input.PublicKey)
+        x.SetBytes(input.PublicKey[:(keyLen / 2)])
+        y.SetBytes(input.PublicKey[(keyLen / 2):])
 
         curve := elliptic.P256()
         rawPubKey := ecdsa.PublicKey{curve, &amp;x, &amp;y}
 
-        <span class="hljs-keyword">if</span> !ecdsa.Verify(&amp;rawPubKey, txCopy.TXID, &amp;r, &amp;s) {
-            <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>
+        if !ecdsa.Verify(&amp;rawPubKey, txCopy.TXID, &amp;r, &amp;s) {
+            return false
         }
     }
 
-    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>
+    return true
 }
 </code></pre>
 <h3 id="-测试">- 测试</h3>
@@ -3305,115 +3309,115 @@
 <h1 id="三、打印命令">三、打印命令</h1>
 <h3 id="-结构体的string">- 结构体的String()</h3>
 <p>如果结构体实现了String()这个方法，那么fmt默认会调用String()。</p>
-<pre><code class="lang-go"><span class="hljs-keyword">package</span> main
+<pre><code class="lang-go">package main
 
-<span class="hljs-keyword">import</span> <span class="hljs-string">&quot;fmt&quot;</span>
+import &quot;fmt&quot;
 
-<span class="hljs-keyword">type</span> Test <span class="hljs-keyword">struct</span> {
-    s <span class="hljs-keyword">string</span>
+type Test struct {
+    s string
 }
 
-<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(t *Test)</span> <span class="hljs-title">String</span><span class="hljs-params">()</span> <span class="hljs-title">string</span></span>{
-    <span class="hljs-keyword">return</span> fmt.Sprintf(<span class="hljs-string">&quot;hello world: %s\n&quot;</span>, t.s)
+func (t *Test) String() string{
+    return fmt.Sprintf(&quot;hello world: %s\n&quot;, t.s)
 }
 
-<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> {
-    n := Test{s:<span class="hljs-string">&quot;你好&quot;</span>}
-    fmt.Println(&amp;n) <span class="hljs-comment">//hello world:</span>
+func main() {
+    n := Test{s:&quot;你好&quot;}
+    fmt.Println(&amp;n) //hello world:
 }
 </code></pre>
 <h3 id="-更新代码">- 更新代码</h3>
-<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(cli *CLI)</span> <span class="hljs-title">printChain</span><span class="hljs-params">()</span></span> {
+<pre><code class="lang-go">func (cli *CLI) printChain() {
 
-    <span class="hljs-comment">//定义迭代器</span>
-    <span class="hljs-comment">//it := NewBlockChainIterator(cli.bc)</span>
+    //定义迭代器
+    //it := NewBlockChainIterator(cli.bc)
     bc := GetBlockChainObj()
     it := NewBlockChainIterator(bc)
-    <span class="hljs-keyword">for</span> {
+    for {
 
         block := it.GetBlockAndMoveLeft()
 
-        fmt.Printf(<span class="hljs-string">&quot; ============== Block %x============\n&quot;</span>, block.Hash)
+        fmt.Printf(&quot; ============== Block %x============\n&quot;, block.Hash)
         pow := NewProofOfWork(block)
-        fmt.Printf(<span class="hljs-string">&quot;IsValid : %v\n&quot;</span>, pow.IsValid())
+        fmt.Printf(&quot;IsValid : %v\n&quot;, pow.IsValid())
 
-        <span class="hljs-keyword">for</span> _, tx := <span class="hljs-keyword">range</span> block.Transactions {
+        for _, tx := range block.Transactions {
             fmt.Println(tx)
         }
 
-        <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(block.PrevBlockHash) == <span class="hljs-number">0</span> {
-            fmt.Println(<span class="hljs-string">&quot;print over!&quot;</span>)
-            <span class="hljs-keyword">break</span>
+        if len(block.PrevBlockHash) == 0 {
+            fmt.Println(&quot;print over!&quot;)
+            break
         }
     }
 }
 </code></pre>
 <p>在Transaction结构中，添加如下函数:</p>
-<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(tx Transaction)</span> <span class="hljs-title">String</span><span class="hljs-params">()</span> <span class="hljs-title">string</span></span> {
-    <span class="hljs-keyword">var</span> lines []<span class="hljs-keyword">string</span>
+<pre><code class="lang-go">func (tx Transaction) String() string {
+    var lines []string
 
-    lines = <span class="hljs-built_in">append</span>(lines, fmt.Sprintf(<span class="hljs-string">&quot;--- Transaction %x:&quot;</span>, tx.TXID))
+    lines = append(lines, fmt.Sprintf(&quot;--- Transaction %x:&quot;, tx.TXID))
 
-    <span class="hljs-keyword">for</span> i, input := <span class="hljs-keyword">range</span> tx.TXInputs {
+    for i, input := range tx.TXInputs {
 
-        lines = <span class="hljs-built_in">append</span>(lines, fmt.Sprintf(<span class="hljs-string">&quot;     Input %d:&quot;</span>, i))
-        lines = <span class="hljs-built_in">append</span>(lines, fmt.Sprintf(<span class="hljs-string">&quot;       TXID:      %x&quot;</span>, input.TXID))
-        lines = <span class="hljs-built_in">append</span>(lines, fmt.Sprintf(<span class="hljs-string">&quot;       Out:       %d&quot;</span>, input.VoutIndex))
-        lines = <span class="hljs-built_in">append</span>(lines, fmt.Sprintf(<span class="hljs-string">&quot;       Signature: %x&quot;</span>, input.Signature))
-        lines = <span class="hljs-built_in">append</span>(lines, fmt.Sprintf(<span class="hljs-string">&quot;       PubKey:    %x&quot;</span>, input.PublicKey))
+        lines = append(lines, fmt.Sprintf(&quot;     Input %d:&quot;, i))
+        lines = append(lines, fmt.Sprintf(&quot;       TXID:      %x&quot;, input.TXID))
+        lines = append(lines, fmt.Sprintf(&quot;       Out:       %d&quot;, input.VoutIndex))
+        lines = append(lines, fmt.Sprintf(&quot;       Signature: %x&quot;, input.Signature))
+        lines = append(lines, fmt.Sprintf(&quot;       PubKey:    %x&quot;, input.PublicKey))
     }
 
-    <span class="hljs-keyword">for</span> i, output := <span class="hljs-keyword">range</span> tx.TXOutputs{
-        lines = <span class="hljs-built_in">append</span>(lines, fmt.Sprintf(<span class="hljs-string">&quot;     Output %d:&quot;</span>, i))
-        lines = <span class="hljs-built_in">append</span>(lines, fmt.Sprintf(<span class="hljs-string">&quot;       Value:  %f&quot;</span>, output.Value))
-        lines = <span class="hljs-built_in">append</span>(lines, fmt.Sprintf(<span class="hljs-string">&quot;       Script: %x&quot;</span>, output.PublicKeyHash))
+    for i, output := range tx.TXOutputs{
+        lines = append(lines, fmt.Sprintf(&quot;     Output %d:&quot;, i))
+        lines = append(lines, fmt.Sprintf(&quot;       Value:  %f&quot;, output.Value))
+        lines = append(lines, fmt.Sprintf(&quot;       Script: %x&quot;, output.PublicKeyHash))
     }
 
-    <span class="hljs-keyword">return</span> strings.Join(lines, <span class="hljs-string">&quot;\n&quot;</span>)
+    return strings.Join(lines, &quot;\n&quot;)
 }
 </code></pre>
 <h3 id="-测试">- 测试</h3>
 <p>与比特币核心类似</p>
 <p><img src="assets/image-20221108142942576.png" alt="image-20221108142942576"></p>
 <h3 id="-transaction-添加string（）方法">- Transaction 添加String（）方法</h3>
-<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(tx Transaction)</span> <span class="hljs-title">String</span><span class="hljs-params">()</span> <span class="hljs-title">string</span></span> {
-    <span class="hljs-keyword">var</span> lines []<span class="hljs-keyword">string</span>
+<pre><code class="lang-go">func (tx Transaction) String() string {
+    var lines []string
 
-    lines = <span class="hljs-built_in">append</span>(lines, fmt.Sprintf(<span class="hljs-string">&quot;--- Transaction %x:&quot;</span>, tx.TxId))
+    lines = append(lines, fmt.Sprintf(&quot;--- Transaction %x:&quot;, tx.TxId))
 
-    <span class="hljs-keyword">for</span> i, input := <span class="hljs-keyword">range</span> tx.TXInputs {
+    for i, input := range tx.TXInputs {
 
-        lines = <span class="hljs-built_in">append</span>(lines, fmt.Sprintf(<span class="hljs-string">&quot;     Input %d:&quot;</span>, i))
-        lines = <span class="hljs-built_in">append</span>(lines, fmt.Sprintf(<span class="hljs-string">&quot;       TXID:      %x&quot;</span>, input.TXID))
-        lines = <span class="hljs-built_in">append</span>(lines, fmt.Sprintf(<span class="hljs-string">&quot;       Out:       %d&quot;</span>, input.Index))
-        lines = <span class="hljs-built_in">append</span>(lines, fmt.Sprintf(<span class="hljs-string">&quot;       Signature: %x&quot;</span>, input.Signature))
-        lines = <span class="hljs-built_in">append</span>(lines, fmt.Sprintf(<span class="hljs-string">&quot;       PubKey:    %x&quot;</span>, input.PubKey))
+        lines = append(lines, fmt.Sprintf(&quot;     Input %d:&quot;, i))
+        lines = append(lines, fmt.Sprintf(&quot;       TXID:      %x&quot;, input.TXID))
+        lines = append(lines, fmt.Sprintf(&quot;       Out:       %d&quot;, input.Index))
+        lines = append(lines, fmt.Sprintf(&quot;       Signature: %x&quot;, input.Signature))
+        lines = append(lines, fmt.Sprintf(&quot;       PubKey:    %x&quot;, input.PubKey))
     }
 
-    <span class="hljs-keyword">for</span> i, output := <span class="hljs-keyword">range</span> tx.TXOutputs {
-        lines = <span class="hljs-built_in">append</span>(lines, fmt.Sprintf(<span class="hljs-string">&quot;     Output %d:&quot;</span>, i))
-        lines = <span class="hljs-built_in">append</span>(lines, fmt.Sprintf(<span class="hljs-string">&quot;       Value:  %f&quot;</span>, output.Value))
-        lines = <span class="hljs-built_in">append</span>(lines, fmt.Sprintf(<span class="hljs-string">&quot;       Script: %x&quot;</span>, output.PubKeyHash))
+    for i, output := range tx.TXOutputs {
+        lines = append(lines, fmt.Sprintf(&quot;     Output %d:&quot;, i))
+        lines = append(lines, fmt.Sprintf(&quot;       Value:  %f&quot;, output.Value))
+        lines = append(lines, fmt.Sprintf(&quot;       Script: %x&quot;, output.PubKeyHash))
     }
 
-    <span class="hljs-keyword">return</span> strings.Join(lines, <span class="hljs-string">&quot;\n&quot;</span>)
+    return strings.Join(lines, &quot;\n&quot;)
 }
 </code></pre>
 <h3 id="-增加printtx命令">- 增加printTx命令</h3>
-<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(bc *BlockChain)</span> <span class="hljs-title">PrintTx</span><span class="hljs-params">()</span></span> {
+<pre><code class="lang-go">func (bc *BlockChain) PrintTx() {
 
     it := bc.NewIterator()
 
-    <span class="hljs-keyword">for</span> {
+    for {
         block := it.Next()
-        fmt.Printf(<span class="hljs-string">&quot;+++++++++++++++++++++++++++++++++++++\n&quot;</span>)
+        fmt.Printf(&quot;+++++++++++++++++++++++++++++++++++++\n&quot;)
 
-        <span class="hljs-keyword">for</span> _, tx := <span class="hljs-keyword">range</span> block.Transactions {
-            fmt.Printf(<span class="hljs-string">&quot;tx : %v\n&quot;</span>, tx)
+        for _, tx := range block.Transactions {
+            fmt.Printf(&quot;tx : %v\n&quot;, tx)
         }
 
-        <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(block.PrevBlockHash) == <span class="hljs-number">0</span> {
-            <span class="hljs-keyword">break</span>
+        if len(block.PrevBlockHash) == 0 {
+            break
         }
 
     }
@@ -3446,7 +3450,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第14节:day5-v5签名","level":"1.18.14","depth":2,"next":{"title":"第十二章:精通以太坊","level":"1.19","depth":1,"path":"12_精通以太坊/README.md","ref":"12_精通以太坊/README.md","articles":[{"title":"第1节:以太坊架构","level":"1.19.1","depth":2,"path":"12_精通以太坊/01_以太坊架构.md","ref":"12_精通以太坊/01_以太坊架构.md","articles":[]}]},"previous":{"title":"第13节:day4-v5钱包","level":"1.18.13","depth":2,"path":"11_精通比特币/day4-02-v5钱包.md","ref":"11_精通比特币/day4-02-v5钱包.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"11_精通比特币/day5-01-v5签名.md","mtime":"2023-09-23T13:33:28.593Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-19T22:08:50.792Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第14节:day5-v5签名","level":"1.18.14","depth":2,"next":{"title":"第十二章:精通以太坊","level":"1.19","depth":1,"path":"12_精通以太坊/README.md","ref":"12_精通以太坊/README.md","articles":[{"title":"第1节:以太坊架构","level":"1.19.1","depth":2,"path":"12_精通以太坊/01_以太坊架构.md","ref":"12_精通以太坊/01_以太坊架构.md","articles":[]}]},"previous":{"title":"第13节:day4-v5钱包","level":"1.18.13","depth":2,"path":"11_精通比特币/day4-02-v5钱包.md","ref":"11_精通比特币/day4-02-v5钱包.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"11_精通比特币/day5-01-v5签名.md","mtime":"2023-09-23T13:33:28.593Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3529,6 +3533,14 @@
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

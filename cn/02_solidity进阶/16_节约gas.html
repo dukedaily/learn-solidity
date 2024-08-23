@@ -36,6 +36,10 @@
                 
             
                 
+                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
+                
+            
+                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3025,41 +3029,41 @@
 <li>对变量进行缓存</li>
 <li>短路效应</li>
 </ol>
-<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
-pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
+<pre><code class="lang-js">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.13;
 
-<span class="hljs-comment">// gas golf</span>
+// gas golf
 contract GasGolf {
-    <span class="hljs-comment">// start - 50908 gas</span>
-    <span class="hljs-comment">// use calldata - 49163 gas</span>
-    <span class="hljs-comment">// load state variables to memory - 48952 gas</span>
-    <span class="hljs-comment">// short circuit - 48634 gas</span>
-    <span class="hljs-comment">// loop increments - 48244 gas</span>
-    <span class="hljs-comment">// cache array length - 48209 gas</span>
-    <span class="hljs-comment">// load array elements to memory - 48047 gas</span>
+    // start - 50908 gas
+    // use calldata - 49163 gas
+    // load state variables to memory - 48952 gas
+    // short circuit - 48634 gas
+    // loop increments - 48244 gas
+    // cache array length - 48209 gas
+    // load array elements to memory - 48047 gas
 
     uint public total;
 
-    <span class="hljs-comment">// start - not gas optimized</span>
-    <span class="hljs-comment">// function sumIfEvenAndLessThan99(uint[] memory nums) external {</span>
-    <span class="hljs-comment">//     for (uint i = 0; i &lt; nums.length; i += 1) {</span>
-    <span class="hljs-comment">//         bool isEven = nums[i] % 2 == 0;</span>
-    <span class="hljs-comment">//         bool isLessThan99 = nums[i] &lt; 99;</span>
-    <span class="hljs-comment">//         if (isEven &amp;&amp; isLessThan99) {</span>
-    <span class="hljs-comment">//             total += nums[i];</span>
-    <span class="hljs-comment">//         }</span>
-    <span class="hljs-comment">//     }</span>
-    <span class="hljs-comment">// }</span>
+    // start - not gas optimized
+    // function sumIfEvenAndLessThan99(uint[] memory nums) external {
+    //     for (uint i = 0; i &lt; nums.length; i += 1) {
+    //         bool isEven = nums[i] % 2 == 0;
+    //         bool isLessThan99 = nums[i] &lt; 99;
+    //         if (isEven &amp;&amp; isLessThan99) {
+    //             total += nums[i];
+    //         }
+    //     }
+    // }
 
-    <span class="hljs-comment">// gas optimized</span>
-    <span class="hljs-comment">// [1, 2, 3, 4, 5, 100]</span>
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sumIfEvenAndLessThan99</span>(<span class="hljs-params">uint[] calldata nums</span>) <span class="hljs-title">external</span> </span>{
+    // gas optimized
+    // [1, 2, 3, 4, 5, 100]
+    function sumIfEvenAndLessThan99(uint[] calldata nums) external {
         uint _total = total;
         uint len = nums.length;
 
-        <span class="hljs-keyword">for</span> (uint i = <span class="hljs-number">0</span>; i &lt; len; ++i) {
+        for (uint i = 0; i &lt; len; ++i) {
             uint num = nums[i];
-            <span class="hljs-keyword">if</span> (num % <span class="hljs-number">2</span> == <span class="hljs-number">0</span> &amp;&amp; num &lt; <span class="hljs-number">99</span>) {
+            if (num % 2 == 0 &amp;&amp; num &lt; 99) {
                 _total += num;
             }
         }
@@ -3156,11 +3160,11 @@ contract GasGolf {
 <h3 id="1-使用最新版本solidity">1. 使用最新版本solidity</h3>
 <p>EVM的升级会带来gas的优化</p>
 <h3 id="2-for循环优化">2. for循环优化</h3>
-<pre><code class="lang-js"><span class="hljs-comment">// 避免重复计算长度</span>
+<pre><code class="lang-js">// 避免重复计算长度
 uint length = arr.length;
-<span class="hljs-comment">// ++i 可以减少一次赋值，初始化i放在for里面</span>
-<span class="hljs-keyword">for</span> (uint i; i &lt; length;) {
-      <span class="hljs-comment">// unchecked可以减少溢出校验</span>
+// ++i 可以减少一次赋值，初始化i放在for里面
+for (uint i; i &lt; length;) {
+      // unchecked可以减少溢出校验
     unchecked { ++i; }
 }
 </code></pre>
@@ -3170,122 +3174,122 @@ uint length = arr.length;
 <h3 id="4-尽量使用immutable代替state-variable">4. 尽量使用immutable代替state variable</h3>
 <p><a href="https://eips.ethereum.org/EIPS/eip-2929" target="_blank">EIP-2929</a> 对slot的操作引入了cold slot（消耗2100 gas）和warm slot（消耗100 gas）的概念，但是依然很贵，而修饰为immutable的变量会保存在bytecode中，使用时使用的是push，仅消耗3gas</p>
 <h3 id="5-使用immutable代替constant（计算keccak时）">5. 使用immutable代替constant（计算keccak时）</h3>
-<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
-pragma solidity <span class="hljs-number">0.8</span><span class="hljs-number">.9</span>;
+<pre><code class="lang-js">// SPDX-License-Identifier: MIT
+pragma solidity 0.8.9;
 
 contract Immutables is AccessControl {
     uint256 public gas;
     bytes32 public immutable MANAGER_ROLE_IMMUT;
 
-      <span class="hljs-comment">// 每次使用都需要重新计算hash值</span>
-    bytes32 public constant MANAGER_ROLE_CONST = keccak256(<span class="hljs-string">&apos;MANAGER_ROLE&apos;</span>);
+      // 每次使用都需要重新计算hash值
+    bytes32 public constant MANAGER_ROLE_CONST = keccak256(&apos;MANAGER_ROLE&apos;);
 
-    <span class="hljs-function"><span class="hljs-title">constructor</span>(<span class="hljs-params"></span>)</span>{
-        <span class="hljs-comment">// 仅在构造时计算hash一次</span>
-        MANAGER_ROLE_IMMUT = keccak256(<span class="hljs-string">&apos;MANAGER_ROLE&apos;</span>);
+    constructor(){
+        // 仅在构造时计算hash一次
+        MANAGER_ROLE_IMMUT = keccak256(&apos;MANAGER_ROLE&apos;);
         _setupRole(MANAGER_ROLE_CONST, msg.sender);
         _setupRole(MANAGER_ROLE_IMMUT, msg.sender);
     }
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">immutableCheck</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> </span>{
+    function immutableCheck() external {
         gas = gasleft();
-        <span class="hljs-built_in">require</span>(hasRole(MANAGER_ROLE_IMMUT, msg.sender), <span class="hljs-string">&apos;Caller is not in manager role&apos;</span>); <span class="hljs-comment">// 24408 gas</span>
+        require(hasRole(MANAGER_ROLE_IMMUT, msg.sender), &apos;Caller is not in manager role&apos;); // 24408 gas
         gas -= gasleft();
     }
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">constantCheck</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> </span>{
+    function constantCheck() external {
         gas = gasleft();
-        <span class="hljs-built_in">require</span>(hasRole(MANAGER_ROLE_CONST, msg.sender), <span class="hljs-string">&apos;Caller is not in manager role&apos;</span>); <span class="hljs-comment">// 24419 gas</span>
+        require(hasRole(MANAGER_ROLE_CONST, msg.sender), &apos;Caller is not in manager role&apos;); // 24419 gas
         gas -= gasleft();
     }
 }
 </code></pre>
 <h3 id="6-使用modifier代替function">6. 使用modifier代替function</h3>
 <p>经过对比，modifier合约的foo方法更加节约gas</p>
-<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
-pragma solidity <span class="hljs-number">0.8</span><span class="hljs-number">.9</span>;
+<pre><code class="lang-js">// SPDX-License-Identifier: MIT
+pragma solidity 0.8.9;
 
 contract Inlined {
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isNotExpired</span>(<span class="hljs-params">bool _true</span>) <span class="hljs-title">internal</span> <span class="hljs-title">view</span> </span>{
-        <span class="hljs-built_in">require</span>(_true == <span class="hljs-literal">true</span>, <span class="hljs-string">&quot;Exchange: EXPIRED&quot;</span>);
+    function isNotExpired(bool _true) internal view {
+        require(_true == true, &quot;Exchange: EXPIRED&quot;);
     }
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params">bool _test</span>) <span class="hljs-title">public</span> <span class="hljs-title">returns</span>(<span class="hljs-params">uint</span>) </span>{
+    function foo(bool _test) public returns(uint) {
         isNotExpired(_test);
-        <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;
+        return 1;
     }
 }
 
 contract Modifier {
-    modifier <span class="hljs-function"><span class="hljs-title">isNotExpired</span>(<span class="hljs-params">bool _true</span>)</span> {
-        <span class="hljs-built_in">require</span>(_true == <span class="hljs-literal">true</span>, <span class="hljs-string">&quot;Exchange: EXPIRED&quot;</span>);
+    modifier isNotExpired(bool _true) {
+        require(_true == true, &quot;Exchange: EXPIRED&quot;);
         _;
     }
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params">bool _test</span>) <span class="hljs-title">public</span> <span class="hljs-title">isNotExpired</span>(<span class="hljs-params">_test</span>)<span class="hljs-title">returns</span>(<span class="hljs-params">uint</span>) </span>{
-        <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;
+    function foo(bool _test) public isNotExpired(_test)returns(uint) {
+        return 1;
     }
 }
 </code></pre>
 <h3 id="7-modifier中使用internal函数减少合约size">7. modifier中使用internal函数减少合约size</h3>
 <p>尽量将modifier中的条件判断逻辑写在单独的internal view函数中，可以减少合约size，从而减少gas消耗。</p>
 <p>以下代码中，onlyOwner在多处使用，使用越多节约效果越明显</p>
-<pre><code class="lang-js">pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.10</span>;
+<pre><code class="lang-js">pragma solidity ^0.8.10;
 
 contract Context {
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_msgSender</span>(<span class="hljs-params"></span>) <span class="hljs-title">internal</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span>(<span class="hljs-params">address</span>) </span>{
-        <span class="hljs-keyword">return</span> msg.sender;
+    function _msgSender() internal view returns(address) {
+        return msg.sender;
     }
 }
 
 contract Ownable is Context {
     address public owner = _msgSender();
 
-    modifier <span class="hljs-function"><span class="hljs-title">onlyOwner</span>(<span class="hljs-params"></span>)</span> {
-        <span class="hljs-built_in">require</span>(owner == _msgSender(), <span class="hljs-string">&quot;Ownable: caller is not the owner&quot;</span>);
+    modifier onlyOwner() {
+        require(owner == _msgSender(), &quot;Ownable: caller is not the owner&quot;);
         _;
     }
 }
 contract Ownable2 is Context {
     address public owner = _msgSender();
 
-    modifier <span class="hljs-function"><span class="hljs-title">onlyOwner</span>(<span class="hljs-params"></span>)</span> {
+    modifier onlyOwner() {
         _checkOwner();
         _;
     }
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_checkOwner</span>(<span class="hljs-params"></span>) <span class="hljs-title">internal</span> <span class="hljs-title">view</span> <span class="hljs-title">virtual</span> </span>{
-        <span class="hljs-built_in">require</span>(owner == _msgSender(), <span class="hljs-string">&quot;Ownable: caller is not the owner&quot;</span>);
+    function _checkOwner() internal view virtual {
+        require(owner == _msgSender(), &quot;Ownable: caller is not the owner&quot;);
     }
 }
-<span class="hljs-comment">// This is deployment gas cost for each function</span>
-<span class="hljs-comment">// 0: 107172</span>
-<span class="hljs-comment">// 1: 145772</span>
-<span class="hljs-comment">// 2: 181610</span>
-<span class="hljs-comment">// 3: 198170</span>
-<span class="hljs-comment">// 4: 214532</span>
-<span class="hljs-comment">// 5: 241059</span>
+// This is deployment gas cost for each function
+// 0: 107172
+// 1: 145772
+// 2: 181610
+// 3: 198170
+// 4: 214532
+// 5: 241059
 contract T1 is Ownable {
     event Call(bytes4 selector);
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f0</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> <span class="hljs-title">onlyOwner</span>(<span class="hljs-params"></span>) </span>{ emit Call(<span class="hljs-built_in">this</span>.f0.selector); }
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f1</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> <span class="hljs-title">onlyOwner</span>(<span class="hljs-params"></span>) </span>{ emit Call(<span class="hljs-built_in">this</span>.f1.selector); }
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f2</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> <span class="hljs-title">onlyOwner</span>(<span class="hljs-params"></span>) </span>{ emit Call(<span class="hljs-built_in">this</span>.f2.selector); }
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f3</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> <span class="hljs-title">onlyOwner</span>(<span class="hljs-params"></span>) </span>{ emit Call(<span class="hljs-built_in">this</span>.f3.selector); }
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f4</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> <span class="hljs-title">onlyOwner</span>(<span class="hljs-params"></span>) </span>{ emit Call(<span class="hljs-built_in">this</span>.f4.selector); }
+    function f0() external onlyOwner() { emit Call(this.f0.selector); }
+    function f1() external onlyOwner() { emit Call(this.f1.selector); }
+    function f2() external onlyOwner() { emit Call(this.f2.selector); }
+    function f3() external onlyOwner() { emit Call(this.f3.selector); }
+    function f4() external onlyOwner() { emit Call(this.f4.selector); }
 }
-<span class="hljs-comment">// 0: 107172</span>
-<span class="hljs-comment">// 1: 147908</span>
-<span class="hljs-comment">// 2: 165818</span>
-<span class="hljs-comment">// 3: 183506</span>
-<span class="hljs-comment">// 4: 192500</span>
-<span class="hljs-comment">// 5: 211682</span>
+// 0: 107172
+// 1: 147908
+// 2: 165818
+// 3: 183506
+// 4: 192500
+// 5: 211682
 contract T2 is Ownable2 {
     event Call(bytes4 selector);
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f0</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> <span class="hljs-title">onlyOwner</span>(<span class="hljs-params"></span>) </span>{ emit Call(<span class="hljs-built_in">this</span>.f0.selector); }
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f1</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> <span class="hljs-title">onlyOwner</span>(<span class="hljs-params"></span>) </span>{ emit Call(<span class="hljs-built_in">this</span>.f1.selector); }
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f2</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> <span class="hljs-title">onlyOwner</span>(<span class="hljs-params"></span>) </span>{ emit Call(<span class="hljs-built_in">this</span>.f2.selector); }
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f3</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> <span class="hljs-title">onlyOwner</span>(<span class="hljs-params"></span>) </span>{ emit Call(<span class="hljs-built_in">this</span>.f3.selector); }
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f4</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> <span class="hljs-title">onlyOwner</span>(<span class="hljs-params"></span>) </span>{ emit Call(<span class="hljs-built_in">this</span>.f4.selector); }
+    function f0() external onlyOwner() { emit Call(this.f0.selector); }
+    function f1() external onlyOwner() { emit Call(this.f1.selector); }
+    function f2() external onlyOwner() { emit Call(this.f2.selector); }
+    function f3() external onlyOwner() { emit Call(this.f3.selector); }
+    function f4() external onlyOwner() { emit Call(this.f4.selector); }
 }
 </code></pre>
 <p>验证结果：</p>
@@ -3295,41 +3299,41 @@ contract T2 is Ownable2 {
 <p>Non-strict inequalities (<code>&gt;=</code>) are cheaper than strict ones (<code>&gt;</code>). This is due to some supplementary checks (<code>ISZERO</code>, 3 gas)).</p>
 <pre><code class="lang-js">uint256 public gas;
 
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">checkStrict</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> </span>{
+function checkStrict() external {
     gas = gasleft();
-    <span class="hljs-built_in">require</span>(<span class="hljs-number">999999999999999999</span> &gt; <span class="hljs-number">1</span>); <span class="hljs-comment">// gas 5017</span>
+    require(999999999999999999 &gt; 1); // gas 5017
     gas -= gasleft();
 }
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">checkNonStrict</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> </span>{
+function checkNonStrict() external {
     gas = gasleft();
-    <span class="hljs-built_in">require</span>(<span class="hljs-number">999999999999999999</span> &gt;= <span class="hljs-number">1</span>); <span class="hljs-comment">// gas 5006</span>
+    require(999999999999999999 &gt;= 1); // gas 5006
     gas -= gasleft(); 
 }
 </code></pre>
 <h3 id="9-使用shr和shl来代替乘除法">9. 使用SHR和SHL来代替乘除法</h3>
 <p>DIV使用5gas，SHR使用3gas，而且后者不用额外校验除数为0的逻辑，更加节约gas</p>
 <h3 id="10-使用多个require代替使用">10. 使用多个require代替使用&amp;&amp;</h3>
-<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
-pragma solidity <span class="hljs-number">0.8</span><span class="hljs-number">.9</span>;
-<span class="hljs-keyword">import</span> <span class="hljs-string">&quot;hardhat/console.sol&quot;</span>;
+<pre><code class="lang-js">// SPDX-License-Identifier: MIT
+pragma solidity 0.8.9;
+import &quot;hardhat/console.sol&quot;;
 
 contract Requires {
     uint256 public gas;
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">check1</span>(<span class="hljs-params">uint x</span>) <span class="hljs-title">public</span> </span>{
+    function check1(uint x) public {
         gas = gasleft();  
-        <span class="hljs-built_in">console</span>.log(gasleft());
-        <span class="hljs-built_in">require</span>(x == <span class="hljs-number">0</span> &amp;&amp; x &lt; <span class="hljs-number">1</span> ); <span class="hljs-comment">// gas cost 22156</span>
-        <span class="hljs-built_in">console</span>.log(gasleft());
+        console.log(gasleft());
+        require(x == 0 &amp;&amp; x &lt; 1 ); // gas cost 22156
+        console.log(gasleft());
         gas -= gasleft();
     }
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">check2</span>(<span class="hljs-params">uint x</span>) <span class="hljs-title">public</span> </span>{
+    function check2(uint x) public {
         gas = gasleft(); 
-        <span class="hljs-built_in">console</span>.log(gasleft());
-        <span class="hljs-built_in">require</span>(x == <span class="hljs-number">0</span>); <span class="hljs-comment">// gas cost 22148</span>
-        <span class="hljs-built_in">require</span>(x &lt; <span class="hljs-number">1</span>);
-        <span class="hljs-built_in">console</span>.log(gasleft());
+        console.log(gasleft());
+        require(x == 0); // gas cost 22148
+        require(x &lt; 1);
+        console.log(gasleft());
         gas -= gasleft();
     }
 }
@@ -3345,15 +3349,15 @@ contract Requires {
 <p>SLOAD：100gas</p>
 <p>MLOAD：3 gas</p>
 <h3 id="14-对结构体格外注意">14. 对结构体格外注意</h3>
-<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
-pragma solidity <span class="hljs-number">0.8</span><span class="hljs-number">.9</span>;
-<span class="hljs-keyword">import</span> <span class="hljs-string">&quot;hardhat/console.sol&quot;</span>;
+<pre><code class="lang-js">// SPDX-License-Identifier: MIT
+pragma solidity 0.8.9;
+import &quot;hardhat/console.sol&quot;;
 
 contract Requires {
     event Unlock(address _sender, uint256 _nftIndex, uint256 _amt);
 
-    <span class="hljs-comment">// struct LockPosition use 3 slots</span>
-    mapping(<span class="hljs-function"><span class="hljs-params">uint256</span> =&gt;</span> LockPosition) positions;
+    // struct LockPosition use 3 slots
+    mapping(uint256 =&gt; LockPosition) positions;
 
     struct LockPosition {
         address owner;
@@ -3361,41 +3365,18 @@ contract Requires {
         uint256 lockAmount;
     }
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">unlock</span>(<span class="hljs-params">uint256 _nftIndex</span>) <span class="hljs-title">external</span> </span>{
-        <span class="hljs-comment">// 3 SLOADs and 3 MSTORES</span>
-        <span class="hljs-comment">// 从storage读取三个变量，并且复制到memory中</span>
-        LockPosition memory position = positions[_nftIndex]; <span class="hljs-comment">// gas: costing 3 SLOADs while only lockAmount is needed twice. </span>
+    function unlock(uint256 _nftIndex) external {
+        // 3 SLOADs and 3 MSTORES
+        // 从storage读取三个变量，并且复制到memory中
+        LockPosition memory position = positions[_nftIndex]; // gas: costing 3 SLOADs while only lockAmount is needed twice. 
 
-        <span class="hljs-comment">//Replace &quot;memory&quot; with &quot;storage&quot; and cache only position.lockAmount</span>
-        <span class="hljs-built_in">require</span>(position.owner == msg.sender, <span class="hljs-string">&quot;unauthorized&quot;</span>);
-        <span class="hljs-built_in">require</span>(position.unlockAt &lt;= block.timestamp, <span class="hljs-string">&quot;locked&quot;</span>);
-
-        <span class="hljs-keyword">delete</span> positions[_nftIndex];
-        payable(msg.sender).transfer(position.lockAmount);
-
-        emit Unlock(msg.sender, _nftIndex, position.lockAmount);
-     }
-
-     <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">unlockOptimize</span>(<span class="hljs-params">uint256 _nftIndex</span>) <span class="hljs-title">external</span> </span>{
-        LockPosition storage position = positions[_nftIndex]; 
-
-        uint256 amt = position.lockAmount;
-
-        <span class="hljs-comment">//Replace &quot;memory&quot; with &quot;storage&quot; and cache only position.lockAmount</span>
-        <span class="hljs-built_in">require</span>(position.owner == msg.sender, <span class="hljs-string">&quot;unauthorized&quot;</span>);
-        <span class="hljs-built_in">require</span>(position.unlockAt &lt;= block.timestamp, <span class="hljs-string">&quot;locked&quot;</span>);
-
-        <span class="hljs-keyword">delete</span> positions[_nftIndex];
-        payable(msg.sender).transfer(amt);
-
-        emit Unlock(msg.sender, _nftIndex, amt);
-     }
-}
-</code></pre>
+        //Replace &quot;memory&quot; with &quot;storage&quot; and cache only position.lockAmount
+        require(position.owner == msg.sender, &quot;unauthorized&quot;);
+        require(position.unlockAt </code></pre>
 <h3 id="15-复用非零值的状态变量更节约gas">15. 复用非零值的状态变量更节约gas</h3>
 <p>Writing to an Existing Storage Slot Is Cheaper Than Using a New One</p>
 <p><a href="https://eips.ethereum.org/EIPS/eip-2200" target="_blank">https://eips.ethereum.org/EIPS/eip-2200</a></p>
-<pre><code class="lang-sh">EIP — 2200 changed a lot with gas, and now <span class="hljs-keyword">if</span> you hold 1 Wei of a token it’s cheaper to use the token than <span class="hljs-keyword">if</span> you hold 0. There is a lot to unpack here so just google EIP 2200 and learn <span class="hljs-keyword">if</span> you want, but <span class="hljs-keyword">in</span> general, <span class="hljs-keyword">if</span> you need to use a storage slot, don’t empty it <span class="hljs-keyword">if</span> you plan to refill it later.
+<pre><code class="lang-sh">EIP — 2200 changed a lot with gas, and now if you hold 1 Wei of a token it’s cheaper to use the token than if you hold 0. There is a lot to unpack here so just google EIP 2200 and learn if you want, but in general, if you need to use a storage slot, don’t empty it if you plan to refill it later.
 </code></pre>
 <h2 id="参考链接">参考链接</h2>
 <ol>
@@ -3430,7 +3411,7 @@ contract Requires {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第16节:节约gas","level":"1.9.16","depth":2,"next":{"title":"第17节:type","level":"1.9.17","depth":2,"path":"02_solidity进阶/17_type.md","ref":"02_solidity进阶/17_type.md","articles":[]},"previous":{"title":"第15节:import","level":"1.9.15","depth":2,"path":"02_solidity进阶/15_import.md","ref":"02_solidity进阶/15_import.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"02_solidity进阶/16_节约gas.md","mtime":"2023-09-23T13:10:46.904Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-19T22:08:50.792Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第16节:节约gas","level":"1.9.16","depth":2,"next":{"title":"第17节:type","level":"1.9.17","depth":2,"path":"02_solidity进阶/17_type.md","ref":"02_solidity进阶/17_type.md","articles":[]},"previous":{"title":"第15节:import","level":"1.9.15","depth":2,"path":"02_solidity进阶/15_import.md","ref":"02_solidity进阶/15_import.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"02_solidity进阶/16_节约gas.md","mtime":"2023-09-23T13:10:46.904Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3513,6 +3494,14 @@ contract Requires {
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

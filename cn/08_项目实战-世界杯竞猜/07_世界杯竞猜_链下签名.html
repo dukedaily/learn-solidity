@@ -36,6 +36,10 @@
                 
             
                 
+                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
+                
+            
+                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3041,20 +3045,20 @@
 <p>我们在区块链中发起的每一笔交易（转账、对合约写操作）都是使用私钥签名过的，矿工会在打包前对每笔交易进行校验。</p>
 <p><img src="https://duke-typora.s3.ap-southeast-1.amazonaws.com/uPic/image-20221127165422619.png" alt="image-20221127165422619"></p>
 <p>其中，V，R，S是对签名分割后得到的数据，会在后面讲解，签名示例如下：</p>
-<pre><code class="lang-sh"><span class="hljs-comment"># private</span>
-<span class="hljs-comment"># 这个私钥事暴露的，完全是测试使用的，千万不要往里面转钱！！！</span>
+<pre><code class="lang-sh"># private
+# 这个私钥事暴露的，完全是测试使用的，千万不要往里面转钱！！！
 0xc5e8f61d1ab959b397eecc0a37a6517b8e67a0e7cf1f4bce5591f3ed80199122
 
-<span class="hljs-comment"># address </span>
+# address 
 0xc783df8a850f42e7F7e57013759C285caa701eB6
 
-<span class="hljs-comment"># message</span>
-[<span class="hljs-string">&apos;0xc783df8a850f42e7F7e57013759C285caa701eB6&apos;</span>, 999]
+# message
+[&apos;0xc783df8a850f42e7F7e57013759C285caa701eB6&apos;, 999]
 
-<span class="hljs-comment"># msgHash</span>
+# msgHash
 0x416401c79c50b3b388890427985a289a2b8e6cd8e38949e79d5c77ec1ff88e88
 
-<span class="hljs-comment"># signature</span>
+# signature
 0x381d3b66dbbbb2e83d054444197daa3b3309d19dcb5e81a8cc4015c4b13d8b7b79f1ce1f34b465b6cb211534869198dadf58118f0bf6208cd646d689b342af071c
 </code></pre>
 <h2 id="签名验证过程">签名验证过程</h2>
@@ -3079,11 +3083,11 @@
 <p><img src="https://duke-typora.s3.ap-southeast-1.amazonaws.com/uPic/image-20221127223259928.png" alt="image-20221127223259928"></p>
 <h3 id="阶段一：打包原始消息">阶段一：打包原始消息</h3>
 <p>在以太坊的ECDSA标准中，被签名的<code>消息</code>为一组数据的hash值（由keccak256算法生成的byte32类型的数据），我们可以使用abi.encodePacked打包函数将任意多个参数进行打包，此处为：address和uint256类型。</p>
-<pre><code class="lang-js">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getMessageHash</span>(<span class="hljs-params">
+<pre><code class="lang-js">    function getMessageHash(
         address _to,
         uint _amount
-    </span>) <span class="hljs-title">public</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bytes32</span>) </span>{
-        <span class="hljs-keyword">return</span> keccak256(abi.encodePacked(_to, _amount));
+    ) public pure returns (bytes32) {
+        return keccak256(abi.encodePacked(_to, _amount));
     }
 </code></pre>
 <p>输入参数：0xc783df8a850f42e7f7e57013759c285caa701eb6, 100</p>
@@ -3091,16 +3095,16 @@
 <p><img src="https://duke-typora.s3.ap-southeast-1.amazonaws.com/uPic/image-20221127224627119.png" alt="image-20221127224627119"></p>
 <h3 id="阶段二：生成待签名数据">阶段二：生成待签名数据</h3>
 <p>原始的<code>消息</code>可以是能被执行的交易，也可以是其他任何形式。为了避免用户误签了恶意交易，<code>EIP191</code>提倡在<code>消息</code>前加上前缀prefix：<code>&quot;\x19Ethereum Signed Message:\n32&quot;</code>字符，并再做一次<code>keccak256</code>哈希，作为<code>以太坊签名消息</code>。经过<code>getEthSignedMessageHash()</code>函数处理后的消息，不能被用于执行交易。</p>
-<pre><code class="lang-js">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getEthSignedMessageHash</span>(<span class="hljs-params">bytes32 _messageHash</span>)
-        <span class="hljs-title">public</span>
-        <span class="hljs-title">pure</span>
-        <span class="hljs-title">returns</span> (<span class="hljs-params">bytes32</span>)
-    </span>{
-        <span class="hljs-keyword">return</span>
+<pre><code class="lang-js">    function getEthSignedMessageHash(bytes32 _messageHash)
+        public
+        pure
+        returns (bytes32)
+    {
+        return
             keccak256(
-                <span class="hljs-comment">// 这是标准字符串: \x19Ethereum Signed Message:\n</span>
-                <span class="hljs-comment">// 32表示后面的哈希内容长度</span>
-                abi.encodePacked(<span class="hljs-string">&quot;\x19Ethereum Signed Message:\n32&quot;</span>, _messageHash)
+                // 这是标准字符串: \x19Ethereum Signed Message:\n
+                // 32表示后面的哈希内容长度
+                abi.encodePacked(&quot;\x19Ethereum Signed Message:\n32&quot;, _messageHash)
             );
     }
 </code></pre>
@@ -3115,9 +3119,9 @@
 </li>
 <li><p>打开控制台F12（chrome）-&gt; console，输入如下内容：</p>
 <pre><code class="lang-js">ethereum.enable()
-account = <span class="hljs-string">&quot;0xc783df8a850f42e7F7e57013759C285caa701eB6&quot;</span>
-hash = <span class="hljs-string">&quot;0xcfb170482914a76ca8521405f52699df67c7ebb8e3899f27cc8265ebdab98a36&quot;</span>
-ethereum.request({<span class="hljs-attr">method</span>: <span class="hljs-string">&quot;personal_sign&quot;</span>, <span class="hljs-attr">params</span>: [account, hash]})
+account = &quot;0xc783df8a850f42e7F7e57013759C285caa701eB6&quot;
+hash = &quot;0xcfb170482914a76ca8521405f52699df67c7ebb8e3899f27cc8265ebdab98a36&quot;
+ethereum.request({method: &quot;personal_sign&quot;, params: [account, hash]})
 </code></pre>
 </li>
 <li><p>点击Sign进行签名</p>
@@ -3129,28 +3133,28 @@ ethereum.request({<span class="hljs-attr">method</span>: <span class="hljs-strin
 <h4 id="2-etherjs生成签名">2. etherjs生成签名</h4>
 <ol>
 <li><p>在hardhat的test文件夹下创建sign.ts，内容如下：</p>
-<pre><code class="lang-js"><span class="hljs-keyword">const</span> { expect } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;chai&quot;</span>)
-<span class="hljs-keyword">const</span> { ethers } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;hardhat&quot;</span>)
+<pre><code class="lang-js">const { expect } = require(&quot;chai&quot;)
+const { ethers } = require(&quot;hardhat&quot;)
 
-describe(<span class="hljs-string">&quot;Signature&quot;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
-  it(<span class="hljs-string">&quot;signature&quot;</span>, <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
-    <span class="hljs-comment">// 0xc783df8a850f42e7f7e57013759c285caa701eb6</span>
-    <span class="hljs-keyword">let</span> privateKey = <span class="hljs-string">&apos;0xc5e8f61d1ab959b397eecc0a37a6517b8e67a0e7cf1f4bce5591f3ed80199122&apos;</span>
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;private:&apos;</span>, privateKey);
+describe(&quot;Signature&quot;, function () {
+  it(&quot;signature&quot;, async function () {
+    // 0xc783df8a850f42e7f7e57013759c285caa701eb6
+    let privateKey = &apos;0xc5e8f61d1ab959b397eecc0a37a6517b8e67a0e7cf1f4bce5591f3ed80199122&apos;
+    console.log(&apos;private:&apos;, privateKey);
 
-    <span class="hljs-keyword">const</span> signer = <span class="hljs-keyword">new</span> ethers.Wallet(privateKey);
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;address :&apos;</span>, signer.address);
+    const signer = new ethers.Wallet(privateKey);
+    console.log(&apos;address :&apos;, signer.address);
 
-    <span class="hljs-keyword">const</span> amount = <span class="hljs-number">100</span>
+    const amount = 100
 
-    <span class="hljs-keyword">let</span> msgHash = ethers.utils.solidityKeccak256(
-      [<span class="hljs-string">&quot;address&quot;</span>, <span class="hljs-string">&quot;uint256&quot;</span>], [signer.address, amount]
+    let msgHash = ethers.utils.solidityKeccak256(
+      [&quot;address&quot;, &quot;uint256&quot;], [signer.address, amount]
     )
 
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;msgHash:&apos;</span>, msgHash);
-    <span class="hljs-keyword">const</span> sig = <span class="hljs-keyword">await</span> signer.signMessage(ethers.utils.arrayify(msgHash))
+    console.log(&apos;msgHash:&apos;, msgHash);
+    const sig = await signer.signMessage(ethers.utils.arrayify(msgHash))
 
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;signature:&apos;</span>, sig);
+    console.log(&apos;signature:&apos;, sig);
   })
 })
 </code></pre>
@@ -3159,35 +3163,35 @@ describe(<span class="hljs-string">&quot;Signature&quot;</span>, <span class="hl
 </li>
 </ol>
 <p>此时我们已经生成了签名，<code>签名</code>是由数学算法生成的。这里我们使用的是<code>rsv签名</code>，<code>签名</code>中包含<code>r, s, v</code>三个值的信息。而后，我们可以通过<code>r, s, v</code>及<code>以太坊签名消息</code>来求得<code>公钥</code>。下面的<code>recoverSigner()</code>函数实现了上述步骤，它利用<code>以太坊签名消息 _ethSignedMessageHash</code>和<code>签名 _signature</code>恢复<code>公钥</code>（使用了内联汇编）：</p>
-<pre><code class="lang-js">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">recoverSigner</span>(<span class="hljs-params">bytes32 _ethSignedMessageHash, bytes memory _signature</span>)
-        <span class="hljs-title">public</span>
-        <span class="hljs-title">pure</span>
-        <span class="hljs-title">returns</span> (<span class="hljs-params">address</span>)
-    </span>{
+<pre><code class="lang-js">    function recoverSigner(bytes32 _ethSignedMessageHash, bytes memory _signature)
+        public
+        pure
+        returns (address)
+    {
         (bytes32 r, bytes32 s, uint8 v) = splitSignature(_signature);
 
-          <span class="hljs-comment">// 返回解析出来的签名地址，</span>
-        <span class="hljs-keyword">return</span> ecrecover(_ethSignedMessageHash, v, r, s);
+          // 返回解析出来的签名地址，
+        return ecrecover(_ethSignedMessageHash, v, r, s);
     }
 
-        <span class="hljs-comment">// 对私钥进行分割</span>
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">splitSignature</span>(<span class="hljs-params">bytes memory sig</span>)
-        <span class="hljs-title">public</span>
-        <span class="hljs-title">pure</span>
-        <span class="hljs-title">returns</span> (<span class="hljs-params">
+        // 对私钥进行分割
+    function splitSignature(bytes memory sig)
+        public
+        pure
+        returns (
             bytes32 r,
             bytes32 s,
             uint8 v
-        </span>)
-    </span>{
-          <span class="hljs-comment">// 验证长度有效性</span>
-        <span class="hljs-built_in">require</span>(sig.length == <span class="hljs-number">65</span>, <span class="hljs-string">&quot;invalid signature length&quot;</span>);
+        )
+    {
+          // 验证长度有效性
+        require(sig.length == 65, &quot;invalid signature length&quot;);
 
-          <span class="hljs-comment">// 通过读取内存数据，根据规则进行截取，返回r，s，v数据</span>
+          // 通过读取内存数据，根据规则进行截取，返回r，s，v数据
         assembly {
-            <span class="hljs-attr">r</span> := mload(add(sig, <span class="hljs-number">32</span>))
-            <span class="hljs-attr">s</span> := mload(add(sig, <span class="hljs-number">64</span>))
-            <span class="hljs-attr">v</span> := byte(<span class="hljs-number">0</span>, mload(add(sig, <span class="hljs-number">96</span>)))
+            r := mload(add(sig, 32))
+            s := mload(add(sig, 64))
+            v := byte(0, mload(add(sig, 96)))
         }
     }
 </code></pre>
@@ -3197,76 +3201,76 @@ describe(<span class="hljs-string">&quot;Signature&quot;</span>, <span class="hl
 <p><img src="https://duke-typora.s3.ap-southeast-1.amazonaws.com/uPic/image-20221128001415565.png" alt="image-20221128001415565"></p>
 <h3 id="阶段四：验证">阶段四：验证</h3>
 <p>接下来，我们只需要比对恢复的<code>公钥</code>与签名者公钥<code>_signer</code>是否相等：若相等，则签名有效；否则，签名无效：</p>
-<pre><code class="lang-js">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">verify</span>(<span class="hljs-params">bytes32 _msgHash, bytes memory _signature, address _signer</span>) <span class="hljs-title">public</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bool</span>) </span>{
-        <span class="hljs-keyword">return</span> recoverSigner(_msgHash, _signature) == _signer;
+<pre><code class="lang-js">    function verify(bytes32 _msgHash, bytes memory _signature, address _signer) public pure returns (bool) {
+        return recoverSigner(_msgHash, _signature) == _signer;
     }
 </code></pre>
 <p>效果如下，此为有效签名！</p>
 <p><img src="https://duke-typora.s3.ap-southeast-1.amazonaws.com/uPic/image-20221128002314447.png" alt="image-20221128002314447"></p>
 <h2 id="完整代码">完整代码</h2>
-<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
-pragma solidity ^<span class="hljs-number">0.8</span>;
+<pre><code class="lang-js">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8;
 
 contract VerifySignature {
-    <span class="hljs-comment">// 1. 对真正的内容进行哈希处理，私钥最终只对这个进行签名</span>
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getMessageHash</span>(<span class="hljs-params">
+    // 1. 对真正的内容进行哈希处理，私钥最终只对这个进行签名
+    function getMessageHash(
         address _to,
         uint _amount
-    </span>) <span class="hljs-title">public</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bytes32</span>) </span>{
-        <span class="hljs-keyword">return</span> keccak256(abi.encodePacked(_to, _amount));
+    ) public pure returns (bytes32) {
+        return keccak256(abi.encodePacked(_to, _amount));
     }
 
-    <span class="hljs-comment">// 2. 对内容的哈希进行二次哈希，这个用于做verify处理</span>
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getEthSignedMessageHash</span>(<span class="hljs-params">bytes32 _messageHash</span>)
-        <span class="hljs-title">public</span>
-        <span class="hljs-title">pure</span>
-        <span class="hljs-title">returns</span> (<span class="hljs-params">bytes32</span>)
-    </span>{
-        <span class="hljs-keyword">return</span>
+    // 2. 对内容的哈希进行二次哈希，这个用于做verify处理
+    function getEthSignedMessageHash(bytes32 _messageHash)
+        public
+        pure
+        returns (bytes32)
+    {
+        return
             keccak256(
-                <span class="hljs-comment">//这是标准字符串: \x19Ethereum Signed Message:\n</span>
-                <span class="hljs-comment">//32表示后面的哈希内容长度</span>
-                abi.encodePacked(<span class="hljs-string">&quot;\x19Ethereum Signed Message:\n32&quot;</span>, _messageHash)
+                //这是标准字符串: \x19Ethereum Signed Message:\n
+                //32表示后面的哈希内容长度
+                abi.encodePacked(&quot;\x19Ethereum Signed Message:\n32&quot;, _messageHash)
             );
     }
 
-    <span class="hljs-comment">// 3. 传入基础数据和签名，内部会计算出哈希值，并使用签名进行校验。</span>
-    <span class="hljs-comment">// 这个是最核心的方法，最终外部仅调用这个</span>
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">verify</span>(<span class="hljs-params">bytes32 _msgHash, bytes memory _signature, address _signer</span>) <span class="hljs-title">public</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bool</span>) </span>{
-        <span class="hljs-keyword">return</span> recoverSigner(_msgHash, _signature) == _signer;
+    // 3. 传入基础数据和签名，内部会计算出哈希值，并使用签名进行校验。
+    // 这个是最核心的方法，最终外部仅调用这个
+    function verify(bytes32 _msgHash, bytes memory _signature, address _signer) public pure returns (bool) {
+        return recoverSigner(_msgHash, _signature) == _signer;
     }
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">recoverSigner</span>(<span class="hljs-params">bytes32 _ethSignedMessageHash, bytes memory _signature</span>)
-        <span class="hljs-title">public</span>
-        <span class="hljs-title">pure</span>
-        <span class="hljs-title">returns</span> (<span class="hljs-params">address</span>)
-    </span>{
+    function recoverSigner(bytes32 _ethSignedMessageHash, bytes memory _signature)
+        public
+        pure
+        returns (address)
+    {
         (bytes32 r, bytes32 s, uint8 v) = splitSignature(_signature);
 
-        <span class="hljs-keyword">return</span> ecrecover(_ethSignedMessageHash, v, r, s);
+        return ecrecover(_ethSignedMessageHash, v, r, s);
     }
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">splitSignature</span>(<span class="hljs-params">bytes memory sig</span>)
-        <span class="hljs-title">public</span>
-        <span class="hljs-title">pure</span>
-        <span class="hljs-title">returns</span> (<span class="hljs-params">
+    function splitSignature(bytes memory sig)
+        public
+        pure
+        returns (
             bytes32 r,
             bytes32 s,
             uint8 v
-        </span>)
-    </span>{
-        <span class="hljs-built_in">require</span>(sig.length == <span class="hljs-number">65</span>, <span class="hljs-string">&quot;invalid signature length&quot;</span>);
+        )
+    {
+        require(sig.length == 65, &quot;invalid signature length&quot;);
 
         assembly {
-            <span class="hljs-attr">r</span> := mload(add(sig, <span class="hljs-number">32</span>))
-            <span class="hljs-attr">s</span> := mload(add(sig, <span class="hljs-number">64</span>))
-            <span class="hljs-attr">v</span> := byte(<span class="hljs-number">0</span>, mload(add(sig, <span class="hljs-number">96</span>)))
+            r := mload(add(sig, 32))
+            s := mload(add(sig, 64))
+            v := byte(0, mload(add(sig, 96)))
         }
     }
 }
 </code></pre>
 <p>单元测试：</p>
-<pre><code class="lang-sh">npx hardhat <span class="hljs-built_in">test</span> <span class="hljs-built_in">test</span>/verifySignature.ts
+<pre><code class="lang-sh">npx hardhat test test/verifySignature.ts
 </code></pre>
 <p><img src="https://duke-typora.s3.ap-southeast-1.amazonaws.com/uPic/image-20221128004656106.png" alt="image-20221128004656106"></p>
 <h2 id="链下签名实现白名单">链下签名实现白名单</h2>
@@ -3275,20 +3279,20 @@ contract VerifySignature {
 <li>对将白名单用户地址，tokenId，进行签名入库；</li>
 <li>用户mint时，传入签名，在mint中进行校验，只有校验为true的用户才可以mint，从而完成白名单功能。</li>
 </ol>
-<pre><code class="lang-js">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">mint</span>(<span class="hljs-params">uint256 _tokenId, bytes memory _signature</span>) <span class="hljs-title">external</span> </span>{
-          <span class="hljs-comment">// 将用户地址和_tokenId打包消息</span>
+<pre><code class="lang-js">    function mint(uint256 _tokenId, bytes memory _signature) external {
+          // 将用户地址和_tokenId打包消息
         bytes32 _msgHash = getMessageHash(msg.sener, _tokenId); 
 
-          <span class="hljs-comment">// 计算以太坊签名消息</span>
+          // 计算以太坊签名消息
         bytes32 _ethSignedMessageHash = getEthSignedMessageHash(_msgHash);
 
-          <span class="hljs-comment">// ECDSA检验通过</span>
-        <span class="hljs-built_in">require</span>(verify(_ethSignedMessageHash, _signature), <span class="hljs-string">&quot;Invalid signature&quot;</span>);
+          // ECDSA检验通过
+        require(verify(_ethSignedMessageHash, _signature), &quot;Invalid signature&quot;);
 
-          <span class="hljs-comment">// 地址没有mint过</span>
-        <span class="hljs-built_in">require</span>(!mintedAddress[_account], <span class="hljs-string">&quot;Already minted!&quot;</span>); 
+          // 地址没有mint过
+        require(!mintedAddress[_account], &quot;Already minted!&quot;); 
         _mint(_account, _tokenId);
-        mintedAddress[_account] = <span class="hljs-literal">true</span>;
+        mintedAddress[_account] = true;
     }
 </code></pre>
 <h2 id="总结">总结</h2>
@@ -3377,7 +3381,7 @@ contract VerifySignature {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第7节:世界杯竞猜_链下签名","level":"1.15.11","depth":2,"next":{"title":"第8节:世界杯竞猜_多签钱包","level":"1.15.12","depth":2,"path":"08_项目实战-世界杯竞猜/08_世界杯竞猜_多签钱包.md","ref":"08_项目实战-世界杯竞猜/08_世界杯竞猜_多签钱包.md","articles":[]},"previous":{"title":"第6节:世界杯竞猜_upgrade","level":"1.15.10","depth":2,"path":"08_项目实战-世界杯竞猜/06_世界杯竞猜_upgrade.md","ref":"08_项目实战-世界杯竞猜/06_世界杯竞猜_upgrade.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"08_项目实战-世界杯竞猜/07_世界杯竞猜_链下签名.md","mtime":"2023-09-23T13:48:35.106Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-19T22:08:50.792Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第7节:世界杯竞猜_链下签名","level":"1.15.11","depth":2,"next":{"title":"第8节:世界杯竞猜_多签钱包","level":"1.15.12","depth":2,"path":"08_项目实战-世界杯竞猜/08_世界杯竞猜_多签钱包.md","ref":"08_项目实战-世界杯竞猜/08_世界杯竞猜_多签钱包.md","articles":[]},"previous":{"title":"第6节:世界杯竞猜_upgrade","level":"1.15.10","depth":2,"path":"08_项目实战-世界杯竞猜/06_世界杯竞猜_upgrade.md","ref":"08_项目实战-世界杯竞猜/06_世界杯竞猜_upgrade.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"08_项目实战-世界杯竞猜/07_世界杯竞猜_链下签名.md","mtime":"2023-09-23T13:48:35.106Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3460,6 +3464,14 @@ contract VerifySignature {
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

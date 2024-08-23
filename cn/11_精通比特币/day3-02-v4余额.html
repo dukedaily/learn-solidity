@@ -36,6 +36,10 @@
                 
             
                 
+                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
+                
+            
+                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3069,15 +3073,15 @@
 <li>所消费utxo在output中的索引</li>
 <li>解锁脚本</li>
 </ul>
-<pre><code class="lang-go"><span class="hljs-keyword">type</span> TXInput <span class="hljs-keyword">struct</span> {
-    <span class="hljs-comment">//引用output所在交易ID</span>
-    TXID []<span class="hljs-keyword">byte</span>
+<pre><code class="lang-go">type TXInput struct {
+    //引用output所在交易ID
+    TXID []byte
 
-    <span class="hljs-comment">//应用output的索引值</span>
-    VoutIndex <span class="hljs-keyword">int64</span>
+    //应用output的索引值
+    VoutIndex int64
 
-    <span class="hljs-comment">//解锁脚本</span>
-    ScriptSig <span class="hljs-keyword">string</span>
+    //解锁脚本
+    ScriptSig string
 }
 </code></pre>
 <h2 id="2-交易输出（txoutput）">2. 交易输出（TXOutput）</h2>
@@ -3089,30 +3093,30 @@
 <p>==易错点：经常把Value写成小写字母开头的==，这样会无法写入数据库，切记！</p>
 </li>
 </ul>
-<pre><code class="lang-go"><span class="hljs-keyword">type</span> TXOutput <span class="hljs-keyword">struct</span> {
-    <span class="hljs-comment">//接收的金额</span>
-    Value <span class="hljs-keyword">float64</span>
+<pre><code class="lang-go">type TXOutput struct {
+    //接收的金额
+    Value float64
 
-    <span class="hljs-comment">//锁定脚本</span>
-    ScriptPubKey <span class="hljs-keyword">string</span>
+    //锁定脚本
+    ScriptPubKey string
 }
 </code></pre>
 <h2 id="3-交易结构">3. 交易结构</h2>
-<pre><code class="lang-go"><span class="hljs-keyword">type</span> Transaction <span class="hljs-keyword">struct</span> {
-    <span class="hljs-comment">//交易ID</span>
-    TXID []<span class="hljs-keyword">byte</span>
+<pre><code class="lang-go">type Transaction struct {
+    //交易ID
+    TXID []byte
 
-    <span class="hljs-comment">//交易输入，可能是多个</span>
+    //交易输入，可能是多个
     TXInputs []TXInput
 
-    <span class="hljs-comment">//交易输出，可能是多个</span>
+    //交易输出，可能是多个
     TXOutputs []TXOutput
 }
 </code></pre>
 <h2 id="4-设置交易id方法">4. 设置交易ID方法</h2>
-<pre><code class="lang-go"><span class="hljs-comment">//设置交易哈希</span>
-<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(tx *Transaction)</span> <span class="hljs-title">setHash</span><span class="hljs-params">()</span></span> {
-    <span class="hljs-keyword">var</span> buffer bytes.Buffer
+<pre><code class="lang-go">//设置交易哈希
+func (tx *Transaction) setHash() {
+    var buffer bytes.Buffer
 
     encoder := gob.NewEncoder(&amp;buffer)
     encoder.Encode(tx)
@@ -3126,21 +3130,21 @@
 <h1 id="二、创建coinbase交易">二、创建Coinbase交易</h1>
 <p>coinbase总是新区块的第一条交易，这条交易中只有一个输出，即对矿工的奖励，没有输入。</p>
 <p>​    </p>
-<pre><code class="lang-go"><span class="hljs-comment">//address 是矿工地址，data是矿工自定义的附加信息</span>
-<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">NewCoinbaseTX</span><span class="hljs-params">(address <span class="hljs-keyword">string</span>, data <span class="hljs-keyword">string</span>)</span> *<span class="hljs-title">Transaction</span></span> {
+<pre><code class="lang-go">//address 是矿工地址，data是矿工自定义的附加信息
+func NewCoinbaseTX(address string, data string) *Transaction {
 
-    <span class="hljs-keyword">if</span> data == <span class="hljs-string">&quot;&quot;</span> {
-        data = fmt.Sprintf(<span class="hljs-string">&quot;reward %s %f\n&quot;</span>, address, reward)
+    if data == &quot;&quot; {
+        data = fmt.Sprintf(&quot;reward %s %f\n&quot;, address, reward)
     }
 
-    <span class="hljs-comment">//比特币系统，对于这个input的id填0，对索引填0xffff，data由矿工填写，一般填所在矿池的名字</span>
-    input := TXInput{<span class="hljs-literal">nil</span>, <span class="hljs-number">-1</span>, data}
+    //比特币系统，对于这个input的id填0，对索引填0xffff，data由矿工填写，一般填所在矿池的名字
+    input := TXInput{nil, -1, data}
     output := TXOutput{reward, address}
 
-    txTmp := Transaction{<span class="hljs-literal">nil</span>, []TXInput{input}, []TXOutput{output}}
+    txTmp := Transaction{nil, []TXInput{input}, []TXOutput{output}}
     txTmp.setHash()
 
-    <span class="hljs-keyword">return</span> &amp;txTmp
+    return &amp;txTmp
 }
 </code></pre>
 <p>中本聪在创世块中添加信息：</p>
@@ -3153,100 +3157,46 @@
 </code></pre><h1 id="三、根据transaction调整代码">三、根据Transaction调整代码</h1>
 <h2 id="1-block改写">1. block改写</h2>
 <p>使用交易数组代替Data，代码如下：</p>
-<pre><code class="lang-go"><span class="hljs-keyword">type</span> Block <span class="hljs-keyword">struct</span> {
-<span class="hljs-comment">//区块头：</span>
-    <span class="hljs-comment">//比特币网络的版本号</span>
-    Version <span class="hljs-keyword">uint64</span>
-    <span class="hljs-comment">//当前区块的哈希，注意，这是为了方便写代码而加入的。比特币不在区块中存储当前区块的哈希值</span>
-    Hash []<span class="hljs-keyword">byte</span>
-    <span class="hljs-comment">//前区块的哈希值，用于连接链条</span>
-    PrevBlockHash []<span class="hljs-keyword">byte</span>
-    <span class="hljs-comment">//梅克尔根，用于快速校验区块，校验区块的完整性。</span>
-    MerkleRoot []<span class="hljs-keyword">byte</span>
-    <span class="hljs-comment">//时间戳，表示区块创建的时间</span>
-    TimeStamp <span class="hljs-keyword">uint64</span>
-    <span class="hljs-comment">//难度值，调整挖矿难度</span>
-    Difficuty <span class="hljs-keyword">uint64</span>
-    <span class="hljs-comment">//随机值，挖矿需要求的数字</span>
-    Nonce <span class="hljs-keyword">uint64</span>
+<pre><code class="lang-go">type Block struct {
+//区块头：
+    //比特币网络的版本号
+    Version uint64
+    //当前区块的哈希，注意，这是为了方便写代码而加入的。比特币不在区块中存储当前区块的哈希值
+    Hash []byte
+    //前区块的哈希值，用于连接链条
+    PrevBlockHash []byte
+    //梅克尔根，用于快速校验区块，校验区块的完整性。
+    MerkleRoot []byte
+    //时间戳，表示区块创建的时间
+    TimeStamp uint64
+    //难度值，调整挖矿难度
+    Difficuty uint64
+    //随机值，挖矿需要求的数字
+    Nonce uint64
 
-<span class="hljs-comment">//区块体：</span>
-    <span class="hljs-comment">//区块数据</span>
-    <span class="hljs-comment">//Data []byte</span>
-    Transactions []*Transaction  <span class="hljs-comment">//这里&lt;------------</span>
-}
-</code></pre>
+//区块体：
+    //区块数据
+    //Data []byte
+    Transactions []*Transaction  //这里</code></pre>
 <h2 id="2-newblock改写">2. NewBlock改写</h2>
-<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">NewBlock</span><span class="hljs-params">(txs []*Transaction, prevHash []<span class="hljs-keyword">byte</span>)</span> <span class="hljs-title">Block</span></span> {  <span class="hljs-comment">//这里&lt;------------</span>
-    <span class="hljs-keyword">var</span> block Block
-    block = Block{
-        Version:       <span class="hljs-number">0</span>,
-        PrevBlockHash: prevHash,
-        <span class="hljs-comment">//Hash:          []byte{},</span>
-        MerkleRoot:    []<span class="hljs-keyword">byte</span>{},
-        TimeStamp:     <span class="hljs-keyword">uint64</span>(time.Now().Unix()),
-        Difficuty:     <span class="hljs-number">10</span>,
-        Nonce:         <span class="hljs-number">10</span>,
-        Transactions:txs}  <span class="hljs-comment">//这里修改 &lt;---------------</span>
-
-    pow := NewProofOfWork(block)
-    hash, nonce := pow.Run()
-    block.Hash = hash
-    block.Nonce = nonce
-
-    <span class="hljs-keyword">return</span> block
-}
-</code></pre>
+<pre><code class="lang-go">func NewBlock(txs []*Transaction, prevHash []byte) Block {  //这里</code></pre>
 <h2 id="3-newblockchain改写">3. NewBlockChain改写</h2>
-<pre><code class="lang-go"><span class="hljs-comment">//中本聪在创世块中保存的信息</span>
-<span class="hljs-keyword">const</span> genesisInfo = <span class="hljs-string">&quot;The Times 03/Jan/2009 Chancellor on brink of second bailout for banks&quot;</span>
+<pre><code class="lang-go">//中本聪在创世块中保存的信息
+const genesisInfo = &quot;The Times 03/Jan/2009 Chancellor on brink of second bailout for banks&quot;
 
-<span class="hljs-comment">//- 提供一个创建BlockChain的方法</span>
-<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">NewBlockChain</span><span class="hljs-params">(address <span class="hljs-keyword">string</span>)</span> *<span class="hljs-title">BlockChain</span></span> { <span class="hljs-comment">//&lt;------这里修改</span>
-    <span class="hljs-keyword">var</span> lastHash []<span class="hljs-keyword">byte</span>
-
-    ...
-
-    db.Update(<span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(tx *bolt.Tx)</span> <span class="hljs-title">error</span></span> {
-        bucket := tx.Bucket([]<span class="hljs-keyword">byte</span>(blockBucket))
-        ...
-        <span class="hljs-comment">//创建coinbase交易  &lt;---这里修改</span>
-        coinbaseTx := NewCoinbaseTX(address, genesisInfo)
-        <span class="hljs-comment">//创建创世块 &lt;---这里修改</span>
-        genesisBlock := NewBlock([]*Transaction{coinbaseTx}, []<span class="hljs-keyword">byte</span>{})
-        ...
-    }
-}
-</code></pre>
+//- 提供一个创建BlockChain的方法
+func NewBlockChain(address string) *BlockChain { //</code></pre>
 <h2 id="4-addblock改写">4. AddBlock改写</h2>
-<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(bc *BlockChain)</span><span class="hljs-title">AddBlock</span><span class="hljs-params">(txs []*Transaction)</span></span>  {
+<pre><code class="lang-go">func (bc *BlockChain)AddBlock(txs []*Transaction)  {
     ...
 
-    <span class="hljs-comment">//创建新区块</span>
-    newBlock := NewBlock(txs, lastBlockHash) <span class="hljs-comment">//&lt;----修改这里</span>
-    ...
-}
-</code></pre>
+    //创建新区块
+    newBlock := NewBlock(txs, lastBlockHash) //</code></pre>
 <h2 id="5修改preparedata函数">5.修改prepareData函数</h2>
 <p>在ProofOfWork.go文件中，</p>
-<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(pow *ProofOfWork)</span> <span class="hljs-title">prepareData</span><span class="hljs-params">(num <span class="hljs-keyword">uint64</span>)</span> []<span class="hljs-title">byte</span></span> {
+<pre><code class="lang-go">func (pow *ProofOfWork) prepareData(num uint64) []byte {
     block := pow.block
-    block.MerkleRoot = block.HashTransactions() <span class="hljs-comment">//&lt;----这里修改了</span>
-    tmp := [][]<span class="hljs-keyword">byte</span>{
-        uintToByte(block.Version),
-        block.PrevBlockHash,
-        <span class="hljs-comment">//block.Hash,</span>
-        block.MerkleRoot,
-        uintToByte(block.TimeStamp),
-        uintToByte(block.Difficuty),
-        uintToByte(num)}
-
-        <span class="hljs-comment">//block.Data}  //&lt;----这里修改了</span>
-
-    data := bytes.Join(tmp, []<span class="hljs-keyword">byte</span>{})
-    <span class="hljs-keyword">return</span> data
-}
-</code></pre>
+    block.MerkleRoot = block.HashTransactions() //</code></pre>
 <ul>
 <li><p>==在比特币中，其实是对区块头进行哈希运算，而不是对区块整体进行哈希运算。==</p>
 </li>
@@ -3255,18 +3205,18 @@
 </ul>
 <h2 id="6-hashtransaction函数实现">6. HashTransaction函数实现</h2>
 <p>这个函数是为了生成Merkel Tree Root哈希值，正常的生成过程是使用所有交易的哈希值生成一个平衡二叉树，此处，为了简化代码，我们目前直接将区块中交易的哈希值进行拼接后进行哈希操作即可。</p>
-<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(block *Block)</span><span class="hljs-title">HashTransactions</span><span class="hljs-params">()</span> []<span class="hljs-title">byte</span></span> {
+<pre><code class="lang-go">func (block *Block)HashTransactions() []byte {
 
-    <span class="hljs-keyword">var</span> tmp [][]<span class="hljs-keyword">byte</span>
-    <span class="hljs-keyword">for</span> _, tx := <span class="hljs-keyword">range</span> block.Transactions{
-        <span class="hljs-comment">//交易的ID就是交易的哈希值，还记得吗？我们在Transaction里面提供了方法。</span>
-        tmp = <span class="hljs-built_in">append</span>(tmp, tx.TXID)
+    var tmp [][]byte
+    for _, tx := range block.Transactions{
+        //交易的ID就是交易的哈希值，还记得吗？我们在Transaction里面提供了方法。
+        tmp = append(tmp, tx.TXID)
     }
 
-    data := bytes.Join(tmp, []<span class="hljs-keyword">byte</span>{})
+    data := bytes.Join(tmp, []byte{})
     hash := sha256.Sum256(data)
 
-    <span class="hljs-keyword">return</span> hash[:]
+    return hash[:]
 }
 </code></pre>
 <h2 id="7修改commandlinego文件">7.修改commandLine.go文件</h2>
@@ -3300,77 +3250,77 @@
 <p>解锁脚本是检验input是否可以使用由某个地址锁定的utxo，所以对于解锁脚本来说，是外部提供锁定信息，我去检查一下能否解开它。</p>
 <p>我们没有涉及到真实的非对称加密，所以使用字符串来代替加密和签名数据。即使用地址进行加密，同时使用地址当做签名，通过对比字符串来确定utxo能否解开。</p>
 <p>在transaction.go中，添加解锁脚本如下：</p>
-<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(input *TXInput)</span> <span class="hljs-title">CanUnlockUTXOWith</span><span class="hljs-params">(unlockData <span class="hljs-keyword">string</span> /*收款人的地址*/)</span> <span class="hljs-title">bool</span></span> {
-    <span class="hljs-comment">//ScriptSig是签名，v4版本中使用付款人的地址填充</span>
-    <span class="hljs-keyword">return</span> input.ScriptSig == unlockData
+<pre><code class="lang-go">func (input *TXInput) CanUnlockUTXOWith(unlockData string /*收款人的地址*/) bool {
+    //ScriptSig是签名，v4版本中使用付款人的地址填充
+    return input.ScriptSig == unlockData
 }
 </code></pre>
 <h2 id="2锁定脚本">2.锁定脚本</h2>
 <p>同样的，锁定脚本是用于指定比特币的新主人，在创建output时创建。对于这个output来说，它应该是一直在等待一个签名的到来，检查这个签名能否解开自己锁定的比特币。</p>
-<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(output *TXOutput)</span> <span class="hljs-title">CanBeUnlockedWith</span><span class="hljs-params">(unlockData <span class="hljs-keyword">string</span>/*付款人的地址（签名）*/)</span> <span class="hljs-title">bool</span></span> {
-    <span class="hljs-comment">//ScriptPubKey是锁定信息，v4版本中使用收款人的地址填充</span>
-    <span class="hljs-keyword">return</span> output.ScriptPubKey == unlockData
+<pre><code class="lang-go">func (output *TXOutput) CanBeUnlockedWith(unlockData string/*付款人的地址（签名）*/) bool {
+    //ScriptPubKey是锁定信息，v4版本中使用收款人的地址填充
+    return output.ScriptPubKey == unlockData
 }
 </code></pre>
 <h2 id="3获取指定地址的utxo的交易集合">3.获取指定地址的UTXO的交易集合</h2>
 <p>我们的比特币都在UTXO中，UTXO又包含在交易中，所以如果想知道我们可以支配的UTXO，必须找到这些UTXO所在的交易，每个人有N个UTXO，所以我们需要找到所有的交易，也就是说，应该找到包含UTXO的交易的集合。</p>
 <p>==这是一个核心函数==，代码如下：</p>
 <pre><code class="lang-go">
-<span class="hljs-comment">//返回指定地址能够支配的utxo所在的交易的集合</span>
-<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(bc *BlockChain)</span> <span class="hljs-title">FindUTXOTransactions</span><span class="hljs-params">(address <span class="hljs-keyword">string</span>)</span> [] <span class="hljs-title">Transaction</span></span> {
+//返回指定地址能够支配的utxo所在的交易的集合
+func (bc *BlockChain) FindUTXOTransactions(address string) [] Transaction {
 
-    <span class="hljs-keyword">var</span> transactions []Transaction
+    var transactions []Transaction
 
-    spentUTXOs := <span class="hljs-built_in">make</span>(<span class="hljs-keyword">map</span>[<span class="hljs-keyword">string</span>][]<span class="hljs-keyword">int64</span>)
+    spentUTXOs := make(map[string][]int64)
     it := bc.NewIterator()
 
-    <span class="hljs-keyword">for</span> {
-        <span class="hljs-comment">//遍历区块</span>
+    for {
+        //遍历区块
         block := it.Next()
 
-        <span class="hljs-comment">//遍历交易</span>
-        <span class="hljs-keyword">for</span> _, tx := <span class="hljs-keyword">range</span> block.Transactions {
+        //遍历交易
+        for _, tx := range block.Transactions {
 
         OUTPUTS:
-        <span class="hljs-comment">//遍历outputs</span>
-            <span class="hljs-keyword">for</span> currentIndex, output := <span class="hljs-keyword">range</span> tx.TXOutputs {
-                <span class="hljs-comment">//过滤已经消耗过得utxo</span>
-                <span class="hljs-keyword">if</span> spentUTXOs[<span class="hljs-keyword">string</span>(tx.TXID)] != <span class="hljs-literal">nil</span> {
-                    <span class="hljs-comment">//交易id非空， 意味着在交易里面有消耗的utxo</span>
-                    indexs := spentUTXOs[<span class="hljs-keyword">string</span>(tx.TXID)]
+        //遍历outputs
+            for currentIndex, output := range tx.TXOutputs {
+                //过滤已经消耗过得utxo
+                if spentUTXOs[string(tx.TXID)] != nil {
+                    //交易id非空， 意味着在交易里面有消耗的utxo
+                    indexs := spentUTXOs[string(tx.TXID)]
 
-                    <span class="hljs-keyword">for</span> _, index := <span class="hljs-keyword">range</span> indexs {
-                        <span class="hljs-keyword">if</span> <span class="hljs-keyword">int64</span>(currentIndex) == index {
-                            <span class="hljs-keyword">continue</span> OUTPUTS
+                    for _, index := range indexs {
+                        if int64(currentIndex) == index {
+                            continue OUTPUTS
                         }
                     }
                 }
 
-                <span class="hljs-keyword">if</span> output.CanBeUnlockedWith(address) {
-                    transactions = <span class="hljs-built_in">append</span>(transactions, *tx)
+                if output.CanBeUnlockedWith(address) {
+                    transactions = append(transactions, *tx)
                 }
             }
 
-            <span class="hljs-comment">//遍历inputs</span>
-            <span class="hljs-keyword">if</span> !tx.IsCoinbase() {
-                <span class="hljs-keyword">for</span> _, input := <span class="hljs-keyword">range</span> tx.TXInputs {
-                    <span class="hljs-comment">//检查一下当前的inputs是否和地址有关，能否解开</span>
-                    <span class="hljs-comment">//看看当前花费的这个input是不是和指定的地址有关，如果有关，要记录下来，</span>
-                    <span class="hljs-comment">//这样遍历前面的交易时，就不会再对这个引用的output重复统计了。</span>
-                    <span class="hljs-keyword">if</span> input.CanUnlockUTXOWith(address) {
-                        spentUTXOs[<span class="hljs-keyword">string</span>(input.TXID)] = <span class="hljs-built_in">append</span>(spentUTXOs[<span class="hljs-keyword">string</span>(input.TXID)], input.VoutIndex)
-                        <span class="hljs-comment">//map[0x000000] = []int64{0}</span>
-                        <span class="hljs-comment">//map[0x111111] = []int64{2,5}</span>
-                        <span class="hljs-comment">//map[0xnnnnnn] = []int64{3}</span>
+            //遍历inputs
+            if !tx.IsCoinbase() {
+                for _, input := range tx.TXInputs {
+                    //检查一下当前的inputs是否和地址有关，能否解开
+                    //看看当前花费的这个input是不是和指定的地址有关，如果有关，要记录下来，
+                    //这样遍历前面的交易时，就不会再对这个引用的output重复统计了。
+                    if input.CanUnlockUTXOWith(address) {
+                        spentUTXOs[string(input.TXID)] = append(spentUTXOs[string(input.TXID)], input.VoutIndex)
+                        //map[0x000000] = []int64{0}
+                        //map[0x111111] = []int64{2,5}
+                        //map[0xnnnnnn] = []int64{3}
                     }
                 }
             }
-        <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(block.PrevBlockHash) == <span class="hljs-number">0</span> {
-            <span class="hljs-keyword">break</span>
+        if len(block.PrevBlockHash) == 0 {
+            break
         }
         }
     }
-    <span class="hljs-keyword">return</span> transactions
+    return transactions
 }
 </code></pre>
 <p>分析一个示例（跟着代码流程走）：</p>
@@ -3380,69 +3330,69 @@
 </ol>
 <h2 id="4iscoinbase函数实现">4.IsCoinbase函数实现</h2>
 <p>根据coinbase的特点进行判断，请参考签名NewCoinbase函数</p>
-<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">NewCoinbaseTX</span><span class="hljs-params">(address <span class="hljs-keyword">string</span>, data <span class="hljs-keyword">string</span>)</span> *<span class="hljs-title">Transaction</span></span> {
+<pre><code class="lang-go">func NewCoinbaseTX(address string, data string) *Transaction {
     ...
-    input := TXInput{<span class="hljs-literal">nil</span>, <span class="hljs-number">-1</span>, data}
+    input := TXInput{nil, -1, data}
     ...
 }
 </code></pre>
 <p>具体实现：</p>
-<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(tx *Transaction)</span> <span class="hljs-title">IsCoinbase</span><span class="hljs-params">()</span> <span class="hljs-title">bool</span></span> {
-    <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(tx.TXInputs) == <span class="hljs-number">1</span> {
-        <span class="hljs-keyword">if</span> tx.TXInputs[<span class="hljs-number">0</span>].TXID == <span class="hljs-literal">nil</span> &amp;&amp; tx.TXInputs[<span class="hljs-number">0</span>].VoutIndex == <span class="hljs-number">-1</span> {
-            <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>
+<pre><code class="lang-go">func (tx *Transaction) IsCoinbase() bool {
+    if len(tx.TXInputs) == 1 {
+        if tx.TXInputs[0].TXID == nil &amp;&amp; tx.TXInputs[0].VoutIndex == -1 {
+            return true
         }
     }
-    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>
+    return false
 }
 </code></pre>
 <h2 id="5获取指定地址的utxo的集合">5.获取指定地址的UTXO的集合</h2>
 <p>我们已经获取到了所有的交易集合，那么utxo集合便非常容易获取，只需要遍历交易即可。</p>
-<pre><code class="lang-go"><span class="hljs-comment">//返回指定地址能够支配的utxo的集合</span>
-<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(bc *BlockChain)</span> <span class="hljs-title">FindUTXOs</span><span class="hljs-params">(address <span class="hljs-keyword">string</span>)</span> []<span class="hljs-title">TXOutput</span></span> {
+<pre><code class="lang-go">//返回指定地址能够支配的utxo的集合
+func (bc *BlockChain) FindUTXOs(address string) []TXOutput {
     txs := bc.FindUTXOTransactions(address)
 
-    <span class="hljs-keyword">var</span> utxos []TXOutput
-    <span class="hljs-keyword">for</span> _, tx := <span class="hljs-keyword">range</span> txs {
-        <span class="hljs-keyword">for</span> _, output := <span class="hljs-keyword">range</span> tx.TXOutputs {
-            <span class="hljs-comment">//找到自己能解锁的output</span>
-            <span class="hljs-keyword">if</span> output.CanBeUnlockedWith(address) {
-                utxos = <span class="hljs-built_in">append</span>(utxos, output)
+    var utxos []TXOutput
+    for _, tx := range txs {
+        for _, output := range tx.TXOutputs {
+            //找到自己能解锁的output
+            if output.CanBeUnlockedWith(address) {
+                utxos = append(utxos, output)
             }
         }
     }
 
-    <span class="hljs-keyword">return</span> utxos
+    return utxos
 }
 </code></pre>
 <h2 id="6获取余额">6.获取余额</h2>
 <p>我们说过，比特币是没有余额概念的，所以这个属于钱包的功能，我们把它放到CLI中去实现。</p>
 <p>此时只需要遍历UTXO，然后累计里面的value字段的值即可。</p>
 <p>在commandLine.go中添加如下代码：</p>
-<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(cli *CLI)</span><span class="hljs-title">GetBalance</span><span class="hljs-params">(address <span class="hljs-keyword">string</span>)</span></span>  {
+<pre><code class="lang-go">func (cli *CLI)GetBalance(address string)  {
     bc := GetBlockChainObj()
-    <span class="hljs-keyword">defer</span> bc.db.Close()
+    defer bc.db.Close()
 
     utxos := bc.FindUTXOs(address)
 
-    <span class="hljs-keyword">var</span> total <span class="hljs-keyword">float64</span>
-    <span class="hljs-keyword">for</span> _, utxo := <span class="hljs-keyword">range</span> utxos{
+    var total float64
+    for _, utxo := range utxos{
         total += utxo.Value
     }
 
-    fmt.Printf(<span class="hljs-string">&quot;The balance of %s is : %f\n&quot;</span>, address, total)
+    fmt.Printf(&quot;The balance of %s is : %f\n&quot;, address, total)
 }
 </code></pre>
 <p>添加getBalance命令如下：</p>
-<pre><code class="lang-go">    <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;getBalance&quot;</span>:
-        <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(os.Args) &gt; <span class="hljs-number">3</span> &amp;&amp; os.Args[<span class="hljs-number">2</span>] == <span class="hljs-string">&quot;--address&quot;</span> {
-            address := os.Args[<span class="hljs-number">3</span>]
-            <span class="hljs-keyword">if</span> address == <span class="hljs-string">&quot;&quot;</span> {
-                fmt.Println(<span class="hljs-string">&quot;address should not be empty!&quot;</span>)
-                os.Exit(<span class="hljs-number">1</span>)
+<pre><code class="lang-go">    case &quot;getBalance&quot;:
+        if len(os.Args) &gt; 3 &amp;&amp; os.Args[2] == &quot;--address&quot; {
+            address := os.Args[3]
+            if address == &quot;&quot; {
+                fmt.Println(&quot;address should not be empty!&quot;)
+                os.Exit(1)
             }
             cli.GetBalance(address)
-        } <span class="hljs-keyword">else</span> {
+        } else {
             fmt.Println(Usage)
         }
 </code></pre>
@@ -3456,26 +3406,26 @@
 <p>到目前为止，我们已经完成了70%的工作，接下来就是实现核心功能--<strong>转账</strong>。</p>
 <p>我们的AddBlock命令一直是被注释的状态，接下来就要把它重新用起来。</p>
 <p>转账通过交易，所以我们要完成交易的创建，前面已经实现过一个交易，即挖矿奖励交易Coinbase，我们回顾一下，</p>
-<pre><code class="lang-go"><span class="hljs-comment">//address 是矿工地址，data是矿工自定义的附加信息</span>
-<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">NewCoinbaseTX</span><span class="hljs-params">(address <span class="hljs-keyword">string</span>, data <span class="hljs-keyword">string</span>)</span> *<span class="hljs-title">Transaction</span></span> {
+<pre><code class="lang-go">//address 是矿工地址，data是矿工自定义的附加信息
+func NewCoinbaseTX(address string, data string) *Transaction {
 
-    <span class="hljs-keyword">if</span> data == <span class="hljs-string">&quot;&quot;</span> {
-        data = fmt.Sprintf(<span class="hljs-string">&quot;reward %s %f\n&quot;</span>, address, reward)
+    if data == &quot;&quot; {
+        data = fmt.Sprintf(&quot;reward %s %f\n&quot;, address, reward)
     }
 
-    <span class="hljs-comment">//比特币系统，对于这个input的id填0，对索引填0xffff，data由矿工填写，一般填所在矿池的名字</span>
-    input := TXInput{<span class="hljs-literal">nil</span>, <span class="hljs-number">-1</span>, data}
+    //比特币系统，对于这个input的id填0，对索引填0xffff，data由矿工填写，一般填所在矿池的名字
+    input := TXInput{nil, -1, data}
     output := TXOutput{reward, address}
 
-    txTmp := Transaction{<span class="hljs-literal">nil</span>, []TXInput{input}, []TXOutput{output}}
+    txTmp := Transaction{nil, []TXInput{input}, []TXOutput{output}}
     txTmp.setHash()
 
-    <span class="hljs-keyword">return</span> &amp;txTmp
+    return &amp;txTmp
 }
 </code></pre>
 <p>这个交易十分特殊，没有输入，只有输出，而我们真实的交易一定有输入输出，以及输出金额，所以我们的原型定义如下：</p>
-<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">NewTransaction</span><span class="hljs-params">(from, to <span class="hljs-keyword">string</span>, amount <span class="hljs-keyword">float64</span>, bc *BlockChain)</span> *<span class="hljs-title">Transaction</span></span> {
-    <span class="hljs-comment">//TODO</span>
+<pre><code class="lang-go">func NewTransaction(from, to string, amount float64, bc *BlockChain) *Transaction {
+    //TODO
 }
 </code></pre>
 <p>from：付款人</p>
@@ -3484,45 +3434,45 @@
 <p>bc：区块链本身</p>
 <h2 id="1-普通交易创建">1. 普通交易创建</h2>
 <p>在transaction.go中添加如下代码：</p>
-<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">NewTransaction</span><span class="hljs-params">(from, to <span class="hljs-keyword">string</span>, amount <span class="hljs-keyword">float64</span>, bc *BlockChain)</span> *<span class="hljs-title">Transaction</span></span> {
+<pre><code class="lang-go">func NewTransaction(from, to string, amount float64, bc *BlockChain) *Transaction {
 
-    <span class="hljs-comment">//map[txid][]int64</span>
-    validUTXOs := <span class="hljs-built_in">make</span>(<span class="hljs-keyword">map</span>[<span class="hljs-keyword">string</span>][]<span class="hljs-keyword">int64</span>)
-    <span class="hljs-keyword">var</span> total <span class="hljs-keyword">float64</span>
+    //map[txid][]int64
+    validUTXOs := make(map[string][]int64)
+    var total float64
 
-    <span class="hljs-comment">//第一部分，找到所需要的UTXO的集合</span>
-    validUTXOs <span class="hljs-comment">/*本次支付所需要的utxo的集合*/</span> , total <span class="hljs-comment">/*返回utxos所包含的金额*/</span> = bc.FindSuitableUTXOs(from, amount)
+    //第一部分，找到所需要的UTXO的集合
+    validUTXOs /*本次支付所需要的utxo的集合*/ , total /*返回utxos所包含的金额*/ = bc.FindSuitableUTXOs(from, amount)
 
-    <span class="hljs-keyword">if</span> total &lt; amount {
-        fmt.Println(<span class="hljs-string">&quot;Money is not enough!!!&quot;</span>)
-        os.Exit(<span class="hljs-number">1</span>)
+    if total &lt; amount {
+        fmt.Println(&quot;Money is not enough!!!&quot;)
+        os.Exit(1)
     }
 
-    <span class="hljs-comment">//将返回的utxo转换成input</span>
-    <span class="hljs-keyword">var</span> inputs []TXInput
-    <span class="hljs-keyword">var</span> outputs []TXOutput
+    //将返回的utxo转换成input
+    var inputs []TXInput
+    var outputs []TXOutput
 
-    <span class="hljs-comment">//第二部分，input的创建</span>
-    <span class="hljs-keyword">for</span> txid, indexs := <span class="hljs-keyword">range</span> validUTXOs{
-        <span class="hljs-keyword">for</span> _, index := <span class="hljs-keyword">range</span> indexs{
-            input := TXInput{[]<span class="hljs-keyword">byte</span>(txid), index, from}
-            inputs = <span class="hljs-built_in">append</span>(inputs, input)
+    //第二部分，input的创建
+    for txid, indexs := range validUTXOs{
+        for _, index := range indexs{
+            input := TXInput{[]byte(txid), index, from}
+            inputs = append(inputs, input)
         }
     }
 
-    <span class="hljs-comment">//第三部分，output的创建</span>
+    //第三部分，output的创建
     output := TXOutput{amount, to}
 
-    outputs = <span class="hljs-built_in">append</span>(outputs, output)
+    outputs = append(outputs, output)
 
-    <span class="hljs-keyword">if</span> total &gt; amount {
-        outputs = <span class="hljs-built_in">append</span>(outputs, TXOutput{total-amount, from})
+    if total &gt; amount {
+        outputs = append(outputs, TXOutput{total-amount, from})
     }
 
-    txTmp := Transaction{<span class="hljs-literal">nil</span>, inputs, outputs}
+    txTmp := Transaction{nil, inputs, outputs}
     txTmp.setHash()
 
-    <span class="hljs-keyword">return</span> &amp;txTmp
+    return &amp;txTmp
 }
 </code></pre>
 <p>这个函数分为三个部分，</p>
@@ -3533,31 +3483,31 @@
 </ul>
 <h2 id="2辅助函数findsuitableutxos">2.辅助函数FindSuitableUTXOs</h2>
 <p>在blockChain.go文件中，添加如下代码：</p>
-<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(bc *BlockChain)</span> <span class="hljs-title">FindSuitableUTXOs</span><span class="hljs-params">(address <span class="hljs-keyword">string</span>, amount <span class="hljs-keyword">float64</span>)</span> <span class="hljs-params">(<span class="hljs-keyword">map</span>[<span class="hljs-keyword">string</span>][]<span class="hljs-keyword">int64</span>, <span class="hljs-keyword">float64</span>)</span></span> {
+<pre><code class="lang-go">func (bc *BlockChain) FindSuitableUTXOs(address string, amount float64) (map[string][]int64, float64) {
     txs := bc.FindUTXOTransactions(address)
-    validUTXOs := <span class="hljs-built_in">make</span>(<span class="hljs-keyword">map</span>[<span class="hljs-keyword">string</span>][]<span class="hljs-keyword">int64</span>)
-    <span class="hljs-keyword">var</span> total <span class="hljs-keyword">float64</span> = <span class="hljs-number">0</span>
+    validUTXOs := make(map[string][]int64)
+    var total float64 = 0
 
 CALCULATE:
-    <span class="hljs-keyword">for</span> _, currentTx := <span class="hljs-keyword">range</span> txs {
+    for _, currentTx := range txs {
 
-        <span class="hljs-keyword">for</span> currentIndex, output := <span class="hljs-keyword">range</span> currentTx.TXOutputs {
-            <span class="hljs-keyword">if</span> output.CanBeUnlockedWith(address) {
-                <span class="hljs-keyword">if</span> total &lt; amount {
+        for currentIndex, output := range currentTx.TXOutputs {
+            if output.CanBeUnlockedWith(address) {
+                if total &lt; amount {
                     total += output.Value
 
-                    <span class="hljs-comment">//indexs := validUTXOs[string(currentTx.TXID)]</span>
-                    <span class="hljs-comment">//indexs = append(indexs, int64(currentIndex))</span>
-                    validUTXOs[<span class="hljs-keyword">string</span>(currentTx.TXID)] = <span class="hljs-built_in">append</span>(validUTXOs[<span class="hljs-keyword">string</span>(currentTx.TXID)], <span class="hljs-keyword">int64</span>(currentIndex))
+                    //indexs := validUTXOs[string(currentTx.TXID)]
+                    //indexs = append(indexs, int64(currentIndex))
+                    validUTXOs[string(currentTx.TXID)] = append(validUTXOs[string(currentTx.TXID)], int64(currentIndex))
 
-                } <span class="hljs-keyword">else</span> {
-                    <span class="hljs-keyword">break</span> CALCULATE
+                } else {
+                    break CALCULATE
                 }
             }
         }
     }
 
-    <span class="hljs-keyword">return</span> validUTXOs, total
+    return validUTXOs, total
 }
 </code></pre>
 <p>这个函数的功能为：找到指定地址所需金额的UTXO的集合，同时将这些UTXO总额一并返回。</p>
@@ -3588,36 +3538,36 @@ CALCULATE:
 </table>
 <p>由于我们没有涉及到网络，所以我们手动指定矿工，完成资源分配</p>
 <h2 id="2-调整代码">2. 调整代码</h2>
-<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(cli *CLI)</span><span class="hljs-title">Send</span><span class="hljs-params">(from , to <span class="hljs-keyword">string</span>, amount <span class="hljs-keyword">float64</span>, miner <span class="hljs-keyword">string</span>)</span></span>  {
+<pre><code class="lang-go">func (cli *CLI)Send(from , to string, amount float64, miner string)  {
     bc := GetBlockChainObj()
     tx := NewTransaction(from, to, amount, bc)
-    <span class="hljs-keyword">defer</span> bc.db.Close()
+    defer bc.db.Close()
 
-    <span class="hljs-comment">//指定挖矿交易</span>
-    coinbase := NewCoinbaseTX(miner, <span class="hljs-string">&quot;&quot;</span>)
+    //指定挖矿交易
+    coinbase := NewCoinbaseTX(miner, &quot;&quot;)
     bc.AddBlock([]*Transaction{coinbase, tx})
 
-    fmt.Println(<span class="hljs-string">&quot;Send Successfully!&quot;</span>)
+    fmt.Println(&quot;Send Successfully!&quot;)
 }
 </code></pre>
 <p>修改Usage如下（注意，删除了addBlock --data DATA命令）</p>
 <p><img src="assets/image-20221108135611837.png" alt="image-20221108135611837"></p>
 <h2 id="3参数解析">3.参数解析</h2>
-<pre><code class="lang-go">    <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;send&quot;</span>:
-        <span class="hljs-comment">//send --from FROM --to TO --amount AMOUNT --miner MINER  &quot;send money from FROM to TO&quot;</span>
-        <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(os.Args) &lt; <span class="hljs-number">10</span> {
+<pre><code class="lang-go">    case &quot;send&quot;:
+        //send --from FROM --to TO --amount AMOUNT --miner MINER  &quot;send money from FROM to TO&quot;
+        if len(os.Args) &lt; 10 {
             fmt.Println(Usage)
-            os.Exit(<span class="hljs-number">1</span>)
+            os.Exit(1)
         }
 
-        <span class="hljs-comment">//简单粗暴，缺少校验，先看效果，马上整改</span>
-        from := os.Args[<span class="hljs-number">3</span>]
-        to := os.Args[<span class="hljs-number">5</span>]
-        amount, _ := strconv.ParseFloat(os.Args[<span class="hljs-number">7</span>], <span class="hljs-number">64</span>)
-        miner := os.Args[<span class="hljs-number">9</span>]
+        //简单粗暴，缺少校验，先看效果，马上整改
+        from := os.Args[3]
+        to := os.Args[5]
+        amount, _ := strconv.ParseFloat(os.Args[7], 64)
+        miner := os.Args[9]
 
         cli.Send(from, to, amount, miner)
-    <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;printChain&quot;</span>:
+    case &quot;printChain&quot;:
         ...
 </code></pre>
 <h1 id="九、第三次测试">九、第三次测试</h1>
@@ -3633,11 +3583,7 @@ Send Successfully!
 The balance of duke is : 2.500000
  duke ~/Desktop/code/v4$  ./block getBalance --address lily
 The balance of lily is : 10.000000
- duke ~/Desktop/code/v4$  ./block getBalance --address tom  //&lt;-----账本中没有他，所以为零
-The balance of tom is : 0.000000
- duke ~/Desktop/code/v4$  ./block getBalance --address Tom
-The balance of Tom is : 12.500000
-</code></pre>
+ duke ~/Desktop/code/v4$  ./block getBalance --address tom  //</code></pre>
 <p>测试金额不足情况</p>
 <p><img src="assets/image-20221108135624498.png" alt="image-20221108135624498"></p>
 <h1 id="十、小结">十、小结</h1>
@@ -3678,7 +3624,7 @@ The balance of Tom is : 12.500000
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第11节:day3-v4余额","level":"1.18.11","depth":2,"next":{"title":"第12节:day4-v4转账","level":"1.18.12","depth":2,"path":"11_精通比特币/day4-01-v4转账.md","ref":"11_精通比特币/day4-01-v4转账.md","articles":[]},"previous":{"title":"第10节:day3-交易原理","level":"1.18.10","depth":2,"path":"11_精通比特币/day3-01-交易原理.md","ref":"11_精通比特币/day3-01-交易原理.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"11_精通比特币/day3-02-v4余额.md","mtime":"2023-09-23T13:33:07.619Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-19T22:08:50.792Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第11节:day3-v4余额","level":"1.18.11","depth":2,"next":{"title":"第12节:day4-v4转账","level":"1.18.12","depth":2,"path":"11_精通比特币/day4-01-v4转账.md","ref":"11_精通比特币/day4-01-v4转账.md","articles":[]},"previous":{"title":"第10节:day3-交易原理","level":"1.18.10","depth":2,"path":"11_精通比特币/day3-01-交易原理.md","ref":"11_精通比特币/day3-01-交易原理.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"11_精通比特币/day3-02-v4余额.md","mtime":"2023-09-23T13:33:07.619Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3761,6 +3707,14 @@ The balance of Tom is : 12.500000
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

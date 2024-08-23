@@ -36,6 +36,10 @@
                 
             
                 
+                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
+                
+            
+                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3023,119 +3027,119 @@
 <ol>
 <li><p>方式1：abi.encodeWithSignature</p>
 <p>拼装selector和函数参数，我们可以在A合约中得到calldata，并在A合约中通过call方法去调用B合约中的方法，从而实现合约间的调用。举例，下面的代码功能是：在当前合约中使用<strong>call</strong>调用<strong>addr</strong>地址中的<strong>transfer</strong>方法：</p>
-<pre><code class="lang-js"><span class="hljs-comment">// 在合约中，一个function的4字节selector可以通过abi.encodeWithSignature(...)来获取</span>
-<span class="hljs-comment">// &quot;0xa9059cbb&quot;</span>
-bytes memory transferSelector = abi.encodeWithSignature(<span class="hljs-string">&quot;transfer(address,uint256)&quot;</span>);
+<pre><code class="lang-js">// 在合约中，一个function的4字节selector可以通过abi.encodeWithSignature(...)来获取
+// &quot;0xa9059cbb&quot;
+bytes memory transferSelector = abi.encodeWithSignature(&quot;transfer(address,uint256)&quot;);
 
-<span class="hljs-comment">// 调用合约</span>
-addr.call(transferSelector, 0xSomeAddress, <span class="hljs-number">100</span>); 
+// 调用合约
+addr.call(transferSelector, 0xSomeAddress, 100); 
 
-<span class="hljs-comment">// 一般会写成一行，简写如下：</span>
-<span class="hljs-comment">// addr.call(abi.encodeWithSignature(&quot;transfer(address,uint256)&quot;), 0xSomeAddress, 100);</span>
+// 一般会写成一行，简写如下：
+// addr.call(abi.encodeWithSignature(&quot;transfer(address,uint256)&quot;), 0xSomeAddress, 100);
 </code></pre>
 </li>
 <li><p>方式2：keccak256方法（sha3哈希算法）</p>
-<pre><code class="lang-js"><span class="hljs-comment">//注意我们这里做hash时，仅处理函数名与参数，并不会计算函数返回值</span>
-bytes4(keccak256(bytes(<span class="hljs-string">&quot;transfer(address,uint256)&quot;</span>)))
+<pre><code class="lang-js">//注意我们这里做hash时，仅处理函数名与参数，并不会计算函数返回值
+bytes4(keccak256(bytes(&quot;transfer(address,uint256)&quot;)))
 </code></pre>
 </li>
 <li><p>方式3：在合约内部也可以直接获取selector</p>
-<pre><code class="lang-js"><span class="hljs-comment">// 假设当前合约内有transfer函数</span>
-<span class="hljs-built_in">this</span>.transfer.selector
+<pre><code class="lang-js">// 假设当前合约内有transfer函数
+this.transfer.selector
 </code></pre>
 </li>
 <li><p>方式4：也可以使用abi.encodeCall方式获取</p>
 <pre><code class="lang-js">interface IERC20 {
-        <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">transfer</span>(<span class="hljs-params">address, uint</span>) <span class="hljs-title">external</span></span>;
+        function transfer(address, uint) external;
 }
 
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">encodeCall</span>(<span class="hljs-params">address to, uint amount</span>) <span class="hljs-title">external</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bytes memory</span>) </span>{
-      <span class="hljs-comment">// Typo and type errors will not compile</span>
-      <span class="hljs-keyword">return</span> abi.encodeCall(IERC20.transfer, (to, amount));
+function encodeCall(address to, uint amount) external pure returns (bytes memory) {
+      // Typo and type errors will not compile
+      return abi.encodeCall(IERC20.transfer, (to, amount));
 }
 </code></pre>
 </li>
 </ol>
 <h2 id="完整demo">完整demo</h2>
-<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
-pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
+<pre><code class="lang-js">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.13;
 
 interface IERC20 {
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">transfer</span>(<span class="hljs-params">address, uint</span>) <span class="hljs-title">external</span></span>;
+    function transfer(address, uint) external;
 }
 
 contract FunctionSelector {
     event Selector(bytes4 s1, bytes4 s2);
 
-    <span class="hljs-comment">//_func示例值: &quot;transfer(address,uint256)&quot;</span>
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getSelector</span>(<span class="hljs-params">string calldata _func</span>) <span class="hljs-title">external</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bytes4, bytes memory</span>) </span>{
+    //_func示例值: &quot;transfer(address,uint256)&quot;
+    function getSelector(string calldata _func) external pure returns (bytes4, bytes memory) {
         bytes4 selector1 = bytes4(keccak256(bytes(_func)));
         bytes memory selector2 = abi.encodeWithSignature(_func);
 
-        <span class="hljs-comment">// 两者相同</span>
-    <span class="hljs-comment">// 0: bytes4: 0xa9059cbb</span>
-    <span class="hljs-comment">// 1: bytes: 0xa9059cbb</span>
-        <span class="hljs-keyword">return</span> (selector1, selector2);
+        // 两者相同
+    // 0: bytes4: 0xa9059cbb
+    // 1: bytes: 0xa9059cbb
+        return (selector1, selector2);
     }
 
-       <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">encodeWithSignature</span>(<span class="hljs-params">address to, uint amount</span>)
-        <span class="hljs-title">external</span>
-        <span class="hljs-title">pure</span>
-        <span class="hljs-title">returns</span> (<span class="hljs-params">bytes memory</span>)
-    </span>{
-        <span class="hljs-comment">// Typo is not checked - &quot;transfer(address, uint)&quot;，不会检查参数类型</span>
-        <span class="hljs-keyword">return</span> abi.encodeWithSignature(<span class="hljs-string">&quot;transfer(address,uint256)&quot;</span>, to, amount);
+       function encodeWithSignature(address to, uint amount)
+        external
+        pure
+        returns (bytes memory)
+    {
+        // Typo is not checked - &quot;transfer(address, uint)&quot;，不会检查参数类型
+        return abi.encodeWithSignature(&quot;transfer(address,uint256)&quot;, to, amount);
     }
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">encodeWithSelector</span>(<span class="hljs-params">address to, uint amount</span>)
-        <span class="hljs-title">external</span>
-        <span class="hljs-title">pure</span>
-        <span class="hljs-title">returns</span> (<span class="hljs-params">bytes memory</span>)
-    </span>{
-        <span class="hljs-comment">// Type is not checked - (IERC20.transfer.selector, true, amount) ，不会检查to, amount类型</span>
-        <span class="hljs-keyword">return</span> abi.encodeWithSelector(IERC20.transfer.selector, to, amount);
+    function encodeWithSelector(address to, uint amount)
+        external
+        pure
+        returns (bytes memory)
+    {
+        // Type is not checked - (IERC20.transfer.selector, true, amount) ，不会检查to, amount类型
+        return abi.encodeWithSelector(IERC20.transfer.selector, to, amount);
     }
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">encodeCall</span>(<span class="hljs-params">address to, uint amount</span>) <span class="hljs-title">external</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bytes memory</span>) </span>{
-        <span class="hljs-comment">// Typo and type errors will not compile，校验最严格</span>
-        <span class="hljs-keyword">return</span> abi.encodeCall(IERC20.transfer, (to, amount));
+    function encodeCall(address to, uint amount) external pure returns (bytes memory) {
+        // Typo and type errors will not compile，校验最严格
+        return abi.encodeCall(IERC20.transfer, (to, amount));
     }
 }
 </code></pre>
 <h2 id="其他知识点">其他知识点</h2>
 <ol>
 <li><p>一般提到signature的方法指的是函数原型：</p>
-<pre><code class="lang-js"><span class="hljs-string">&quot;transfer(address,uint256)&quot;</span>
+<pre><code class="lang-js">&quot;transfer(address,uint256)&quot;
 </code></pre>
 </li>
 <li><p>一般提到selector指的是前4字节</p>
-<pre><code class="lang-js"><span class="hljs-comment">// bytes4(keccak256(bytes(&quot;transfer(address,uint256)&quot;)))</span>
-<span class="hljs-string">&quot;Function sig:&quot;</span> <span class="hljs-string">&quot;0xa9059cbb&quot;</span>
+<pre><code class="lang-js">// bytes4(keccak256(bytes(&quot;transfer(address,uint256)&quot;)))
+&quot;Function sig:&quot; &quot;0xa9059cbb&quot;
 </code></pre>
 </li>
 <li><p>链下方式计算selector（详见在web3.js和ether.js章节），<a href="https://web3playground.io/QmRkM4oxkQVTV7JcGxuUpnYvuA2yhMWg867DnFiNVE1Y9K" target="_blank">点击</a>执行demo</p>
-<pre><code class="lang-js"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">main</span>(<span class="hljs-params"></span>) </span>{
-  <span class="hljs-keyword">let</span> transferEvent = <span class="hljs-string">&quot;Transfer(address,address,uint256)&quot;</span>
-  <span class="hljs-keyword">let</span> sig1 = web3.eth.abi.encodeEventSignature(transferEvent)
-  <span class="hljs-keyword">let</span> sig2 = web3.eth.abi.encodeFunctionSignature(transferEvent)
+<pre><code class="lang-js">async function main() {
+  let transferEvent = &quot;Transfer(address,address,uint256)&quot;
+  let sig1 = web3.eth.abi.encodeEventSignature(transferEvent)
+  let sig2 = web3.eth.abi.encodeFunctionSignature(transferEvent)
 
-  <span class="hljs-comment">// 0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef</span>
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;event sig1:&apos;</span>, sig1)
+  // 0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef
+  console.log(&apos;event sig1:&apos;, sig1)
 
-  <span class="hljs-comment">// 0xddf252ad</span>
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;event sig2:&apos;</span>, sig2)
+  // 0xddf252ad
+  console.log(&apos;event sig2:&apos;, sig2)
 
-  <span class="hljs-keyword">let</span> transferFun = <span class="hljs-string">&quot;transfer(address,uint256)&quot;</span>
-  <span class="hljs-keyword">let</span> sig3 = web3.eth.abi.encodeFunctionSignature(transferFun)
+  let transferFun = &quot;transfer(address,uint256)&quot;
+  let sig3 = web3.eth.abi.encodeFunctionSignature(transferFun)
 
-  <span class="hljs-comment">// 0xa9059cbb，差一个字母千差万别</span>
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;Function sig:&apos;</span>, sig3)
+  // 0xa9059cbb，差一个字母千差万别
+  console.log(&apos;Function sig:&apos;, sig3)
 }
 </code></pre>
 </li>
 <li><p>哈希算法：</p>
-<pre><code class="lang-js"><span class="hljs-comment">// keccak256与sha3和算法相同  ==》  brew install sha3sum</span>
-<span class="hljs-comment">// sha256属于sha2系列(与sha3不同)。</span>
+<pre><code class="lang-js">// keccak256与sha3和算法相同  ==》  brew install sha3sum
+// sha256属于sha2系列(与sha3不同)。
 </code></pre>
 </li>
 </ol>
@@ -3166,7 +3170,7 @@ contract FunctionSelector {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第7节:selector","level":"1.9.7","depth":2,"next":{"title":"第8节:send_ether","level":"1.9.8","depth":2,"path":"02_solidity进阶/08_send_ether.md","ref":"02_solidity进阶/08_send_ether.md","articles":[]},"previous":{"title":"第6节:keccak256","level":"1.9.6","depth":2,"path":"02_solidity进阶/06_keccak256.md","ref":"02_solidity进阶/06_keccak256.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"02_solidity进阶/07_selector.md","mtime":"2023-09-23T13:10:08.922Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-19T22:08:50.792Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第7节:selector","level":"1.9.7","depth":2,"next":{"title":"第8节:send_ether","level":"1.9.8","depth":2,"path":"02_solidity进阶/08_send_ether.md","ref":"02_solidity进阶/08_send_ether.md","articles":[]},"previous":{"title":"第6节:keccak256","level":"1.9.6","depth":2,"path":"02_solidity进阶/06_keccak256.md","ref":"02_solidity进阶/06_keccak256.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"02_solidity进阶/07_selector.md","mtime":"2023-09-23T13:10:08.922Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3249,6 +3253,14 @@ contract FunctionSelector {
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

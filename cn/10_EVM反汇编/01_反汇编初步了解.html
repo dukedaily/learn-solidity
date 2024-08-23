@@ -36,6 +36,10 @@
                 
             
                 
+                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
+                
+            
+                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3016,54 +3020,54 @@
                                 <h1 id="第1节：汇编介绍">第1节：汇编介绍</h1>
 <p><a href="https://medium.com/@TrustChain/reversing-and-debugging-evm-smart-contracts-392fdadef32d" target="_blank">Reversing and debugging EVM Smart contracts: First steps in assembly-part1</a></p>
 <h2 id="合约代码">合约代码</h2>
-<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: UNLICENSED</span>
-pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.0</span>;
+<pre><code class="lang-js">// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.0;
 contract Test {  
 
-   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">test</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> </span>{      } 
+   function test() external {      } 
 
-   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">test2</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> </span>{      }  
+   function test2() external {      }  
 
-   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">test3</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> </span>{      }  
+   function test3() external {      }  
 }
 </code></pre>
 <h2 id="bytecode">bytecode</h2>
-<pre><code class="lang-js"><span class="hljs-number">0x6080604052348015600f57600080fd5b5060043610603c5760003560e01c80630a8e8e0114604157806366e41cb7146049578063f8a8fd6d146051575b600080fd5b60476059565b005b604f605b565b005b6057605d565b005b565b565b56fea2646970667358221220d28f98515dc0855e1c6f5aa3747ff775f1b8ab6545f14c70641ff9af67c2465164736f6c63430008070033</span>
+<pre><code class="lang-js">0x6080604052348015600f57600080fd5b5060043610603c5760003560e01c80630a8e8e0114604157806366e41cb7146049578063f8a8fd6d146051575b600080fd5b60476059565b005b604f605b565b005b6057605d565b005b565b565b56fea2646970667358221220d28f98515dc0855e1c6f5aa3747ff775f1b8ab6545f14c70641ff9af67c2465164736f6c63430008070033
 </code></pre>
 <h2 id="执行test函数">执行test函数</h2>
 <p>在真正执行test之前，有很多前置操作</p>
 <h2 id="检查msgvalue">检查msg.value</h2>
-<pre><code class="lang-js"><span class="hljs-number">005</span> CALLVALUE load msg.value
-<span class="hljs-number">006</span> DUP1      duplicate msg.value
-<span class="hljs-number">007</span> ISZERO    verify <span class="hljs-keyword">if</span> msg.value is equal to <span class="hljs-number">0</span>
-<span class="hljs-number">008</span> PUSH1 0f  push 0f <span class="hljs-keyword">in</span> the Stack (the byte location after the REVERT byte location)
-<span class="hljs-number">010</span> JUMPI     jump to <span class="hljs-built_in">this</span> location <span class="hljs-keyword">if</span> msg.value is not equal to <span class="hljs-number">0</span>
-<span class="hljs-number">011</span> PUSH1 <span class="hljs-number">00</span>  push <span class="hljs-number">00</span> <span class="hljs-keyword">in</span> the Stack
-<span class="hljs-number">013</span> DUP1      duplicate <span class="hljs-number">00</span> <span class="hljs-keyword">in</span> the Stack
-<span class="hljs-number">014</span> REVERT    revert the execution 
+<pre><code class="lang-js">005 CALLVALUE load msg.value
+006 DUP1      duplicate msg.value
+007 ISZERO    verify if msg.value is equal to 0
+008 PUSH1 0f  push 0f in the Stack (the byte location after the REVERT byte location)
+010 JUMPI     jump to this location if msg.value is not equal to 0
+011 PUSH1 00  push 00 in the Stack
+013 DUP1      duplicate 00 in the Stack
+014 REVERT    revert the execution 
 
-In solidity, <span class="hljs-built_in">this</span> is equivalent to:
-<span class="hljs-keyword">if</span> (msg.value &gt; <span class="hljs-number">0</span>) { 
+In solidity, this is equivalent to:
+if (msg.value &gt; 0) { 
    revert(); 
-} <span class="hljs-keyword">else</span> {
-   <span class="hljs-comment">// Jump to byte 15</span>
+} else {
+   // Jump to byte 15
 }
 </code></pre>
 <h2 id="检查calldatasize">检查CALLDATASIZE</h2>
 <p>我们调用的是test，没有参数，因此calldata就是test的signatrue，具体为4字节的数据：</p>
-<pre><code class="lang-js"><span class="hljs-number">015</span> JUMPDEST     | <span class="hljs-number">0x00</span> |
-<span class="hljs-number">016</span> POP          ||
-<span class="hljs-number">017</span> PUSH1 <span class="hljs-number">04</span>     | <span class="hljs-number">0x04</span> |
-<span class="hljs-number">019</span> CALLDATASIZE | msg.data.size | <span class="hljs-number">0x04</span> |
-<span class="hljs-number">020</span> LT           | msg.data.size &gt; <span class="hljs-number">0x04</span> |
-<span class="hljs-number">021</span> PUSH1 3c    | <span class="hljs-number">0x3c</span> | msg.data.size &gt; <span class="hljs-number">0x04</span> |
-<span class="hljs-number">023</span> JUMPI        || (JUMPI takes <span class="hljs-number">2</span> <span class="hljs-built_in">arguments</span>)
-<span class="hljs-number">060</span> JUMPDEST     ||
-<span class="hljs-number">061</span> PUSH1 <span class="hljs-number">00</span>     |<span class="hljs-number">0x00</span>|
-<span class="hljs-number">063</span> DUP1         |<span class="hljs-number">0x00</span>|<span class="hljs-number">0x00</span>|
-<span class="hljs-number">064</span> REVERT       ||
+<pre><code class="lang-js">015 JUMPDEST     | 0x00 |
+016 POP          ||
+017 PUSH1 04     | 0x04 |
+019 CALLDATASIZE | msg.data.size | 0x04 |
+020 LT           | msg.data.size &gt; 0x04 |
+021 PUSH1 3c    | 0x3c | msg.data.size &gt; 0x04 |
+023 JUMPI        || (JUMPI takes 2 arguments)
+060 JUMPDEST     ||
+061 PUSH1 00     |0x00|
+063 DUP1         |0x00|0x00|
+064 REVERT       ||
 
-<span class="hljs-keyword">if</span> (msg.data.size &lt; <span class="hljs-number">4</span>) { revert(); }
+if (msg.data.size &lt; 4) { revert(); }
 </code></pre>
 <h2 id="检查selector">检查SELECTOR</h2>
 <p>上面已经确定selector的size，接下来要寻找目标函数，包括calldataload获取数据，偏移量去除填充的0字节，对比等，其中三个函数的selector分别为：</p>
@@ -3072,36 +3076,36 @@ In solidity, <span class="hljs-built_in">this</span> is equivalent to:
 <li>0x0a8e8e01：test2</li>
 <li>0x66e41cb7：test3</li>
 </ul>
-<pre><code class="lang-js"><span class="hljs-number">024</span> PUSH1 <span class="hljs-number">00</span> |<span class="hljs-number">0x00</span>| (the stack was previously empty <span class="hljs-keyword">in</span> byte <span class="hljs-number">23</span>)
-<span class="hljs-number">026</span> CALLDATALOAD |<span class="hljs-number">0xf8a8fd6d0000000</span>.60zeros<span class="hljs-number">.000000000</span>|
-<span class="hljs-number">027</span> PUSH1 e0 |<span class="hljs-number">0xe0</span>|<span class="hljs-number">0xf8a8fd6d0000000</span>.60zeros<span class="hljs-number">.000000000</span>|
-<span class="hljs-number">029</span> SHR |<span class="hljs-number">0xf8a8fd6d</span>|
-<span class="hljs-number">030</span> DUP1 |<span class="hljs-number">0xf8a8fd6d</span>|<span class="hljs-number">0xf8a8fd6d</span>|
-<span class="hljs-number">031</span> PUSH4 0a8e8e01 |<span class="hljs-number">0x0a8e8e01</span>|<span class="hljs-number">0xf8a8fd6d</span>|<span class="hljs-number">0xf8a8fd6d</span>|  《=== 通过对比calldata，发现不是test2
-<span class="hljs-number">036</span> EQ |<span class="hljs-number">0x0</span>|<span class="hljs-number">0xf8a8fd6d</span>|<span class="hljs-number">0xf8a8fd6d</span>| 
-<span class="hljs-number">037</span> PUSH1 <span class="hljs-number">41</span> |<span class="hljs-number">0x41</span>|<span class="hljs-number">0x1</span>|<span class="hljs-number">0xf8a8fd6d</span>|
-<span class="hljs-number">039</span> JUMPI |<span class="hljs-number">0xf8a8fd6d</span>|
-<span class="hljs-number">040</span> DUP1 |<span class="hljs-number">0xf8a8fd6d</span>|<span class="hljs-number">0xf8a8fd6d</span>|
-<span class="hljs-number">041</span> PUSH4 66e41cb7 ||<span class="hljs-number">0xf8a8fd6d</span>|<span class="hljs-number">0xf8a8fd6d</span>| 《=== 通过对比calldata，发现不是test3
-<span class="hljs-number">046</span> EQ |<span class="hljs-number">0x0</span>|<span class="hljs-number">0xf8a8fd6d</span>|
-<span class="hljs-number">047</span> PUSH1 <span class="hljs-number">49</span> |<span class="hljs-number">0x49</span>|<span class="hljs-number">0x1</span>|<span class="hljs-number">0xf8a8fd6d</span>|
-<span class="hljs-number">049</span> JUMPI |<span class="hljs-number">0xf8a8fd6d</span>|
-<span class="hljs-number">050</span> DUP1 |<span class="hljs-number">0xf8a8fd6d</span>|<span class="hljs-number">0xf8a8fd6d</span>|
-<span class="hljs-number">051</span> PUSH4 f8a8fd6d |<span class="hljs-number">0xf8a8fd6d</span>|<span class="hljs-number">0xf8a8fd6d</span>|<span class="hljs-number">0xf8a8fd6d</span>| 《=== 通过对比calldata，发现确实是test，找到了！！
-<span class="hljs-number">056</span> EQ |<span class="hljs-number">0x1</span>|<span class="hljs-number">0xf8a8fd6d</span>|
-<span class="hljs-number">057</span> PUSH1 <span class="hljs-number">51</span> |<span class="hljs-number">0x51</span>|<span class="hljs-number">0x1</span>|<span class="hljs-number">0xf8a8fd6d</span>|
-<span class="hljs-number">059</span> JUMPI |<span class="hljs-number">0xf8a8fd6d</span>|
+<pre><code class="lang-js">024 PUSH1 00 |0x00| (the stack was previously empty in byte 23)
+026 CALLDATALOAD |0xf8a8fd6d0000000.60zeros.000000000|
+027 PUSH1 e0 |0xe0|0xf8a8fd6d0000000.60zeros.000000000|
+029 SHR |0xf8a8fd6d|
+030 DUP1 |0xf8a8fd6d|0xf8a8fd6d|
+031 PUSH4 0a8e8e01 |0x0a8e8e01|0xf8a8fd6d|0xf8a8fd6d|  《=== 通过对比calldata，发现不是test2
+036 EQ |0x0|0xf8a8fd6d|0xf8a8fd6d| 
+037 PUSH1 41 |0x41|0x1|0xf8a8fd6d|
+039 JUMPI |0xf8a8fd6d|
+040 DUP1 |0xf8a8fd6d|0xf8a8fd6d|
+041 PUSH4 66e41cb7 ||0xf8a8fd6d|0xf8a8fd6d| 《=== 通过对比calldata，发现不是test3
+046 EQ |0x0|0xf8a8fd6d|
+047 PUSH1 49 |0x49|0x1|0xf8a8fd6d|
+049 JUMPI |0xf8a8fd6d|
+050 DUP1 |0xf8a8fd6d|0xf8a8fd6d|
+051 PUSH4 f8a8fd6d |0xf8a8fd6d|0xf8a8fd6d|0xf8a8fd6d| 《=== 通过对比calldata，发现确实是test，找到了！！
+056 EQ |0x1|0xf8a8fd6d|
+057 PUSH1 51 |0x51|0x1|0xf8a8fd6d|
+059 JUMPI |0xf8a8fd6d|
 </code></pre>
 <h2 id="最终反编译">最终反编译</h2>
-<pre><code class="lang-js">mstore(<span class="hljs-number">0x40</span>,<span class="hljs-number">0x80</span>)                              
-<span class="hljs-keyword">if</span> (msg.value &gt; <span class="hljs-number">0</span>) { revert(); }                              
-<span class="hljs-keyword">if</span> (msg.data.size &lt; <span class="hljs-number">4</span>) { revert(); }                              
-byte4 selector = msg.data[<span class="hljs-number">0x00</span>:<span class="hljs-number">0x04</span>]                                
-<span class="hljs-keyword">switch</span> (selector) {                               
-   <span class="hljs-keyword">case</span> <span class="hljs-number">0x0a8e8e01</span>:   <span class="hljs-comment">// JUMP to 41 (65 in dec)   stop()</span>
-   <span class="hljs-keyword">case</span> <span class="hljs-number">0x66e41cb7</span>:   <span class="hljs-comment">// JUMP to 49 (73 in dec)   stop()</span>
-   <span class="hljs-keyword">case</span> <span class="hljs-number">0xf8a8fd6d</span>:   <span class="hljs-comment">// JUMP to 51 (85 in dec)   stop()</span>
-   <span class="hljs-keyword">default</span>: revert();
+<pre><code class="lang-js">mstore(0x40,0x80)                              
+if (msg.value &gt; 0) { revert(); }                              
+if (msg.data.size &lt; 4) { revert(); }                              
+byte4 selector = msg.data[0x00:0x04]                                
+switch (selector) {                               
+   case 0x0a8e8e01:   // JUMP to 41 (65 in dec)   stop()
+   case 0x66e41cb7:   // JUMP to 49 (73 in dec)   stop()
+   case 0xf8a8fd6d:   // JUMP to 51 (85 in dec)   stop()
+   default: revert();
 stop()
 </code></pre>
 
@@ -3131,7 +3135,7 @@ stop()
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第1节:反汇编初步了解","level":"1.17.1","depth":2,"next":{"title":"第2节:合约部署都做了啥","level":"1.17.2","depth":2,"path":"10_EVM反汇编/02_合约部署都做了啥.md","ref":"10_EVM反汇编/02_合约部署都做了啥.md","articles":[]},"previous":{"title":"第十章:EVM反汇编","level":"1.17","depth":1,"path":"10_EVM反汇编/README.md","ref":"10_EVM反汇编/README.md","articles":[{"title":"第1节:反汇编初步了解","level":"1.17.1","depth":2,"path":"10_EVM反汇编/01_反汇编初步了解.md","ref":"10_EVM反汇编/01_反汇编初步了解.md","articles":[]},{"title":"第2节:合约部署都做了啥","level":"1.17.2","depth":2,"path":"10_EVM反汇编/02_合约部署都做了啥.md","ref":"10_EVM反汇编/02_合约部署都做了啥.md","articles":[]},{"title":"第3节:各种类型是如何存储的","level":"1.17.3","depth":2,"path":"10_EVM反汇编/03_各种类型是如何存储的.md","ref":"10_EVM反汇编/03_各种类型是如何存储的.md","articles":[]},{"title":"第4节:五种程序终止命令介绍","level":"1.17.4","depth":2,"path":"10_EVM反汇编/04_五种程序终止命令介绍.md","ref":"10_EVM反汇编/04_五种程序终止命令介绍.md","articles":[]},{"title":"第5节:function执行流程","level":"1.17.5","depth":2,"path":"10_EVM反汇编/05_function执行流程.md","ref":"10_EVM反汇编/05_function执行流程.md","articles":[]},{"title":"第6节:智能合约Layout分析","level":"1.17.6","depth":2,"path":"10_EVM反汇编/06_智能合约Layout分析.md","ref":"10_EVM反汇编/06_智能合约Layout分析.md","articles":[]},{"title":"第7节:合约间调用","level":"1.17.7","depth":2,"path":"10_EVM反汇编/07_合约间调用.md","ref":"10_EVM反汇编/07_合约间调用.md","articles":[]}]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"10_EVM反汇编/01_反汇编初步了解.md","mtime":"2023-03-21T14:01:27.000Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-19T22:08:50.792Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第1节:反汇编初步了解","level":"1.17.1","depth":2,"next":{"title":"第2节:合约部署都做了啥","level":"1.17.2","depth":2,"path":"10_EVM反汇编/02_合约部署都做了啥.md","ref":"10_EVM反汇编/02_合约部署都做了啥.md","articles":[]},"previous":{"title":"第十章:EVM反汇编","level":"1.17","depth":1,"path":"10_EVM反汇编/README.md","ref":"10_EVM反汇编/README.md","articles":[{"title":"第1节:反汇编初步了解","level":"1.17.1","depth":2,"path":"10_EVM反汇编/01_反汇编初步了解.md","ref":"10_EVM反汇编/01_反汇编初步了解.md","articles":[]},{"title":"第2节:合约部署都做了啥","level":"1.17.2","depth":2,"path":"10_EVM反汇编/02_合约部署都做了啥.md","ref":"10_EVM反汇编/02_合约部署都做了啥.md","articles":[]},{"title":"第3节:各种类型是如何存储的","level":"1.17.3","depth":2,"path":"10_EVM反汇编/03_各种类型是如何存储的.md","ref":"10_EVM反汇编/03_各种类型是如何存储的.md","articles":[]},{"title":"第4节:五种程序终止命令介绍","level":"1.17.4","depth":2,"path":"10_EVM反汇编/04_五种程序终止命令介绍.md","ref":"10_EVM反汇编/04_五种程序终止命令介绍.md","articles":[]},{"title":"第5节:function执行流程","level":"1.17.5","depth":2,"path":"10_EVM反汇编/05_function执行流程.md","ref":"10_EVM反汇编/05_function执行流程.md","articles":[]},{"title":"第6节:智能合约Layout分析","level":"1.17.6","depth":2,"path":"10_EVM反汇编/06_智能合约Layout分析.md","ref":"10_EVM反汇编/06_智能合约Layout分析.md","articles":[]},{"title":"第7节:合约间调用","level":"1.17.7","depth":2,"path":"10_EVM反汇编/07_合约间调用.md","ref":"10_EVM反汇编/07_合约间调用.md","articles":[]}]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"10_EVM反汇编/01_反汇编初步了解.md","mtime":"2023-03-21T14:01:27.000Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3214,6 +3218,14 @@ stop()
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

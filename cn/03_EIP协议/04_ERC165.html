@@ -36,6 +36,10 @@
                 
             
                 
+                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
+                
+            
+                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3020,36 +3024,36 @@
 <h2 id="eip-165接口定义">EIP-165接口定义</h2>
 <p>EIP165提供了一种检测智能合约类型的方法，在实现上它只定义了一个接口，同时也明确了计算interfaceId的规则：对该协议（如NFT721）的所有接口selector的hash值做^运算（异或，XOR，^），再取前四字节作为interfaceId。</p>
 <pre><code class="lang-js">interface IERC165 {
-    <span class="hljs-comment">/**
-     * <span class="hljs-doctag">@dev </span>Returns true if this contract implements the interface defined by
+    /**
+     * @dev Returns true if this contract implements the interface defined by
      * `interfaceId`. See the corresponding
      * https://eips.ethereum.org/EIPS/eip-165#how-interfaces-are-identified[EIP section]
      * to learn more about how these ids are created.
      *
      * This function call must use less than 30 000 gas.
-     */</span>
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">supportsInterface</span>(<span class="hljs-params">bytes4 interfaceId</span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bool</span>)</span>;
+     */
+    function supportsInterface(bytes4 interfaceId) external view returns (bool);
 }
 </code></pre>
 <p>EIP165协议的interfaceId为0x01ffc9a7，计算公式：</p>
 <pre><code class="lang-sh">0x01ffc9a7=bytes4(keccak256(supportsInterface.selector))
 </code></pre>
 <h2 id="nft721的interfaceid">NFT721的interfaceid</h2>
-<pre><code class="lang-js"><span class="hljs-comment">// Note: the ERC-165 identifier for this interface is 0x80ac58cd.</span>
-interface ERC721 <span class="hljs-comment">/* is ERC165 */</span> {
+<pre><code class="lang-js">// Note: the ERC-165 identifier for this interface is 0x80ac58cd.
+interface ERC721 /* is ERC165 */ {
     event Transfer(address indexed _from, address indexed _to, uint256 indexed _tokenId);
     event Approval(address indexed _owner, address indexed _approved, uint256 indexed _tokenId);
     event ApprovalForAll(address indexed _owner, address indexed _operator, bool _approved);
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">balanceOf</span>(<span class="hljs-params">address _owner</span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint256</span>)</span>;
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ownerOf</span>(<span class="hljs-params">uint256 _tokenId</span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">address</span>)</span>;
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">safeTransferFrom</span>(<span class="hljs-params">address _from, address _to, uint256 _tokenId, bytes data</span>) <span class="hljs-title">external</span> <span class="hljs-title">payable</span></span>;
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">safeTransferFrom</span>(<span class="hljs-params">address _from, address _to, uint256 _tokenId</span>) <span class="hljs-title">external</span> <span class="hljs-title">payable</span></span>;
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">transferFrom</span>(<span class="hljs-params">address _from, address _to, uint256 _tokenId</span>) <span class="hljs-title">external</span> <span class="hljs-title">payable</span></span>;
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">approve</span>(<span class="hljs-params">address _approved, uint256 _tokenId</span>) <span class="hljs-title">external</span> <span class="hljs-title">payable</span></span>;
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setApprovalForAll</span>(<span class="hljs-params">address _operator, bool _approved</span>) <span class="hljs-title">external</span></span>;
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getApproved</span>(<span class="hljs-params">uint256 _tokenId</span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">address</span>)</span>;
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isApprovedForAll</span>(<span class="hljs-params">address _owner, address _operator</span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bool</span>)</span>;
+    function balanceOf(address _owner) external view returns (uint256);
+    function ownerOf(uint256 _tokenId) external view returns (address);
+    function safeTransferFrom(address _from, address _to, uint256 _tokenId, bytes data) external payable;
+    function safeTransferFrom(address _from, address _to, uint256 _tokenId) external payable;
+    function transferFrom(address _from, address _to, uint256 _tokenId) external payable;
+    function approve(address _approved, uint256 _tokenId) external payable;
+    function setApprovalForAll(address _operator, bool _approved) external;
+    function getApproved(uint256 _tokenId) external view returns (address);
+    function isApprovedForAll(address _owner, address _operator) external view returns (bool);
 }
 </code></pre>
 <p>NFT721的interfaceId为：0x80ac58cd，计算公式为：</p>
@@ -3057,11 +3061,11 @@ interface ERC721 <span class="hljs-comment">/* is ERC165 */</span> {
 </code></pre>
 <p>当我们想判断一个合约的类型是否为NFT721时，只需检查一下<code>supportsInterface(0x80ac58cd)</code>是否返回true即可。</p>
 <h2 id="nft721meta的interfaceid">NFT721Meta的interfaceId</h2>
-<pre><code class="lang-js"><span class="hljs-comment">// Note: the ERC-165 identifier for this interface is 0x5b5e139f.</span>
-interface ERC721Metadata <span class="hljs-comment">/* is ERC721 */</span> {
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">name</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">string _name</span>)</span>;
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">symbol</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">string _symbol</span>)</span>;
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">tokenURI</span>(<span class="hljs-params">uint256 _tokenId</span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">string</span>)</span>; 
+<pre><code class="lang-js">// Note: the ERC-165 identifier for this interface is 0x5b5e139f.
+interface ERC721Metadata /* is ERC721 */ {
+    function name() external view returns (string _name);
+    function symbol() external view returns (string _symbol);
+    function tokenURI(uint256 _tokenId) external view returns (string); 
 }
 </code></pre>
 <p>NFT721Meta的interfaceId为：0x5b5e139f，计算公式为：</p>
@@ -3069,14 +3073,14 @@ interface ERC721Metadata <span class="hljs-comment">/* is ERC721 */</span> {
 </code></pre>
 <h2 id="在nft721中实现supportsinterface">在NFT721中实现supportsInterface</h2>
 <p>下面这个接口是NFT721中的标准实现</p>
-<pre><code class="lang-js">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">supportsInterface</span>(<span class="hljs-params">bytes4 interfaceId</span>) <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">virtual</span> <span class="hljs-title">override</span>(<span class="hljs-params">ERC165, IERC165</span>) <span class="hljs-title">returns</span> (<span class="hljs-params">bool</span>) </span>{
-        <span class="hljs-keyword">return</span>
-                  <span class="hljs-comment">// 0x80ac58cd</span>
+<pre><code class="lang-js">    function supportsInterface(bytes4 interfaceId) public view virtual override(ERC165, IERC165) returns (bool) {
+        return
+                  // 0x80ac58cd
             interfaceId == type(IERC721).interfaceId ||
-            <span class="hljs-comment">// 0x5b5e139f</span>
+            // 0x5b5e139f
             interfaceId == type(IERC721Metadata).interfaceId ||
-            <span class="hljs-comment">// 0x01ffc9a7</span>
-            <span class="hljs-built_in">super</span>.supportsInterface(interfaceId);
+            // 0x01ffc9a7
+            super.supportsInterface(interfaceId);
     }
 </code></pre>
 <h2 id="总结">总结</h2>
@@ -3111,7 +3115,7 @@ interface ERC721Metadata <span class="hljs-comment">/* is ERC721 */</span> {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第4节:ERC165","level":"1.10.4","depth":2,"next":{"title":"第5节:EIP2612","level":"1.10.5","depth":2,"path":"03_EIP协议/05_EIP2612.md","ref":"03_EIP协议/05_EIP2612.md","articles":[]},"previous":{"title":"第3节:ERC1155","level":"1.10.3","depth":2,"path":"03_EIP协议/03_ERC1155.md","ref":"03_EIP协议/03_ERC1155.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"03_EIP协议/04_ERC165.md","mtime":"2023-03-21T14:01:27.000Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-19T22:08:50.792Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第4节:ERC165","level":"1.10.4","depth":2,"next":{"title":"第5节:EIP2612","level":"1.10.5","depth":2,"path":"03_EIP协议/05_EIP2612.md","ref":"03_EIP协议/05_EIP2612.md","articles":[]},"previous":{"title":"第3节:ERC1155","level":"1.10.3","depth":2,"path":"03_EIP协议/03_ERC1155.md","ref":"03_EIP协议/03_ERC1155.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"03_EIP协议/04_ERC165.md","mtime":"2023-03-21T14:01:27.000Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3194,6 +3198,14 @@ interface ERC721Metadata <span class="hljs-comment">/* is ERC721 */</span> {
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

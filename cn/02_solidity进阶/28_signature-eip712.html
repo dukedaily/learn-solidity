@@ -36,6 +36,10 @@
                 
             
                 
+                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
+                
+            
+                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3025,59 +3029,59 @@
 <li>手册：<a href="https://docs.ethers.org/v5/api/signer/#Signer-signTypedData" target="_blank">https://docs.ethers.org/v5/api/signer/#Signer-signTypedData</a></li>
 </ol>
 <p>这是官方示例代码：</p>
-<pre><code class="lang-js"><span class="hljs-comment">// All properties on a domain are optional</span>
-<span class="hljs-keyword">const</span> domain = {
-    <span class="hljs-attr">name</span>: <span class="hljs-string">&apos;Ether Mail&apos;</span>,
-    <span class="hljs-attr">version</span>: <span class="hljs-string">&apos;1&apos;</span>,
-    <span class="hljs-attr">chainId</span>: <span class="hljs-number">1</span>,
-    <span class="hljs-attr">verifyingContract</span>: <span class="hljs-string">&apos;0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC&apos;</span>
+<pre><code class="lang-js">// All properties on a domain are optional
+const domain = {
+    name: &apos;Ether Mail&apos;,
+    version: &apos;1&apos;,
+    chainId: 1,
+    verifyingContract: &apos;0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC&apos;
 };
 
-<span class="hljs-comment">// The named list of all type definitions</span>
-<span class="hljs-keyword">const</span> types = {
-    <span class="hljs-attr">Person</span>: [
-        { <span class="hljs-attr">name</span>: <span class="hljs-string">&apos;name&apos;</span>, <span class="hljs-attr">type</span>: <span class="hljs-string">&apos;string&apos;</span> },
-        { <span class="hljs-attr">name</span>: <span class="hljs-string">&apos;wallet&apos;</span>, <span class="hljs-attr">type</span>: <span class="hljs-string">&apos;address&apos;</span> }
+// The named list of all type definitions
+const types = {
+    Person: [
+        { name: &apos;name&apos;, type: &apos;string&apos; },
+        { name: &apos;wallet&apos;, type: &apos;address&apos; }
     ],
-    <span class="hljs-attr">Mail</span>: [
-        { <span class="hljs-attr">name</span>: <span class="hljs-string">&apos;from&apos;</span>, <span class="hljs-attr">type</span>: <span class="hljs-string">&apos;Person&apos;</span> },
-        { <span class="hljs-attr">name</span>: <span class="hljs-string">&apos;to&apos;</span>, <span class="hljs-attr">type</span>: <span class="hljs-string">&apos;Person&apos;</span> },
-        { <span class="hljs-attr">name</span>: <span class="hljs-string">&apos;contents&apos;</span>, <span class="hljs-attr">type</span>: <span class="hljs-string">&apos;string&apos;</span> }
+    Mail: [
+        { name: &apos;from&apos;, type: &apos;Person&apos; },
+        { name: &apos;to&apos;, type: &apos;Person&apos; },
+        { name: &apos;contents&apos;, type: &apos;string&apos; }
     ]
 };
 
-<span class="hljs-comment">// The data to sign</span>
-<span class="hljs-keyword">const</span> value = {
-    <span class="hljs-attr">from</span>: {
-        <span class="hljs-attr">name</span>: <span class="hljs-string">&apos;Cow&apos;</span>,
-        <span class="hljs-attr">wallet</span>: <span class="hljs-string">&apos;0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826&apos;</span>
+// The data to sign
+const value = {
+    from: {
+        name: &apos;Cow&apos;,
+        wallet: &apos;0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826&apos;
     },
-    <span class="hljs-attr">to</span>: {
-        <span class="hljs-attr">name</span>: <span class="hljs-string">&apos;Bob&apos;</span>,
-        <span class="hljs-attr">wallet</span>: <span class="hljs-string">&apos;0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB&apos;</span>
+    to: {
+        name: &apos;Bob&apos;,
+        wallet: &apos;0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB&apos;
     },
-    <span class="hljs-attr">contents</span>: <span class="hljs-string">&apos;Hello, Bob!&apos;</span>
+    contents: &apos;Hello, Bob!&apos;
 };
 
-signature = <span class="hljs-keyword">await</span> signer._signTypedData(domain, types, value);
-<span class="hljs-comment">// &apos;0x463b9c9971d1a144507d2e905f4e98becd159139421a4bb8d3c9c2ed04eb401057dd0698d504fd6ca48829a3c8a7a98c1c961eae617096cb54264bbdd082e13d1c&apos;</span>
+signature = await signer._signTypedData(domain, types, value);
+// &apos;0x463b9c9971d1a144507d2e905f4e98becd159139421a4bb8d3c9c2ed04eb401057dd0698d504fd6ca48829a3c8a7a98c1c961eae617096cb54264bbdd082e13d1c&apos;
 </code></pre>
 <p>合约：使用openzeppelin的标准包，构造函数的时候，需要传递参数构造：ERC721(name，version)，这两个值在后面的verify时会用到</p>
-<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
-pragma solidity <span class="hljs-number">0.8</span><span class="hljs-number">.11</span>;
-<span class="hljs-keyword">import</span> <span class="hljs-string">&quot;@openzeppelin/contracts/utils/cryptography/ECDSA.sol&quot;</span>;
+<pre><code class="lang-js">// SPDX-License-Identifier: MIT
+pragma solidity 0.8.11;
+import &quot;@openzeppelin/contracts/utils/cryptography/ECDSA.sol&quot;;
 
 contract TestEIP712 {
-    <span class="hljs-comment">// 其他...</span>
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">verify</span>(<span class="hljs-params">
+    // 其他...
+    function verify(
         uint256 id,
         uint256 amt,
         address[] memory workers,
         bytes memory signature
-    </span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bool</span>) </span>{
+    ) external view returns (bool) {
         bytes memory encoded = abi.encode(
             keccak256(
-                <span class="hljs-string">&apos;Message(uint256 id,uint256 amt,address[] workers)&apos;</span>
+                &apos;Message(uint256 id,uint256 amt,address[] workers)&apos;
             ),
             id,
             amt,
@@ -3085,63 +3089,63 @@ contract TestEIP712 {
         );
 
         bytes32 structHash = keccak256(encoded);
-          <span class="hljs-comment">// 里面会拼接\x19\x01、domainHash、自定义结构hash</span>
+          // 里面会拼接\x19\x01、domainHash、自定义结构hash
         bytes32 digest = _hashTypedDataV4(structHash);
-        <span class="hljs-keyword">return</span> ECDSA.recover(digest, signature) == owner();
+        return ECDSA.recover(digest, signature) == owner();
     }
 }
 </code></pre>
 <p>testcase.ts</p>
-<pre><code class="lang-js"><span class="hljs-keyword">import</span> { verifyTypedData } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;ethers/lib/utils&apos;</span>
+<pre><code class="lang-js">import { verifyTypedData } from &apos;ethers/lib/utils&apos;
 
-<span class="hljs-keyword">const</span> typedData = {
-      <span class="hljs-comment">// 这里的domain 不需要再写了，因为ethers会自动帮忙添加</span>
-      <span class="hljs-attr">types</span>: {
-        <span class="hljs-comment">// EIP712Domain: [</span>
-        <span class="hljs-comment">//   { name: &quot;name&quot;, type: &quot;string&quot; },</span>
-        <span class="hljs-comment">//   { name: &quot;version&quot;, type: &quot;string&quot; },</span>
-        <span class="hljs-comment">//   { name: &quot;chainId&quot;, type: &quot;uint256&quot; },</span>
-        <span class="hljs-comment">//   { name: &quot;verifyingContract&quot;, type: &quot;address&quot; }</span>
-        <span class="hljs-comment">// ],</span>
-        <span class="hljs-attr">Message</span>: [
-          { <span class="hljs-attr">name</span>: <span class="hljs-string">&apos;id&apos;</span>, <span class="hljs-attr">type</span>: <span class="hljs-string">&apos;uint256&apos;</span> },
-          { <span class="hljs-attr">name</span>: <span class="hljs-string">&apos;amt&apos;</span>, <span class="hljs-attr">type</span>: <span class="hljs-string">&apos;uint256&apos;</span> },
-          { <span class="hljs-attr">name</span>: <span class="hljs-string">&apos;workers&apos;</span>, <span class="hljs-attr">type</span>: <span class="hljs-string">&apos;address[]&apos;</span> },
+const typedData = {
+      // 这里的domain 不需要再写了，因为ethers会自动帮忙添加
+      types: {
+        // EIP712Domain: [
+        //   { name: &quot;name&quot;, type: &quot;string&quot; },
+        //   { name: &quot;version&quot;, type: &quot;string&quot; },
+        //   { name: &quot;chainId&quot;, type: &quot;uint256&quot; },
+        //   { name: &quot;verifyingContract&quot;, type: &quot;address&quot; }
+        // ],
+        Message: [
+          { name: &apos;id&apos;, type: &apos;uint256&apos; },
+          { name: &apos;amt&apos;, type: &apos;uint256&apos; },
+          { name: &apos;workers&apos;, type: &apos;address[]&apos; },
         ],
       },
-      <span class="hljs-comment">// 这个就是上面的Message</span>
-      <span class="hljs-attr">primaryType</span>: <span class="hljs-string">&apos;Message&apos;</span>,
-      <span class="hljs-comment">// 这是EIP712Domain的值</span>
-      <span class="hljs-attr">domain</span>: {
-        <span class="hljs-attr">name</span>: name,
-        <span class="hljs-attr">version</span>: version,
-        <span class="hljs-attr">chainId</span>: chainId,
-        <span class="hljs-attr">verifyingContract</span>: contractAddress,
+      // 这个就是上面的Message
+      primaryType: &apos;Message&apos;,
+      // 这是EIP712Domain的值
+      domain: {
+        name: name,
+        version: version,
+        chainId: chainId,
+        verifyingContract: contractAddress,
       },
-      <span class="hljs-comment">// 这是message的值</span>
-      <span class="hljs-attr">message</span>: {
-        <span class="hljs-string">&quot;id&quot;</span>: id,
-        <span class="hljs-string">&quot;amt&quot;</span>: amt,
-        <span class="hljs-string">&quot;workers&quot;</span>: workers
+      // 这是message的值
+      message: {
+        &quot;id&quot;: id,
+        &quot;amt&quot;: amt,
+        &quot;workers&quot;: workers
       },
     };
 
-    <span class="hljs-comment">// 结构化签名</span>
-    <span class="hljs-keyword">const</span> signature = <span class="hljs-keyword">await</span> signer._signTypedData(
+    // 结构化签名
+    const signature = await signer._signTypedData(
       typedData.domain,
       typedData.types,
       typedData.message,
     );
 
-    <span class="hljs-comment">// 使用ethersjs验证：</span>
-    <span class="hljs-keyword">let</span> res = verifyTypedData(
+    // 使用ethersjs验证：
+    let res = verifyTypedData(
       typedData.domain, typedData.types, typedData.message, signature,
     ).toLowerCase() === signerAddress.toLowerCase()
 
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;etherjs验证签名有效性:&quot;</span>, res);
+    console.log(&quot;etherjs验证签名有效性:&quot;, res);
 
-    <span class="hljs-comment">// 使用合约验证：</span>
-    <span class="hljs-keyword">await</span> instance.verify(
+    // 使用合约验证：
+    await instance.verify(
     id, amt, workers, signature
 )
 </code></pre>
@@ -3184,7 +3188,7 @@ contract TestEIP712 {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第28节:signature-eip712","level":"1.9.28","depth":2,"next":{"title":"第三章:EIP协议","level":"1.10","depth":1,"path":"03_EIP协议/README.md","ref":"03_EIP协议/README.md","articles":[{"title":"第1节:ERC20","level":"1.10.1","depth":2,"path":"03_EIP协议/01_ERC20.md","ref":"03_EIP协议/01_ERC20.md","articles":[]},{"title":"第2节:ERC721","level":"1.10.2","depth":2,"path":"03_EIP协议/02_ERC721.md","ref":"03_EIP协议/02_ERC721.md","articles":[]},{"title":"第3节:ERC1155","level":"1.10.3","depth":2,"path":"03_EIP协议/03_ERC1155.md","ref":"03_EIP协议/03_ERC1155.md","articles":[]},{"title":"第4节:ERC165","level":"1.10.4","depth":2,"path":"03_EIP协议/04_ERC165.md","ref":"03_EIP协议/04_ERC165.md","articles":[]},{"title":"第5节:EIP2612","level":"1.10.5","depth":2,"path":"03_EIP协议/05_EIP2612.md","ref":"03_EIP协议/05_EIP2612.md","articles":[]},{"title":"第6节:EIP712","level":"1.10.6","depth":2,"path":"03_EIP协议/06_EIP712.md","ref":"03_EIP协议/06_EIP712.md","articles":[]},{"title":"第7节:ERC5114","level":"1.10.7","depth":2,"path":"03_EIP协议/07_ERC5114.md","ref":"03_EIP协议/07_ERC5114.md","articles":[]},{"title":"第8节:ERC1820","level":"1.10.8","depth":2,"path":"03_EIP协议/08_ERC1820.md","ref":"03_EIP协议/08_ERC1820.md","articles":[]},{"title":"第9节:ERC4626","level":"1.10.9","depth":2,"path":"03_EIP协议/09_ERC4626.md","ref":"03_EIP协议/09_ERC4626.md","articles":[]},{"title":"第10节:EIP1559","level":"1.10.10","depth":2,"path":"03_EIP协议/10_EIP1559.md","ref":"03_EIP协议/10_EIP1559.md","articles":[]},{"title":"第20节:NFT理念探讨","level":"1.10.11","depth":2,"path":"03_EIP协议/20_NFT理念探讨.md","ref":"03_EIP协议/20_NFT理念探讨.md","articles":[]},{"title":"第21节:Metaverse","level":"1.10.12","depth":2,"path":"03_EIP协议/21_metaverse.md","ref":"03_EIP协议/21_metaverse.md","articles":[]}]},"previous":{"title":"第27节:permit2","level":"1.9.27","depth":2,"path":"02_solidity进阶/27_permit2.md","ref":"02_solidity进阶/27_permit2.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"02_solidity进阶/28_signature-eip712.md","mtime":"2023-09-23T13:16:26.936Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-19T22:08:50.792Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第28节:signature-eip712","level":"1.9.28","depth":2,"next":{"title":"第三章:EIP协议","level":"1.10","depth":1,"path":"03_EIP协议/README.md","ref":"03_EIP协议/README.md","articles":[{"title":"第1节:ERC20","level":"1.10.1","depth":2,"path":"03_EIP协议/01_ERC20.md","ref":"03_EIP协议/01_ERC20.md","articles":[]},{"title":"第2节:ERC721","level":"1.10.2","depth":2,"path":"03_EIP协议/02_ERC721.md","ref":"03_EIP协议/02_ERC721.md","articles":[]},{"title":"第3节:ERC1155","level":"1.10.3","depth":2,"path":"03_EIP协议/03_ERC1155.md","ref":"03_EIP协议/03_ERC1155.md","articles":[]},{"title":"第4节:ERC165","level":"1.10.4","depth":2,"path":"03_EIP协议/04_ERC165.md","ref":"03_EIP协议/04_ERC165.md","articles":[]},{"title":"第5节:EIP2612","level":"1.10.5","depth":2,"path":"03_EIP协议/05_EIP2612.md","ref":"03_EIP协议/05_EIP2612.md","articles":[]},{"title":"第6节:EIP712","level":"1.10.6","depth":2,"path":"03_EIP协议/06_EIP712.md","ref":"03_EIP协议/06_EIP712.md","articles":[]},{"title":"第7节:ERC5114","level":"1.10.7","depth":2,"path":"03_EIP协议/07_ERC5114.md","ref":"03_EIP协议/07_ERC5114.md","articles":[]},{"title":"第8节:ERC1820","level":"1.10.8","depth":2,"path":"03_EIP协议/08_ERC1820.md","ref":"03_EIP协议/08_ERC1820.md","articles":[]},{"title":"第9节:ERC4626","level":"1.10.9","depth":2,"path":"03_EIP协议/09_ERC4626.md","ref":"03_EIP协议/09_ERC4626.md","articles":[]},{"title":"第10节:EIP1559","level":"1.10.10","depth":2,"path":"03_EIP协议/10_EIP1559.md","ref":"03_EIP协议/10_EIP1559.md","articles":[]},{"title":"第20节:NFT理念探讨","level":"1.10.11","depth":2,"path":"03_EIP协议/20_NFT理念探讨.md","ref":"03_EIP协议/20_NFT理念探讨.md","articles":[]},{"title":"第21节:Metaverse","level":"1.10.12","depth":2,"path":"03_EIP协议/21_metaverse.md","ref":"03_EIP协议/21_metaverse.md","articles":[]}]},"previous":{"title":"第27节:permit2","level":"1.9.27","depth":2,"path":"02_solidity进阶/27_permit2.md","ref":"02_solidity进阶/27_permit2.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"02_solidity进阶/28_signature-eip712.md","mtime":"2023-09-23T13:16:26.936Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3267,6 +3271,14 @@ contract TestEIP712 {
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

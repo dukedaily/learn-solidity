@@ -36,6 +36,10 @@
                 
             
                 
+                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
+                
+            
+                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3043,14 +3047,14 @@
 <h3 id="1-升级的原理">1. 升级的原理</h3>
 <p>对于普通的合约，一般是用户直接与业务逻辑交互，如下图所示：</p>
 <p><img src="assets/image-20221112190432057.png" alt="image-20221112190432057"></p>
-<pre><code class="lang-js"><span class="hljs-comment">// 简化表达</span>
+<pre><code class="lang-js">// 简化表达
 User ---- tx ----------&gt; Implementation_v0
 </code></pre>
 <p>此时，如果重新部署Logic合约，那么地址会发生变化，用户可以感知到，而且Logic中的用户数据也会发生变化。</p>
 <p>可升级合约的实现思路是：<strong>引入一个代理合约Proxy（蓝色）</strong>，用户User仅与这个代理合约进行交互，由代理合约去与Loigc合约进行交互，因此在Logic合约发生变化（升级）的时候，用户User无感，并且历史数据也能够保留下来，如下图所示：</p>
 <p><img src="assets/image-20221112190524468.png" alt="image-20221112190524468"></p>
-<pre><code class="lang-js"><span class="hljs-comment">// 简化表达</span>
-User ---- tx ---&gt; <span class="hljs-built_in">Proxy</span> ----------&gt; Implementation_v0
+<pre><code class="lang-js">// 简化表达
+User ---- tx ---&gt; Proxy ----------&gt; Implementation_v0
                      |
                       ------------&gt; Implementation_v1
 </code></pre>
@@ -3078,32 +3082,32 @@ User ---- tx ---&gt; <span class="hljs-built_in">Proxy</span> ----------&gt; Imp
 <p>正是由于delegatecall的这两个特性，才使得代理合约能够实现，因为这使得从目标合约的角度来看，所有的操作都是在修改用户的数据，并且存储在了Proxy中。</p>
 <p>（注，由于Transparent模式升级时，implementation和proxy不用相互关心彼此的storage数据，因此这种模式被称为：unstructed storage）</p>
 <p>delegatecall调用案例：</p>
-<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
-pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
+<pre><code class="lang-js">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.13;
 
 contract Implementation {
-    <span class="hljs-comment">// <span class="hljs-doctag">NOTE:</span> storage layout must be the same as contract A</span>
+    // NOTE: storage layout must be the same as contract A
     uint public num;
     address public sender;
     uint public value;
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setVars</span>(<span class="hljs-params">uint _num</span>) <span class="hljs-title">public</span> <span class="hljs-title">payable</span> </span>{
+    function setVars(uint _num) public payable {
         num = _num;
         sender = msg.sender;
         value = msg.value;
     }
 }
 
-<span class="hljs-comment">// 注意：执行后，Proxy中的sender值为EOA的地址，而不是A合约的地址  (调用链EOA-&gt; Proxy::setVars -&gt; Implementation::setVars)</span>
-contract <span class="hljs-built_in">Proxy</span> {
+// 注意：执行后，Proxy中的sender值为EOA的地址，而不是A合约的地址  (调用链EOA-&gt; Proxy::setVars -&gt; Implementation::setVars)
+contract Proxy {
     uint public num;
     address public sender;
     uint public value;
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setVars</span>(<span class="hljs-params">address _impl, uint _num</span>) <span class="hljs-title">public</span> <span class="hljs-title">payable</span> </span>{
-        <span class="hljs-comment">// Proxy&apos;s storage is set, Implementation is not modified.</span>
+    function setVars(address _impl, uint _num) public payable {
+        // Proxy&apos;s storage is set, Implementation is not modified.
         (bool success, bytes memory data) = _impl.delegatecall(
-            abi.encodeWithSignature(<span class="hljs-string">&quot;setVars(uint256)&quot;</span>, _num)
+            abi.encodeWithSignature(&quot;setVars(uint256)&quot;, _num)
         );
     }
 }
@@ -3112,13 +3116,9 @@ contract <span class="hljs-built_in">Proxy</span> {
 <p>在solidity中，状态变量存储在slot中，slot可以理解为key-value存储空间，evm为每个合约代码提供了最多2^256个slot，每个slot可以最多存储32字节数据。(key-&gt;value, 32bytes -&gt; 32bytes)</p>
 <p>状态变量一般是从slot 0开始进行存储的，在使用delegatecall的时候，由于需要在<code>Proxy</code>的slot中存储<code>目标合约</code>中指定的数据结构，此时如果proxy的storage布局与目标合约的storage布局不相同，那么就会出现存储冲突（Storage collisioin）的问题，即：<strong>目标合约在Proxy合约中修改了错误的位置。</strong></p>
 <p><img src="assets/image-20221112194610101.png" alt="image-20221112194610101"></p>
-<pre><code class="lang-js">|<span class="hljs-built_in">Proxy</span>                     |Implementation           |
+<pre><code class="lang-js">|Proxy                     |Implementation           |
 |--------------------------|-------------------------|
-|address _implementation   |address _owner           | &lt;=== Storage collision!
-|...                       |mapping _balances        |
-|                          |uint256 _supply          |
-|                          |...                      |
-</code></pre>
+|address _implementation   |address _owner           | </code></pre>
 <p>如图所示，由于在Proyx中需要存储逻辑合约的地址，而在逻辑合约中不用存储，所以此时两个合约的storage布局不同，两者的slot 0分别存储的是 <strong>逻辑合约地址_imp</strong> 和<strong>管理员地址</strong>，因此当逻辑合约想修改owner时，会错误的修改了_imp地址。</p>
 <h3 id="4-解决存储冲突">4. 解决存储冲突</h3>
 <p>在代理合约Proxy中，一共需要指定两个状态变量：</p>
@@ -3127,7 +3127,7 @@ contract <span class="hljs-built_in">Proxy</span> {
 <li>Admin，代理合约的管理员，有权限进行合约升级；</li>
 </ul>
 <p>因此，如果不进行特殊处理，则一定会出现存储slot冲突，我们要做的是：将Proxy中的默认slot留出来，不要占用，而是在代理合约使用指定的slot来中存储<code>逻辑合约_imp</code>和admin地址，如何存储，业界对此有标准，<a href="https://eips.ethereum.org/EIPS/eip-1967" target="_blank">EIP-1967</a></p>
-<pre><code class="lang-js">|<span class="hljs-built_in">Proxy</span>                     |Implementation           |
+<pre><code class="lang-js">|Proxy                     |Implementation           |
 |--------------------------|-------------------------|
 |...                       |address _owner           |
 |...                       |mapping _balances        |
@@ -3137,20 +3137,17 @@ contract <span class="hljs-built_in">Proxy</span> {
 |...                       |                         |
 |...                       |                         |
 |...                       |                         |
-|address _implementation   |                         | &lt;=== Randomized slot.
-|...                       |                         |
-|...                       |                         |
-</code></pre>
+|address _implementation   |                         | </code></pre>
 <p>存储逻辑合约地址的位置为：</p>
-<pre><code class="lang-sh"><span class="hljs-comment"># implementation slot 生成规则：</span>
-bytes32(uint256(keccak256(<span class="hljs-string">&apos;eip1967.proxy.beacon&apos;</span>)) - 1), 
-<span class="hljs-comment"># 存储位置：</span>
+<pre><code class="lang-sh"># implementation slot 生成规则：
+bytes32(uint256(keccak256(&apos;eip1967.proxy.beacon&apos;)) - 1), 
+# 存储位置：
 0xa3f0ad74e5423aebfd80d3ef4346578335a9a72aeaee59ff6cb3582b35133d50
 
 
-<span class="hljs-comment"># admin slot 生成规则：</span>
-bytes32(uint256(keccak256(<span class="hljs-string">&apos;eip1967.proxy.admin&apos;</span>)) - 1)),
-<span class="hljs-comment"># 存储位置：</span>
+# admin slot 生成规则：
+bytes32(uint256(keccak256(&apos;eip1967.proxy.admin&apos;)) - 1)),
+# 存储位置：
 0xb53127684a568b3173ae13b9f8a6016e243e63b6e8ee1178d6a717850b5d6103
 </code></pre>
 <p>当proxy将两个状态变量存储在特定位置后，由于将默认slot的空间留给了业务合约，因此相当于storage布局与逻辑合约一致了，冲突解决！</p>
@@ -3159,21 +3156,7 @@ bytes32(uint256(keccak256(<span class="hljs-string">&apos;eip1967.proxy.admin&ap
 <p>因为如果在新合约Implementation1中，改变了Implementation0中原始状态变量的顺序，那么就会出现存储冲突问题，如下图</p>
 <pre><code class="lang-sh">|Implementation_v0   |Implementation_v1        |
 |--------------------|-------------------------|
-|address _owner      |address _lastContributor | &lt;=== Storage collision!
-|mapping _balances   |address _owner           |
-|uint256 _supply     |mapping _balances        |
-|...                 |uint256 _supply          |
-|                    |...                      |
-Correct storage preservation:
-
-|Implementation_v0   |Implementation_v1        |
-|--------------------|-------------------------|
-|address _owner      |address _owner           |
-|mapping _balances   |mapping _balances        |
-|uint256 _supply     |uint256 _supply          |
-|...                 |address _lastContributor | &lt;=== Storage extension.  <span class="hljs-comment">#修改了原来</span>
-|                    |...                      |
-</code></pre>
+|address _owner      |address _lastContributor | </code></pre>
 <p>所以在升级的合约Implementation1中，如果有新变量的添加，那么新的状态变量只能添加在原始合约状态末尾依次往后添加，切记切记，否则升级失败！</p>
 <h3 id="5-initializer代替constructor">5. initializer代替constructor</h3>
 <p>如果一个合约定义为可升级的，那么这个合约需要将构造函数移除（如有），并且使用initialize函数来代替初始化工作。原因为：我们需要将部署时的数据存储在Proxy合约中，如果提供了构造函数，这些数据就会错误的写在了逻辑合约中。</p>
@@ -3181,21 +3164,21 @@ Correct storage preservation:
 <h3 id="1-修改原有代码">1. 修改原有代码</h3>
 <p>说了这么多，我们测试一下升级，我们使用openzeppelin标准库来完成合约升级，并且使用<a href="https://docs.openzeppelin.com/upgrades-plugins/1.x/" target="_blank">hardhat-upgrade</a>来进行集成。</p>
 <p>为了实现合约升级，我们需要改写一下原来的Worldcup代码，将构造函数去掉，增加初始化函数</p>
-<pre><code class="lang-sh"><span class="hljs-comment"># 安装升级版本的合约，我们需要使用标准的初始化函数</span>
+<pre><code class="lang-sh"># 安装升级版本的合约，我们需要使用标准的初始化函数
 $ npm i @openzeppelin/contracts-upgradeable
 </code></pre>
 <p>修改代码：</p>
-<pre><code class="lang-js">    <span class="hljs-comment">//1. 导入标准包</span>
-    <span class="hljs-keyword">import</span> <span class="hljs-string">&quot;@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol&quot;</span>;
+<pre><code class="lang-js">    //1. 导入标准包
+    import &quot;@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol&quot;;
 
-    <span class="hljs-comment">//2. 继承</span>
+    //2. 继承
     contract WorldCupV1 is Initializable {  
-      <span class="hljs-comment">//3. 将构造函数替换为初始化函数 constructor(uint256 _deadline) </span>
-      <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">initialize</span>(<span class="hljs-params">uint256 _deadline</span>) <span class="hljs-title">public</span> <span class="hljs-title">initializer</span> </span>{
+      //3. 将构造函数替换为初始化函数 constructor(uint256 _deadline) 
+      function initialize(uint256 _deadline) public initializer {
           admin = msg.sender;
-          <span class="hljs-built_in">require</span>(
+          require(
               _deadline &gt; block.timestamp,
-              <span class="hljs-string">&quot;WorldCupLottery: invalid deadline!&quot;</span>
+              &quot;WorldCupLottery: invalid deadline!&quot;
           );
           deadline = _deadline;
       }   
@@ -3203,17 +3186,17 @@ $ npm i @openzeppelin/contracts-upgradeable
 </code></pre>
 <h3 id="2-编写准备升级的新合约">2. 编写准备升级的新合约</h3>
 <p>创建升级合约WorldCupV2.sol，与V1相比，增加了代码，包括：一个函数，一个状态变量，一个事件，具体如下：</p>
-<pre><code class="lang-js">        <span class="hljs-comment">// event ChangeDeadline(uint256 _prev, uint256 _curr);</span>
-        <span class="hljs-comment">// uint256 changeCount</span>
+<pre><code class="lang-js">        // event ChangeDeadline(uint256 _prev, uint256 _curr);
+        // uint256 changeCount
 
-        <span class="hljs-comment">// 1. 增加函数，支持修改deadline</span>
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">changeDeadline</span>(<span class="hljs-params">uint256 _newDeadline</span>) <span class="hljs-title">external</span> </span>{
-      <span class="hljs-built_in">require</span>(_newDeadline &gt; block.timestamp, <span class="hljs-string">&quot;invalid timestamp!&quot;</span>);
+        // 1. 增加函数，支持修改deadline
+    function changeDeadline(uint256 _newDeadline) external {
+      require(_newDeadline &gt; block.timestamp, &quot;invalid timestamp!&quot;);
 
-      <span class="hljs-comment">// 2.增加新事件</span>
+      // 2.增加新事件
       emit ChangeDeadline(deadline, _newDeadline); 
 
-      <span class="hljs-comment">// 4.状态变量</span>
+      // 4.状态变量
       changeCount++;  
       deadline = _newDeadline;
     }
@@ -3225,12 +3208,12 @@ $ Successfully generated 86 typings!
 $ Compiled 24 Solidity files successfully
 </code></pre>
 <h3 id="3-安装升级插件">3. 安装升级插件</h3>
-<pre><code class="lang-sh"><span class="hljs-comment"># 升级插件，在部署脚本中使用</span>
+<pre><code class="lang-sh"># 升级插件，在部署脚本中使用
 $ npm install --save-dev @openzeppelin/hardhat-upgrades
 </code></pre>
 <p>在配置文件中导入：</p>
-<pre><code class="lang-js"><span class="hljs-comment">// hardhat.config.js</span>
-<span class="hljs-built_in">require</span>(<span class="hljs-string">&apos;@openzeppelin/hardhat-upgrades&apos;</span>);
+<pre><code class="lang-js">// hardhat.config.js
+require(&apos;@openzeppelin/hardhat-upgrades&apos;);
 </code></pre>
 <h3 id="4-编写升级脚本">4. 编写升级脚本</h3>
 <p>contracts/scripts/upgrade/deployAndUpgrade.ts，</p>
@@ -3241,30 +3224,30 @@ $ npm install --save-dev @openzeppelin/hardhat-upgrades
 <li>读取新的deadline，查看返回值。</li>
 </ol>
 <p>具体内容如下：</p>
-<pre><code class="lang-js"><span class="hljs-keyword">const</span> { ethers, upgrades } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;hardhat&quot;</span>);
+<pre><code class="lang-js">const { ethers, upgrades } = require(&quot;hardhat&quot;);
 
-<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">main</span>(<span class="hljs-params"></span>) </span>{
-  <span class="hljs-keyword">const</span> TWO_WEEKS_IN_SECS = <span class="hljs-number">14</span> * <span class="hljs-number">24</span> * <span class="hljs-number">60</span> * <span class="hljs-number">60</span>;
-  <span class="hljs-keyword">const</span> timestamp = <span class="hljs-built_in">Math</span>.floor(<span class="hljs-built_in">Date</span>.now() / <span class="hljs-number">1000</span>)
-  <span class="hljs-keyword">const</span> deadline = timestamp + TWO_WEEKS_IN_SECS;
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;deadline:&apos;</span>, deadline)
+async function main() {
+  const TWO_WEEKS_IN_SECS = 14 * 24 * 60 * 60;
+  const timestamp = Math.floor(Date.now() / 1000)
+  const deadline = timestamp + TWO_WEEKS_IN_SECS;
+  console.log(&apos;deadline:&apos;, deadline)
 
-  <span class="hljs-comment">// Deploying</span>
-  <span class="hljs-keyword">const</span> WorldCupv1 = <span class="hljs-keyword">await</span> ethers.getContractFactory(<span class="hljs-string">&quot;WorldCupV1&quot;</span>);
-  <span class="hljs-keyword">const</span> instance = <span class="hljs-keyword">await</span> upgrades.deployProxy(WorldCupv1, [deadline]);
-  <span class="hljs-keyword">await</span> instance.deployed();
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;WorldCupV1 address:&quot;</span>, instance.address);
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;deadline1:&quot;</span>, <span class="hljs-keyword">await</span> instance.deadline())
+  // Deploying
+  const WorldCupv1 = await ethers.getContractFactory(&quot;WorldCupV1&quot;);
+  const instance = await upgrades.deployProxy(WorldCupv1, [deadline]);
+  await instance.deployed();
+  console.log(&quot;WorldCupV1 address:&quot;, instance.address);
+  console.log(&quot;deadline1:&quot;, await instance.deadline())
 
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;ready to upgrade to V2...&apos;</span>);
+  console.log(&apos;ready to upgrade to V2...&apos;);
 
-  <span class="hljs-comment">// Upgrading</span>
-  <span class="hljs-keyword">const</span> WorldCupV2 = <span class="hljs-keyword">await</span> ethers.getContractFactory(<span class="hljs-string">&quot;WorldCupV2&quot;</span>);
-  <span class="hljs-keyword">const</span> upgraded = <span class="hljs-keyword">await</span> upgrades.upgradeProxy(instance.address, WorldCupV2);
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;WorldCupV2 address:&quot;</span>, upgraded.address);
+  // Upgrading
+  const WorldCupV2 = await ethers.getContractFactory(&quot;WorldCupV2&quot;);
+  const upgraded = await upgrades.upgradeProxy(instance.address, WorldCupV2);
+  console.log(&quot;WorldCupV2 address:&quot;, upgraded.address);
 
-  <span class="hljs-keyword">await</span> upgraded.changeDeadline(deadline + <span class="hljs-number">100</span>)
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;deadline2:&quot;</span>, <span class="hljs-keyword">await</span> upgraded.deadline())
+  await upgraded.changeDeadline(deadline + 100)
+  console.log(&quot;deadline2:&quot;, await upgraded.deadline())
 }
 
 main();
@@ -3348,7 +3331,7 @@ main();
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第6节:世界杯竞猜_upgrade","level":"1.15.10","depth":2,"next":{"title":"第7节:世界杯竞猜_链下签名","level":"1.15.11","depth":2,"path":"08_项目实战-世界杯竞猜/07_世界杯竞猜_链下签名.md","ref":"08_项目实战-世界杯竞猜/07_世界杯竞猜_链下签名.md","articles":[]},"previous":{"title":"第5节:世界杯竞猜_airdrop","level":"1.15.9","depth":2,"path":"08_项目实战-世界杯竞猜/05-世界杯竞猜_airdrop.md","ref":"08_项目实战-世界杯竞猜/05-世界杯竞猜_airdrop.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"08_项目实战-世界杯竞猜/06_世界杯竞猜_upgrade.md","mtime":"2023-09-23T13:48:35.132Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-19T22:08:50.792Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第6节:世界杯竞猜_upgrade","level":"1.15.10","depth":2,"next":{"title":"第7节:世界杯竞猜_链下签名","level":"1.15.11","depth":2,"path":"08_项目实战-世界杯竞猜/07_世界杯竞猜_链下签名.md","ref":"08_项目实战-世界杯竞猜/07_世界杯竞猜_链下签名.md","articles":[]},"previous":{"title":"第5节:世界杯竞猜_airdrop","level":"1.15.9","depth":2,"path":"08_项目实战-世界杯竞猜/05-世界杯竞猜_airdrop.md","ref":"08_项目实战-世界杯竞猜/05-世界杯竞猜_airdrop.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"08_项目实战-世界杯竞猜/06_世界杯竞猜_upgrade.md","mtime":"2023-09-23T13:48:35.132Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3431,6 +3414,14 @@ main();
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

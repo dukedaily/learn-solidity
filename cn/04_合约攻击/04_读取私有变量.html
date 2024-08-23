@@ -36,6 +36,10 @@
                 
             
                 
+                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
+                
+            
+                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3019,83 +3023,83 @@
 </blockquote>
 <p>所有链上的数据都可以被访问；不要把任何敏感信息存储在链上</p>
 <p>private修饰符表示链上合约无法访问该数据，但是可以通过链下（读取slot的方式读取私有数据）</p>
-<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
-pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
+<pre><code class="lang-js">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.13;
 
-<span class="hljs-comment">/*
+/*
 Note: cannot use web3 on JVM, so use the contract deployed on ropsten
 Note: browser Web3 is old so use Web3 from truffle console
 
 Contract deployed on Ropsten
 0x3505a02BCDFbb225988161a95528bfDb279faD6b
-*/</span>
+*/
 
-<span class="hljs-comment">/*
+/*
 # Storage
 - 2 ** 256 slots
 - 32 bytes for each slot
 - data is stored sequentially in the order of declaration
 - storage is optimized to save space. If neighboring variables fit in a single
   32 bytes, then they are packed into the same slot, starting from the right
-*/</span>
+*/
 
 contract Vault {
-    <span class="hljs-comment">// slot 0</span>
-    uint public count = <span class="hljs-number">123</span>;
-    <span class="hljs-comment">// slot 1</span>
+    // slot 0
+    uint public count = 123;
+    // slot 1
     address public owner = msg.sender;
-    bool public isTrue = <span class="hljs-literal">true</span>;
-    uint16 public u16 = <span class="hljs-number">31</span>;
-    <span class="hljs-comment">// slot 2</span>
+    bool public isTrue = true;
+    uint16 public u16 = 31;
+    // slot 2
     bytes32 private password;
 
-    <span class="hljs-comment">// constants do not use storage</span>
-    uint public constant someConst = <span class="hljs-number">123</span>;
+    // constants do not use storage
+    uint public constant someConst = 123;
 
-    <span class="hljs-comment">// slot 3, 4, 5 (one for each array element)</span>
-    bytes32[<span class="hljs-number">3</span>] public data;
+    // slot 3, 4, 5 (one for each array element)
+    bytes32[3] public data;
 
     struct User {
         uint id;
         bytes32 password;
     }
 
-    <span class="hljs-comment">// slot 6 - length of array</span>
-    <span class="hljs-comment">// starting from slot hash(6) - array elements</span>
-    <span class="hljs-comment">// slot where array element is stored = keccak256(slot)) + (index * elementSize)</span>
-    <span class="hljs-comment">// where slot = 6 and elementSize = 2 (1 (uint) +  1 (bytes32))</span>
+    // slot 6 - length of array
+    // starting from slot hash(6) - array elements
+    // slot where array element is stored = keccak256(slot)) + (index * elementSize)
+    // where slot = 6 and elementSize = 2 (1 (uint) +  1 (bytes32))
     User[] private users;
 
-    <span class="hljs-comment">// slot 7 - empty</span>
-    <span class="hljs-comment">// entries are stored at hash(key, slot)</span>
-    <span class="hljs-comment">// where slot = 7, key = map key</span>
-    mapping(<span class="hljs-function"><span class="hljs-params">uint</span> =&gt;</span> User) private idToUser;
+    // slot 7 - empty
+    // entries are stored at hash(key, slot)
+    // where slot = 7, key = map key
+    mapping(uint =&gt; User) private idToUser;
 
-    <span class="hljs-function"><span class="hljs-title">constructor</span>(<span class="hljs-params">bytes32 _password</span>)</span> {
+    constructor(bytes32 _password) {
         password = _password;
     }
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addUser</span>(<span class="hljs-params">bytes32 _password</span>) <span class="hljs-title">public</span> </span>{
-        User memory user = User({<span class="hljs-attr">id</span>: users.length, <span class="hljs-attr">password</span>: _password});
+    function addUser(bytes32 _password) public {
+        User memory user = User({id: users.length, password: _password});
 
         users.push(user);
         idToUser[user.id] = user;
     }
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getArrayLocation</span>(<span class="hljs-params">
+    function getArrayLocation(
         uint slot,
         uint index,
         uint elementSize
-    </span>) <span class="hljs-title">public</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint</span>) </span>{
-        <span class="hljs-keyword">return</span> uint(keccak256(abi.encodePacked(slot))) + (index * elementSize);
+    ) public pure returns (uint) {
+        return uint(keccak256(abi.encodePacked(slot))) + (index * elementSize);
     }
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getMapLocation</span>(<span class="hljs-params">uint slot, uint key</span>) <span class="hljs-title">public</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint</span>) </span>{
-        <span class="hljs-keyword">return</span> uint(keccak256(abi.encodePacked(key, slot)));
+    function getMapLocation(uint slot, uint key) public pure returns (uint) {
+        return uint(keccak256(abi.encodePacked(key, slot)));
     }
 }
 
-<span class="hljs-comment">/*
+/*
 slot 0 - count
     web3.eth.getStorageAt(&quot;0x3505a02BCDFbb225988161a95528bfDb279faD6b&quot;, 0, console.log)
 slot 1 - u16, isTrue, owner
@@ -3124,7 +3128,7 @@ slot 7 - empty
     user 1
     web3.eth.getStorageAt(&quot;0x3505a02BCDFbb225988161a95528bfDb279faD6b&quot;, &quot;0xb39221ace053465ec3453ce2b36430bd138b997ecea25c1043da0c366812b828&quot;, console.log)
     web3.eth.getStorageAt(&quot;0x3505a02BCDFbb225988161a95528bfDb279faD6b&quot;, &quot;0xb39221ace053465ec3453ce2b36430bd138b997ecea25c1043da0c366812b829&quot;, console.log)
-*/</span>
+*/
 </code></pre>
 <p>在线验证：<a href="https://web3playground.io/QmQgatm8kvy3QcWugTTiegiAz8mnqLkaXGRRu37yX1ucFq" target="_blank">https://web3playground.io/QmQgatm8kvy3QcWugTTiegiAz8mnqLkaXGRRu37yX1ucFq</a></p>
 
@@ -3154,7 +3158,7 @@ slot 7 - empty
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第4节:读取私有变量","level":"1.11.4","depth":2,"next":{"title":"第11节:安全事故1-poly网络哈希碰撞攻击","level":"1.11.5","depth":2,"path":"04_合约攻击/11_安全事故1-poly网络哈希碰撞攻击.md","ref":"04_合约攻击/11_安全事故1-poly网络哈希碰撞攻击.md","articles":[]},"previous":{"title":"第3节:合约自杀导致Dos","level":"1.11.3","depth":2,"path":"04_合约攻击/03_合约自杀导致Dos.md","ref":"04_合约攻击/03_合约自杀导致Dos.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"04_合约攻击/04_读取私有变量.md","mtime":"2023-09-23T13:02:23.796Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-19T22:08:50.792Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第4节:读取私有变量","level":"1.11.4","depth":2,"next":{"title":"第11节:安全事故1-poly网络哈希碰撞攻击","level":"1.11.5","depth":2,"path":"04_合约攻击/11_安全事故1-poly网络哈希碰撞攻击.md","ref":"04_合约攻击/11_安全事故1-poly网络哈希碰撞攻击.md","articles":[]},"previous":{"title":"第3节:合约自杀导致Dos","level":"1.11.3","depth":2,"path":"04_合约攻击/03_合约自杀导致Dos.md","ref":"04_合约攻击/03_合约自杀导致Dos.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"04_合约攻击/04_读取私有变量.md","mtime":"2023-09-23T13:02:23.796Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3237,6 +3241,14 @@ slot 7 - empty
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

@@ -36,6 +36,10 @@
                 
             
                 
+                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
+                
+            
+                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3019,14 +3023,14 @@
 </blockquote>
 <p>合约自杀时，会将合约自身持有的ether全部转入到指定地址之中。</p>
 <p>如果某个合约使用了balance方法来进行校验时，有可能会出现攻击漏洞。</p>
-<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
-pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
+<pre><code class="lang-js">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.13;
 
-<span class="hljs-comment">// The goal of this game is to be the 7th player to deposit 1 Ether.</span>
-<span class="hljs-comment">// Players can deposit only 1 Ether at a time.</span>
-<span class="hljs-comment">// Winner will be able to withdraw all Ether.</span>
+// The goal of this game is to be the 7th player to deposit 1 Ether.
+// Players can deposit only 1 Ether at a time.
+// Winner will be able to withdraw all Ether.
 
-<span class="hljs-comment">/*
+/*
 1. Deploy EtherGame
 2. Players (say Alice and Bob) decides to play, deposits 1 Ether each.
 2. Deploy Attack with address of EtherGame
@@ -3036,78 +3040,40 @@ pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.
 What happened?
 Attack forced the balance of EtherGame to equal 7 ether.
 Now no one can deposit and the winner cannot be set.
-*/</span>
+*/
 
 contract EtherGame {
-    uint public targetAmount = <span class="hljs-number">7</span> ether;
+    uint public targetAmount = 7 ether;
     address public winner;
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">deposit</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> <span class="hljs-title">payable</span> </span>{
-        <span class="hljs-built_in">require</span>(msg.value == <span class="hljs-number">1</span> ether, <span class="hljs-string">&quot;You can only send 1 Ether&quot;</span>);
+    function deposit() public payable {
+        require(msg.value == 1 ether, &quot;You can only send 1 Ether&quot;);
 
-        uint balance = address(<span class="hljs-built_in">this</span>).balance;
-        <span class="hljs-built_in">require</span>(balance &lt;= targetAmount, <span class="hljs-string">&quot;Game is over&quot;</span>);
+        uint balance = address(this).balance;
+        require(balance <= targetamount, "game is over"); if (balance="=" targetamount) { winner="msg.sender;" } function claimreward() public require(msg.sender="=" winner, "not winner"); (bool sent, )="msg.sender.call{value:" address(this).balance}(""); require(sent, "failed to send ether"); contract attack ethergame ethergame; constructor(ethergame _ethergame) attack() payable you can simply break the game by sending ether so that balance>= 7 ether
 
-        <span class="hljs-keyword">if</span> (balance == targetAmount) {
-            winner = msg.sender;
-        }
-    }
-
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">claimReward</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> </span>{
-        <span class="hljs-built_in">require</span>(msg.sender == winner, <span class="hljs-string">&quot;Not winner&quot;</span>);
-
-        (bool sent, ) = msg.sender.call{<span class="hljs-attr">value</span>: address(<span class="hljs-built_in">this</span>).balance}(<span class="hljs-string">&quot;&quot;</span>);
-        <span class="hljs-built_in">require</span>(sent, <span class="hljs-string">&quot;Failed to send Ether&quot;</span>);
-    }
-}
-
-contract Attack {
-    EtherGame etherGame;
-
-    <span class="hljs-function"><span class="hljs-title">constructor</span>(<span class="hljs-params">EtherGame _etherGame</span>)</span> {
-        etherGame = EtherGame(_etherGame);
-    }
-
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">attack</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> <span class="hljs-title">payable</span> </span>{
-        <span class="hljs-comment">// You can simply break the game by sending ether so that</span>
-        <span class="hljs-comment">// the game balance &gt;= 7 ether</span>
-
-        <span class="hljs-comment">// cast address to payable</span>
+        // cast address to payable
         address payable addr = payable(address(etherGame));
         selfdestruct(addr);
     }
 }
-</code></pre>
+</=></code></pre>
 <p>解决方案：不要依赖address(this).balance来进行校验</p>
-<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
-pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
+<pre><code class="lang-js">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.13;
 
 contract EtherGame {
-    uint public targetAmount = <span class="hljs-number">3</span> ether;
+    uint public targetAmount = 3 ether;
     uint public balance;
     address public winner;
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">deposit</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> <span class="hljs-title">payable</span> </span>{
-        <span class="hljs-built_in">require</span>(msg.value == <span class="hljs-number">1</span> ether, <span class="hljs-string">&quot;You can only send 1 Ether&quot;</span>);
+    function deposit() public payable {
+        require(msg.value == 1 ether, &quot;You can only send 1 Ether&quot;);
 
-          <span class="hljs-comment">// ！！通过状态变量来统计ether，此时即使合约自杀传入ether，也不会干扰条件判断逻辑！！</span>
+          // ！！通过状态变量来统计ether，此时即使合约自杀传入ether，也不会干扰条件判断逻辑！！
         balance += msg.value;
 
-        <span class="hljs-built_in">require</span>(balance &lt;= targetAmount, <span class="hljs-string">&quot;Game is over&quot;</span>);
-
-        <span class="hljs-keyword">if</span> (balance == targetAmount) {
-            winner = msg.sender;
-        }
-    }
-
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">claimReward</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> </span>{
-        <span class="hljs-built_in">require</span>(msg.sender == winner, <span class="hljs-string">&quot;Not winner&quot;</span>);
-
-        (bool sent, ) = msg.sender.call{<span class="hljs-attr">value</span>: balance}(<span class="hljs-string">&quot;&quot;</span>);
-        <span class="hljs-built_in">require</span>(sent, <span class="hljs-string">&quot;Failed to send Ether&quot;</span>);
-    }
-}
-</code></pre>
+        require(balance </code></pre>
 
                                 
                                 </section>
@@ -3135,7 +3101,7 @@ contract EtherGame {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第3节:合约自杀导致Dos","level":"1.11.3","depth":2,"next":{"title":"第4节:读取私有变量","level":"1.11.4","depth":2,"path":"04_合约攻击/04_读取私有变量.md","ref":"04_合约攻击/04_读取私有变量.md","articles":[]},"previous":{"title":"第2节:返回值校验","level":"1.11.2","depth":2,"path":"04_合约攻击/02_返回值校验.md","ref":"04_合约攻击/02_返回值校验.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"04_合约攻击/03_合约自杀导致Dos.md","mtime":"2023-09-23T13:02:23.837Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-19T22:08:50.792Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第3节:合约自杀导致Dos","level":"1.11.3","depth":2,"next":{"title":"第4节:读取私有变量","level":"1.11.4","depth":2,"path":"04_合约攻击/04_读取私有变量.md","ref":"04_合约攻击/04_读取私有变量.md","articles":[]},"previous":{"title":"第2节:返回值校验","level":"1.11.2","depth":2,"path":"04_合约攻击/02_返回值校验.md","ref":"04_合约攻击/02_返回值校验.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"04_合约攻击/03_合约自杀导致Dos.md","mtime":"2023-09-23T13:02:23.837Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3218,6 +3184,14 @@ contract EtherGame {
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

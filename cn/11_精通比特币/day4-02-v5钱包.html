@@ -36,6 +36,10 @@
                 
             
                 
+                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
+                
+            
+                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3019,68 +3023,68 @@
 <p>职场进阶: <a href="https://dukeweb3.com" target="_blank">https://dukeweb3.com</a></p>
 </blockquote>
 <h2 id="1-txinput">1. TXInput</h2>
-<pre><code class="lang-go"><span class="hljs-keyword">type</span> TXInput <span class="hljs-keyword">struct</span> {
-    <span class="hljs-comment">//引用output所在交易ID</span>
-    TXID []<span class="hljs-keyword">byte</span>
+<pre><code class="lang-go">type TXInput struct {
+    //引用output所在交易ID
+    TXID []byte
 
-    <span class="hljs-comment">//应用output的索引值</span>
-    VoutIndex <span class="hljs-keyword">int64</span>
+    //应用output的索引值
+    VoutIndex int64
 
-    <span class="hljs-comment">//解锁脚本</span>
-    <span class="hljs-comment">//ScriptSig string</span>
+    //解锁脚本
+    //ScriptSig string
 
-    <span class="hljs-comment">//签名</span>
-    Signature []<span class="hljs-keyword">byte</span>
-    <span class="hljs-comment">//公钥</span>
-    PublicKey []<span class="hljs-keyword">byte</span>
+    //签名
+    Signature []byte
+    //公钥
+    PublicKey []byte
 }
 </code></pre>
 <h2 id="2-txoutput">2. TXOutput</h2>
-<pre><code class="lang-go"><span class="hljs-keyword">type</span> TXOutput <span class="hljs-keyword">struct</span> {
-    <span class="hljs-comment">//接收的金额</span>
-    Value <span class="hljs-keyword">float64</span>
+<pre><code class="lang-go">type TXOutput struct {
+    //接收的金额
+    Value float64
 
-    <span class="hljs-comment">//锁定脚本</span>
-    <span class="hljs-comment">//ScriptPubKey string</span>
+    //锁定脚本
+    //ScriptPubKey string
 
-    <span class="hljs-comment">//公钥哈希</span>
-    PublicKeyHash []<span class="hljs-keyword">byte</span>
+    //公钥哈希
+    PublicKeyHash []byte
 }
 </code></pre>
 <h2 id="3检查pubkeyhash是否可以解锁utxo">3.检查pubKeyHash是否可以解锁utxo</h2>
 <p>可以理解为解锁条件，真正的能解锁与否还要看后面的verify动作（稍后介绍）</p>
-<pre><code class="lang-go"><span class="hljs-comment">//解锁脚本</span>
-<span class="hljs-comment">//存储在output中的其实是公钥的哈希，我们去锁定的时候也是输入地址，然后内部逆向算出哈希存储的</span>
-<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(input *TXInput)</span> <span class="hljs-title">CanUnlockUTXOWith</span><span class="hljs-params">(pubKeyHash []<span class="hljs-keyword">byte</span> /*收款人的公钥哈希*/)</span> <span class="hljs-title">bool</span></span> {
+<pre><code class="lang-go">//解锁脚本
+//存储在output中的其实是公钥的哈希，我们去锁定的时候也是输入地址，然后内部逆向算出哈希存储的
+func (input *TXInput) CanUnlockUTXOWith(pubKeyHash []byte /*收款人的公钥哈希*/) bool {
     hash := HashPubKey(input.PublicKey)
-    <span class="hljs-keyword">return</span> bytes.Compare(hash, pubKeyHash) == <span class="hljs-number">0</span>
+    return bytes.Compare(hash, pubKeyHash) == 0
 }
 </code></pre>
 <h2 id="4检查utxo是否可以被pubkeyhash解锁">4.检查utxo是否可以被pubKeyHash解锁</h2>
 <p>3，4步两个函数是相对的，辅助功能，用于在遍历交易的时候进行过滤</p>
-<pre><code class="lang-go"><span class="hljs-comment">//检测是否被某个地址锁定</span>
-<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(output *TXOutput)</span> <span class="hljs-title">CanBeUnlockedWith</span><span class="hljs-params">(pubKeyHash []<span class="hljs-keyword">byte</span> /*收款人的公钥哈希*/)</span> <span class="hljs-title">bool</span></span> {
-    <span class="hljs-keyword">return</span> bytes.Compare(output.PublicKeyHash, pubKeyHash) == <span class="hljs-number">0</span>
+<pre><code class="lang-go">//检测是否被某个地址锁定
+func (output *TXOutput) CanBeUnlockedWith(pubKeyHash []byte /*收款人的公钥哈希*/) bool {
+    return bytes.Compare(output.PublicKeyHash, pubKeyHash) == 0
 }
 </code></pre>
 <h2 id="5锁定脚本">5.锁定脚本</h2>
 <p>之前的版本未涉及到锁定，在创建utxo的时候直接赋值为地址就算是锁定了，这里需要逆向求出来pubKeyHash，所以写了个锁定函数</p>
-<pre><code class="lang-go"><span class="hljs-comment">//锁定脚本</span>
-<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(output *TXOutput)</span> <span class="hljs-title">Lock</span><span class="hljs-params">(address <span class="hljs-keyword">string</span> /*付款人的地址*/)</span></span> {
-    <span class="hljs-comment">//先decode58</span>
-    pubKeyHash := Base58Decode([]<span class="hljs-keyword">byte</span>(address))
-    <span class="hljs-comment">//去除掉version和checksum</span>
-    pubKeyHash = pubKeyHash[<span class="hljs-number">1</span>:<span class="hljs-built_in">len</span>(pubKeyHash)<span class="hljs-number">-4</span>]
-    <span class="hljs-comment">//使用公钥哈希锁定该output</span>
+<pre><code class="lang-go">//锁定脚本
+func (output *TXOutput) Lock(address string /*付款人的地址*/) {
+    //先decode58
+    pubKeyHash := Base58Decode([]byte(address))
+    //去除掉version和checksum
+    pubKeyHash = pubKeyHash[1:len(pubKeyHash)-4]
+    //使用公钥哈希锁定该output
     output.PublicKeyHash = pubKeyHash
 }
 </code></pre>
 <h2 id="6提供创建newtxoutput函数">6.提供创建NewTXOutput函数</h2>
 <p>由于引入了Lock方法，无法像之前一样直接定义结构了，所以需要一个额外的函数。</p>
-<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">NewTXOutput</span><span class="hljs-params">(value <span class="hljs-keyword">float64</span>, address <span class="hljs-keyword">string</span>)</span> *<span class="hljs-title">TXOutput</span></span> {
-    txoutput := TXOutput{value, <span class="hljs-literal">nil</span>}
+<pre><code class="lang-go">func NewTXOutput(value float64, address string) *TXOutput {
+    txoutput := TXOutput{value, nil}
     txoutput.Lock(address)
-    <span class="hljs-keyword">return</span> &amp;txoutput
+    return &amp;txoutput
 }
 </code></pre>
 <h1 id="二、调整代码">二、调整代码</h1>
@@ -3089,16 +3093,16 @@
 <li>TXInput的pubKey字段添加为矿工输入的数据</li>
 <li>TXOutput使用NewTXOutput来代替</li>
 </ol>
-<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">NewCoinbaseTX</span><span class="hljs-params">(address <span class="hljs-keyword">string</span>, data <span class="hljs-keyword">string</span>)</span> *<span class="hljs-title">Transaction</span></span> {
+<pre><code class="lang-go">func NewCoinbaseTX(address string, data string) *Transaction {
     ...
-    <span class="hljs-comment">//比特币系统，对于这个input的id填0，对索引填0xffff，data由矿工填写，一般填所在矿池的名字</span>
-    input := TXInput{<span class="hljs-literal">nil</span>, <span class="hljs-number">-1</span>, <span class="hljs-literal">nil</span>, []<span class="hljs-keyword">byte</span>(data)}
+    //比特币系统，对于这个input的id填0，对索引填0xffff，data由矿工填写，一般填所在矿池的名字
+    input := TXInput{nil, -1, nil, []byte(data)}
     output := NewTXOutput(reward, address)
 
-    txTmp := Transaction{<span class="hljs-literal">nil</span>, []TXInput{input}, []TXOutput{*output}}
+    txTmp := Transaction{nil, []TXInput{input}, []TXOutput{*output}}
     txTmp.setHash()
 
-    <span class="hljs-keyword">return</span> &amp;txTmp
+    return &amp;txTmp
 }
 </code></pre>
 <h2 id="2更新newutxotransaction">2.更新NewUTXOTransaction</h2>
@@ -3111,20 +3115,20 @@
 <li>使用私钥对交易进行签名</li>
 </ol>
 <p>代码如下：</p>
-<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">NewTransaction</span><span class="hljs-params">(from, to <span class="hljs-keyword">string</span>, amount <span class="hljs-keyword">float64</span>, bc *BlockChain)</span> *<span class="hljs-title">Transaction</span></span> {
+<pre><code class="lang-go">func NewTransaction(from, to string, amount float64, bc *BlockChain) *Transaction {
     ...
-    <span class="hljs-comment">//第一步：打开钱包，根据创建人的address找到对应的钱包（银行卡）</span>
-    <span class="hljs-comment">//返回当前的钱包容器，加载到内存，注意，不会创建新的秘钥对</span>
+    //第一步：打开钱包，根据创建人的address找到对应的钱包（银行卡）
+    //返回当前的钱包容器，加载到内存，注意，不会创建新的秘钥对
     ws, err := NewWallets()
-    <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
-        fmt.Println(<span class="hljs-string">&quot;no wallet.dat, will create one!&quot;</span>)
+    if err != nil {
+        fmt.Println(&quot;no wallet.dat, will create one!&quot;)
     }
 
     wallet := ws.WalletsMap[from]
 
-    <span class="hljs-keyword">if</span> wallet == <span class="hljs-literal">nil</span> {
-        fmt.Printf(<span class="hljs-string">&quot;本地没有 %s 的钱包，无法创建交易\n&quot;</span>, from)
-        <span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>
+    if wallet == nil {
+        fmt.Printf(&quot;本地没有 %s 的钱包，无法创建交易\n&quot;, from)
+        return nil
     }
 
     privateKey := wallet.PrivateKey
@@ -3132,39 +3136,39 @@
 
     pubKeyHash := HashPubKey(wallet.PublicKey)
 
-    <span class="hljs-comment">//第二步：查找可用的utxo，注意此时传递的不再是地址，而是地址的公钥哈希：pubKeyHash</span>
-    validUTXOs <span class="hljs-comment">/*本次支付所需要的utxo的集合*/</span> , total <span class="hljs-comment">/*返回utxos所包含的金额*/</span> = bc.FindSuitableUTXOs(pubKeyHash, amount)
+    //第二步：查找可用的utxo，注意此时传递的不再是地址，而是地址的公钥哈希：pubKeyHash
+    validUTXOs /*本次支付所需要的utxo的集合*/ , total /*返回utxos所包含的金额*/ = bc.FindSuitableUTXOs(pubKeyHash, amount)
     ...
-    <span class="hljs-comment">//第三步：创建输入</span>
-    <span class="hljs-comment">//调整input的参数，签名填nil，后面会有签名函数负责填充</span>
-    input := TXInput{[]<span class="hljs-keyword">byte</span>(txid), index, <span class="hljs-literal">nil</span>, wallet.PublicKey <span class="hljs-comment">/*这里千万别错误的填哈希值，这是个坑啊！！*/</span>}
+    //第三步：创建输入
+    //调整input的参数，签名填nil，后面会有签名函数负责填充
+    input := TXInput{[]byte(txid), index, nil, wallet.PublicKey /*这里千万别错误的填哈希值，这是个坑啊！！*/}
     ...
-    <span class="hljs-comment">//第四步：创建输出（付款，找零）</span>
-    <span class="hljs-comment">//调用函数生成新的output</span>
+    //第四步：创建输出（付款，找零）
+    //调用函数生成新的output
     output := NewTXOutput(amount, to)
-    outputs = <span class="hljs-built_in">append</span>(outputs, *output)
+    outputs = append(outputs, *output)
 
-    <span class="hljs-keyword">if</span> total &gt; amount {
-        <span class="hljs-comment">//找零</span>
+    if total &gt; amount {
+        //找零
         output = NewTXOutput(total-amount, from)
-        outputs = <span class="hljs-built_in">append</span>(outputs, *output)
+        outputs = append(outputs, *output)
     }
 
-    <span class="hljs-comment">//第五步：使用私钥对交易进行签名</span>
-    <span class="hljs-comment">//TODO</span>
+    //第五步：使用私钥对交易进行签名
+    //TODO
 }
 </code></pre>
 <p><strong>这是后就可以编译了，把FindSuitableUTXOs直接屏蔽掉</strong></p>
 <h2 id="3更新findsuitableutxos">3.更新FindSuitableUTXOs</h2>
-<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(bc *BlockChain)</span> <span class="hljs-title">FindUTXOTransactions</span><span class="hljs-params">(pubKeyHash []<span class="hljs-keyword">byte</span>)</span> [] <span class="hljs-title">Transaction</span></span> {
-    <span class="hljs-comment">//将对应的address替换成pubKeyHash即可</span>
+<pre><code class="lang-go">func (bc *BlockChain) FindUTXOTransactions(pubKeyHash []byte) [] Transaction {
+    //将对应的address替换成pubKeyHash即可
 }
 </code></pre>
 <p>同理更新FindSuitableUTXOs，FindUTXOs函数，同时修改GetBalance如下，将参数先设置为空，方便编译过</p>
-<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(cli *CLI)</span><span class="hljs-title">GetBalance</span><span class="hljs-params">(address <span class="hljs-keyword">string</span>)</span></span>  {
+<pre><code class="lang-go">func (cli *CLI)GetBalance(address string)  {
     ...
-    <span class="hljs-comment">//utxos := bc.FindUTXOs(address)</span>
-    utxos := bc.FindUTXOs([]<span class="hljs-keyword">byte</span>{})
+    //utxos := bc.FindUTXOs(address)
+    utxos := bc.FindUTXOs([]byte{})
 }
 </code></pre>
 <h2 id="4编译测试">4.编译测试</h2>
@@ -3183,56 +3187,56 @@
 </li>
 </ol>
 <p>代码如下：</p>
-<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(cli *CLI)</span> <span class="hljs-title">GetBalance</span><span class="hljs-params">(address <span class="hljs-keyword">string</span>)</span></span> {
+<pre><code class="lang-go">func (cli *CLI) GetBalance(address string) {
     bc := GetBlockChainObj()
-    <span class="hljs-keyword">defer</span> bc.db.Close()
+    defer bc.db.Close()
 
-    <span class="hljs-comment">//这里添加</span>
+    //这里添加
     checkAddress(address)
-    <span class="hljs-comment">//这里修改</span>
-    pubKeyHash := Base58Decode([]<span class="hljs-keyword">byte</span>(address))
-    pubKeyHash = pubKeyHash[<span class="hljs-number">1</span>: <span class="hljs-built_in">len</span>(pubKeyHash)-addressCheckSumLen]
+    //这里修改
+    pubKeyHash := Base58Decode([]byte(address))
+    pubKeyHash = pubKeyHash[1: len(pubKeyHash)-addressCheckSumLen]
 
     utxos := bc.FindUTXOs(pubKeyHash)
 
-    <span class="hljs-keyword">var</span> total <span class="hljs-keyword">float64</span>
-    <span class="hljs-keyword">for</span> _, utxo := <span class="hljs-keyword">range</span> utxos {
+    var total float64
+    for _, utxo := range utxos {
         total += utxo.Value
     }
 
-    fmt.Printf(<span class="hljs-string">&quot;The balance of %s is : %f\n&quot;</span>, address, total)
+    fmt.Printf(&quot;The balance of %s is : %f\n&quot;, address, total)
 }
 </code></pre>
 <h2 id="6-校验地址的有效性">6. 校验地址的有效性</h2>
-<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">isValidAddress</span><span class="hljs-params">(address <span class="hljs-keyword">string</span>)</span> <span class="hljs-title">bool</span></span> {
-    <span class="hljs-comment">//1. 逆向求出pubKeyHash数据</span>
-    <span class="hljs-comment">//2. 得到version + 哈希1 部分，并做checksum运算</span>
-    <span class="hljs-comment">//3. 与实际checksum比较，如果相同，则地址有效，反之则无效</span>
+<pre><code class="lang-go">func isValidAddress(address string) bool {
+    //1. 逆向求出pubKeyHash数据
+    //2. 得到version + 哈希1 部分，并做checksum运算
+    //3. 与实际checksum比较，如果相同，则地址有效，反之则无效
 
-    pubKeyHash := Base58Decode([]<span class="hljs-keyword">byte</span>(address))
+    pubKeyHash := Base58Decode([]byte(address))
 
-    <span class="hljs-comment">//防止输入的过短引起下面访问越界</span>
-    <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(pubKeyHash) &lt; <span class="hljs-number">4</span> {
-        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>
+    //防止输入的过短引起下面访问越界
+    if len(pubKeyHash) &lt; 4 {
+        return false
     }
 
-    payload := pubKeyHash[:<span class="hljs-built_in">len</span>(pubKeyHash)<span class="hljs-number">-4</span>]
-    actualCheckSum := pubKeyHash[<span class="hljs-built_in">len</span>(pubKeyHash)<span class="hljs-number">-4</span>:]
-    fmt.Printf(<span class="hljs-string">&quot;actualCheckSum : %x\n&quot;</span>, actualCheckSum)
+    payload := pubKeyHash[:len(pubKeyHash)-4]
+    actualCheckSum := pubKeyHash[len(pubKeyHash)-4:]
+    fmt.Printf(&quot;actualCheckSum : %x\n&quot;, actualCheckSum)
 
     targetCheckSum := checksum(payload)
-    fmt.Printf(<span class="hljs-string">&quot;targetCheckSum : %x\n&quot;</span>, targetCheckSum)
+    fmt.Printf(&quot;targetCheckSum : %x\n&quot;, targetCheckSum)
 
-    <span class="hljs-keyword">return</span> bytes.Compare(actualCheckSum, targetCheckSum) == <span class="hljs-number">0</span>
+    return bytes.Compare(actualCheckSum, targetCheckSum) == 0
 }
 </code></pre>
 <p>添加一个简单的校验函数，打印log</p>
-<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">checkAddress</span><span class="hljs-params">(address <span class="hljs-keyword">string</span>)</span></span> {
-    <span class="hljs-keyword">if</span> !isValidAddress(address) {
-        fmt.Println(<span class="hljs-string">&quot;not valid address :&quot;</span>, address)
-        os.Exit(<span class="hljs-number">1</span>)
+<pre><code class="lang-go">func checkAddress(address string) {
+    if !isValidAddress(address) {
+        fmt.Println(&quot;not valid address :&quot;, address)
+        os.Exit(1)
     }
-    fmt.Println(<span class="hljs-string">&quot;valid address!&quot;</span>)
+    fmt.Println(&quot;valid address!&quot;)
 }
 </code></pre>
 <h2 id="6创建区块链账本">6.创建区块链账本</h2>
@@ -3272,7 +3276,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第13节:day4-v5钱包","level":"1.18.13","depth":2,"next":{"title":"第14节:day5-v5签名","level":"1.18.14","depth":2,"path":"11_精通比特币/day5-01-v5签名.md","ref":"11_精通比特币/day5-01-v5签名.md","articles":[]},"previous":{"title":"第12节:day4-v4转账","level":"1.18.12","depth":2,"path":"11_精通比特币/day4-01-v4转账.md","ref":"11_精通比特币/day4-01-v4转账.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"11_精通比特币/day4-02-v5钱包.md","mtime":"2023-09-23T13:33:23.700Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-19T22:08:50.792Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第13节:day4-v5钱包","level":"1.18.13","depth":2,"next":{"title":"第14节:day5-v5签名","level":"1.18.14","depth":2,"path":"11_精通比特币/day5-01-v5签名.md","ref":"11_精通比特币/day5-01-v5签名.md","articles":[]},"previous":{"title":"第12节:day4-v4转账","level":"1.18.12","depth":2,"path":"11_精通比特币/day4-01-v4转账.md","ref":"11_精通比特币/day4-01-v4转账.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"11_精通比特币/day4-02-v5钱包.md","mtime":"2023-09-23T13:33:23.700Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3355,6 +3359,14 @@
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

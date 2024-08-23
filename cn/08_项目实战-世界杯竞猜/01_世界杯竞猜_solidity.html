@@ -36,6 +36,10 @@
                 
             
                 
+                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
+                
+            
+                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3064,9 +3068,9 @@
 <li><p>1 ether = 10^9 gwei</p>
 </li>
 <li><p>tx：</p>
-<pre><code class="lang-js"><span class="hljs-number">1.</span> <span class="hljs-keyword">from</span>：交易发起人， 合约中是：msg.sender
-<span class="hljs-number">2.</span> to：交互合约地址，传给合约的数据：msg.data
-<span class="hljs-number">3.</span> value：传递的金额，msg.value
+<pre><code class="lang-js">1. from：交易发起人， 合约中是：msg.sender
+2. to：交互合约地址，传给合约的数据：msg.data
+3. value：传递的金额，msg.value
 </code></pre>
 </li>
 <li><p><strong>&quot;storage&quot;, &quot;memory&quot;</strong> </p>
@@ -3083,24 +3087,10 @@
 <li><p><a href="https://goerli.etherscan.io/address/0xD0f85823D7e118BB7fa4D460A25851fCf99f7Fa9" target="_blank">https://goerli.etherscan.io/address/0xD0f85823D7e118BB7fa4D460A25851fCf99f7Fa9</a></p>
 </li>
 </ul>
-<pre><code class="lang-JavaScript"><span class="hljs-comment">// SPDX-License-Identifier: GPL-3.0</span>
-pragma solidity &gt;=<span class="hljs-number">0.7</span><span class="hljs-number">.0</span> &lt;<span class="hljs-number">0.9</span><span class="hljs-number">.0</span>;
-
-<span class="hljs-keyword">import</span> <span class="hljs-string">&quot;hardhat/console.sol&quot;</span>;
-
-contract WorldCup {
-    <span class="hljs-comment">// 1. 状态变量：管理员、所有玩家、获奖者地址、第几期、参赛球队</span>
-    <span class="hljs-comment">// 2. 核心方法：下注、开奖、</span>
-    <span class="hljs-comment">// 3. 辅助方法：获取奖金池金额、管理员地址、当前期数、参与人数、所有玩家、参赛球队</span>
-
-    address public admin;
-    uint8 public currRound;
-
-    <span class="hljs-comment">// string[] public countries; // [&quot;GERMANY&quot;, &quot;FRANCH&quot;, &quot;CHINA&quot;, &quot;BRIZAL&quot;, &quot;KOREA&quot;]</span>
-    string[] public countries = [<span class="hljs-string">&quot;GERMANY&quot;</span>, <span class="hljs-string">&quot;FRANCH&quot;</span>, <span class="hljs-string">&quot;CHINA&quot;</span>, <span class="hljs-string">&quot;BRIZAL&quot;</span>, <span class="hljs-string">&quot;KOREA&quot;</span>];
-    mapping (<span class="hljs-function"><span class="hljs-params">uint8</span> =&gt;</span> mapping (<span class="hljs-function"><span class="hljs-params">address</span> =&gt;</span> Player)) players;
-    mapping (<span class="hljs-function"><span class="hljs-params">uint8</span> =&gt;</span> mapping (<span class="hljs-function"><span class="hljs-params">Country</span> =&gt;</span> address[])) public countryToPlayers;
-    mapping (<span class="hljs-function"><span class="hljs-params">address</span> =&gt;</span> uint256) public winnerVaults;
+<pre><code class="lang-JavaScript">// SPDX-License-Identifier: GPL-3.0
+pragma solidity &gt;=0.7.0 <0.9.0; import "hardhat console.sol"; contract worldcup { 1. 状态变量：管理员、所有玩家、获奖者地址、第几期、参赛球队 2. 核心方法：下注、开奖、 3. 辅助方法：获取奖金池金额、管理员地址、当前期数、参与人数、所有玩家、参赛球队 address public admin; uint8 currround; string[] countries; ["germany", "franch", "china", "brizal", "korea"] countries="[&quot;GERMANY&quot;," "korea"]; mapping (uint8> mapping (address =&gt; Player)) players;
+    mapping (uint8 =&gt; mapping (Country =&gt; address[])) public countryToPlayers;
+    mapping (address =&gt; uint256) public winnerVaults;
 
     uint256 public immutable deadline;
     uint256 public lockedAmts;
@@ -3118,111 +3108,111 @@ contract WorldCup {
     event ClaimReward(address _claimer, uint256 _amt);
 
     modifier onlyAdmin {
-        <span class="hljs-built_in">require</span>(msg.sender == admin, <span class="hljs-string">&quot;not authorized!&quot;</span>);
+        require(msg.sender == admin, &quot;not authorized!&quot;);
         _;
     }
 
     struct Player {
         bool isSet;
-        mapping (<span class="hljs-function"><span class="hljs-params">Country</span> =&gt;</span> uint256) counts;
+        mapping (Country =&gt; uint256) counts;
     }
 
-    <span class="hljs-comment">// constructor(string[] memory _countries, uint256 _deadline) {</span>
-    <span class="hljs-function"><span class="hljs-title">constructor</span>(<span class="hljs-params">uint256 _deadline</span>)</span> {
+    // constructor(string[] memory _countries, uint256 _deadline) {
+    constructor(uint256 _deadline) {
         admin = msg.sender;
-        <span class="hljs-built_in">require</span>(_deadline &gt; block.timestamp, <span class="hljs-string">&quot;WorldCupLottery: invalid deadline!&quot;</span>);
+        require(_deadline &gt; block.timestamp, &quot;WorldCupLottery: invalid deadline!&quot;);
         deadline = _deadline;
     }
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">play</span>(<span class="hljs-params">Country _selected</span>) <span class="hljs-title">payable</span> <span class="hljs-title">external</span> </span>{
-        <span class="hljs-comment">// 参数校验</span>
-        <span class="hljs-built_in">require</span>(msg.value == <span class="hljs-number">1</span> gwei, <span class="hljs-string">&quot;invalid funds provided!&quot;</span>);
+    function play(Country _selected) payable external {
+        // 参数校验
+        require(msg.value == 1 gwei, &quot;invalid funds provided!&quot;);
 
-        <span class="hljs-built_in">require</span>(block.timestamp &lt; deadline, <span class="hljs-string">&quot;it&apos;s all over!&quot;</span>);
+        require(block.timestamp &lt; deadline, &quot;it&apos;s all over!&quot;);
 
-        <span class="hljs-comment">// 更新countryToPlayers</span>
+        // 更新countryToPlayers
         countryToPlayers[currRound][_selected].push(msg.sender);
 
-        <span class="hljs-comment">// 更新players</span>
+        // 更新players
         Player storage player = players[currRound][msg.sender];
-        <span class="hljs-comment">// player.isSet = false;</span>
-        player.counts[_selected] += <span class="hljs-number">1</span>;
+        // player.isSet = false;
+        player.counts[_selected] += 1;
 
         emit Play(currRound, msg.sender, _selected);
     }
 
-    <span class="hljs-comment">// 写另外一个合约，模拟oracle，讲解合约间调用</span>
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">finialize</span>(<span class="hljs-params">Country _country</span>) <span class="hljs-title">onlyAdmin</span> <span class="hljs-title">external</span> </span>{
-        <span class="hljs-comment">// 找到winners</span>
+    // 写另外一个合约，模拟oracle，讲解合约间调用
+    function finialize(Country _country) onlyAdmin external {
+        // 找到winners
         address[] memory winners = countryToPlayers[currRound][_country];
         uint256 distributeAmt;
 
-        <span class="hljs-comment">// 分配奖励金额</span>
+        // 分配奖励金额
         uint currAvalBalance = getVaultBalance() - lockedAmts;
-        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;currAvalBalance:&quot;</span>, currAvalBalance, <span class="hljs-string">&quot;winners count:&quot;</span>, winners.length);
+        console.log(&quot;currAvalBalance:&quot;, currAvalBalance, &quot;winners count:&quot;, winners.length);
 
-        <span class="hljs-keyword">for</span> (uint i = <span class="hljs-number">0</span>; i&lt; winners.length; i++) {
+        for (uint i = 0; i&lt; winners.length; i++) {
             address currWinner = winners[i];
 
-            <span class="hljs-comment">// 获取每个地址应该得到的份额</span>
+            // 获取每个地址应该得到的份额
             Player storage winner = players[currRound][currWinner];
-            <span class="hljs-keyword">if</span> (winner.isSet) {
-                <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;this winner has been set already, will be skipped!&quot;</span>);
-                <span class="hljs-keyword">continue</span>;
+            if (winner.isSet) {
+                console.log(&quot;this winner has been set already, will be skipped!&quot;);
+                continue;
             }
 
-            winner.isSet = <span class="hljs-literal">true</span>;
+            winner.isSet = true;
 
             uint currCounts = winner.counts[_country];
 
-            <span class="hljs-comment">// （本期总奖励 / 总参与人数）* 当前地址持有份额</span>
+            // （本期总奖励 / 总参与人数）* 当前地址持有份额
             uint amt = (currAvalBalance / countryToPlayers[currRound][_country].length) * currCounts;
 
             winnerVaults[currWinner] += amt;
             distributeAmt += amt;
             lockedAmts += amt;
 
-            <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;winner:&quot;</span>, currWinner, <span class="hljs-string">&quot;currCounts:&quot;</span>, currCounts);
-            <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;reward amt curr:&quot;</span>, amt, <span class="hljs-string">&quot;total:&quot;</span>, winnerVaults[currWinner]);
+            console.log(&quot;winner:&quot;, currWinner, &quot;currCounts:&quot;, currCounts);
+            console.log(&quot;reward amt curr:&quot;, amt, &quot;total:&quot;, winnerVaults[currWinner]);
         }
 
         uint giftAmt = currAvalBalance - distributeAmt;
-        <span class="hljs-keyword">if</span> (giftAmt &gt; <span class="hljs-number">0</span>) {
+        if (giftAmt &gt; 0) {
             winnerVaults[admin] += giftAmt;
         }
 
         emit Finialize(currRound++, uint256(_country));
     }
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">claimReward</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> </span>{
+    function claimReward() external {
         uint256 rewards = winnerVaults[msg.sender];
-        <span class="hljs-built_in">require</span>(rewards &gt; <span class="hljs-number">0</span>, <span class="hljs-string">&quot;nothing to claim!&quot;</span>);
+        require(rewards &gt; 0, &quot;nothing to claim!&quot;);
 
-        winnerVaults[msg.sender] = <span class="hljs-number">0</span>;
+        winnerVaults[msg.sender] = 0;
         lockedAmts -= rewards;
-        (bool succeed,) = msg.sender.call{<span class="hljs-attr">value</span>: rewards}(<span class="hljs-string">&quot;&quot;</span>);
-        <span class="hljs-built_in">require</span>(succeed, <span class="hljs-string">&quot;claim reward failed!&quot;</span>);
+        (bool succeed,) = msg.sender.call{value: rewards}(&quot;&quot;);
+        require(succeed, &quot;claim reward failed!&quot;);
 
-        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;rewards:&quot;</span>, rewards);
+        console.log(&quot;rewards:&quot;, rewards);
 
         emit ClaimReward(msg.sender, rewards);
     }
 
-    <span class="hljs-comment">////////////////////////////////////////////// getter functions ////////////////////////////////////////////////</span>
+    ////////////////////////////////////////////// getter functions ////////////////////////////////////////////////
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getVaultBalance</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span>(<span class="hljs-params">uint256 bal</span>)</span>{
-        bal = address(<span class="hljs-built_in">this</span>).balance;
+    function getVaultBalance() public view returns(uint256 bal){
+        bal = address(this).balance;
     }
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getCountryPlayters</span>(<span class="hljs-params">uint8 _round, Country _country</span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint256</span>) </span>{
-        <span class="hljs-keyword">return</span> countryToPlayers[_round][_country].length;
+    function getCountryPlayters(uint8 _round, Country _country) external view returns (uint256) {
+        return countryToPlayers[_round][_country].length;
     }
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getPlayerInfo</span>(<span class="hljs-params">uint8 _round, address _player, Country _country</span>) <span class="hljs-title">external</span>  <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint256 _counts</span>) </span>{
-        <span class="hljs-keyword">return</span> players[_round][_player].counts[_country];
+    function getPlayerInfo(uint8 _round, address _player, Country _country) external  view returns (uint256 _counts) {
+        return players[_round][_player].counts[_country];
     }
 }
-</code></pre>
+</0.9.0;></code></pre>
 <h2 id="下次预告">下次预告</h2>
 <ol>
 <li>使用工程化来管理合约</li>
@@ -3268,7 +3258,7 @@ contract WorldCup {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第1节:世界杯竞猜_solidity","level":"1.15.5","depth":2,"next":{"title":"第2节:世界杯竞猜_hardhat","level":"1.15.6","depth":2,"path":"08_项目实战-世界杯竞猜/02_世界杯竞猜_hardhat.md","ref":"08_项目实战-世界杯竞猜/02_世界杯竞猜_hardhat.md","articles":[]},"previous":{"title":"第d节:世界杯竞猜_solidity（下）","level":"1.15.4","depth":2,"path":"08_项目实战-世界杯竞猜/基础回顾/04-solidity（下）.md","ref":"08_项目实战-世界杯竞猜/基础回顾/04-solidity（下）.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"08_项目实战-世界杯竞猜/01_世界杯竞猜_solidity.md","mtime":"2023-09-23T13:48:35.132Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-19T22:08:50.792Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第1节:世界杯竞猜_solidity","level":"1.15.5","depth":2,"next":{"title":"第2节:世界杯竞猜_hardhat","level":"1.15.6","depth":2,"path":"08_项目实战-世界杯竞猜/02_世界杯竞猜_hardhat.md","ref":"08_项目实战-世界杯竞猜/02_世界杯竞猜_hardhat.md","articles":[]},"previous":{"title":"第d节:世界杯竞猜_solidity（下）","level":"1.15.4","depth":2,"path":"08_项目实战-世界杯竞猜/基础回顾/04-solidity（下）.md","ref":"08_项目实战-世界杯竞猜/基础回顾/04-solidity（下）.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"08_项目实战-世界杯竞猜/01_世界杯竞猜_solidity.md","mtime":"2023-09-23T13:48:35.132Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3351,6 +3341,14 @@ contract WorldCup {
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

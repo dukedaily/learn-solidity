@@ -36,6 +36,10 @@
                 
             
                 
+                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
+                
+            
+                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3026,83 +3030,83 @@
 <h2 id="impersonateaccount">impersonate_account</h2>
 <p>默认情况下，我们的hardaht账户在主网上是没有资产的，因此我们在使用fork功能时，需要impersonate（扮演）成其他地址（这个人在主网上，在我们指定的块高上，是有真实资产的），具体代码如下：</p>
 <p>创建test.fork/sendTransactionFork.ts：(单独创建一个fork的文件夹，与原来的test分开)</p>
-<pre><code class="lang-js"><span class="hljs-comment">/* eslint-disable no-console */</span>
-<span class="hljs-keyword">import</span> { network, ethers } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;hardhat&quot;</span>;
-<span class="hljs-comment">// import { SignerWithAddress } from &apos;@nomiclabs/hardhat-ethers/signers&apos;</span>
-<span class="hljs-keyword">import</span> { JsonRpcServer } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;hardhat/types&quot;</span>;
-<span class="hljs-keyword">import</span> { SignerWithAddress } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@nomiclabs/hardhat-ethers/signers&quot;</span>;
-<span class="hljs-keyword">import</span> { JsonRpcSigner } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@ethersproject/providers&quot;</span>;
+<pre><code class="lang-js">/* eslint-disable no-console */
+import { network, ethers } from &quot;hardhat&quot;;
+// import { SignerWithAddress } from &apos;@nomiclabs/hardhat-ethers/signers&apos;
+import { JsonRpcServer } from &quot;hardhat/types&quot;;
+import { SignerWithAddress } from &quot;@nomiclabs/hardhat-ethers/signers&quot;;
+import { JsonRpcSigner } from &quot;@ethersproject/providers&quot;;
 
-describe(<span class="hljs-string">&quot;sendTransaction&quot;</span>, <span class="hljs-function">() =&gt;</span> {
-  <span class="hljs-keyword">let</span> signer: JsonRpcSigner;
-  <span class="hljs-keyword">let</span> acc0: SignerWithAddress;
+describe(&quot;sendTransaction&quot;, () =&gt; {
+  let signer: JsonRpcSigner;
+  let acc0: SignerWithAddress;
 
-  beforeEach(<span class="hljs-keyword">async</span> () =&gt; {
-    <span class="hljs-comment">// https://etherscan.io/accounts</span>
-    <span class="hljs-keyword">const</span> ETHWHALE = <span class="hljs-string">&quot;0xF977814e90dA44bFA03b6295A0616a897441aceC&quot;</span>;
-    <span class="hljs-keyword">await</span> network.provider.request({
-      <span class="hljs-attr">method</span>: <span class="hljs-string">&quot;hardhat_impersonateAccount&quot;</span>,
-      <span class="hljs-attr">params</span>: [ETHWHALE],
+  beforeEach(async () =&gt; {
+    // https://etherscan.io/accounts
+    const ETHWHALE = &quot;0xF977814e90dA44bFA03b6295A0616a897441aceC&quot;;
+    await network.provider.request({
+      method: &quot;hardhat_impersonateAccount&quot;,
+      params: [ETHWHALE],
     });
 
-    <span class="hljs-comment">//1. 获取hardaht内置账户</span>
-    <span class="hljs-keyword">const</span> accounts = <span class="hljs-keyword">await</span> ethers.getSigners();
-    acc0 = accounts[<span class="hljs-number">0</span>];
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;acc0:&quot;</span>, acc0.address);
+    //1. 获取hardaht内置账户
+    const accounts = await ethers.getSigners();
+    acc0 = accounts[0];
+    console.log(&quot;acc0:&quot;, acc0.address);
 
-    <span class="hljs-comment">//2. 查看金额，应该为：10000000000000000000000（这是初始化的值）</span>
-    <span class="hljs-keyword">let</span> bal = <span class="hljs-keyword">await</span> ethers.provider.getBalance(acc0.address);
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;acc0 bal:&quot;</span>, bal.toString());
+    //2. 查看金额，应该为：10000000000000000000000（这是初始化的值）
+    let bal = await ethers.provider.getBalance(acc0.address);
+    console.log(&quot;acc0 bal:&quot;, bal.toString());
 
-    <span class="hljs-comment">//3. 重要‼️ acc0扮演成: 三方地址（有真实资产的地址），后续signer代表的就是这个三方地址了，而不是原来的acc0</span>
+    //3. 重要‼️ acc0扮演成: 三方地址（有真实资产的地址），后续signer代表的就是这个三方地址了，而不是原来的acc0
     signer = ethers.provider.getSigner(ETHWHALE);
-    bal = <span class="hljs-keyword">await</span> ethers.provider.getBalance(signer.getAddress());
+    bal = await ethers.provider.getBalance(signer.getAddress());
 
-    <span class="hljs-comment">//4. 查看这个资产</span>
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;ETHWHALE bal:&quot;</span>, bal.toString());
+    //4. 查看这个资产
+    console.log(&quot;ETHWHALE bal:&quot;, bal.toString());
   });
 
-  describe(<span class="hljs-string">&quot;sendTransaction Test&quot;</span>, <span class="hljs-function">() =&gt;</span> {
-    it(<span class="hljs-string">&quot;should send transaction&quot;</span>, <span class="hljs-keyword">async</span> () =&gt; {
-      <span class="hljs-comment">// 4. 测试一下，用三方地址给我们的acc0转账</span>
-      <span class="hljs-keyword">await</span> signer.sendTransaction({
-        <span class="hljs-attr">to</span>: acc0.address,
-        <span class="hljs-attr">value</span>: ethers.utils.parseEther(<span class="hljs-string">&quot;20&quot;</span>),
+  describe(&quot;sendTransaction Test&quot;, () =&gt; {
+    it(&quot;should send transaction&quot;, async () =&gt; {
+      // 4. 测试一下，用三方地址给我们的acc0转账
+      await signer.sendTransaction({
+        to: acc0.address,
+        value: ethers.utils.parseEther(&quot;20&quot;),
       });
 
-      <span class="hljs-keyword">const</span> bal = <span class="hljs-keyword">await</span> ethers.provider.getBalance(acc0.address);
-      <span class="hljs-comment">// 5. 查看acc0的金额，应该是：10020000000000000000000</span>
-      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;new acc0 bal:&quot;</span>, bal.toString());
+      const bal = await ethers.provider.getBalance(acc0.address);
+      // 5. 查看acc0的金额，应该是：10020000000000000000000
+      console.log(&quot;new acc0 bal:&quot;, bal.toString());
     });
   });
 });
 </code></pre>
 <h2 id="修改配置文件">修改配置文件</h2>
 <p>hardhat.config.ts</p>
-<pre><code class="lang-js"><span class="hljs-keyword">const</span> mainnetFork = MAINNET_FORK  <span class="hljs-comment">//我们使用环境变量来控制fork与否</span>
+<pre><code class="lang-js">const mainnetFork = MAINNET_FORK  //我们使用环境变量来控制fork与否
   ? {
-    <span class="hljs-attr">url</span>: <span class="hljs-string">&apos;urlxxxxx&apos;</span>
-    <span class="hljs-attr">blockNumber</span>: <span class="hljs-number">21577481</span>,
+    url: &apos;urlxxxxx&apos;
+    blockNumber: 21577481,
   }
-  : <span class="hljs-literal">undefined</span>;
+  : undefined;
 
-<span class="hljs-keyword">const</span> config: HardhatUserConfig = {
-  <span class="hljs-attr">networks</span>: {
-    <span class="hljs-attr">bsc_main</span>: <span class="hljs-string">&apos;urlxxxxx&apos;</span>
-    <span class="hljs-attr">hardhat</span>: {
-      <span class="hljs-attr">blockGasLimit</span>: DEFAULT_BLOCK_GAS_LIMIT,
-      <span class="hljs-attr">gas</span>: DEFAULT_BLOCK_GAS_LIMIT,
-      <span class="hljs-attr">gasPrice</span>: <span class="hljs-number">8000000000</span>,
-      <span class="hljs-attr">chainId</span>: <span class="hljs-number">56</span>,
-      <span class="hljs-attr">throwOnTransactionFailures</span>: <span class="hljs-literal">true</span>,
-      <span class="hljs-attr">throwOnCallFailures</span>: <span class="hljs-literal">true</span>,
-      <span class="hljs-attr">accounts</span>: 
-      forking: mainnetFork  <span class="hljs-comment">// 开关在这里生效</span>
+const config: HardhatUserConfig = {
+  networks: {
+    bsc_main: &apos;urlxxxxx&apos;
+    hardhat: {
+      blockGasLimit: DEFAULT_BLOCK_GAS_LIMIT,
+      gas: DEFAULT_BLOCK_GAS_LIMIT,
+      gasPrice: 8000000000,
+      chainId: 56,
+      throwOnTransactionFailures: true,
+      throwOnCallFailures: true,
+      accounts: 
+      forking: mainnetFork  // 开关在这里生效
     },
   },
 </code></pre>
 <h2 id="执行代码">执行代码</h2>
-<pre><code class="lang-sh"> MAINNET_FORK=<span class="hljs-literal">true</span> npx hardhat <span class="hljs-built_in">test</span> test.fork/sendTransactionFork.ts
+<pre><code class="lang-sh"> MAINNET_FORK=true npx hardhat test test.fork/sendTransactionFork.ts
 </code></pre>
 <p><img src="https://duke-typora.s3.ap-southeast-1.amazonaws.com/uPic/image-20221118095707119.png" alt="image-20221118095707119"></p>
 
@@ -3132,7 +3136,7 @@ describe(<span class="hljs-string">&quot;sendTransaction&quot;</span>, <span cla
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第3节:fork主网","level":"1.12.3","depth":2,"next":{"title":"第4节:多版本编译","level":"1.12.4","depth":2,"path":"05_hardhat框架/04_多版本编译.md","ref":"05_hardhat框架/04_多版本编译.md","articles":[]},"previous":{"title":"第2节:单元测试","level":"1.12.2","depth":2,"path":"05_hardhat框架/02_单元测试.md","ref":"05_hardhat框架/02_单元测试.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"05_hardhat框架/03_fork主网.md","mtime":"2023-09-23T13:26:34.369Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-19T22:08:50.792Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第3节:fork主网","level":"1.12.3","depth":2,"next":{"title":"第4节:多版本编译","level":"1.12.4","depth":2,"path":"05_hardhat框架/04_多版本编译.md","ref":"05_hardhat框架/04_多版本编译.md","articles":[]},"previous":{"title":"第2节:单元测试","level":"1.12.2","depth":2,"path":"05_hardhat框架/02_单元测试.md","ref":"05_hardhat框架/02_单元测试.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"05_hardhat框架/03_fork主网.md","mtime":"2023-09-23T13:26:34.369Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3215,6 +3219,14 @@ describe(<span class="hljs-string">&quot;sendTransaction&quot;</span>, <span cla
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

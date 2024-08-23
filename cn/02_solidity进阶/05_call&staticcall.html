@@ -36,6 +36,10 @@
                 
             
                 
+                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
+                
+            
+                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3019,62 +3023,62 @@
 <p>职场进阶: <a href="https://dukeweb3.com" target="_blank">https://dukeweb3.com</a></p>
 </blockquote>
 <p><strong>call</strong>是一种底层调用合约的方式，可以在合约内调用其他合约，call语法为：</p>
-<pre><code class="lang-js"><span class="hljs-comment">//(bool success, bytes memory data) = addr.call{value: valueAmt, gas: gasAmt}(abi.encodeWithSignature(&quot;foo(string,uint256)&quot;, 参数1, 参数2)</span>
+<pre><code class="lang-js">//(bool success, bytes memory data) = addr.call{value: valueAmt, gas: gasAmt}(abi.encodeWithSignature(&quot;foo(string,uint256)&quot;, 参数1, 参数2)
 其中：
-<span class="hljs-number">1.</span> success：执行结果，一定要校验success是否成功，失败务必要回滚
-<span class="hljs-number">2.</span> data：执行调用的返回值，是打包的字节序，需要解析才能得到调用函数的返回值（后续encode_decode详解）
+1. success：执行结果，一定要校验success是否成功，失败务必要回滚
+2. data：执行调用的返回值，是打包的字节序，需要解析才能得到调用函数的返回值（后续encode_decode详解）
 </code></pre>
 <p>当调用fallback方式给合约转ether的时候，<strong>建议使用call</strong>，而不是使用transfer或send方法</p>
-<pre><code class="lang-js">(bool success, bytes memory data) = addr.call{<span class="hljs-attr">value</span>: <span class="hljs-number">10</span>}(<span class="hljs-string">&quot;&quot;</span>)
+<pre><code class="lang-js">(bool success, bytes memory data) = addr.call{value: 10}(&quot;&quot;)
 </code></pre>
 <p>对于存在的方法，不建议使用call方式调用。</p>
-<pre><code class="lang-js">(bool success, bytes memory data) = _addr.call(abi.encodeWithSignature(<span class="hljs-string">&quot;doesNotExist()&quot;</span>));
+<pre><code class="lang-js">(bool success, bytes memory data) = _addr.call(abi.encodeWithSignature(&quot;doesNotExist()&quot;));
 </code></pre>
 <p>注意，当调用的方法不存在，且合约又未实现fallback时，<strong>交易会调用成功，但是第一个参数为：false</strong>，所以使用call调用后一定要检查success状态</p>
 <h2 id="完整demo">完整demo:</h2>
-<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
-pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
+<pre><code class="lang-js">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.13;
 
 contract Receiver {
     event Received(address caller, uint amount, string message);
 
     fallback() external payable {
-        emit Received(msg.sender, msg.value, <span class="hljs-string">&quot;Fallback was called&quot;</span>);
+        emit Received(msg.sender, msg.value, &quot;Fallback was called&quot;);
     }
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params">string memory _message, uint _x</span>) <span class="hljs-title">public</span> <span class="hljs-title">payable</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint</span>) </span>{
+    function foo(string memory _message, uint _x) public payable returns (uint) {
         emit Received(msg.sender, msg.value, _message);
 
-        <span class="hljs-keyword">return</span> _x + <span class="hljs-number">1</span>;
+        return _x + 1;
     }
 }
 
 contract ReceiverWithOutFallback {
     event Received(address caller, uint amount, string message);
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params">string memory _message, uint _x</span>) <span class="hljs-title">public</span> <span class="hljs-title">payable</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint</span>) </span>{
+    function foo(string memory _message, uint _x) public payable returns (uint) {
         emit Received(msg.sender, msg.value, _message);
 
-        <span class="hljs-keyword">return</span> _x + <span class="hljs-number">1</span>;
+        return _x + 1;
     }
 }
 
 contract Caller {
     event Response(bool success, bytes data);
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">testCallFoo</span>(<span class="hljs-params">address payable _addr</span>) <span class="hljs-title">public</span> <span class="hljs-title">payable</span> </span>{
-        <span class="hljs-comment">// You can send ether and specify a custom gas amount</span>
-        (bool success, bytes memory data) = _addr.call{<span class="hljs-attr">value</span>: msg.value, <span class="hljs-attr">gas</span>: <span class="hljs-number">5000</span>}(
-            abi.encodeWithSignature(<span class="hljs-string">&quot;foo(string,uint256)&quot;</span>, <span class="hljs-string">&quot;call foo&quot;</span>, <span class="hljs-number">123</span>)
+    function testCallFoo(address payable _addr) public payable {
+        // You can send ether and specify a custom gas amount
+        (bool success, bytes memory data) = _addr.call{value: msg.value, gas: 5000}(
+            abi.encodeWithSignature(&quot;foo(string,uint256)&quot;, &quot;call foo&quot;, 123)
         );
 
         emit Response(success, data);
     }
 
-    <span class="hljs-comment">// Calling a function that does not exist triggers the fallback function.</span>
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">testCallDoesNotExist</span>(<span class="hljs-params">address _addr</span>) <span class="hljs-title">public</span> </span>{
+    // Calling a function that does not exist triggers the fallback function.
+    function testCallDoesNotExist(address _addr) public {
         (bool success, bytes memory data) = _addr.call(
-            abi.encodeWithSignature(<span class="hljs-string">&quot;doesNotExist()&quot;</span>)
+            abi.encodeWithSignature(&quot;doesNotExist()&quot;)
         );
 
         emit Response(success, data);
@@ -3090,12 +3094,12 @@ contract Caller {
 <li><p>与CALL相同，但是不允许修改任何状态变量，是为了安全🔐考虑而新增的OPCODE</p>
 </li>
 <li><p>在Transparent模式的代理合约逻辑中，就使用了staticcall，从而让proxyAmin能够免费的调用父合约的admin函数，从而从slot中返回代理合约的管理员。这部分会在合约升级章节介绍。</p>
-<pre><code class="lang-js">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getProxyAdmin</span>(<span class="hljs-params">TransparentUpgradeableProxy proxy</span>) <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">virtual</span> <span class="hljs-title">returns</span> (<span class="hljs-params">address</span>) </span>{
-        <span class="hljs-comment">// We need to manually run the static call since the getter cannot be flagged as view</span>
-        <span class="hljs-comment">// bytes4(keccak256(&quot;admin()&quot;)) == 0xf851a440</span>
-        (bool success, bytes memory returndata) = address(proxy).staticcall(hex<span class="hljs-string">&quot;f851a440&quot;</span>);
-        <span class="hljs-built_in">require</span>(success);
-        <span class="hljs-keyword">return</span> abi.decode(returndata, (address));
+<pre><code class="lang-js">    function getProxyAdmin(TransparentUpgradeableProxy proxy) public view virtual returns (address) {
+        // We need to manually run the static call since the getter cannot be flagged as view
+        // bytes4(keccak256(&quot;admin()&quot;)) == 0xf851a440
+        (bool success, bytes memory returndata) = address(proxy).staticcall(hex&quot;f851a440&quot;);
+        require(success);
+        return abi.decode(returndata, (address));
     }
 </code></pre>
 </li>
@@ -3127,7 +3131,7 @@ contract Caller {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第5节:call&staticcall","level":"1.9.5","depth":2,"next":{"title":"第6节:keccak256","level":"1.9.6","depth":2,"path":"02_solidity进阶/06_keccak256.md","ref":"02_solidity进阶/06_keccak256.md","articles":[]},"previous":{"title":"第4节:encode_encodePacked","level":"1.9.4","depth":2,"path":"02_solidity进阶/04_encode_encodePacked.md","ref":"02_solidity进阶/04_encode_encodePacked.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"02_solidity进阶/05_call&staticcall.md","mtime":"2023-09-23T13:10:00.897Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-19T22:08:50.792Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第5节:call&staticcall","level":"1.9.5","depth":2,"next":{"title":"第6节:keccak256","level":"1.9.6","depth":2,"path":"02_solidity进阶/06_keccak256.md","ref":"02_solidity进阶/06_keccak256.md","articles":[]},"previous":{"title":"第4节:encode_encodePacked","level":"1.9.4","depth":2,"path":"02_solidity进阶/04_encode_encodePacked.md","ref":"02_solidity进阶/04_encode_encodePacked.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"02_solidity进阶/05_call&staticcall.md","mtime":"2023-09-23T13:10:00.897Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3210,6 +3214,14 @@ contract Caller {
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

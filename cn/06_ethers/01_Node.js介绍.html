@@ -36,6 +36,10 @@
                 
             
                 
+                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
+                
+            
+                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3067,36 +3071,36 @@
 <li>使用<code>let</code>来定义一个变量，而不要再使用<code>var</code>了，因为<code>var</code>有很多坑；可以认为<code>let</code>就是修复了bug的<code>var</code>。比如，var允许重复声明变量而且不报错；var的作用域让人感觉疑惑。</li>
 <li>最佳实践：优先用<code>const</code>，如果变量需要被修改才用<code>let</code>；要理解目前很多早期写的项目中仍然是用<code>var</code>。</li>
 </ul>
-<pre><code class="lang-js"><span class="hljs-keyword">var</span> i = <span class="hljs-number">10</span>;
-<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;var :&quot;</span> , i);
+<pre><code class="lang-js">var i = 10;
+console.log(&quot;var :&quot; , i);
 
-<span class="hljs-keyword">var</span> i = <span class="hljs-number">100</span>;
-<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;var :&quot;</span> , i);
+var i = 100;
+console.log(&quot;var :&quot; , i);
 
 
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">test</span> (<span class="hljs-params"></span>) </span>{
-    <span class="hljs-keyword">var</span> m = <span class="hljs-number">10</span>;
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;test m :&quot;</span>, m);
+function test () {
+    var m = 10;
+    console.log(&quot;test m :&quot;, m);
 }
 
 test();
-<span class="hljs-comment">//console.log(&quot;test outside :&quot;, m);</span>
+//console.log(&quot;test outside :&quot;, m);
 
 
-<span class="hljs-keyword">let</span> j = <span class="hljs-string">&quot;hello&quot;</span>
-<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;j :&quot;</span> , j);
+let j = &quot;hello&quot;
+console.log(&quot;j :&quot; , j);
 
-j = <span class="hljs-string">&quot;HELLO&quot;</span>
-<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;j :&quot;</span> , j);
+j = &quot;HELLO&quot;
+console.log(&quot;j :&quot; , j);
 
-<span class="hljs-keyword">const</span> k = [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>];
-<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;k0 :&quot;</span> , k);
+const k = [1,2,3,4];
+console.log(&quot;k0 :&quot; , k);
 
-k[<span class="hljs-number">0</span>] = <span class="hljs-number">100</span>;
-<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;k1 :&quot;</span> , k);
+k[0] = 100;
+console.log(&quot;k1 :&quot; , k);
 
-<span class="hljs-comment">//k = [4,5,6,7];</span>
-<span class="hljs-comment">//console.log(&quot;k2 :&quot; , k)</span>
+//k = [4,5,6,7];
+//console.log(&quot;k2 :&quot; , k)
 </code></pre>
 <h2 id="3-解构赋值">3. 解构赋值</h2>
 <blockquote>
@@ -3104,24 +3108,24 @@ k[<span class="hljs-number">0</span>] = <span class="hljs-number">100</span>;
 </blockquote>
 <ul>
 <li><p>数组的解构赋值</p>
-<pre><code class="lang-javascript"><span class="hljs-keyword">const</span> arr = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>] <span class="hljs-comment">//我们得到了一个数组</span>
-<span class="hljs-keyword">let</span> [a, b, c] = arr <span class="hljs-comment">//可以这样同时定义变量和赋值</span>
-<span class="hljs-built_in">console</span>.log(a, b, c); <span class="hljs-comment">// 1 2 3</span>
+<pre><code class="lang-javascript">const arr = [1, 2, 3] //我们得到了一个数组
+let [a, b, c] = arr //可以这样同时定义变量和赋值
+console.log(a, b, c); // 1 2 3
 </code></pre>
 </li>
 <li><p>对象的解构赋值（常用）</p>
-<pre><code class="lang-javascript"><span class="hljs-keyword">const</span> obj = { <span class="hljs-attr">name</span>: <span class="hljs-string">&apos;俊哥&apos;</span>,<span class="hljs-attr">address</span>:<span class="hljs-string">&apos;深圳&apos;</span>, <span class="hljs-attr">age</span>: <span class="hljs-string">&apos;100&apos;</span>} <span class="hljs-comment">//我们得到了一个对象</span>
-<span class="hljs-keyword">let</span> {name, age} = obj <span class="hljs-comment">//可以这样定义变量并赋值</span>
-<span class="hljs-built_in">console</span>.log(name, age); <span class="hljs-comment">//俊哥 100</span>
+<pre><code class="lang-javascript">const obj = { name: &apos;俊哥&apos;,address:&apos;深圳&apos;, age: &apos;100&apos;} //我们得到了一个对象
+let {name, age} = obj //可以这样定义变量并赋值
+console.log(name, age); //俊哥 100
 </code></pre>
 </li>
 <li><p>函数参数的解构赋值（常用）</p>
-<pre><code class="lang-javascript"><span class="hljs-keyword">const</span> person = { <span class="hljs-attr">name</span>: <span class="hljs-string">&apos;小明&apos;</span>, <span class="hljs-attr">age</span>: <span class="hljs-number">11</span>}
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">printPerson</span>(<span class="hljs-params">{name, age}</span>) </span>{ <span class="hljs-comment">// 函数参数可以解构一个对象</span>
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`姓名：<span class="hljs-subst">${name}</span> 年龄：<span class="hljs-subst">${age}</span>`</span>);
-    <span class="hljs-comment">//console.log(&quot;姓名：&quot;, name,  &quot;年龄：&quot;, age);</span>
+<pre><code class="lang-javascript">const person = { name: &apos;小明&apos;, age: 11}
+function printPerson({name, age}) { // 函数参数可以解构一个对象
+    console.log(`姓名：${name} 年龄：${age}`);
+    //console.log(&quot;姓名：&quot;, name,  &quot;年龄：&quot;, age);
 }
-printPerson(person) <span class="hljs-comment">// 姓名：小明 年龄：11</span>
+printPerson(person) // 姓名：小明 年龄：11
 </code></pre>
 </li>
 </ul>
@@ -3131,29 +3135,29 @@ printPerson(person) <span class="hljs-comment">// 姓名：小明 年龄：11</s
 </blockquote>
 <ul>
 <li><p>参数默认值，从ES6开始，我们可以为一个函数的参数设置默认值， go语言有默认值吗？</p>
-<pre><code class="lang-javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params">name, address = <span class="hljs-string">&apos;深圳&apos;</span></span>) </span>{
-    <span class="hljs-built_in">console</span>.log(name, address);
+<pre><code class="lang-javascript">function foo(name, address = &apos;深圳&apos;) {
+    console.log(name, address);
 }
-foo(<span class="hljs-string">&quot;小明&quot;</span>) <span class="hljs-comment">// address将使用默认值</span>
-foo(<span class="hljs-string">&quot;小王&quot;</span>, <span class="hljs-string">&apos;上海&apos;</span>) <span class="hljs-comment">// address被赋值为&apos;上海&apos;</span>
+foo(&quot;小明&quot;) // address将使用默认值
+foo(&quot;小王&quot;, &apos;上海&apos;) // address被赋值为&apos;上海&apos;
 </code></pre>
 </li>
 <li><p>箭头函数，将<code>function</code>换成<code>=&gt;</code>定义的函数，<a href="https://segmentfault.com/a/1190000009410939" target="_blank">就是箭头函数</a></p>
 </li>
 <li><p>只适合用于普通函数，不要用在构造函数，不要用在成员函数，不要用着原型函数</p>
-<pre><code class="lang-javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">add</span>(<span class="hljs-params">x, y</span>) </span>{
-    <span class="hljs-keyword">return</span> x + y
+<pre><code class="lang-javascript">function add(x, y) {
+    return x + y
 }
-<span class="hljs-comment">//演示自执行函数</span>
-<span class="hljs-comment">//函数也是变量，可以赋值</span>
-<span class="hljs-comment">// 这个箭头函数等同于上面的add函数</span>
+//演示自执行函数
+//函数也是变量，可以赋值
+// 这个箭头函数等同于上面的add函数
 (x, y) =&gt; x +y;
-<span class="hljs-comment">// 如果函数体有多行，则需要用大括号包裹</span>
-<span class="hljs-function">(<span class="hljs-params">x, y</span>) =&gt;</span> {
-    <span class="hljs-keyword">if</span>(x &gt;<span class="hljs-number">0</span>){
-        <span class="hljs-keyword">return</span> x + y
-    }<span class="hljs-keyword">else</span> {
-        <span class="hljs-keyword">return</span> x - y
+// 如果函数体有多行，则需要用大括号包裹
+(x, y) =&gt; {
+    if(x &gt;0){
+        return x + y
+    }else {
+        return x - y
     }
 }
 </code></pre>
@@ -3163,30 +3167,30 @@ foo(<span class="hljs-string">&quot;小王&quot;</span>, <span class="hljs-strin
 <blockquote>
 <p>由于==js一开始被设计为函数式语言==，万物皆函数。所有对象都是从函数原型继承而来，通过继承某个函数的原型来实现对象的继承。但是这种写法会让新学者产生疑惑，并且和传统的OOP语言差别很大。ES6 封装了class语法来大大简化了对象的继承。</p>
 </blockquote>
-<pre><code class="lang-javascript"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Person</span> </span>{
-    <span class="hljs-function"><span class="hljs-title">constructor</span>(<span class="hljs-params">name, age</span>)</span>{
-        <span class="hljs-built_in">this</span>.name = name
-        <span class="hljs-built_in">this</span>.age = age
+<pre><code class="lang-javascript">class Person {
+    constructor(name, age){
+        this.name = name
+        this.age = age
     }
-    <span class="hljs-comment">// 注意：没有function关键字</span>
-    <span class="hljs-function"><span class="hljs-title">sayHello</span>(<span class="hljs-params"></span>)</span>{
-        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`大家好，我叫<span class="hljs-subst">${<span class="hljs-built_in">this</span>.name}</span>`</span>);
+    // 注意：没有function关键字
+    sayHello(){
+        console.log(`大家好，我叫${this.name}`);
     }
 }
 
-<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Man</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Person</span></span>{
-    <span class="hljs-function"><span class="hljs-title">constructor</span>(<span class="hljs-params">name, age</span>)</span>{
-        <span class="hljs-built_in">super</span>(name, age)
+class Man extends Person{
+    constructor(name, age){
+        super(name, age)
     }
-    <span class="hljs-comment">//重写父类的方法</span>
-    <span class="hljs-function"><span class="hljs-title">sayHello</span>(<span class="hljs-params"></span>)</span>{
-        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;我重写了父类的方法！&apos;</span>);
+    //重写父类的方法
+    sayHello(){
+        console.log(&apos;我重写了父类的方法！&apos;);
     }
 }
-<span class="hljs-keyword">let</span> p = <span class="hljs-keyword">new</span> Person(<span class="hljs-string">&quot;小明&quot;</span>, <span class="hljs-number">33</span>) <span class="hljs-comment">//创建对象</span>
-p.sayHello() <span class="hljs-comment">// 调用对象p的方法，打印 大家好，我叫小明</span>
-<span class="hljs-keyword">let</span> m = <span class="hljs-keyword">new</span> Man(<span class="hljs-string">&quot;小五&quot;</span>, <span class="hljs-number">33</span>)
-m.sayHello() <span class="hljs-comment">// 我重写了父类的方法！</span>
+let p = new Person(&quot;小明&quot;, 33) //创建对象
+p.sayHello() // 调用对象p的方法，打印 大家好，我叫小明
+let m = new Man(&quot;小五&quot;, 33)
+m.sayHello() // 我重写了父类的方法！
 </code></pre>
 <h2 id="6-总结">6. 总结</h2>
 <p>ES6 的新语法有很多，有人将它总结为了一本书。当然，ES6提出的只是标准，各大浏览器和node基本实现了90%以上的新特性，极其个别还没有实现。我们目前讲的是最基本的一些语法，由于你们还未了解同步和异步的概念；Promise和async/await的内容将会在后面的课程中讲解。</p>
@@ -3214,58 +3218,58 @@ m.sayHello() <span class="hljs-comment">// 我重写了父类的方法！</span>
 function foo2(value, callback1, callback2) { }
 </code></pre><h2 id="3-同步调用（阻塞）">3. 同步调用（阻塞）</h2>
 <p>请事先在当前目录下准备文件&quot;input.txt&quot;，写入任意数据。</p>
-<pre><code class="lang-js"><span class="hljs-keyword">var</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;fs&quot;</span>);
+<pre><code class="lang-js">var fs = require(&quot;fs&quot;);
 
-<span class="hljs-keyword">var</span> data = fs.readFileSync(<span class="hljs-string">&apos;input.txt&apos;</span>);
+var data = fs.readFileSync(&apos;input.txt&apos;);
 
-<span class="hljs-built_in">console</span>.log(data.toString());
-<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;程序执行结束!&quot;</span>);
+console.log(data.toString());
+console.log(&quot;程序执行结束!&quot;);
 </code></pre>
 <h2 id="4-异步调用（非阻塞）">4. 异步调用（非阻塞）</h2>
-<pre><code class="lang-js"><span class="hljs-keyword">var</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;fs&quot;</span>);
+<pre><code class="lang-js">var fs = require(&quot;fs&quot;);
 
-<span class="hljs-comment">//error first callback</span>
-fs.readFile(<span class="hljs-string">&apos;input.txt&apos;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err, data</span>) </span>{
-    <span class="hljs-keyword">if</span> (err) <span class="hljs-keyword">return</span> <span class="hljs-built_in">console</span>.error(err);
-    <span class="hljs-built_in">console</span>.log(data.toString());
+//error first callback
+fs.readFile(&apos;input.txt&apos;, function (err, data) {
+    if (err) return console.error(err);
+    console.log(data.toString());
 });
 
-<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;程序执行结束!&quot;</span>);
+console.log(&quot;程序执行结束!&quot;);
 </code></pre>
 <p>demo</p>
-<pre><code class="lang-js"><span class="hljs-comment">//node内置的读取文件的模块</span>
-<span class="hljs-keyword">let</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&apos;fs&apos;</span>)
+<pre><code class="lang-js">//node内置的读取文件的模块
+let fs = require(&apos;fs&apos;)
 
-<span class="hljs-keyword">let</span> filename = <span class="hljs-string">&apos;1.txt&apos;</span>
+let filename = &apos;1.txt&apos;
 
-<span class="hljs-comment">//先测试同步读取文件</span>
-<span class="hljs-keyword">let</span> data = fs.readFileSync(filename, <span class="hljs-string">&apos;utf-8&apos;</span>)
-<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;同步读取文件内容 data :&apos;</span>, data)
+//先测试同步读取文件
+let data = fs.readFileSync(filename, &apos;utf-8&apos;)
+console.log(&apos;同步读取文件内容 data :&apos;, data)
 
-<span class="hljs-comment">//同步执行：</span>
-<span class="hljs-comment">//1. 同步读取文件时，无需回调函数，返回值就是读取的数据内容</span>
-<span class="hljs-comment">//2. 主线程阻塞在读取函数这里，一直到读取完成后，才继续向下执行</span>
-<span class="hljs-comment">//3. 慢，效率低</span>
-
-
-<span class="hljs-comment">//异步执行：</span>
-<span class="hljs-comment">//1. 需要注册一个回调函数</span>
-<span class="hljs-comment">//2. 主线发现是异步调用时，直接把任务丢给nodejs的后台线程执行， 主线程继续向下执行其他代码</span>
-<span class="hljs-comment">//3. 当后台执行完成时，会通知通过回调函数通知主线程，主线程执行。</span>
+//同步执行：
+//1. 同步读取文件时，无需回调函数，返回值就是读取的数据内容
+//2. 主线程阻塞在读取函数这里，一直到读取完成后，才继续向下执行
+//3. 慢，效率低
 
 
+//异步执行：
+//1. 需要注册一个回调函数
+//2. 主线发现是异步调用时，直接把任务丢给nodejs的后台线程执行， 主线程继续向下执行其他代码
+//3. 当后台执行完成时，会通知通过回调函数通知主线程，主线程执行。
 
-<span class="hljs-comment">//测试异步读取文件</span>
-fs.readFile(filename, <span class="hljs-string">&apos;utf-8&apos;</span>, <span class="hljs-comment">/*回调函数*/</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err, data</span>) </span>{
-    <span class="hljs-keyword">if</span> (err) {
-        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;读取文件出错:&apos;</span>, err)
-        <span class="hljs-keyword">return</span>
+
+
+//测试异步读取文件
+fs.readFile(filename, &apos;utf-8&apos;, /*回调函数*/ function (err, data) {
+    if (err) {
+        console.log(&apos;读取文件出错:&apos;, err)
+        return
     }
 
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;异步读取文件数据:&apos;</span>, data)
+    console.log(&apos;异步读取文件数据:&apos;, data)
 })
 
-<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;异步读取数据2222!&apos;</span>)
+console.log(&apos;异步读取数据2222!&apos;)
 </code></pre>
 <h2 id="5-异步调用原理（了解即可）">5. 异步调用原理（了解即可）</h2>
 <h3 id="-事件处理机制">- 事件处理机制</h3>
@@ -3297,70 +3301,70 @@ fs.readFile(filename, <span class="hljs-string">&apos;utf-8&apos;</span>, <span 
 <h1 id="四、常用数据类型">四、常用数据类型</h1>
 <h2 id="1-buffer">1. Buffer</h2>
 <p>JavaScript 语言自身只有字符串数据类型，没有二进制数据类型，因此在 Node.js中，定义了一个 Buffer 类，该类用来创建一个专门存放二进制数据的缓存区。</p>
-<pre><code class="lang-js"><span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;=============== buffer 与 编码&quot;</span>);
-<span class="hljs-keyword">const</span> buf = Buffer.from(<span class="hljs-string">&apos;runoob&apos;</span>, <span class="hljs-string">&apos;ascii&apos;</span>);
-<span class="hljs-built_in">console</span>.log(buf);
-<span class="hljs-built_in">console</span>.log(buf.toString());
-<span class="hljs-built_in">console</span>.log(buf.toString(<span class="hljs-string">&apos;utf8&apos;</span>));
-<span class="hljs-built_in">console</span>.log(buf.toString(<span class="hljs-string">&apos;hex&apos;</span>));
+<pre><code class="lang-js">console.log(&quot;=============== buffer 与 编码&quot;);
+const buf = Buffer.from(&apos;runoob&apos;, &apos;ascii&apos;);
+console.log(buf);
+console.log(buf.toString());
+console.log(buf.toString(&apos;utf8&apos;));
+console.log(buf.toString(&apos;hex&apos;));
 
 
-<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;=============== 创建buffer&quot;</span>)
-<span class="hljs-comment">//指定长度，默认值为buffer，string，number</span>
-<span class="hljs-keyword">const</span> buf1 = Buffer.alloc(<span class="hljs-number">10</span>, <span class="hljs-string">&apos;test&apos;</span>)
-<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;buf1 &quot;</span> + buf1)
+console.log(&quot;=============== 创建buffer&quot;)
+//指定长度，默认值为buffer，string，number
+const buf1 = Buffer.alloc(10, &apos;test&apos;)
+console.log(&quot;buf1 &quot; + buf1)
 
-<span class="hljs-comment">//数组，buffer，string</span>
-<span class="hljs-keyword">let</span> buffer = Buffer.from([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>])
+//数组，buffer，string
+let buffer = Buffer.from([1, 2,3,4])
 
-<span class="hljs-built_in">console</span>.log(buffer)
-<span class="hljs-built_in">console</span>.log(buffer.toString())
-<span class="hljs-built_in">console</span>.log(buffer.toJSON())
+console.log(buffer)
+console.log(buffer.toString())
+console.log(buffer.toJSON())
 
-<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;=============写入buffer&quot;</span>)
+console.log(&quot;=============写入buffer&quot;)
 
-<span class="hljs-keyword">let</span> buf2 = Buffer.alloc(<span class="hljs-number">152</span>);
-<span class="hljs-keyword">let</span> len = buf2.write(<span class="hljs-string">&apos;hello world!&apos;</span>)
-<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;len : &quot;</span> + len);
+let buf2 = Buffer.alloc(152);
+let len = buf2.write(&apos;hello world!&apos;)
+console.log(&quot;len : &quot; + len);
 </code></pre>
 <h2 id="2-事件">2. 事件</h2>
 <p>Node.js 有多个内置的事件，我们可以通过引入 events 模块，并通过实例化 EventEmitter 类来绑定和监听事件。</p>
-<pre><code class="lang-js"><span class="hljs-keyword">let</span> event = <span class="hljs-built_in">require</span>(<span class="hljs-string">&apos;events&apos;</span>);
+<pre><code class="lang-js">let event = require(&apos;events&apos;);
 
 
-<span class="hljs-comment">//创建event</span>
-<span class="hljs-keyword">var</span> eventEmitter = <span class="hljs-keyword">new</span> event.EventEmitter();
+//创建event
+var eventEmitter = new event.EventEmitter();
 
-<span class="hljs-comment">//绑定事件</span>
-<span class="hljs-comment">//名字，响应函数</span>
-eventEmitter.on(<span class="hljs-string">&apos;eat&apos;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;begin to eat!&quot;</span>);
-    eventEmitter.emit(<span class="hljs-string">&apos;drink&apos;</span>, <span class="hljs-string">&apos;beer&apos;</span>);
+//绑定事件
+//名字，响应函数
+eventEmitter.on(&apos;eat&apos;, function(){
+    console.log(&quot;begin to eat!&quot;);
+    eventEmitter.emit(&apos;drink&apos;, &apos;beer&apos;);
 })
 
-<span class="hljs-comment">//绑定多个事件</span>
-eventEmitter.on(<span class="hljs-string">&apos;drink&apos;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">what</span>)</span>{
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;begin to drink :&quot;</span>, what);
-    eventEmitter.emit(<span class="hljs-string">&apos;think&apos;</span>);
+//绑定多个事件
+eventEmitter.on(&apos;drink&apos;, function(what){
+    console.log(&quot;begin to drink :&quot;, what);
+    eventEmitter.emit(&apos;think&apos;);
 })
 
-<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;before eat!&quot;</span>);
+console.log(&quot;before eat!&quot;);
 
-<span class="hljs-comment">//触发事件</span>
-<span class="hljs-keyword">let</span> test = <span class="hljs-function">()=&gt;</span> {
-    eventEmitter.emit(<span class="hljs-string">&apos;eat&apos;</span>);
+//触发事件
+let test = ()=&gt; {
+    eventEmitter.emit(&apos;eat&apos;);
 }
 
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">thinkHandler</span>(<span class="hljs-params"></span>)</span>{
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;who am I!&apos;</span>);
+function thinkHandler(){
+    console.log(&apos;who am I!&apos;);
 }
 
-<span class="hljs-comment">//必须写处理函数，否则抛异常</span>
-<span class="hljs-comment">//eventEmitter.addListener(&apos;think&apos;);</span>
-eventEmitter.addListener(<span class="hljs-string">&apos;think&apos;</span>,thinkHandler);
-eventEmitter.removeListener(<span class="hljs-string">&apos;think&apos;</span>, thinkHandler);
-eatCount = eventEmitter.listenerCount(<span class="hljs-string">&apos;eat&apos;</span>);
-<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;eat count :&quot;</span> +eatCount);
+//必须写处理函数，否则抛异常
+//eventEmitter.addListener(&apos;think&apos;);
+eventEmitter.addListener(&apos;think&apos;,thinkHandler);
+eventEmitter.removeListener(&apos;think&apos;, thinkHandler);
+eatCount = eventEmitter.listenerCount(&apos;eat&apos;);
+console.log(&quot;eat count :&quot; +eatCount);
 
 
 test();
@@ -3371,15 +3375,15 @@ test();
 <h2 id="1模块系统（exports，require）">1.模块系统（exports，require）</h2>
 <p>为了让Node.js的文件可以相互调用，Node.js提供了一个简单的模块系统</p>
 <p>一个文件就是一个模块，使用export关键字实现</p>
-<pre><code class="lang-js"><span class="hljs-comment">//hello.js</span>
-<span class="hljs-keyword">let</span> Hello = <span class="hljs-function">() =&gt;</span> {
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;hello world!&quot;</span>)
+<pre><code class="lang-js">//hello.js
+let Hello = () =&gt; {
+    console.log(&quot;hello world!&quot;)
 }
-<span class="hljs-built_in">module</span>.exports = Hello;
+module.exports = Hello;
 </code></pre>
 <p>有导出才有导入，两者一定是配合使用的。</p>
-<pre><code class="lang-js"><span class="hljs-comment">//main.js </span>
-<span class="hljs-keyword">var</span> Hello = <span class="hljs-built_in">require</span>(<span class="hljs-string">&apos;./hello&apos;</span>); 
+<pre><code class="lang-js">//main.js 
+var Hello = require(&apos;./hello&apos;); 
 Hello();
 </code></pre>
 <h2 id="2-全局变量">2. 全局变量</h2>
@@ -3395,41 +3399,41 @@ Hello();
 <li><code>setInterval/clearInterval</code>：定时器</li>
 </ul>
 <pre><code class="lang-js">
-<span class="hljs-keyword">let</span> array = [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>];
-<span class="hljs-built_in">console</span>.table(array);
-<span class="hljs-built_in">console</span>.log(array);
+let array = [1,2,3,4];
+console.table(array);
+console.log(array);
 
 
-<span class="hljs-keyword">let</span> obj = {<span class="hljs-attr">name</span> : <span class="hljs-string">&apos;lily&apos;</span>, <span class="hljs-attr">age</span> : <span class="hljs-number">20</span>, <span class="hljs-attr">address</span> : <span class="hljs-string">&apos;Shenzhen&apos;</span>};
-<span class="hljs-built_in">console</span>.table(obj);
+let obj = {name : &apos;lily&apos;, age : 20, address : &apos;Shenzhen&apos;};
+console.table(obj);
 
-<span class="hljs-built_in">console</span>.table(<span class="hljs-string">&quot;hello world!&quot;</span>);
-
-
-<span class="hljs-built_in">console</span>.log(__dirname)
-<span class="hljs-built_in">console</span>.log(__filename)
+console.table(&quot;hello world!&quot;);
 
 
+console.log(__dirname)
+console.log(__filename)
 
-<span class="hljs-keyword">let</span> argv = process.argv;
 
-<span class="hljs-built_in">console</span>.table(argv);
 
-argv.forEach(<span class="hljs-function">(<span class="hljs-params">value, index</span>) =&gt;</span> {
-    <span class="hljs-built_in">console</span>.log(index, value);
+let argv = process.argv;
+
+console.table(argv);
+
+argv.forEach((value, index) =&gt; {
+    console.log(index, value);
 })
 
 
-<span class="hljs-keyword">let</span> t1 = <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
-   <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;帅不过三秒&apos;</span>);
-   <span class="hljs-built_in">clearInterval</span>(t2);
-}, <span class="hljs-number">3000</span>);
+let t1 = setTimeout(function () {
+   console.log(&apos;帅不过三秒&apos;);
+   clearInterval(t2);
+}, 3000);
 
 
-<span class="hljs-keyword">let</span> t2 = <span class="hljs-built_in">setInterval</span>(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
-   <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;======= 1s 又 1s &quot;</span>)
-    <span class="hljs-comment">//clearTimeout(t1);</span>
-}, <span class="hljs-number">1000</span>);
+let t2 = setInterval(function () {
+   console.log(&quot;======= 1s 又 1s &quot;)
+    //clearTimeout(t1);
+}, 1000);
 </code></pre>
 <h2 id="3-path模块">3. path<a href="http://www.runoob.com/nodejs/nodejs-path-module.html" target="_blank">模块</a></h2>
 <blockquote>
@@ -3447,19 +3451,19 @@ argv.forEach(<span class="hljs-function">(<span class="hljs-params">value, index
 <li><code>path.normalize</code>：将一个路径正常化</li>
 <li><code>path.resolve([from ...], to)</code>  基于当前的执行目录，返回一个绝对路径，退一层演示</li>
 </ul>
-<pre><code class="lang-js"><span class="hljs-keyword">var</span> path = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;path&quot;</span>);
+<pre><code class="lang-js">var path = require(&quot;path&quot;);
 
-<span class="hljs-comment">// 格式化路径</span>
-<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;normalization : &apos;</span> + path.normalize(<span class="hljs-string">&apos;/test/test1//2slashes/1slash/tab/..&apos;</span>));
+// 格式化路径
+console.log(&apos;normalization : &apos; + path.normalize(&apos;/test/test1//2slashes/1slash/tab/..&apos;));
 
-<span class="hljs-comment">// 连接路径</span>
-<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;joint path : &apos;</span> + path.join(<span class="hljs-string">&apos;/test&apos;</span>, <span class="hljs-string">&apos;test1&apos;</span>, <span class="hljs-string">&apos;2slashes/1slash&apos;</span>, <span class="hljs-string">&apos;tab&apos;</span>, <span class="hljs-string">&apos;..&apos;</span>));
+// 连接路径
+console.log(&apos;joint path : &apos; + path.join(&apos;/test&apos;, &apos;test1&apos;, &apos;2slashes/1slash&apos;, &apos;tab&apos;, &apos;..&apos;));
 
-<span class="hljs-comment">// 转换为绝对路径</span>
-<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;resolve : &apos;</span> + path.resolve(<span class="hljs-string">&apos;main.js&apos;</span>));
+// 转换为绝对路径
+console.log(&apos;resolve : &apos; + path.resolve(&apos;main.js&apos;));
 
-<span class="hljs-comment">// 路径中文件的后缀名</span>
-<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;ext name : &apos;</span> + path.extname(<span class="hljs-string">&apos;main.js&apos;</span>));
+// 路径中文件的后缀名
+console.log(&apos;ext name : &apos; + path.extname(&apos;main.js&apos;));
 </code></pre>
 <h2 id="4-fs模块">4. fs模块</h2>
 <blockquote>
@@ -3485,31 +3489,31 @@ argv.forEach(<span class="hljs-function">(<span class="hljs-params">value, index
 <li><p><code>fs.watchFile</code>：监视文件的变化</p>
 </li>
 </ul>
-<pre><code class="lang-js"><span class="hljs-keyword">let</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&apos;fs&apos;</span>)
+<pre><code class="lang-js">let fs = require(&apos;fs&apos;)
 
-<span class="hljs-keyword">let</span> filename = <span class="hljs-string">&apos;1.txt&apos;</span>
-<span class="hljs-keyword">let</span> data = fs.readFileSync(filename)
+let filename = &apos;1.txt&apos;
+let data = fs.readFileSync(filename)
 
-<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;data :&apos;</span>, data.toString())
-<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;读取结束!&apos;</span>)
+console.log(&apos;data :&apos;, data.toString())
+console.log(&apos;读取结束!&apos;)
 
-fs.writeFileSync(<span class="hljs-string">&apos;./2.txt&apos;</span>, data.toString())
-<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;同步写结束!&apos;</span>)
+fs.writeFileSync(&apos;./2.txt&apos;, data.toString())
+console.log(&apos;同步写结束!&apos;)
 
 
-fs.writeFile(<span class="hljs-string">&apos;./3.txt&apos;</span>, data.toString(), <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err</span>) </span>{
-    <span class="hljs-keyword">if</span> (err) {
-        <span class="hljs-keyword">return</span>
+fs.writeFile(&apos;./3.txt&apos;, data.toString(), function (err) {
+    if (err) {
+        return
     }
 
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;异步写文件成功!&apos;</span>)
+    console.log(&apos;异步写文件成功!&apos;)
 })
 
-<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;异步写还没成功...&apos;</span>)
+console.log(&apos;异步写还没成功...&apos;)
 
-fs.stat(<span class="hljs-string">&apos;./1.txt&apos;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err, stat</span>) </span>{
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;isFile :&apos;</span>, stat.isFile())
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;isDir :&apos;</span>, stat.isDirectory())
+fs.stat(&apos;./1.txt&apos;, function (err, stat) {
+    console.log(&apos;isFile :&apos;, stat.isFile())
+    console.log(&apos;isDir :&apos;, stat.isDirectory())
 })
 </code></pre>
 <h2 id="5-stream">5. <a href="http://nodejs.cn/api/stream.html" target="_blank">stream</a></h2>
@@ -3536,27 +3540,27 @@ fs.stat(<span class="hljs-string">&apos;./1.txt&apos;</span>, <span class="hljs-
 <p>传统的<code>fs.readFile</code>在读取小文件时很方便，因为它是一次把文件全部读取到内存中；假如我们要读取一个3G大小的电影文件，那么内存不就爆了么？node提供了流对象来读取大文件。</p>
 <p>流的方式其实就是把所有的数据分成一个个的小数据块（chunk），一次读取一个chunk，分很多次就能读取特别大的文件，写入也是同理。这种读取方式就像水龙头里的水流一样，一点一点的流出来，而不是一下子涌出来，所以称为流。</p>
 </blockquote>
-<pre><code class="lang-js"><span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&apos;fs&apos;</span>)
-<span class="hljs-keyword">const</span> path = <span class="hljs-built_in">require</span>(<span class="hljs-string">&apos;path&apos;</span>)
+<pre><code class="lang-js">const fs = require(&apos;fs&apos;)
+const path = require(&apos;path&apos;)
 
-<span class="hljs-comment">// fs.readFile(&apos;bigfile&apos;, (err, data)=&gt;{</span>
-<span class="hljs-comment">//     if(err){</span>
-<span class="hljs-comment">//         throw err;</span>
-<span class="hljs-comment">//     }</span>
-<span class="hljs-comment">//     console.log(data.length);</span>
-<span class="hljs-comment">// })</span>
+// fs.readFile(&apos;bigfile&apos;, (err, data)=&gt;{
+//     if(err){
+//         throw err;
+//     }
+//     console.log(data.length);
+// })
 
-<span class="hljs-comment">// 需求复制一份MobyLinuxVM.vhdx文件，简写为pipe，on效果一致</span>
-<span class="hljs-keyword">const</span> reader = fs.createReadStream(<span class="hljs-string">&apos;MobyLinuxVM.vhdx&apos;</span>)
-<span class="hljs-keyword">const</span> writer = fs.createWriteStream(<span class="hljs-string">&apos;MobyLinuxVM-2.vhdx&apos;</span>)
-<span class="hljs-comment">// let total = 0</span>
-<span class="hljs-comment">// reader.on(&apos;data&apos;, (chunk)=&gt;{</span>
-<span class="hljs-comment">//     total += chunk.length</span>
-<span class="hljs-comment">//     writer.write(chunk)</span>
-<span class="hljs-comment">// })</span>
-<span class="hljs-comment">// reader.on(&apos;end&apos;,()=&gt;{</span>
-<span class="hljs-comment">//     console.log(&apos;总大小：&apos;+total/(1024*1024*1024));</span>
-<span class="hljs-comment">// })</span>
+// 需求复制一份MobyLinuxVM.vhdx文件，简写为pipe，on效果一致
+const reader = fs.createReadStream(&apos;MobyLinuxVM.vhdx&apos;)
+const writer = fs.createWriteStream(&apos;MobyLinuxVM-2.vhdx&apos;)
+// let total = 0
+// reader.on(&apos;data&apos;, (chunk)=&gt;{
+//     total += chunk.length
+//     writer.write(chunk)
+// })
+// reader.on(&apos;end&apos;,()=&gt;{
+//     console.log(&apos;总大小：&apos;+total/(1024*1024*1024));
+// })
 reader.pipe(writer);
 </code></pre>
 <p><strong>任务：用以下知识点完成大文件的拷贝。</strong></p>
@@ -3642,66 +3646,66 @@ let fs = require(&apos;fs&apos;)</p>
 
   // checkStat1()
 </code></pre><p>promise写法如下：</p>
-<pre><code class="lang-js"><span class="hljs-keyword">let</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&apos;fs&apos;</span>)
+<pre><code class="lang-js">let fs = require(&apos;fs&apos;)
 
-<span class="hljs-comment">//解决办法：把每一个异步函数都封装成一个pomise</span>
-<span class="hljs-keyword">let</span> readFilePromise = <span class="hljs-function">() =&gt;</span> {
-    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
-        <span class="hljs-keyword">try</span> {
-            fs.readFile(<span class="hljs-string">&apos;./1.txt&apos;</span>, <span class="hljs-string">&apos;utf-8&apos;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err, data</span>) </span>{
-                <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;读取文件: &apos;</span>, data)
+//解决办法：把每一个异步函数都封装成一个pomise
+let readFilePromise = () =&gt; {
+    return new Promise((resolve, reject) =&gt; {
+        try {
+            fs.readFile(&apos;./1.txt&apos;, &apos;utf-8&apos;, function (err, data) {
+                console.log(&apos;读取文件: &apos;, data)
                 resolve(data)
             })
-        } <span class="hljs-keyword">catch</span> (e) {
+        } catch (e) {
             reject(e)
         }
     })
 }
 
-<span class="hljs-keyword">let</span> writeFilePromise = <span class="hljs-function">(<span class="hljs-params">data</span>) =&gt;</span> {
-    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
-        fs.writeFile(<span class="hljs-string">&apos;./2.txt&apos;</span>, data, <span class="hljs-string">&apos;utf-8&apos;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err</span>) </span>{
-            <span class="hljs-keyword">if</span> (err) {
+let writeFilePromise = (data) =&gt; {
+    return new Promise((resolve, reject) =&gt; {
+        fs.writeFile(&apos;./2.txt&apos;, data, &apos;utf-8&apos;, function (err) {
+            if (err) {
                 reject(err)
             }
-            resolve(<span class="hljs-string">&apos;写入成功!&apos;</span>)
+            resolve(&apos;写入成功!&apos;)
         })
     })
 }
 
-<span class="hljs-keyword">let</span> statPromise = <span class="hljs-function">() =&gt;</span> {
-    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
-        fs.stat(<span class="hljs-string">&apos;./2.txt&apos;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err, stat</span>) </span>{
-            <span class="hljs-keyword">if</span> (err) {
+let statPromise = () =&gt; {
+    return new Promise((resolve, reject) =&gt; {
+        fs.stat(&apos;./2.txt&apos;, function (err, stat) {
+            if (err) {
                 reject(err)
             }
-            <span class="hljs-comment">// console.log(&apos;文件状态:&apos;, stat)</span>
+            // console.log(&apos;文件状态:&apos;, stat)
             resolve(stat)
         })
     })
 }
 
-<span class="hljs-comment">//如果想使用async，await，promise，</span>
-<span class="hljs-comment">//调用函数的外面修饰为async</span>
-<span class="hljs-comment">//promise函数前面加上await</span>
+//如果想使用async，await，promise，
+//调用函数的外面修饰为async
+//promise函数前面加上await
 
-<span class="hljs-keyword">let</span> checkStat2 = <span class="hljs-keyword">async</span> () =&gt; {
-    <span class="hljs-keyword">try</span> {
-        <span class="hljs-keyword">let</span> data = <span class="hljs-keyword">await</span> readFilePromise()
+let checkStat2 = async () =&gt; {
+    try {
+        let data = await readFilePromise()
 
-        <span class="hljs-keyword">let</span> res = <span class="hljs-keyword">await</span> writeFilePromise(data)
-        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;res :&apos;</span>, res)
+        let res = await writeFilePromise(data)
+        console.log(&apos;res :&apos;, res)
 
-        <span class="hljs-keyword">let</span> stat = <span class="hljs-keyword">await</span> statPromise()
-        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;stat:&apos;</span>, stat)
+        let stat = await statPromise()
+        console.log(&apos;stat:&apos;, stat)
 
-    } <span class="hljs-keyword">catch</span> (e) {
-        <span class="hljs-built_in">console</span>.log(e)
+    } catch (e) {
+        console.log(e)
     }
 }
 
 checkStat2()
-<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;333333333&apos;</span>)
+console.log(&apos;333333333&apos;)
 </code></pre>
 <p><strong>异步代码的终极写法：</strong></p>
 <ol>
@@ -3775,7 +3779,7 @@ npm 命令 --help
 npm config list
 </code></pre>
 <h3 id="-设置淘宝镜像">- 设置淘宝镜像</h3>
-<pre><code class="lang-sh">npm config <span class="hljs-built_in">set</span> registry https://registry.npm.taobao.org
+<pre><code class="lang-sh">npm config set registry https://registry.npm.taobao.org
 </code></pre>
 <p>常见错误：</p>
 <pre><code class="lang-js">json parse faild }....@solc
@@ -3784,7 +3788,7 @@ npm config list
 <pre><code class="lang-js">npm cache clean --force
 </code></pre>
 <h3 id="-全局安装目录">==- 全局安装目录==</h3>
-<pre><code class="lang-js">mac : <span class="hljs-regexp">/usr/</span>local/Cellar/node/<span class="hljs-number">10.11</span><span class="hljs-number">.0</span>/bin
+<pre><code class="lang-js">mac : /usr/local/Cellar/node/10.11.0/bin
 </code></pre>
 <h2 id="4-交互式解释器">4. 交互式解释器</h2>
 <h3 id="-简单计算">- 简单计算</h3>
@@ -3803,29 +3807,29 @@ npm config list
 </code></pre>
 <h3 id="-使用变量">- 使用变量</h3>
 <p>不用变量时直接输出，使用时被变量接收</p>
-<pre><code class="lang-shell"><span class="hljs-meta">$</span><span class="bash"> node</span>
-<span class="hljs-meta">&gt;</span><span class="bash"> x = 10</span>
+<pre><code class="lang-shell">$ node
+&gt; x = 10
 10
-<span class="hljs-meta">&gt;</span><span class="bash"> var y = 10</span>
+&gt; var y = 10
 undefined
-<span class="hljs-meta">&gt;</span><span class="bash"> x + y</span>
+&gt; x + y
 20
-<span class="hljs-meta">&gt;</span><span class="bash"> console.log(<span class="hljs-string">&quot;Hello World&quot;</span>)</span>
+&gt; console.log(&quot;Hello World&quot;)
 Hello World
 undefined
 </code></pre>
 <h3 id="-下划线变量">- 下划线(_)变量</h3>
 <p>你可以使用下划线(_)获取上一个表达式的运算结果：</p>
-<pre><code class="lang-shell"><span class="hljs-meta">$</span><span class="bash"> node</span>
-<span class="hljs-meta">&gt;</span><span class="bash"> var x = 10</span>
+<pre><code class="lang-shell">$ node
+&gt; var x = 10
 undefined
-<span class="hljs-meta">&gt;</span><span class="bash"> var y = 20</span>
+&gt; var y = 20
 undefined
-<span class="hljs-meta">&gt;</span><span class="bash"> x + y</span>
+&gt; x + y
 30
-<span class="hljs-meta">&gt;</span><span class="bash"> var sum = _</span>
+&gt; var sum = _
 undefined
-<span class="hljs-meta">&gt;</span><span class="bash"> console.log(sum)</span>
+&gt; console.log(sum)
 30
 undefined
 </code></pre>
@@ -3856,7 +3860,7 @@ undefined
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第1节:Node.js介绍","level":"1.13.1","depth":2,"next":{"title":"第七章:subgraph","level":"1.14","depth":1,"path":"07_subgraph/README.md","ref":"07_subgraph/README.md","articles":[{"title":"第0节:命令速查","level":"1.14.1","depth":2,"path":"07_subgraph/00_命令速查.md","ref":"07_subgraph/00_命令速查.md","articles":[]},{"title":"第1节:概述","level":"1.14.2","depth":2,"path":"07_subgraph/01_概述.md","ref":"07_subgraph/01_概述.md","articles":[]},{"title":"第2节:实战教程","level":"1.14.3","depth":2,"path":"07_subgraph/02_实战教程.md","ref":"07_subgraph/02_实战教程.md","articles":[]},{"title":"第3节:语法学习","level":"1.14.4","depth":2,"path":"07_subgraph/03_语法学习.md","ref":"07_subgraph/03_语法学习.md","articles":[]},{"title":"第4节:支持的网络","level":"1.14.5","depth":2,"path":"07_subgraph/04_支持的网络.md","ref":"07_subgraph/04_支持的网络.md","articles":[]}]},"previous":{"title":"第六章:ethers","level":"1.13","depth":1,"path":"06_ethers/README.md","ref":"06_ethers/README.md","articles":[{"title":"第1节:Node.js介绍","level":"1.13.1","depth":2,"path":"06_ethers/01_Node.js介绍.md","ref":"06_ethers/01_Node.js介绍.md","articles":[]}]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"06_ethers/01_Node.js介绍.md","mtime":"2023-09-23T13:25:36.528Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-19T22:08:50.792Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第1节:Node.js介绍","level":"1.13.1","depth":2,"next":{"title":"第七章:subgraph","level":"1.14","depth":1,"path":"07_subgraph/README.md","ref":"07_subgraph/README.md","articles":[{"title":"第0节:命令速查","level":"1.14.1","depth":2,"path":"07_subgraph/00_命令速查.md","ref":"07_subgraph/00_命令速查.md","articles":[]},{"title":"第1节:概述","level":"1.14.2","depth":2,"path":"07_subgraph/01_概述.md","ref":"07_subgraph/01_概述.md","articles":[]},{"title":"第2节:实战教程","level":"1.14.3","depth":2,"path":"07_subgraph/02_实战教程.md","ref":"07_subgraph/02_实战教程.md","articles":[]},{"title":"第3节:语法学习","level":"1.14.4","depth":2,"path":"07_subgraph/03_语法学习.md","ref":"07_subgraph/03_语法学习.md","articles":[]},{"title":"第4节:支持的网络","level":"1.14.5","depth":2,"path":"07_subgraph/04_支持的网络.md","ref":"07_subgraph/04_支持的网络.md","articles":[]}]},"previous":{"title":"第六章:ethers","level":"1.13","depth":1,"path":"06_ethers/README.md","ref":"06_ethers/README.md","articles":[{"title":"第1节:Node.js介绍","level":"1.13.1","depth":2,"path":"06_ethers/01_Node.js介绍.md","ref":"06_ethers/01_Node.js介绍.md","articles":[]}]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"06_ethers/01_Node.js介绍.md","mtime":"2023-09-23T13:25:36.528Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3939,6 +3943,14 @@ undefined
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

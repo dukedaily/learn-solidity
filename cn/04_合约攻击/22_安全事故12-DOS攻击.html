@@ -36,6 +36,10 @@
                 
             
                 
+                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
+                
+            
+                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3015,24 +3019,24 @@
                                 
                                 <h1 id="第22节：安全事故12-dos攻击">第22节：安全事故12-DOS攻击</h1>
 <p>调用外部合约可能永久失败导致本合约不能接受新的指令，例如当合约主动对另外一个合约转账，而被转账合约没有接受转账的函数时，转账失败，此时合约可能进入拒绝服务状态。</p>
-<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
-pragma solidity <span class="hljs-number">0.8</span><span class="hljs-number">.11</span>;
+<pre><code class="lang-js">// SPDX-License-Identifier: MIT
+pragma solidity 0.8.11;
 
 contract Refunder {
 
 address[] private refundAddresses;
-mapping (<span class="hljs-function"><span class="hljs-params">address</span> =&gt;</span> uint) public refunds;
-    <span class="hljs-function"><span class="hljs-title">constructor</span>(<span class="hljs-params"></span>)</span> {
-        refundAddresses.push(<span class="hljs-number">0x79B483371E87d664cd39491b5F06250165e4b184</span>);
-        refundAddresses.push(<span class="hljs-number">0x78731D3Ca6b7E34aC0F824c42a7cC18A495cabaB</span>);
+mapping (address =&gt; uint) public refunds;
+    constructor() {
+        refundAddresses.push(0x79B483371E87d664cd39491b5F06250165e4b184);
+        refundAddresses.push(0x78731D3Ca6b7E34aC0F824c42a7cC18A495cabaB);
     }
 
-    <span class="hljs-comment">// bad</span>
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">refundAll</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> </span>{
-        <span class="hljs-comment">// arbitrary length iteration based on how many addresses participated</span>
-        <span class="hljs-keyword">for</span>(uint x; x &lt; refundAddresses.length; x++) { 
-            <span class="hljs-comment">// doubly bad, now a single failure on send will hold up all funds</span>
-            <span class="hljs-built_in">require</span>(payable(refundAddresses[x]).send(refunds[refundAddresses[x]]));
+    // bad
+    function refundAll() public {
+        // arbitrary length iteration based on how many addresses participated
+        for(uint x; x &lt; refundAddresses.length; x++) { 
+            // doubly bad, now a single failure on send will hold up all funds
+            require(payable(refundAddresses[x]).send(refunds[refundAddresses[x]]));
         }
     }
 }
@@ -3066,7 +3070,7 @@ mapping (<span class="hljs-function"><span class="hljs-params">address</span> =&
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第22节:安全事故12-DOS攻击","level":"1.11.16","depth":2,"next":{"title":"第23节:安全事故13-encodePacked攻击","level":"1.11.17","depth":2,"path":"04_合约攻击/23_安全事故13-encodePacked攻击.md","ref":"04_合约攻击/23_安全事故13-encodePacked攻击.md","articles":[]},"previous":{"title":"第21节:安全事故11-tx.origin攻击","level":"1.11.15","depth":2,"path":"04_合约攻击/21_安全事故11-tx.origin攻击.md","ref":"04_合约攻击/21_安全事故11-tx.origin攻击.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"04_合约攻击/22_安全事故12-DOS攻击.md","mtime":"2023-03-21T14:01:27.000Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-19T22:08:50.792Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第22节:安全事故12-DOS攻击","level":"1.11.16","depth":2,"next":{"title":"第23节:安全事故13-encodePacked攻击","level":"1.11.17","depth":2,"path":"04_合约攻击/23_安全事故13-encodePacked攻击.md","ref":"04_合约攻击/23_安全事故13-encodePacked攻击.md","articles":[]},"previous":{"title":"第21节:安全事故11-tx.origin攻击","level":"1.11.15","depth":2,"path":"04_合约攻击/21_安全事故11-tx.origin攻击.md","ref":"04_合约攻击/21_安全事故11-tx.origin攻击.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"04_合约攻击/22_安全事故12-DOS攻击.md","mtime":"2023-03-21T14:01:27.000Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3149,6 +3153,14 @@ mapping (<span class="hljs-function"><span class="hljs-params">address</span> =&
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

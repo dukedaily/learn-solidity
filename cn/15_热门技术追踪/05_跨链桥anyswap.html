@@ -36,6 +36,10 @@
                 
             
                 
+                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
+                
+            
+                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3051,19 +3055,19 @@
 </ol>
 <h2 id="用户部署a链合约">用户部署A链合约</h2>
 <p>A链合约中，根据业务需求，最终调用AnycallV7Proxy的anyCall方法，调用后请求会发送到SMPC网络，最终传递到B链</p>
-<pre><code class="lang-js">pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.10</span>;
+<pre><code class="lang-js">pragma solidity ^0.8.10;
 
-<span class="hljs-comment">/// IAnycallProxy interface of the anycall proxy</span>
+/// IAnycallProxy interface of the anycall proxy
 interface IAnycallProxy {
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">executor</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">address</span>)</span>;
+    function executor() external view returns (address);
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">anyCall</span>(<span class="hljs-params">
-        address _to, <span class="hljs-comment">// B链合约地址</span>
-        bytes calldata _data, <span class="hljs-comment">//B链执行的数据 </span>
-        uint256 _toChainID, <span class="hljs-comment">// B链ID</span>
+    function anyCall(
+        address _to, // B链合约地址
+        bytes calldata _data, //B链执行的数据 
+        uint256 _toChainID, // B链ID
         uint256 _flags,
         bytes calldata _extdata
-    </span>) <span class="hljs-title">external</span> <span class="hljs-title">payable</span></span>;
+    ) external payable;
 }
 </code></pre>
 <h2 id="用户部署b链合约">用户部署B链合约</h2>
@@ -3090,10 +3094,10 @@ interface IAnycallProxy {
 </ol>
 <h1 id="自己运行demo">自己运行demo</h1>
 <p><a href="https://github.com/dukedaily/multchain-anycallv7-example" target="_blank">https://github.com/dukedaily/multchain-anycallv7-example</a></p>
-<pre><code class="lang-sh"><span class="hljs-comment"># 0x48636063bD54f705E8c5b5858a0462F896c05ADC</span>
+<pre><code class="lang-sh"># 0x48636063bD54f705E8c5b5858a0462F896c05ADC
 yarn hardhat deploy --network ftmtest
 
-<span class="hljs-comment"># 0x8B43B8E728Af345830732A6A0Bd78BB754Fd51a3</span>
+# 0x8B43B8E728Af345830732A6A0Bd78BB754Fd51a3
 yarn hardhat deploy --network bnbtest
 
  yarn hardhat run ./scripts/1testanycall.js --network bnbtest
@@ -3174,7 +3178,7 @@ yarn hardhat deploy --network bnbtest
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第5节:跨链桥anyswap","level":"1.22.5","depth":2,"next":{"title":"第6节:跨链桥wormhole","level":"1.22.6","depth":2,"path":"15_热门技术追踪/06_跨链桥wormhole.md","ref":"15_热门技术追踪/06_跨链桥wormhole.md","articles":[]},"previous":{"title":"第4节:从HD钱包到MPC钱包","level":"1.22.4","depth":2,"path":"15_热门技术追踪/04_从HD钱包到MPC钱包.md","ref":"15_热门技术追踪/04_从HD钱包到MPC钱包.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"15_热门技术追踪/05_跨链桥anyswap.md","mtime":"2023-03-21T14:01:28.000Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-19T22:08:50.792Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第5节:跨链桥anyswap","level":"1.22.5","depth":2,"next":{"title":"第6节:跨链桥wormhole","level":"1.22.6","depth":2,"path":"15_热门技术追踪/06_跨链桥wormhole.md","ref":"15_热门技术追踪/06_跨链桥wormhole.md","articles":[]},"previous":{"title":"第4节:从HD钱包到MPC钱包","level":"1.22.4","depth":2,"path":"15_热门技术追踪/04_从HD钱包到MPC钱包.md","ref":"15_热门技术追踪/04_从HD钱包到MPC钱包.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"15_热门技术追踪/05_跨链桥anyswap.md","mtime":"2023-03-21T14:01:28.000Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3257,6 +3261,14 @@ yarn hardhat deploy --network bnbtest
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

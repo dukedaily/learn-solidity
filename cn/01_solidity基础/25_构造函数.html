@@ -36,6 +36,10 @@
                 
             
                 
+                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
+                
+            
+                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3022,59 +3026,59 @@
 <li>构造函数是可选的，在部署合约时会自动被调用</li>
 <li>在合约继承的时候，如果父合约有构造函数，则需要显示的对父合约进行构造</li>
 </ol>
-<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
-pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
+<pre><code class="lang-js">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.13;
 
-<span class="hljs-comment">// Base contract X</span>
+// Base contract X
 contract X {
     string public name;
 
-    <span class="hljs-function"><span class="hljs-title">constructor</span>(<span class="hljs-params">string memory _name</span>)</span> {
+    constructor(string memory _name) {
         name = _name;
     }
 }
 
-<span class="hljs-comment">// Base contract Y</span>
+// Base contract Y
 contract Y {
     string public text;
 
-    <span class="hljs-function"><span class="hljs-title">constructor</span>(<span class="hljs-params">string memory _text</span>)</span> {
+    constructor(string memory _text) {
         text = _text;
     }
 }
 
-<span class="hljs-comment">// There are 2 ways to initialize parent contract with parameters.</span>
+// There are 2 ways to initialize parent contract with parameters.
 
-<span class="hljs-comment">// 1. Pass the parameters here in the inheritance list.</span>
-contract B is X(<span class="hljs-string">&quot;Input to X&quot;</span>), <span class="hljs-function"><span class="hljs-title">Y</span>(<span class="hljs-params"><span class="hljs-string">&quot;Input to Y&quot;</span></span>)</span> {
+// 1. Pass the parameters here in the inheritance list.
+contract B is X(&quot;Input to X&quot;), Y(&quot;Input to Y&quot;) {
 
 }
 
 contract C is X, Y {
-    <span class="hljs-comment">// 2. Pass the parameters here in the constructor,</span>
-    <span class="hljs-comment">// similar to function modifiers.</span>
-    <span class="hljs-title">constructor</span>(<span class="hljs-params">string memory _name, string memory _text</span>) <span class="hljs-title">X</span>(<span class="hljs-params">_name</span>) <span class="hljs-title">Y</span>(<span class="hljs-params">_text</span>) {}
+    // 2. Pass the parameters here in the constructor,
+    // similar to function modifiers.
+    constructor(string memory _name, string memory _text) X(_name) Y(_text) {}
 }
 
-<span class="hljs-comment">// Parent constructors are always called in the order of inheritance</span>
-<span class="hljs-comment">// regardless of the order of parent contracts listed in the</span>
-<span class="hljs-comment">// constructor of the child contract.</span>
+// Parent constructors are always called in the order of inheritance
+// regardless of the order of parent contracts listed in the
+// constructor of the child contract.
 
-<span class="hljs-comment">// 构造顺序取决于继承顺序（由左至右），而不是实例化顺序</span>
-<span class="hljs-comment">// Order of constructors called:</span>
-<span class="hljs-comment">// 1. X</span>
-<span class="hljs-comment">// 2. Y</span>
-<span class="hljs-comment">// 3. D</span>
+// 构造顺序取决于继承顺序（由左至右），而不是实例化顺序
+// Order of constructors called:
+// 1. X
+// 2. Y
+// 3. D
 contract D is X, Y {
-    <span class="hljs-title">constructor</span>(<span class="hljs-params"></span>) <span class="hljs-title">X</span>(<span class="hljs-params"><span class="hljs-string">&quot;X was called&quot;</span></span>) <span class="hljs-title">Y</span>(<span class="hljs-params"><span class="hljs-string">&quot;Y was called&quot;</span></span>) {}
+    constructor() X(&quot;X was called&quot;) Y(&quot;Y was called&quot;) {}
 }
 
-<span class="hljs-comment">// Order of constructors called:</span>
-<span class="hljs-comment">// 1. X</span>
-<span class="hljs-comment">// 2. Y</span>
-<span class="hljs-comment">// 3. E</span>
+// Order of constructors called:
+// 1. X
+// 2. Y
+// 3. E
 contract E is X, Y {
-    <span class="hljs-title">constructor</span>(<span class="hljs-params"></span>) <span class="hljs-title">Y</span>(<span class="hljs-params"><span class="hljs-string">&quot;Y was called&quot;</span></span>) <span class="hljs-title">X</span>(<span class="hljs-params"><span class="hljs-string">&quot;X was called&quot;</span></span>) {}
+    constructor() Y(&quot;Y was called&quot;) X(&quot;X was called&quot;) {}
 }
 </code></pre>
 
@@ -3104,7 +3108,7 @@ contract E is X, Y {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第25节:构造函数","level":"1.8.25","depth":2,"next":{"title":"第26节:可见性visibility","level":"1.8.26","depth":2,"path":"01_solidity基础/26_可见性visibility.md","ref":"01_solidity基础/26_可见性visibility.md","articles":[]},"previous":{"title":"第24节:继承状态变量_覆盖","level":"1.8.24","depth":2,"path":"01_solidity基础/24_继承状态变量_覆盖.md","ref":"01_solidity基础/24_继承状态变量_覆盖.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"01_solidity基础/25_构造函数.md","mtime":"2023-09-23T13:08:36.915Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-19T22:08:50.792Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第25节:构造函数","level":"1.8.25","depth":2,"next":{"title":"第26节:可见性visibility","level":"1.8.26","depth":2,"path":"01_solidity基础/26_可见性visibility.md","ref":"01_solidity基础/26_可见性visibility.md","articles":[]},"previous":{"title":"第24节:继承状态变量_覆盖","level":"1.8.24","depth":2,"path":"01_solidity基础/24_继承状态变量_覆盖.md","ref":"01_solidity基础/24_继承状态变量_覆盖.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"01_solidity基础/25_构造函数.md","mtime":"2023-09-23T13:08:36.915Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3187,6 +3191,14 @@ contract E is X, Y {
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

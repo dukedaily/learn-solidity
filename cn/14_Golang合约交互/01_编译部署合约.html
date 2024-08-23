@@ -36,6 +36,10 @@
                 
             
                 
+                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
+                
+            
+                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3029,10 +3033,10 @@
 </ul>
 <h2 id="安装编译器">安装编译器</h2>
 <p>solc会对合约进行编译，生成：abi和bytecode</p>
-<pre><code class="lang-sh"><span class="hljs-comment"># Ubuntu</span>
+<pre><code class="lang-sh"># Ubuntu
 sudo snap install solc --edge
 
-<span class="hljs-comment"># MacOS</span>
+# MacOS
 brew update
 brew tap ethereum/ethereum
 brew install solidity
@@ -3040,26 +3044,26 @@ brew install solidity
 <h2 id="安装abigen">安装abigen</h2>
 <p>abigen可以对abi进行编译，生成配套的go代码，从而支持我们进行后续开发。</p>
 <pre><code class="lang-sh">go get -u github.com/ethereum/go-ethereum
-<span class="hljs-built_in">cd</span> <span class="hljs-variable">$GOPATH</span>/src/github.com/ethereum/go-ethereum/
+cd $GOPATH/src/github.com/ethereum/go-ethereum/
 make
 make devtools
 </code></pre>
 <h2 id="编写合约">编写合约</h2>
 <p>创建工程：go mod init code，并创建文件contracts/Store.sol</p>
-<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: GPL-3.0</span>
-pragma solidity =<span class="hljs-number">0.8</span><span class="hljs-number">.15</span>;
+<pre><code class="lang-js">// SPDX-License-Identifier: GPL-3.0
+pragma solidity =0.8.15;
 
 contract Store {
   event ItemSet(bytes32 key, bytes32 value);
 
   string public version;
-  mapping (<span class="hljs-function"><span class="hljs-params">bytes32</span> =&gt;</span> bytes32) public items;
+  mapping (bytes32 =&gt; bytes32) public items;
 
-  <span class="hljs-function"><span class="hljs-title">constructor</span>(<span class="hljs-params">string memory _version</span>)</span> {
+  constructor(string memory _version) {
     version = _version;
   }
 
-  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setItem</span>(<span class="hljs-params">bytes32 key, bytes32 value</span>) <span class="hljs-title">external</span> </span>{
+  function setItem(bytes32 key, bytes32 value) external {
     items[key] = value;
     emit ItemSet(key, value);
   }
@@ -3068,106 +3072,106 @@ contract Store {
 <h2 id="编译合约">编译合约</h2>
 <p><a href="https://geth.ethereum.org/docs/tools/abigen" target="_blank">https://geth.ethereum.org/docs/tools/abigen</a></p>
 <p>指定合约，生成abi和bin（bytecode），存放在metadata目录下，同时生成配套代码Store.go</p>
-<pre><code class="lang-sh"><span class="hljs-comment"># 1.通过.sol编译出abi</span>
+<pre><code class="lang-sh"># 1.通过.sol编译出abi
  solc --abi --bin contracts/Store.sol -o metadata
 
-<span class="hljs-comment"># 2.通过abi编译出go文件</span>
-abigen --abi=metadata/Store.abi --bin=metadata/Store.bin --pkg=store --<span class="hljs-built_in">type</span> Store --out=src/Store.go
+# 2.通过abi编译出go文件
+abigen --abi=metadata/Store.abi --bin=metadata/Store.bin --pkg=store --type Store --out=src/Store.go
 
-<span class="hljs-comment"># 4.安装go依赖包</span>
+# 4.安装go依赖包
 go mod tidy
 </code></pre>
 <p>当前工程目录结构：</p>
 <p><img src="https://duke-typora.s3.ap-southeast-1.amazonaws.com/uPic/image-20221130114625242.png" alt="image-20221130114625242"></p>
 <h2 id="部署合约">部署合约</h2>
 <p>创建部署文件main/deploy.go，准备部署到bsc testnet，chainid：56</p>
-<pre><code class="lang-go"><span class="hljs-keyword">package</span> main
+<pre><code class="lang-go">package main
 
-<span class="hljs-keyword">import</span> (
-    <span class="hljs-string">&quot;fmt&quot;</span>
-    <span class="hljs-string">&quot;log&quot;</span>
+import (
+    &quot;fmt&quot;
+    &quot;log&quot;
 
-    utils <span class="hljs-string">&quot;code/main/utils&quot;</span>
-    store <span class="hljs-string">&quot;code/src&quot;</span>
+    utils &quot;code/main/utils&quot;
+    store &quot;code/src&quot;
 
-    <span class="hljs-string">&quot;github.com/ethereum/go-ethereum/ethclient&quot;</span>
+    &quot;github.com/ethereum/go-ethereum/ethclient&quot;
 )
 
-<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> {
+func main() {
     client, err := ethclient.Dial(utils.BscTestnetRpc)
-    <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
+    if err != nil {
         log.Fatal(err)
     }
 
-    auth := utils.Prepare(utils.HardhatPrivateKey, <span class="hljs-number">0</span>, client)
+    auth := utils.Prepare(utils.HardhatPrivateKey, 0, client)
 
-    input := <span class="hljs-string">&quot;1.0&quot;</span>
+    input := &quot;1.0&quot;
     address, tx, instance, err := store.DeployStore(auth, client, input)
-    <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
+    if err != nil {
         log.Fatal(err)
     }
 
-    <span class="hljs-comment">// 0x587bf1bc96163e279d2ea1b27f3b41cc34b171c3</span>
-    fmt.Println(<span class="hljs-string">&quot;address:&quot;</span>, address.Hex())
+    // 0x587bf1bc96163e279d2ea1b27f3b41cc34b171c3
+    fmt.Println(&quot;address:&quot;, address.Hex())
 
-    <span class="hljs-comment">// https://testnet.bscscan.com/tx/0x082186993e2786744366e2147827841dc02115439d9d3786ce39a1774209d38a</span>
-    fmt.Println(<span class="hljs-string">&quot;tx hash:&quot;</span>, tx.Hash().Hex())
+    // https://testnet.bscscan.com/tx/0x082186993e2786744366e2147827841dc02115439d9d3786ce39a1774209d38a
+    fmt.Println(&quot;tx hash:&quot;, tx.Hash().Hex())
     _ = instance
 }
 </code></pre>
 <p>main/utils/utils.go，为了方便开发，下面的私钥刻意暴露了出来，实际的代码中，应该使用环境变量，将私钥存放在.env文件中，请小心处理之，否则资产会被<code>零元购</code>。</p>
-<pre><code class="lang-go"><span class="hljs-keyword">package</span> utils
+<pre><code class="lang-go">package utils
 
-<span class="hljs-keyword">import</span> (
-    <span class="hljs-string">&quot;context&quot;</span>
-    <span class="hljs-string">&quot;crypto/ecdsa&quot;</span>
-    <span class="hljs-string">&quot;log&quot;</span>
-    <span class="hljs-string">&quot;math/big&quot;</span>
+import (
+    &quot;context&quot;
+    &quot;crypto/ecdsa&quot;
+    &quot;log&quot;
+    &quot;math/big&quot;
 
-    <span class="hljs-string">&quot;github.com/ethereum/go-ethereum/accounts/abi/bind&quot;</span>
-    <span class="hljs-string">&quot;github.com/ethereum/go-ethereum/crypto&quot;</span>
-    <span class="hljs-string">&quot;github.com/ethereum/go-ethereum/ethclient&quot;</span>
+    &quot;github.com/ethereum/go-ethereum/accounts/abi/bind&quot;
+    &quot;github.com/ethereum/go-ethereum/crypto&quot;
+    &quot;github.com/ethereum/go-ethereum/ethclient&quot;
 )
 
-<span class="hljs-keyword">var</span> (
-    BscTestnetRpc = <span class="hljs-string">&quot;https://data-seed-prebsc-2-s1.binance.org:8545&quot;</span>
+var (
+    BscTestnetRpc = &quot;https://data-seed-prebsc-2-s1.binance.org:8545&quot;
 
-    <span class="hljs-comment">// address: 0xc783df8a850f42e7f7e57013759c285caa701eb6</span>
-    HardhatPrivateKey = <span class="hljs-string">&quot;c5e8f61d1ab959b397eecc0a37a6517b8e67a0e7cf1f4bce5591f3ed80199122&quot;</span>
+    // address: 0xc783df8a850f42e7f7e57013759c285caa701eb6
+    HardhatPrivateKey = &quot;c5e8f61d1ab959b397eecc0a37a6517b8e67a0e7cf1f4bce5591f3ed80199122&quot;
 )
 
-<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">Prepare</span><span class="hljs-params">(privKey <span class="hljs-keyword">string</span>, value <span class="hljs-keyword">int64</span>, client *ethclient.Client)</span> *<span class="hljs-title">bind</span>.<span class="hljs-title">TransactOpts</span></span> {
+func Prepare(privKey string, value int64, client *ethclient.Client) *bind.TransactOpts {
     privateKey, err := crypto.HexToECDSA(privKey)
-    <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
+    if err != nil {
         log.Fatal(err)
     }
 
     publicKey := privateKey.Public()
     publicKeECDSA, ok := publicKey.(*ecdsa.PublicKey)
-    <span class="hljs-keyword">if</span> !ok {
-        log.Fatal(<span class="hljs-string">&quot;invalid public key type&quot;</span>)
+    if !ok {
+        log.Fatal(&quot;invalid public key type&quot;)
     }
 
     fromAddress := crypto.PubkeyToAddress(*publicKeECDSA)
     nonce, err := client.PendingNonceAt(context.Background(), fromAddress)
-    <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
+    if err != nil {
         log.Fatal(err)
     }
 
     gasPrice, err := client.SuggestGasPrice(context.Background())
-    <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
+    if err != nil {
         log.Fatal(err)
     }
 
-    <span class="hljs-comment">// chainId := 56</span>
-    <span class="hljs-comment">// auth, _ := bind.NewKeyedTransactorWithChainID(privateKey, big.NewInt(int64(56)))</span>
+    // chainId := 56
+    // auth, _ := bind.NewKeyedTransactorWithChainID(privateKey, big.NewInt(int64(56)))
     auth := bind.NewKeyedTransactor(privateKey)
-    auth.Nonce = big.NewInt(<span class="hljs-keyword">int64</span>(nonce))
+    auth.Nonce = big.NewInt(int64(nonce))
     auth.Value = big.NewInt(value)
-    <span class="hljs-comment">// auth.GasLimit = uint64(300000)</span>
+    // auth.GasLimit = uint64(300000)
     auth.GasPrice = gasPrice
 
-    <span class="hljs-keyword">return</span> auth
+    return auth
 }
 </code></pre>
 <p>执行结果，<a href="https://testnet.bscscan.com/address/0x587bf1bc96163e279d2ea1b27f3b41cc34b171c3" target="_blank">点击查看</a></p>
@@ -3210,7 +3214,7 @@ go mod tidy
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第1节:编译部署合约","level":"1.21.1","depth":2,"next":{"title":"第2节:读写合约","level":"1.21.2","depth":2,"path":"14_Golang合约交互/02_读写合约.md","ref":"14_Golang合约交互/02_读写合约.md","articles":[]},"previous":{"title":"第十四章:Golang合约交互","level":"1.21","depth":1,"path":"14_Golang合约交互/README.md","ref":"14_Golang合约交互/README.md","articles":[{"title":"第1节:编译部署合约","level":"1.21.1","depth":2,"path":"14_Golang合约交互/01_编译部署合约.md","ref":"14_Golang合约交互/01_编译部署合约.md","articles":[]},{"title":"第2节:读写合约","level":"1.21.2","depth":2,"path":"14_Golang合约交互/02_读写合约.md","ref":"14_Golang合约交互/02_读写合约.md","articles":[]},{"title":"第3节:SendTx转账","level":"1.21.3","depth":2,"path":"14_Golang合约交互/03_SendTx转账.md","ref":"14_Golang合约交互/03_SendTx转账.md","articles":[]},{"title":"第4节:SendRawTx转账","level":"1.21.4","depth":2,"path":"14_Golang合约交互/04_SendRawTx转账.md","ref":"14_Golang合约交互/04_SendRawTx转账.md","articles":[]},{"title":"第5节:订阅事件","level":"1.21.5","depth":2,"path":"14_Golang合约交互/05_订阅事件.md","ref":"14_Golang合约交互/05_订阅事件.md","articles":[]},{"title":"第6节:解析事件","level":"1.21.6","depth":2,"path":"14_Golang合约交互/06_解析事件.md","ref":"14_Golang合约交互/06_解析事件.md","articles":[]}]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"14_Golang合约交互/01_编译部署合约.md","mtime":"2023-09-23T13:27:18.154Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-19T22:08:50.792Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第1节:编译部署合约","level":"1.21.1","depth":2,"next":{"title":"第2节:读写合约","level":"1.21.2","depth":2,"path":"14_Golang合约交互/02_读写合约.md","ref":"14_Golang合约交互/02_读写合约.md","articles":[]},"previous":{"title":"第十四章:Golang合约交互","level":"1.21","depth":1,"path":"14_Golang合约交互/README.md","ref":"14_Golang合约交互/README.md","articles":[{"title":"第1节:编译部署合约","level":"1.21.1","depth":2,"path":"14_Golang合约交互/01_编译部署合约.md","ref":"14_Golang合约交互/01_编译部署合约.md","articles":[]},{"title":"第2节:读写合约","level":"1.21.2","depth":2,"path":"14_Golang合约交互/02_读写合约.md","ref":"14_Golang合约交互/02_读写合约.md","articles":[]},{"title":"第3节:SendTx转账","level":"1.21.3","depth":2,"path":"14_Golang合约交互/03_SendTx转账.md","ref":"14_Golang合约交互/03_SendTx转账.md","articles":[]},{"title":"第4节:SendRawTx转账","level":"1.21.4","depth":2,"path":"14_Golang合约交互/04_SendRawTx转账.md","ref":"14_Golang合约交互/04_SendRawTx转账.md","articles":[]},{"title":"第5节:订阅事件","level":"1.21.5","depth":2,"path":"14_Golang合约交互/05_订阅事件.md","ref":"14_Golang合约交互/05_订阅事件.md","articles":[]},{"title":"第6节:解析事件","level":"1.21.6","depth":2,"path":"14_Golang合约交互/06_解析事件.md","ref":"14_Golang合约交互/06_解析事件.md","articles":[]}]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"14_Golang合约交互/01_编译部署合约.md","mtime":"2023-09-23T13:27:18.154Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3293,6 +3297,14 @@ go mod tidy
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

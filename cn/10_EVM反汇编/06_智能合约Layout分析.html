@@ -36,6 +36,10 @@
                 
             
                 
+                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
+                
+            
+                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3019,57 +3023,57 @@
 <li>solidity version: 0.8.7</li>
 <li>optimizer: 200 runs</li>
 </ul>
-<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: UNLICENSED</span>
-pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.0</span>;
+<pre><code class="lang-js">// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.0;
 
 contract Test {
     address owner;
 
     uint data;
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setOwner</span>(<span class="hljs-params">address _addr</span>) <span class="hljs-title">external</span> </span>{
+    function setOwner(address _addr) external {
         owner = _addr;
     }
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">returnAdd</span>(<span class="hljs-params">uint x,uint y</span>) <span class="hljs-title">internal</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span>(<span class="hljs-params">uint</span>) </span>{
-        <span class="hljs-keyword">return</span> x+y;
+    function returnAdd(uint x,uint y) internal view returns(uint) {
+        return x+y;
     }
 
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setBalance</span>(<span class="hljs-params">uint x</span>) <span class="hljs-title">external</span> </span>{
-        uint var1 = <span class="hljs-number">10</span>;
+    function setBalance(uint x) external {
+        uint var1 = 10;
         data = returnAdd(x,var1);
     }
 }
 </code></pre>
 <h2 id="1-disassembling-the-function-main">1. Disassembling the function main</h2>
 <p>入口执行逻辑：由于没有main函数作为entry point，solidity从byte 0开始执行。</p>
-<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">main</span>(<span class="hljs-params"></span>) </span>{
-    mstore(<span class="hljs-number">0x40</span>,<span class="hljs-number">0x80</span>)
-    <span class="hljs-keyword">if</span> (msg.value &gt; <span class="hljs-number">0</span>) { revert(); }
-    <span class="hljs-keyword">if</span> (msg.data.size &lt; <span class="hljs-number">4</span>) { revert(); }
+<pre><code class="lang-js">function main() {
+    mstore(0x40,0x80)
+    if (msg.value &gt; 0) { revert(); }
+    if (msg.data.size &lt; 4) { revert(); }
 }
 </code></pre>
 <p>里面有三个函数（selector），需要分支进行判断，相当于对所有的函数进行遍历map：</p>
-<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">main</span>(<span class="hljs-params"></span>) </span>{
-    mstore(<span class="hljs-number">0x40</span>,<span class="hljs-number">0x80</span>)
-    <span class="hljs-keyword">if</span> (msg.value &gt; <span class="hljs-number">0</span>) { revert(); }
-    <span class="hljs-keyword">if</span> (msg.data.size &lt; <span class="hljs-number">4</span>) { revert(); }
-    byte4 selector = msg.data[<span class="hljs-number">0</span>:<span class="hljs-number">4</span>]
-      <span class="hljs-keyword">switch</span> (selector) {
-        <span class="hljs-keyword">case</span> <span class="hljs-number">0x13af4035</span>:
-            <span class="hljs-comment">// JUMP to 37</span>
+<pre><code class="lang-js">function main() {
+    mstore(0x40,0x80)
+    if (msg.value &gt; 0) { revert(); }
+    if (msg.data.size &lt; 4) { revert(); }
+    byte4 selector = msg.data[0:4]
+      switch (selector) {
+        case 0x13af4035:
+            // JUMP to 37
 
-        <span class="hljs-keyword">case</span> <span class="hljs-number">0xfb1669ca</span>:
-            <span class="hljs-comment">// JUMP to 66</span>
-        <span class="hljs-keyword">default</span>: revert(<span class="hljs-number">0</span>);
+        case 0xfb1669ca:
+            // JUMP to 66
+        default: revert(0);
 }
 </code></pre>
 <h2 id="2-the-function-layout">2. The function layout</h2>
 <p>每个函数的bytecode是连续的（side by side）</p>
-<pre><code class="lang-js">func_082() <span class="hljs-number">0x82</span> =&gt; <span class="hljs-number">0x91</span>
-func_092() <span class="hljs-number">0x92</span> =&gt; <span class="hljs-number">0xB9</span>
-func_0BA(a,b) <span class="hljs-number">0xBA</span> =&gt; <span class="hljs-number">0xD1</span>
-func_0D2() <span class="hljs-number">0xD2</span> =&gt; <span class="hljs-number">0xF6</span>
+<pre><code class="lang-js">func_082() 0x82 =&gt; 0x91
+func_092() 0x92 =&gt; 0xB9
+func_0BA(a,b) 0xBA =&gt; 0xD1
+func_0D2() 0xD2 =&gt; 0xF6
 </code></pre>
 <p>到这里我们得到了每个函数的位置（layout），接下来了解一下函数内部的code。</p>
 <h2 id="3-understanding-the-code-functions">3. Understanding the code functions</h2>
@@ -3103,7 +3107,7 @@ func_0D2() <span class="hljs-number">0xD2</span> =&gt; <span class="hljs-number"
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第6节:智能合约Layout分析","level":"1.17.6","depth":2,"next":{"title":"第7节:合约间调用","level":"1.17.7","depth":2,"path":"10_EVM反汇编/07_合约间调用.md","ref":"10_EVM反汇编/07_合约间调用.md","articles":[]},"previous":{"title":"第5节:function执行流程","level":"1.17.5","depth":2,"path":"10_EVM反汇编/05_function执行流程.md","ref":"10_EVM反汇编/05_function执行流程.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"10_EVM反汇编/06_智能合约Layout分析.md","mtime":"2023-03-21T14:01:27.000Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-19T22:08:50.792Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第6节:智能合约Layout分析","level":"1.17.6","depth":2,"next":{"title":"第7节:合约间调用","level":"1.17.7","depth":2,"path":"10_EVM反汇编/07_合约间调用.md","ref":"10_EVM反汇编/07_合约间调用.md","articles":[]},"previous":{"title":"第5节:function执行流程","level":"1.17.5","depth":2,"path":"10_EVM反汇编/05_function执行流程.md","ref":"10_EVM反汇编/05_function执行流程.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"10_EVM反汇编/06_智能合约Layout分析.md","mtime":"2023-03-21T14:01:27.000Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3186,6 +3190,14 @@ func_0D2() <span class="hljs-number">0xD2</span> =&gt; <span class="hljs-number"
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
+        
+    
+        
+        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         
