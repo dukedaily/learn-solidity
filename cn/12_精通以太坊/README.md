@@ -13,12 +13,6 @@
 
 
 
-**精通以太坊：**
-
-<iframe src="https://drive.google.com/file/d/1-0yanRr70jODXx2F4BvRy-p9iG246G_9/preview" width="640" height="480" allow="autoplay"></iframe>
-
-
-
 **精简版** ： [在线阅读](https://duke-typora.s3.ap-southeast-1.amazonaws.com/ebook/ethereum_evm_illustrated_with_index.pdf)
 
 <iframe src="https://duke-typora.s3.ap-southeast-1.amazonaws.com/ebook/ethereum_evm_illustrated_with_index.pdf" width="640" height="480" allow="autoplay"></iframe>
