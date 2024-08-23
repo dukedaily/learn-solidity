@@ -13,7 +13,8 @@
     "-lunr",
     "page-toc-button",
     "include-codeblock",
-    "js-console"
+    "js-console",
+    "honkit-plugin-mermaid"
   ],
   "variables": {
     "esversion": "2022",
@@ -34,6 +35,9 @@
     },
     "language-picker": {
       "grid-columns": 3
+    },
+    "honkit-plugin-mermaid": {
+      "theme": "default"
     }
   },
   "pdf": {
