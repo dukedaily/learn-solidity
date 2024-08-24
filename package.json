@@ -14,6 +14,7 @@
   "dependencies": {
     "@haxcms/gitbook-2-outline-schema": "^0.0.13",
     "gh-pages": "^3.2.3",
+    "gitalk": "^1.8.0",
     "gitbook-plugin-anchors": "^0.7.1",
     "gitbook-plugin-canonical-link": "^2.0.3",
     "gitbook-plugin-codeblock-label": "*",

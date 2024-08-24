@@ -1,6 +1,4 @@
 {
-  "gitbook": ">=3.0.0",
-  "root": "./",
   "plugins": [
     "heading-anchors@1.0.3",
     "ga@1.0.1",
@@ -13,16 +11,8 @@
     "-lunr",
     "page-toc-button",
     "include-codeblock",
-    "js-console",
-    "honkit-plugin-mermaid"
+    "js-console"
   ],
-  "variables": {
-    "esversion": "2022",
-    "nodeversion": "18.12.0",
-    "npmversion": "8.19.2",
-    "triplebackticks": "```",
-    "console": "<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"
-  },
   "pluginsConfig": {
     "ga": {
       "token": "UA-51680040-3"
@@ -35,12 +25,6 @@
     },
     "language-picker": {
       "grid-columns": 3
-    },
-    "honkit-plugin-mermaid": {
-      "theme": "default"
     }
-  },
-  "pdf": {
-    "fontFamily": "IPAexMincho"
   }
 }

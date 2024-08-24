@@ -8,6 +8,8 @@ In this session, we will discuss the following syntax:
 - unwrap()
 - ?
 
+
+
 ## Copy Type vs Non-Copy Type
 
 this is roughly the same concepts to `Value Type` and `Reference Type` as Solidity.
@@ -140,6 +142,8 @@ in rust, we the techitical word of what we are calling `view only` is : borrowin
 
 ![image-20240726084933412](./assets/image-20240726084933412.png)
 
+
+
 ## Borrowing (copy-type)
 
 ```rust
@@ -159,6 +163,8 @@ in rust, we the techitical word of what we are calling `view only` is : borrowin
 a, b, c all hold a new copy of value 10, the underlying reason is that the overhead is negligible.
 
 ![image-20240726091005029](./assets/image-20240726091005029.png)
+
+
 
 ## Clone a object
 
@@ -314,6 +320,8 @@ update with with the code below.
 
 To turn an Option into the underlying type, we use unwrap(). unwrap() will cause a panic if we received “nothing”, so we should only use it in situations where we want the panic to occur or we are sure we won’t get a empty value.
 
+
+
 ## The deref Operator *
 
 as you may notice, we use `&0` instead of `0`, cos the return type of `unwrap()` is a `view`, so we need to use & ahead.
@@ -435,6 +443,8 @@ describe("day_7_1", () => {
 run:
 
 ![image-20240728120442976](./assets/image-20240728120442976.png)
+
+
 
 ## Key Takeaways
 

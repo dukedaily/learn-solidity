@@ -30,9 +30,13 @@ In Anchor programs, you can access sysvars in two ways: either by using the anch
 
 Not all sysvars can be accessed using Anchor's get method, `Clock`, `EpochSchedule` are available for example.
 
+
+
 ### Clock
 
  `Clock` has been covered in last tutorial.
+
+
 
 ### EpochSchedule
 
@@ -59,6 +63,8 @@ result:
 
 ![image-20240804194026134](./assets/image-20240804194026134.png)
 
+
+
 ### Rent
 
 add another function and test
@@ -74,6 +80,8 @@ add another function and test
 result:
 
 ![image-20240804194518734](./assets/image-20240804194518734.png)
+
+
 
 ## Accessing Via Public Address
 

@@ -216,6 +216,8 @@ In Ethereum, we can not get a user's history transactions by wallet, we will nee
 
 In addition, to audit the transactions in a smart contract, we developers can add events to query transactoins of interest.
 
+
+
 ## How to query tx history in Solana 
 
 Solana has an RPC function `getSignaturesForAddress` which lists all the txs an address has done. The address can be a program or a wallet.
@@ -247,9 +249,13 @@ The following is a script to list the txs from an given address:
 
 Note that the actual content of the Transaction is retrieved using the `getParsedTransaction` RPC method.
 
+
+
 ## Key Takeaways
 
 - It is not possible to scan for past logs like it is in Ethereum, they must be watched for while the transactions is happening.
+
+
 
 ## Links
 

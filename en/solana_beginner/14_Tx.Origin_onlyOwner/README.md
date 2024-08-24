@@ -78,6 +78,8 @@ same to what we log within the code:
 
 ![image-20240818102106135](./assets/image-20240818102106135.png)
 
+
+
 ## Multiple Signers
 
 simply add one more signer, signer2, everything else remains unchange.
@@ -154,6 +156,8 @@ test:
 ![image-20240818103750993](./assets/image-20240818103750993.png)
 
 it works as expected, cool!!
+
+
 
 ## OnlyOwner
 
@@ -238,11 +242,15 @@ execute the test code, and get the result as expected.
 
 we can use try-catch to cease the error, can take a refernce to  day_04, Error Handler.
 
+
+
 ## Modify The Owner
 
 To cahnge the owner in a program, the pubKey assigned to the owner needs to store on-chain, which we will discuss in the later sessions.
 
 As for now, we can just redeploy(upgrade) the bytecode as shown before.
+
+
 
 ## Key Takeaways
 
@@ -250,6 +258,8 @@ As for now, we can just redeploy(upgrade) the bytecode as shown before.
 - support multiple tx.origins in solana
 - can get your local address by cmd:  `solana address`
 - onlyOwner is doable.
+
+
 
 ## Links
 

@@ -14,6 +14,8 @@ we have discussed about: function-like macro before and will cover the rest here
 
 ![image-20240730062853034](./assets/image-20240730062853034.png)
 
+
+
 ## Impl
 
 A impl is similar to a `lib` in solidity, we can bind some functions to a lib and use it with the syntax myLib.newFunction().
@@ -55,6 +57,8 @@ Alice's age: 30
 ```
 
 now we have associated three functions with struct `Person`.
+
+
 
 ## Traits
 
@@ -146,7 +150,9 @@ syn = {version="1.0.57",features=["full","fold"]}
 quote = "1.0.8"
 ```
 
-### add  fields into a struct
+
+
+### Add  fields into a struct
 
 we will define a attribute-like macro: `#[foo_bar_attribute]` and attach it to the simple struct below: 
 
@@ -242,7 +248,9 @@ Result: `cargo run`
 
 ![image-20240730212741245](./assets/image-20240730212741245.png)
 
-### remove fields from a struct
+
+
+### Remove fields from a struct
 
 ```sh
 cd rust_projects
@@ -297,6 +305,8 @@ cargo run:
 
 we got two errors on the compliation stage, this means baz and qux are no longer belong to MyStruct as expected!!
 
+
+
 ## Derive macro
 
 This support a way to augment a struct without changing it, a derive macro can, among other things, attach an `impl` to a struct.
@@ -333,6 +343,8 @@ result:
 ![image-20240730212834375](./assets/image-20240730212834375.png)
 
 can get the code from day_9_3.
+
+
 
 ## Anchor #[pragram]
 

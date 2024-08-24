@@ -8,7 +8,7 @@ Firstly, both ethereum and solana store data in the pattern of key-value.
 
 Storage slots in Ethereum are effectively a massive key-value store:
 
-```js 
+```js
 {
   key: [smart_contract, storage solt] // 32 bytes, solts up to: 2^256
   value: 32_byte_slot // 32 bytes storage for each key
@@ -28,14 +28,16 @@ Solana's model is similar, it's a massive key-value store where the "key" is a b
 
 ```js
 {
-		// key is a base58 encoded 32 byte sequence
+    // key is a base58 encoded 32 byte sequence
     key: ETnqC8mvPRyUVXyXoph22EQ1GS5sTs1zndkn5eGMYWfs
     value: {
-			data: 020000006ad1897139ac2bdb67a3c66a...
-			// other fields are omitted
-		}
+    data: 020000006ad1897139ac2bdb67a3c66a...
+    // other fields are omitted
+    }
 }
 ```
+
+
 
 ## How does ethereum store
 
@@ -102,8 +104,12 @@ contract MainContract {
 
 Below illustrates the basic Account Model of Ethereum:
 
+![evm-state-root](./assets/evm-state-root.jpg)
 
- ```mermaid
+(mermaid source code below)
+
+
+ ```sh
  graph TD
      A[Block Header] --> B[State Root]
      B --> C["Global State Trie - Merkle Patricia Trie Root"]
@@ -132,6 +138,8 @@ Below illustrates the basic Account Model of Ethereum:
 - Account A is a sc, it's data sotres under hash: 0xghi789...
 - Account B is a EOA, no storage at all.
 
+
+
 ## How does solana store
 
 In Solana, the data is stored in a separated sc(we call Account) by design rather a exotic design patter.
@@ -143,6 +151,8 @@ Everything is an account in solana and can potentially hold data. Sometimes we r
 In the image below, we see the accountB is owned by the program accountA. We know A is a program account because it's **executeable** field is set to `true`. This indicateds that the data field of B will be storing data for A:
 
 ![image-20240823102653221](./assets/image-20240823102653221.png)
+
+
 
 ## A basic storage example
 
@@ -167,6 +177,8 @@ it seems strange that we wrapped a single variable in a struct.
 but in solana programs, particularly, all storage, or rather account data, is treated as a struct. The reason is due to the flexibility of the account data. Since accounts are data blobs which can be quite large(10MB), we need some `structure` to interpret the data, otherwise it is just a sequence of bytes with no meaning.
 
 Behind the scenes, Anchor deserializeds and serializes account data into structs when we try to read or write the data.
+
+
 
 ## Account initialization
 
@@ -227,6 +239,8 @@ we add three variables to the `Initialize` struct, let go through them one-by-on
 
 under the hood, this is a byte sequence and store in the `data` field. Solana doesn't force us to use struct to use Solana accounts, but this is the convention, we don't have any reason don't use.
 
+
+
 ## Test Initialization
 
 ```ts
@@ -259,6 +273,8 @@ Solana requires us to specify in advance the accounts a transaction will interac
 
 Note the seeds is an empty array, just like it is in the Anchor program.
 
+
+
 ## Account cannot be initialize twice
 
 if we could reinitialize an account, that would be highly problematic since a user could wipe data from the syste! Thankfully, Anchor defends against this in the background.
@@ -272,6 +288,8 @@ we can solve this by run command:
 ```sh
 solana-test-validator --reset
 ```
+
+
 
 ## Predicting the account address in Solana
 
@@ -287,6 +305,8 @@ In Solana, it's pretty the same as in Ethereum except that it ignores the **byte
 - the seeds(which is akin to create2's salt)
 
 In all the examples in this tutorial, `seeds` is an empty array, but we will explore non-empty arrays in the following tutorial.
+
+
 
 ## Key Takeaways
 

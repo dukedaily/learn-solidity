@@ -2,6 +2,8 @@
 
 In Ethereum, the fee of a transaction is computed as `gasPrice * gasUsed`. This tells us how much in Eth will be needed, and there is a cost ceiling, gasLimit, which will protect the caller from drain his wallet by any kind of issues, such as infinite loops, the transaction will revert if it runs out of gas.
 
+
+
 ## Compute Units
 
 Unlike on EVM chains, Solana opcodes(instructions) consume `compute units`, not gas, and each transaction is limited to 200,000 compute unites and reverts if exceed.
@@ -19,6 +21,8 @@ Both chains execute compiled bytecode and charge a fee for each instruction exec
 
 Ethereum charges different prices for different opcodes depending on how long they take to execute, ranging from one gas to thousands of gas, **however**, each opcode costs one compute unit in solana.
 
+
+
 ## Tx Fees
 
 Even though Solana use the concept of Compoute Units(CU) to calculate the resource, but CU won't affect the fees paid for that transaction, you will be charged as if you used your entire limit or if you used very little of it. For example, a 400 compute unit transaction costs the same as a 200, 000 compute transaction, quite weird right?
@@ -28,6 +32,8 @@ In solana, the only factor that determines transction fee is **The Number of sig
 - one tx, max 1232 bytes.
 - for each signature (64 bytes) and a pub key it refers to(32bytes)
 - number of signatures: 1232 / (64 + 32) = 12.8333333333 => 12
+
+
 
 ## Try it out
 
@@ -119,6 +125,8 @@ We can see that this costs more compute units, almost 20 times our first example
 1. It is only now that CU won't affect the transaction fee, we can not guarantee it won't change in the future.
 2. A tx with less CU consumption would be more competitive compared with the tx with higher CU consumption when there is significant network activity to be included in a block.
 3. A tx with less CU comsumption will make your program more composable with other programs.If another program calls your program, you share the same compute limit(no extra), **it would be more reasonable to leave more compute units to the caller for integration.**
+
+
 
 ## Smaller integers save CU
 
