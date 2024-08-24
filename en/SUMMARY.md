@@ -22,7 +22,7 @@
 
 **MODULE 4 Accounts and Storage in Solana**
 * [16_Accounts_Overview](solana_beginner/16_Accounts_Overview/README.md)
-* [17_Storage](solana_beginner/17_Storage/README.md)
+* [17_Storage](solana_beginner/17_Write_To_Storage/README.md)
 * [18_Reading_Accounts](solana_beginner/18_Reading_Accounts/README.md)
 * [19_Mappings](solana_beginner/19_Mappings/README.md)
 * [20_Storage_Advance](solana_beginner/20_Storage_Advance/README.md)
