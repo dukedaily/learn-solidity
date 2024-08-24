@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3156,26 +3152,26 @@
 </ul>
 <p><img src="https://duke-typora.s3.ap-southeast-1.amazonaws.com/uPic/image-20230101164435228.png" alt="image-20230101164435228"></p>
 <p>在币圈一般都称之为：大饼，各种牛鬼蛇神币种的涨跌基本完全看大饼的脸色，大饼每四年减产一次（即挖矿的奖励减半），大约在2140年时会全部挖完（2100w枚），比特币总量计算如下：<code>totalBTC.go</code></p>
-<pre><code class="lang-go">package main
+<pre><code class="lang-go"><span class="hljs-keyword">package</span> main
 
-import &quot;fmt&quot;
+<span class="hljs-keyword">import</span> <span class="hljs-string">&quot;fmt&quot;</span>
 
-func main() {
-    total := 0.0     //总量
-    interval := 21.0 //区块间隔，万单位
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> {
+    total := <span class="hljs-number">0.0</span>     <span class="hljs-comment">//总量</span>
+    interval := <span class="hljs-number">21.0</span> <span class="hljs-comment">//区块间隔，万单位</span>
 
-    reward := 50.0 //奖励数量，最初50个
+    reward := <span class="hljs-number">50.0</span> <span class="hljs-comment">//奖励数量，最初50个</span>
 
-    for reward != 0 {
-        //累加挖矿值
+    <span class="hljs-keyword">for</span> reward != <span class="hljs-number">0</span> {
+        <span class="hljs-comment">//累加挖矿值</span>
         amount := reward * interval
 
-        total += amount //总量
+        total += amount <span class="hljs-comment">//总量</span>
 
-        reward *= 0.5 //奖励减半
+        reward *= <span class="hljs-number">0.5</span> <span class="hljs-comment">//奖励减半</span>
     }
 
-    fmt.Printf(&quot;total : %fw\n&quot;, total)
+    fmt.Printf(<span class="hljs-string">&quot;total : %fw\n&quot;</span>, total)
 }
 </code></pre>
 <h2 id="3-以太坊">3. 以太坊</h2>
@@ -3251,7 +3247,7 @@ func main() {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第a节:世界杯竞猜_区块链基础（上）","level":"1.15.1","depth":2,"next":{"title":"第b节:世界杯竞猜_区块链基础（下）","level":"1.15.2","depth":2,"path":"08_项目实战-世界杯竞猜/基础回顾/02-区块链基础（下）.md","ref":"08_项目实战-世界杯竞猜/基础回顾/02-区块链基础（下）.md","articles":[]},"previous":{"title":"第八章:项目实战-世界杯竞猜","level":"1.15","depth":1,"path":"08_项目实战-世界杯竞猜/README.md","ref":"08_项目实战-世界杯竞猜/README.md","articles":[{"title":"第a节:世界杯竞猜_区块链基础（上）","level":"1.15.1","depth":2,"path":"08_项目实战-世界杯竞猜/基础回顾/01-区块链基础（上）.md","ref":"08_项目实战-世界杯竞猜/基础回顾/01-区块链基础（上）.md","articles":[]},{"title":"第b节:世界杯竞猜_区块链基础（下）","level":"1.15.2","depth":2,"path":"08_项目实战-世界杯竞猜/基础回顾/02-区块链基础（下）.md","ref":"08_项目实战-世界杯竞猜/基础回顾/02-区块链基础（下）.md","articles":[]},{"title":"第c节:世界杯竞猜_solidity（上）","level":"1.15.3","depth":2,"path":"08_项目实战-世界杯竞猜/基础回顾/03-solidity（上）.md","ref":"08_项目实战-世界杯竞猜/基础回顾/03-solidity（上）.md","articles":[]},{"title":"第d节:世界杯竞猜_solidity（下）","level":"1.15.4","depth":2,"path":"08_项目实战-世界杯竞猜/基础回顾/04-solidity（下）.md","ref":"08_项目实战-世界杯竞猜/基础回顾/04-solidity（下）.md","articles":[]},{"title":"第1节:世界杯竞猜_solidity","level":"1.15.5","depth":2,"path":"08_项目实战-世界杯竞猜/01_世界杯竞猜_solidity.md","ref":"08_项目实战-世界杯竞猜/01_世界杯竞猜_solidity.md","articles":[]},{"title":"第2节:世界杯竞猜_hardhat","level":"1.15.6","depth":2,"path":"08_项目实战-世界杯竞猜/02_世界杯竞猜_hardhat.md","ref":"08_项目实战-世界杯竞猜/02_世界杯竞猜_hardhat.md","articles":[]},{"title":"第3节:世界杯竞猜_ERC20","level":"1.15.7","depth":2,"path":"08_项目实战-世界杯竞猜/03_世界杯竞猜_ERC20.md","ref":"08_项目实战-世界杯竞猜/03_世界杯竞猜_ERC20.md","articles":[]},{"title":"第4节:世界杯竞猜_subgraph","level":"1.15.8","depth":2,"path":"08_项目实战-世界杯竞猜/04_世界杯竞猜_subgraph.md","ref":"08_项目实战-世界杯竞猜/04_世界杯竞猜_subgraph.md","articles":[]},{"title":"第5节:世界杯竞猜_airdrop","level":"1.15.9","depth":2,"path":"08_项目实战-世界杯竞猜/05-世界杯竞猜_airdrop.md","ref":"08_项目实战-世界杯竞猜/05-世界杯竞猜_airdrop.md","articles":[]},{"title":"第6节:世界杯竞猜_upgrade","level":"1.15.10","depth":2,"path":"08_项目实战-世界杯竞猜/06_世界杯竞猜_upgrade.md","ref":"08_项目实战-世界杯竞猜/06_世界杯竞猜_upgrade.md","articles":[]},{"title":"第7节:世界杯竞猜_链下签名","level":"1.15.11","depth":2,"path":"08_项目实战-世界杯竞猜/07_世界杯竞猜_链下签名.md","ref":"08_项目实战-世界杯竞猜/07_世界杯竞猜_链下签名.md","articles":[]},{"title":"第8节:世界杯竞猜_多签钱包","level":"1.15.12","depth":2,"path":"08_项目实战-世界杯竞猜/08_世界杯竞猜_多签钱包.md","ref":"08_项目实战-世界杯竞猜/08_世界杯竞猜_多签钱包.md","articles":[]},{"title":"第9节:世界杯竞猜_Go交互","level":"1.15.13","depth":2,"path":"08_项目实战-世界杯竞猜/09_世界杯竞猜_Go交互合约.md","ref":"08_项目实战-世界杯竞猜/09_世界杯竞猜_Go交互合约.md","articles":[]}]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"08_项目实战-世界杯竞猜/基础回顾/01-区块链基础（上）.md","mtime":"2023-09-23T13:39:48.498Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"../..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第a节:世界杯竞猜_区块链基础（上）","level":"1.15.1","depth":2,"next":{"title":"第b节:世界杯竞猜_区块链基础（下）","level":"1.15.2","depth":2,"path":"08_项目实战-世界杯竞猜/基础回顾/02-区块链基础（下）.md","ref":"08_项目实战-世界杯竞猜/基础回顾/02-区块链基础（下）.md","articles":[]},"previous":{"title":"第八章:项目实战-世界杯竞猜","level":"1.15","depth":1,"path":"08_项目实战-世界杯竞猜/README.md","ref":"08_项目实战-世界杯竞猜/README.md","articles":[{"title":"第a节:世界杯竞猜_区块链基础（上）","level":"1.15.1","depth":2,"path":"08_项目实战-世界杯竞猜/基础回顾/01-区块链基础（上）.md","ref":"08_项目实战-世界杯竞猜/基础回顾/01-区块链基础（上）.md","articles":[]},{"title":"第b节:世界杯竞猜_区块链基础（下）","level":"1.15.2","depth":2,"path":"08_项目实战-世界杯竞猜/基础回顾/02-区块链基础（下）.md","ref":"08_项目实战-世界杯竞猜/基础回顾/02-区块链基础（下）.md","articles":[]},{"title":"第c节:世界杯竞猜_solidity（上）","level":"1.15.3","depth":2,"path":"08_项目实战-世界杯竞猜/基础回顾/03-solidity（上）.md","ref":"08_项目实战-世界杯竞猜/基础回顾/03-solidity（上）.md","articles":[]},{"title":"第d节:世界杯竞猜_solidity（下）","level":"1.15.4","depth":2,"path":"08_项目实战-世界杯竞猜/基础回顾/04-solidity（下）.md","ref":"08_项目实战-世界杯竞猜/基础回顾/04-solidity（下）.md","articles":[]},{"title":"第1节:世界杯竞猜_solidity","level":"1.15.5","depth":2,"path":"08_项目实战-世界杯竞猜/01_世界杯竞猜_solidity.md","ref":"08_项目实战-世界杯竞猜/01_世界杯竞猜_solidity.md","articles":[]},{"title":"第2节:世界杯竞猜_hardhat","level":"1.15.6","depth":2,"path":"08_项目实战-世界杯竞猜/02_世界杯竞猜_hardhat.md","ref":"08_项目实战-世界杯竞猜/02_世界杯竞猜_hardhat.md","articles":[]},{"title":"第3节:世界杯竞猜_ERC20","level":"1.15.7","depth":2,"path":"08_项目实战-世界杯竞猜/03_世界杯竞猜_ERC20.md","ref":"08_项目实战-世界杯竞猜/03_世界杯竞猜_ERC20.md","articles":[]},{"title":"第4节:世界杯竞猜_subgraph","level":"1.15.8","depth":2,"path":"08_项目实战-世界杯竞猜/04_世界杯竞猜_subgraph.md","ref":"08_项目实战-世界杯竞猜/04_世界杯竞猜_subgraph.md","articles":[]},{"title":"第5节:世界杯竞猜_airdrop","level":"1.15.9","depth":2,"path":"08_项目实战-世界杯竞猜/05-世界杯竞猜_airdrop.md","ref":"08_项目实战-世界杯竞猜/05-世界杯竞猜_airdrop.md","articles":[]},{"title":"第6节:世界杯竞猜_upgrade","level":"1.15.10","depth":2,"path":"08_项目实战-世界杯竞猜/06_世界杯竞猜_upgrade.md","ref":"08_项目实战-世界杯竞猜/06_世界杯竞猜_upgrade.md","articles":[]},{"title":"第7节:世界杯竞猜_链下签名","level":"1.15.11","depth":2,"path":"08_项目实战-世界杯竞猜/07_世界杯竞猜_链下签名.md","ref":"08_项目实战-世界杯竞猜/07_世界杯竞猜_链下签名.md","articles":[]},{"title":"第8节:世界杯竞猜_多签钱包","level":"1.15.12","depth":2,"path":"08_项目实战-世界杯竞猜/08_世界杯竞猜_多签钱包.md","ref":"08_项目实战-世界杯竞猜/08_世界杯竞猜_多签钱包.md","articles":[]},{"title":"第9节:世界杯竞猜_Go交互","level":"1.15.13","depth":2,"path":"08_项目实战-世界杯竞猜/09_世界杯竞猜_Go交互合约.md","ref":"08_项目实战-世界杯竞猜/09_世界杯竞猜_Go交互合约.md","articles":[]}]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"cn","gitbook":"*"},"file":{"path":"08_项目实战-世界杯竞猜/基础回顾/01-区块链基础（上）.md","mtime":"2023-09-23T13:39:48.498Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"../..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3334,14 +3330,6 @@ func main() {
     
         
         <script src="../../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

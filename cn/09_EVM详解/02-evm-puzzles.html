@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3031,12 +3027,12 @@
 npx hardhat play
 </code></pre>
 <h2 id="puzzle1：callvalue">Puzzle#1：CALLVALUE</h2>
-<pre><code class="lang-sh">############
-# Puzzle 1 #
-############
+<pre><code class="lang-sh"><span class="hljs-comment">############</span>
+<span class="hljs-comment"># Puzzle 1 #</span>
+<span class="hljs-comment">############</span>
 
-00      34      CALLVALUE    #[msg.value]
-01      56      JUMP    #跳转下一个evm字节，查看JUMPDEST，发现目的地是08，所以msg.value为8
+00      34      CALLVALUE    <span class="hljs-comment">#[msg.value]</span>
+01      56      JUMP    <span class="hljs-comment">#跳转下一个evm字节，查看JUMPDEST，发现目的地是08，所以msg.value为8</span>
 02      FD      REVERT
 03      FD      REVERT
 04      FD      REVERT
@@ -3054,13 +3050,13 @@ npx hardhat play
 <li>由于目的地JUMPDEST是08，所以输入值为：8</li>
 </ul>
 <h2 id="puzzle2：codesize">Puzzle#2：CODESIZE</h2>
-<pre><code class="lang-sh">############
-# Puzzle 2 #
-############
+<pre><code class="lang-sh"><span class="hljs-comment">############</span>
+<span class="hljs-comment"># Puzzle 2 #</span>
+<span class="hljs-comment">############</span>
 
-00      34      CALLVALUE    #[msg.value]
-01      38      CODESIZE    #[10, msg.value]，codesize为当前evm中的操作码的数量，每一个是1字节
-02      03      SUB    #[sub_result]， 需要跳转到06，所以 10 - msg.value = 6
+00      34      CALLVALUE    <span class="hljs-comment">#[msg.value]</span>
+01      38      CODESIZE    <span class="hljs-comment">#[10, msg.value]，codesize为当前evm中的操作码的数量，每一个是1字节</span>
+02      03      SUB    <span class="hljs-comment">#[sub_result]， 需要跳转到06，所以 10 - msg.value = 6</span>
 03      56      JUMP
 04      FD      REVERT
 05      FD      REVERT
@@ -3078,12 +3074,12 @@ npx hardhat play
 <li>JUMP会跳到06字节，因此我们需要 10 - x = 6，推导出：x = 4</li>
 </ul>
 <h2 id="puzzle3：calldatasize">Puzzle#3：CALLDATASIZE</h2>
-<pre><code class="lang-sh">############
-# Puzzle 3 #
-############
+<pre><code class="lang-sh"><span class="hljs-comment">############</span>
+<span class="hljs-comment"># Puzzle 3 #</span>
+<span class="hljs-comment">############</span>
 
-00      36      CALLDATASIZE    #[datasize]
-01      56      JUMP    #跳转到04，所以我们只要保证calldata到size为4即可，内容不限。
+00      36      CALLDATASIZE    <span class="hljs-comment">#[datasize]</span>
+01      56      JUMP    <span class="hljs-comment">#跳转到04，所以我们只要保证calldata到size为4即可，内容不限。</span>
 02      FD      REVERT
 03      FD      REVERT
 04      5B      JUMPDEST
@@ -3096,12 +3092,12 @@ npx hardhat play
 <li>为了JUMP到04，因此我们的输入需要大小为4字节，因此随便输入一个四字节data即可！</li>
 </ul>
 <h2 id="puzzle4：xor">Puzzle#4：XOR</h2>
-<pre><code class="lang-sh">############
-# Puzzle 4 #
-############
+<pre><code class="lang-sh"><span class="hljs-comment">############</span>
+<span class="hljs-comment"># Puzzle 4 #</span>
+<span class="hljs-comment">############</span>
 
-00      34      CALLVALUE    #[msg.value]
-01      38      CODESIZE    #[12, msg.value]
+00      34      CALLVALUE    <span class="hljs-comment">#[msg.value]</span>
+01      38      CODESIZE    <span class="hljs-comment">#[12, msg.value]</span>
 02      18      XOR
 03      56      JUMP
 04      FD      REVERT
@@ -3126,17 +3122,17 @@ npx hardhat play
 </li>
 </ul>
 <h2 id="puzzle5：jumpi">Puzzle#5：JUMPI</h2>
-<pre><code class="lang-sh">############
-# Puzzle 5 #
-############
+<pre><code class="lang-sh"><span class="hljs-comment">############</span>
+<span class="hljs-comment"># Puzzle 5 #</span>
+<span class="hljs-comment">############</span>
 
-00      34          CALLVALUE    #[msg.value]
-01      80          DUP1    #[msg.value, msg.value]
-02      02          MUL    #[mul_result]
-03      610100      PUSH2 0100    #[0100, mul_result]，反推mul_result为: 0100
-06      14          EQ    #[0或1]，反推：1
-07      600C        PUSH1 0C    #[0C, 0或1]，为了能跳转，此时必须为：1
-09      57          JUMPI    #[]，stack2为1时，跳转到stack1的位置
+00      34          CALLVALUE    <span class="hljs-comment">#[msg.value]</span>
+01      80          DUP1    <span class="hljs-comment">#[msg.value, msg.value]</span>
+02      02          MUL    <span class="hljs-comment">#[mul_result]</span>
+03      610100      PUSH2 0100    <span class="hljs-comment">#[0100, mul_result]，反推mul_result为: 0100</span>
+06      14          EQ    <span class="hljs-comment">#[0或1]，反推：1</span>
+07      600C        PUSH1 0C    <span class="hljs-comment">#[0C, 0或1]，为了能跳转，此时必须为：1</span>
+09      57          JUMPI    <span class="hljs-comment">#[]，stack2为1时，跳转到stack1的位置</span>
 0A      FD          REVERT
 0B      FD          REVERT
 0C      5B          JUMPDEST
@@ -3157,13 +3153,13 @@ npx hardhat play
 <li>因此我们需要使得：0100 = x*x，0x0100十进制为256，所以x = 16</li>
 </ul>
 <h2 id="puzzle6：calldataload">Puzzle#6：CALLDATALOAD</h2>
-<pre><code class="lang-sh">############
-# Puzzle 6 #
-############
+<pre><code class="lang-sh"><span class="hljs-comment">############</span>
+<span class="hljs-comment"># Puzzle 6 #</span>
+<span class="hljs-comment">############</span>
 
-00      6000      PUSH1 00    #[00]
-02      35        CALLDATALOAD    #[calldata, 00]
-03      56        JUMP    #跳转到0A，所以stack1为：0A
+00      6000      PUSH1 00    <span class="hljs-comment">#[00]</span>
+02      35        CALLDATALOAD    <span class="hljs-comment">#[calldata, 00]</span>
+03      56        JUMP    <span class="hljs-comment">#跳转到0A，所以stack1为：0A</span>
 04      FD        REVERT
 05      FD        REVERT
 06      FD        REVERT
@@ -3180,21 +3176,21 @@ npx hardhat play
 <li>由于calldata的数值总为32字节的倍数，所以此处应该为：0x000000000000000000000000000000000000000000000000000000000000000a</li>
 </ul>
 <h2 id="puzzle7：extcodesize">Puzzle#7：EXTCODESIZE</h2>
-<pre><code class="lang-sh">############
-# Puzzle 7 #
-############
+<pre><code class="lang-sh"><span class="hljs-comment">############</span>
+<span class="hljs-comment"># Puzzle 7 #</span>
+<span class="hljs-comment">############</span>
 
-00      36        CALLDATASIZE    # [datasize]
-01      6000      PUSH1 00    # [00, datasize]
-03      80        DUP1        # [00, 00, datasize]
-04      37        CALLDATACOPY    # [] data被copy到memory中，栈被清空
-05      36        CALLDATASIZE    # [datasize]
-06      6000      PUSH1 00        # [00, datasize]
-08      6000      PUSH1 00        # [00, 00, datasize]
-0A      F0        CREATE    # [deployed_address] 栈被清空，从内存中读取数据，创建合约，返回地址 
-0B      3B        EXTCODESIZE    # [address_code_size] 输入地址，返回合约的size
-0C      6001      PUSH1 01    # [01, address_code_size]
-0E      14        EQ    # [1] address_code_size必须为1，后续的才成立
+00      36        CALLDATASIZE    <span class="hljs-comment"># [datasize]</span>
+01      6000      PUSH1 00    <span class="hljs-comment"># [00, datasize]</span>
+03      80        DUP1        <span class="hljs-comment"># [00, 00, datasize]</span>
+04      37        CALLDATACOPY    <span class="hljs-comment"># [] data被copy到memory中，栈被清空</span>
+05      36        CALLDATASIZE    <span class="hljs-comment"># [datasize]</span>
+06      6000      PUSH1 00        <span class="hljs-comment"># [00, datasize]</span>
+08      6000      PUSH1 00        <span class="hljs-comment"># [00, 00, datasize]</span>
+0A      F0        CREATE    <span class="hljs-comment"># [deployed_address] 栈被清空，从内存中读取数据，创建合约，返回地址 </span>
+0B      3B        EXTCODESIZE    <span class="hljs-comment"># [address_code_size] 输入地址，返回合约的size</span>
+0C      6001      PUSH1 01    <span class="hljs-comment"># [01, address_code_size]</span>
+0E      14        EQ    <span class="hljs-comment"># [1] address_code_size必须为1，后续的才成立</span>
 0F      6013      PUSH1 13
 11      57        JUMPI
 12      FD        REVERT
@@ -3214,29 +3210,29 @@ npx hardhat play
 </ul>
 <p><img src="assets/image-20221031173928192.png" alt="image-20221031173928192"></p>
 <h2 id="puzzle8：swap">Puzzle#8：SWAP</h2>
-<pre><code class="lang-sh">############
-# Puzzle 8 #
-############
+<pre><code class="lang-sh"><span class="hljs-comment">############</span>
+<span class="hljs-comment"># Puzzle 8 #</span>
+<span class="hljs-comment">############</span>
 
-00      36        CALLDATASIZE    # [datasize]
-01      6000      PUSH1 00    # [00, datasize]
-03      80        DUP1    # [00, 00, datasize]
-04      37        CALLDATACOPY    # []  copy到内存中
-05      36        CALLDATASIZE    # [datasize]，直接生成数据，不需要栈参数
-06      6000      PUSH1 00    # [00, datasize]
-08      6000      PUSH1 00    # [00, 00, datasize]
-0A      F0        CREATE    # [deployed_address]
-0B      6000      PUSH1 00    # [00, deployed_address]
-0D      80        DUP1    # [00, 00, deployed_address]
-0E      80        DUP1    # [00, 00, 00, deployed_address]
-0F      80        DUP1    # [00, 00, 00, 00, deployed_address]
-10      80        DUP1    # [00, 00, 00, 00, 00, deployed_address]
-11      94        SWAP5    # [deployed_address, 00, 00, 00, 00, 00]，兑换1st 和 6th，你没有看错1和6，不是5
-12      5A        GAS    # [gasAvail, deployed_address, 00, 00, 00, 00, 00] // 7个参数
-13      F1        CALL    # [0或1]调用函数，需要是0，0表示失败，1表示成功！（反推的）
-14      6000      PUSH1 00    # [00, 0或1]，需要是0
-16      14        EQ    # [0或1]，需要是1
-17      601B      PUSH1 1B    # [1B, 0或1]，需要是1
+00      36        CALLDATASIZE    <span class="hljs-comment"># [datasize]</span>
+01      6000      PUSH1 00    <span class="hljs-comment"># [00, datasize]</span>
+03      80        DUP1    <span class="hljs-comment"># [00, 00, datasize]</span>
+04      37        CALLDATACOPY    <span class="hljs-comment"># []  copy到内存中</span>
+05      36        CALLDATASIZE    <span class="hljs-comment"># [datasize]，直接生成数据，不需要栈参数</span>
+06      6000      PUSH1 00    <span class="hljs-comment"># [00, datasize]</span>
+08      6000      PUSH1 00    <span class="hljs-comment"># [00, 00, datasize]</span>
+0A      F0        CREATE    <span class="hljs-comment"># [deployed_address]</span>
+0B      6000      PUSH1 00    <span class="hljs-comment"># [00, deployed_address]</span>
+0D      80        DUP1    <span class="hljs-comment"># [00, 00, deployed_address]</span>
+0E      80        DUP1    <span class="hljs-comment"># [00, 00, 00, deployed_address]</span>
+0F      80        DUP1    <span class="hljs-comment"># [00, 00, 00, 00, deployed_address]</span>
+10      80        DUP1    <span class="hljs-comment"># [00, 00, 00, 00, 00, deployed_address]</span>
+11      94        SWAP5    <span class="hljs-comment"># [deployed_address, 00, 00, 00, 00, 00]，兑换1st 和 6th，你没有看错1和6，不是5</span>
+12      5A        GAS    <span class="hljs-comment"># [gasAvail, deployed_address, 00, 00, 00, 00, 00] // 7个参数</span>
+13      F1        CALL    <span class="hljs-comment"># [0或1]调用函数，需要是0，0表示失败，1表示成功！（反推的）</span>
+14      6000      PUSH1 00    <span class="hljs-comment"># [00, 0或1]，需要是0</span>
+16      14        EQ    <span class="hljs-comment"># [0或1]，需要是1</span>
+17      601B      PUSH1 1B    <span class="hljs-comment"># [1B, 0或1]，需要是1</span>
 19      57        JUMPI                        
 1A      FD        REVERT
 1B      5B        JUMPDEST
@@ -3257,27 +3253,27 @@ npx hardhat play
 <li>因此答案为：0x60016000526001601ff3</li>
 </ul>
 <h2 id="puzzle9：lt">Puzzle#9：LT</h2>
-<pre><code class="lang-sh">############
-# Puzzle 9 #
-############
+<pre><code class="lang-sh"><span class="hljs-comment">############</span>
+<span class="hljs-comment"># Puzzle 9 #</span>
+<span class="hljs-comment">############</span>
 
-00      36        CALLDATASIZE    # [datasize]
-01      6003      PUSH1 03    # [03, datasize]
-03      10        LT    # [1], stack(1) &lt; stack(2),
-04      6009      PUSH1 09    # [09, 1]
+00      36        CALLDATASIZE    <span class="hljs-comment"># [datasize]</span>
+01      6003      PUSH1 03    <span class="hljs-comment"># [03, datasize]</span>
+03      10        LT    <span class="hljs-comment"># [1], stack(1) &lt; stack(2),</span>
+04      6009      PUSH1 09    <span class="hljs-comment"># [09, 1]</span>
 06      57        JUMPI
 07      FD        REVERT
 08      FD        REVERT
-09      5B        JUMPDEST    # [] 跳转到这里
-0A      34        CALLVALUE        # [msgvalue]
-0B      36        CALLDATASIZE    # [datasize, msgvalue]
-0C      02        MUL        # [mul_result]
-0D      6008      PUSH1 08    # [08, mul_result]
-0F      14        EQ    # [1], 必须是0
-10      6014      PUSH1 14    # [14, 1]
+09      5B        JUMPDEST    <span class="hljs-comment"># [] 跳转到这里</span>
+0A      34        CALLVALUE        <span class="hljs-comment"># [msgvalue]</span>
+0B      36        CALLDATASIZE    <span class="hljs-comment"># [datasize, msgvalue]</span>
+0C      02        MUL        <span class="hljs-comment"># [mul_result]</span>
+0D      6008      PUSH1 08    <span class="hljs-comment"># [08, mul_result]</span>
+0F      14        EQ    <span class="hljs-comment"># [1], 必须是0</span>
+10      6014      PUSH1 14    <span class="hljs-comment"># [14, 1]</span>
 12      57        JUMPI
 13      FD        REVERT
-14      5B        JUMPDEST    # 跳转到这里，结束！
+14      5B        JUMPDEST    <span class="hljs-comment"># 跳转到这里，结束！</span>
 15      00        STOP
 
 ? Enter the value to send: 
@@ -3295,26 +3291,26 @@ npx hardhat play
 </li>
 </ul>
 <h2 id="puzzle10：iszero">Puzzle#10：ISZERO</h2>
-<pre><code class="lang-sh">#############
-# Puzzle 10 #
-#############
+<pre><code class="lang-sh"><span class="hljs-comment">#############</span>
+<span class="hljs-comment"># Puzzle 10 #</span>
+<span class="hljs-comment">#############</span>
 
-00      38          CODESIZE    # [23]
-01      34          CALLVALUE    # [msgvalue, 23]
-02      90          SWAP1    # [23, msgvalue]
-03      11          GT    # [1], msgvalue &lt; 23
-04      6008        PUSH1 08    # [08, 1]
+00      38          CODESIZE    <span class="hljs-comment"># [23]</span>
+01      34          CALLVALUE    <span class="hljs-comment"># [msgvalue, 23]</span>
+02      90          SWAP1    <span class="hljs-comment"># [23, msgvalue]</span>
+03      11          GT    <span class="hljs-comment"># [1], msgvalue &lt; 23</span>
+04      6008        PUSH1 08    <span class="hljs-comment"># [08, 1]</span>
 06      57          JUMPI
 07      FD          REVERT
-08      5B          JUMPDEST    # 跳到这里
-09      36          CALLDATASIZE    # [datasize]
-0A      610003      PUSH2 0003    # [0003, datasize]
-0D      90          SWAP1    # [datasize, 0003]
-0E      06          MOD        # [N]，取余数，N为余数，必须是：0
-0F      15          ISZERO    # [0或1]，必须是1
-10      34          CALLVALUE    # [msgvalue, 0或1]，必须是：1
-11      600A        PUSH1 0A    # [0A，msgvalue, 0或1]，反推：msgvalue = 0x0f
-13      01          ADD    # [add_result, 0或1]，下面是跳转了，所以栈值为：[0x19, 1]
+08      5B          JUMPDEST    <span class="hljs-comment"># 跳到这里</span>
+09      36          CALLDATASIZE    <span class="hljs-comment"># [datasize]</span>
+0A      610003      PUSH2 0003    <span class="hljs-comment"># [0003, datasize]</span>
+0D      90          SWAP1    <span class="hljs-comment"># [datasize, 0003]</span>
+0E      06          MOD        <span class="hljs-comment"># [N]，取余数，N为余数，必须是：0</span>
+0F      15          ISZERO    <span class="hljs-comment"># [0或1]，必须是1</span>
+10      34          CALLVALUE    <span class="hljs-comment"># [msgvalue, 0或1]，必须是：1</span>
+11      600A        PUSH1 0A    <span class="hljs-comment"># [0A，msgvalue, 0或1]，反推：msgvalue = 0x0f</span>
+13      01          ADD    <span class="hljs-comment"># [add_result, 0或1]，下面是跳转了，所以栈值为：[0x19, 1]</span>
 14      57          JUMPI
 15      FD          REVERT
 16      FD          REVERT
@@ -3377,7 +3373,7 @@ npx hardhat play
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第2节:EVM-PUZZLES挑战","level":"1.16.2","depth":2,"next":{"title":"第3节:汇编概述","level":"1.16.3","depth":2,"path":"09_EVM详解/03-汇编概述.md","ref":"09_EVM详解/03-汇编概述.md","articles":[]},"previous":{"title":"第1节:OPCode手册","level":"1.16.1","depth":2,"path":"09_EVM详解/01_OPCode手册.md","ref":"09_EVM详解/01_OPCode手册.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"09_EVM详解/02-evm-puzzles.md","mtime":"2023-09-23T13:48:35.162Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第2节:EVM-PUZZLES挑战","level":"1.16.2","depth":2,"next":{"title":"第3节:汇编概述","level":"1.16.3","depth":2,"path":"09_EVM详解/03-汇编概述.md","ref":"09_EVM详解/03-汇编概述.md","articles":[]},"previous":{"title":"第1节:OPCode手册","level":"1.16.1","depth":2,"path":"09_EVM详解/01_OPCode手册.md","ref":"09_EVM详解/01_OPCode手册.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"cn","gitbook":"*"},"file":{"path":"09_EVM详解/02-evm-puzzles.md","mtime":"2023-09-23T13:48:35.162Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3460,14 +3456,6 @@ npx hardhat play
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

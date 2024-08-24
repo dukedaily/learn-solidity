@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3046,113 +3042,113 @@
 <p><img src="assets/image-20221108132337319.png" alt="image-20221108132337319"></p>
 <h2 id="2-定义工作量证明结构">2. 定义工作量证明结构</h2>
 <p>创建proofOfWork.go文件，添加如下代码：</p>
-<pre><code class="lang-go">//- 定一个工作量证明的结构ProofOfWork
-//- block
-//- 目标值
+<pre><code class="lang-go"><span class="hljs-comment">//- 定一个工作量证明的结构ProofOfWork</span>
+<span class="hljs-comment">//- block</span>
+<span class="hljs-comment">//- 目标值</span>
 
-type ProofOfWork struct {
+<span class="hljs-keyword">type</span> ProofOfWork <span class="hljs-keyword">struct</span> {
 
-    //区块数据
+    <span class="hljs-comment">//区块数据</span>
     block Block
 
-    //目标值，先写成固定的值，后面再进行推到演算。
+    <span class="hljs-comment">//目标值，先写成固定的值，后面再进行推到演算。</span>
     target big.Int
 }
 </code></pre>
 <h2 id="3-添加创建pow的函数">3. 添加创建POW的函数</h2>
-<pre><code class="lang-go">//- 提供一个创建POW的方法
-//NewProofOfWork(参数)
+<pre><code class="lang-go"><span class="hljs-comment">//- 提供一个创建POW的方法</span>
+<span class="hljs-comment">//NewProofOfWork(参数)</span>
 
-func NewProofOfWork(block Block)  *ProofOfWork{
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">NewProofOfWork</span><span class="hljs-params">(block Block)</span>  *<span class="hljs-title">ProofOfWork</span></span>{
     pow := ProofOfWork{
         block:block,
     }
 
-    //自定义的难度值，先写成固定值
-    //0000100000000000000000000000000000000000000000000000000000000000
-    targetString := &quot;0000100000000000000000000000000000000000000000000000000000000000&quot;
+    <span class="hljs-comment">//自定义的难度值，先写成固定值</span>
+    <span class="hljs-comment">//0000100000000000000000000000000000000000000000000000000000000000</span>
+    targetString := <span class="hljs-string">&quot;0000100000000000000000000000000000000000000000000000000000000000&quot;</span>
 
-    //不要连着写
+    <span class="hljs-comment">//不要连着写</span>
     bigIntTmp := big.Int{}
-    //bigIntTmp.SetBytes([]byte(targetString))
-    bigIntTmp.SetString(targetString, 16)
+    <span class="hljs-comment">//bigIntTmp.SetBytes([]byte(targetString))</span>
+    bigIntTmp.SetString(targetString, <span class="hljs-number">16</span>)
 
     pow.target = bigIntTmp
 
-    return &amp;pow
+    <span class="hljs-keyword">return</span> &amp;pow
 }
 </code></pre>
 <h2 id="4添加挖矿的函数">4.添加挖矿的函数</h2>
-<pre><code class="lang-go">//- 提供一个计算哈希值的方法
-//Run()
-func (pow *ProofOfWork)Run() ([]byte, uint64) {
+<pre><code class="lang-go"><span class="hljs-comment">//- 提供一个计算哈希值的方法</span>
+<span class="hljs-comment">//Run()</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(pow *ProofOfWork)</span><span class="hljs-title">Run</span><span class="hljs-params">()</span> <span class="hljs-params">([]<span class="hljs-keyword">byte</span>, <span class="hljs-keyword">uint64</span>)</span></span> {
 
-    //var data = &quot;helloworld&quot;
-    ////10s中左右
-    //for i := 0; i &lt; 1000000; i++ {
-    //    hash := sha256.Sum256([]byte(data + string(i)))
-    //    fmt.Printf(&quot;hash : %x, %d\n&quot;, string(hash[:]), i)
-    //}
-    var Nonce uint64
-    var hash [32]byte
+    <span class="hljs-comment">//var data = &quot;helloworld&quot;</span>
+    <span class="hljs-comment">////10s中左右</span>
+    <span class="hljs-comment">//for i := 0; i &lt; 1000000; i++ {</span>
+    <span class="hljs-comment">//    hash := sha256.Sum256([]byte(data + string(i)))</span>
+    <span class="hljs-comment">//    fmt.Printf(&quot;hash : %x, %d\n&quot;, string(hash[:]), i)</span>
+    <span class="hljs-comment">//}</span>
+    <span class="hljs-keyword">var</span> Nonce <span class="hljs-keyword">uint64</span>
+    <span class="hljs-keyword">var</span> hash [<span class="hljs-number">32</span>]<span class="hljs-keyword">byte</span>
 
-    fmt.Printf(&quot;target : %x\n&quot;, pow.target)
-    for ;; {
-        //[Size]byte
+    fmt.Printf(<span class="hljs-string">&quot;target : %x\n&quot;</span>, pow.target)
+    <span class="hljs-keyword">for</span> ;; {
+        <span class="hljs-comment">//[Size]byte</span>
         hash = sha256.Sum256(pow.prepareData(Nonce))
 
-        //比较：当前的哈希值[32]byte，目标值：big.Int
+        <span class="hljs-comment">//比较：当前的哈希值[32]byte，目标值：big.Int</span>
 
-        //目标是：把当前的哈希值转换成big.Int
+        <span class="hljs-comment">//目标是：把当前的哈希值转换成big.Int</span>
         tTmp := big.Int{}
         tTmp.SetBytes(hash[:])
 
-        // Cmp compares x and y and returns:
-        //
-        //   -1 if x &lt;  y
-        //    0 if x == y
-        //   +1 if x &gt;  y
-        //
-        //func (x *Int) Cmp(y *Int) (r int) {
-        //当前哈希.Cmp(目标值) == -1，说明当前的哈希小于目标值
-        if tTmp.Cmp(&amp;pow.target)  == -1 {
+        <span class="hljs-comment">// Cmp compares x and y and returns:</span>
+        <span class="hljs-comment">//</span>
+        <span class="hljs-comment">//   -1 if x &lt;  y</span>
+        <span class="hljs-comment">//    0 if x == y</span>
+        <span class="hljs-comment">//   +1 if x &gt;  y</span>
+        <span class="hljs-comment">//</span>
+        <span class="hljs-comment">//func (x *Int) Cmp(y *Int) (r int) {</span>
+        <span class="hljs-comment">//当前哈希.Cmp(目标值) == -1，说明当前的哈希小于目标值</span>
+        <span class="hljs-keyword">if</span> tTmp.Cmp(&amp;pow.target)  == <span class="hljs-number">-1</span> {
 
-        //if tTmp &lt; pow.target {
-            //找到了，退出
-            fmt.Printf(&quot;found hash : %x, %d\n&quot;, hash, Nonce)
-            break
-        } else {
-            //继续循环
+        <span class="hljs-comment">//if tTmp &lt; pow.target {</span>
+            <span class="hljs-comment">//找到了，退出</span>
+            fmt.Printf(<span class="hljs-string">&quot;found hash : %x, %d\n&quot;</span>, hash, Nonce)
+            <span class="hljs-keyword">break</span>
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-comment">//继续循环</span>
             Nonce++
         }
     }
 
-    return hash[:], Nonce
+    <span class="hljs-keyword">return</span> hash[:], Nonce
 }
 </code></pre>
 <h2 id="5实现辅助函数preparedata">5.实现辅助函数prepareData</h2>
 <p>这个函数类似于v1中的setHash函数的功能，代码如下：</p>
-<pre><code class="lang-go">func (pow *ProofOfWork) prepareData(num uint64) []byte {
+<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(pow *ProofOfWork)</span> <span class="hljs-title">prepareData</span><span class="hljs-params">(num <span class="hljs-keyword">uint64</span>)</span> []<span class="hljs-title">byte</span></span> {
     block := pow.block
-    tmp := [][]byte{
+    tmp := [][]<span class="hljs-keyword">byte</span>{
         uintToByte(block.Version),
         block.PrevBlockHash,
-        //block.Hash,
+        <span class="hljs-comment">//block.Hash,</span>
         block.MerkleRoot,
         uintToByte(block.TimeStamp),
         uintToByte(block.Difficuty),
         uintToByte(num),
         block.Data}
 
-    data := bytes.Join(tmp, []byte{})
-    return data
+    data := bytes.Join(tmp, []<span class="hljs-keyword">byte</span>{})
+    <span class="hljs-keyword">return</span> data
 }
 </code></pre>
 <h1 id="二、调用pow">二、调用POW</h1>
 <p>pow在block.go文件中使用，即创建完区块之后引入pow。将setHash()注释掉，使用ProofOfWork替换之。</p>
 <p>代码如下：</p>
 <p>​    </p>
-<pre><code class="lang-go">    //block.setHash()
+<pre><code class="lang-go">    <span class="hljs-comment">//block.setHash()</span>
     pow := NewProofOfWork(block)
     hash, nonce := pow.Run()
     block.Hash = hash
@@ -3163,29 +3159,29 @@ func (pow *ProofOfWork)Run() ([]byte, uint64) {
 <h1 id="三、第一次测试">三、第一次测试</h1>
 <h2 id="1-main函数">1. main函数</h2>
 <p>主函数基于v1版本，无需修改:</p>
-<pre><code class="lang-go">package main
+<pre><code class="lang-go"><span class="hljs-keyword">package</span> main
 
-import (
-    &quot;fmt&quot;
+<span class="hljs-keyword">import</span> (
+    <span class="hljs-string">&quot;fmt&quot;</span>
 )
 
-func main() {
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> {
 
     bc := NewBlockChain()
-    bc.AddBlock(&quot;HelloWorld!&quot;)
-    bc.AddBlock(&quot;Hello Itcast!&quot;)
-    bc.AddBlock(&quot;Hello i11111!&quot;)
-    //block的数组
-    for index, block := range bc.blocks {
-        fmt.Println(&quot; ============== current block index :&quot;, index)
-        fmt.Printf(&quot;Version : %d\n&quot;, block.Version)
-        fmt.Printf(&quot;PrevBlockHash : %x\n&quot;, block.PrevBlockHash)
-        fmt.Printf(&quot;Hash : %x\n&quot;, block.Hash)
-        fmt.Printf(&quot;MerkleRoot : %x\n&quot;, block.MerkleRoot)
-        fmt.Printf(&quot;TimeStamp : %d\n&quot;, block.TimeStamp)
-        fmt.Printf(&quot;Difficuty : %d\n&quot;, block.Difficuty)
-        fmt.Printf(&quot;Nonce : %d\n&quot;, block.Nonce)
-        fmt.Printf(&quot;Data : %s\n&quot;, block.Data)
+    bc.AddBlock(<span class="hljs-string">&quot;HelloWorld!&quot;</span>)
+    bc.AddBlock(<span class="hljs-string">&quot;Hello Itcast!&quot;</span>)
+    bc.AddBlock(<span class="hljs-string">&quot;Hello i11111!&quot;</span>)
+    <span class="hljs-comment">//block的数组</span>
+    <span class="hljs-keyword">for</span> index, block := <span class="hljs-keyword">range</span> bc.blocks {
+        fmt.Println(<span class="hljs-string">&quot; ============== current block index :&quot;</span>, index)
+        fmt.Printf(<span class="hljs-string">&quot;Version : %d\n&quot;</span>, block.Version)
+        fmt.Printf(<span class="hljs-string">&quot;PrevBlockHash : %x\n&quot;</span>, block.PrevBlockHash)
+        fmt.Printf(<span class="hljs-string">&quot;Hash : %x\n&quot;</span>, block.Hash)
+        fmt.Printf(<span class="hljs-string">&quot;MerkleRoot : %x\n&quot;</span>, block.MerkleRoot)
+        fmt.Printf(<span class="hljs-string">&quot;TimeStamp : %d\n&quot;</span>, block.TimeStamp)
+        fmt.Printf(<span class="hljs-string">&quot;Difficuty : %d\n&quot;</span>, block.Difficuty)
+        fmt.Printf(<span class="hljs-string">&quot;Nonce : %d\n&quot;</span>, block.Nonce)
+        fmt.Printf(<span class="hljs-string">&quot;Data : %s\n&quot;</span>, block.Data)
     }
 }
 </code></pre>
@@ -3195,48 +3191,48 @@ func main() {
 </code></pre><h2 id="3执行结果">3.执行结果</h2>
 <pre><code class="lang-go">duke ~/Desktop/code/v2$  ./block 
 target : f00000000000000000000000000000000000000000000000000000000000
-found hash : 00001867d3549489218f6bd148c381da6396a398fae823d1b6b2eacd4fb5bb49, 77832
+found hash : <span class="hljs-number">00001867</span>d3549489218f6bd148c381da6396a398fae823d1b6b2eacd4fb5bb49, <span class="hljs-number">77832</span>
 target : f00000000000000000000000000000000000000000000000000000000000
-found hash : 00000f3a678ab02b58b9428e7eb3fd0e6cb374770b4192c640e2f4964f8120ec, 77018
+found hash : <span class="hljs-number">00000</span>f3a678ab02b58b9428e7eb3fd0e6cb374770b4192c640e2f4964f8120ec, <span class="hljs-number">77018</span>
 target : f00000000000000000000000000000000000000000000000000000000000
-found hash : 00000de185dc87751aa8c78638491e14548ff505473af89eb4954324b5539563, 80369
+found hash : <span class="hljs-number">00000</span>de185dc87751aa8c78638491e14548ff505473af89eb4954324b5539563, <span class="hljs-number">80369</span>
 target : f00000000000000000000000000000000000000000000000000000000000
-found hash : 00005acbe17bfbd374fbabe94ba6b64ba8cdfdedf828f02b21f14a4517dcffc3, 64729
- ============== current block index : 0
-Version : 0
+found hash : <span class="hljs-number">00005</span>acbe17bfbd374fbabe94ba6b64ba8cdfdedf828f02b21f14a4517dcffc3, <span class="hljs-number">64729</span>
+ ============== current block index : <span class="hljs-number">0</span>
+Version : <span class="hljs-number">0</span>
 PrevBlockHash : 
-Hash : 00001867d3549489218f6bd148c381da6396a398fae823d1b6b2eacd4fb5bb49
+Hash : <span class="hljs-number">00001867</span>d3549489218f6bd148c381da6396a398fae823d1b6b2eacd4fb5bb49
 MerkleRoot : 
-TimeStamp : 1536370652
-Difficuty : 10
-Nonce : 77832
+TimeStamp : <span class="hljs-number">1536370652</span>
+Difficuty : <span class="hljs-number">10</span>
+Nonce : <span class="hljs-number">77832</span>
 Data : Genesis Block!
- ============== current block index : 1
-Version : 0
-PrevBlockHash : 00001867d3549489218f6bd148c381da6396a398fae823d1b6b2eacd4fb5bb49
-Hash : 00000f3a678ab02b58b9428e7eb3fd0e6cb374770b4192c640e2f4964f8120ec
+ ============== current block index : <span class="hljs-number">1</span>
+Version : <span class="hljs-number">0</span>
+PrevBlockHash : <span class="hljs-number">00001867</span>d3549489218f6bd148c381da6396a398fae823d1b6b2eacd4fb5bb49
+Hash : <span class="hljs-number">00000</span>f3a678ab02b58b9428e7eb3fd0e6cb374770b4192c640e2f4964f8120ec
 MerkleRoot : 
-TimeStamp : 1536370652
-Difficuty : 10
-Nonce : 77018
+TimeStamp : <span class="hljs-number">1536370652</span>
+Difficuty : <span class="hljs-number">10</span>
+Nonce : <span class="hljs-number">77018</span>
 Data : HelloWorld!
- ============== current block index : 2
-Version : 0
-PrevBlockHash : 00000f3a678ab02b58b9428e7eb3fd0e6cb374770b4192c640e2f4964f8120ec
-Hash : 00000de185dc87751aa8c78638491e14548ff505473af89eb4954324b5539563
+ ============== current block index : <span class="hljs-number">2</span>
+Version : <span class="hljs-number">0</span>
+PrevBlockHash : <span class="hljs-number">00000</span>f3a678ab02b58b9428e7eb3fd0e6cb374770b4192c640e2f4964f8120ec
+Hash : <span class="hljs-number">00000</span>de185dc87751aa8c78638491e14548ff505473af89eb4954324b5539563
 MerkleRoot : 
-TimeStamp : 1536370652
-Difficuty : 10
-Nonce : 80369
+TimeStamp : <span class="hljs-number">1536370652</span>
+Difficuty : <span class="hljs-number">10</span>
+Nonce : <span class="hljs-number">80369</span>
 Data : Hello Itcast!
- ============== current block index : 3
-Version : 0
-PrevBlockHash : 00000de185dc87751aa8c78638491e14548ff505473af89eb4954324b5539563
-Hash : 00005acbe17bfbd374fbabe94ba6b64ba8cdfdedf828f02b21f14a4517dcffc3
+ ============== current block index : <span class="hljs-number">3</span>
+Version : <span class="hljs-number">0</span>
+PrevBlockHash : <span class="hljs-number">00000</span>de185dc87751aa8c78638491e14548ff505473af89eb4954324b5539563
+Hash : <span class="hljs-number">00005</span>acbe17bfbd374fbabe94ba6b64ba8cdfdedf828f02b21f14a4517dcffc3
 MerkleRoot : 
-TimeStamp : 1536370652
-Difficuty : 10
-Nonce : 64729
+TimeStamp : <span class="hljs-number">1536370652</span>
+Difficuty : <span class="hljs-number">10</span>
+Nonce : <span class="hljs-number">64729</span>
 Data : Hello i11111!
  duke ~/Desktop/code/v2$
 </code></pre>
@@ -3245,27 +3241,27 @@ Data : Hello i11111!
 <h1 id="四、添加校验函数">四、添加校验函数</h1>
 <p>校验即对求出来的哈希和随机数进行验证，只需要对求出来的值进行反向的计算比较即可。</p>
 <p>在ProofOfWork.go文件中，添加如下代码：</p>
-<pre><code class="lang-go">//- 提供一个校验函数
-//IsValid()
+<pre><code class="lang-go"><span class="hljs-comment">//- 提供一个校验函数</span>
+<span class="hljs-comment">//IsValid()</span>
 
-func (pow *ProofOfWork)IsValid()  bool{
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(pow *ProofOfWork)</span><span class="hljs-title">IsValid</span><span class="hljs-params">()</span>  <span class="hljs-title">bool</span></span>{
     hash := sha256.Sum256(pow.prepareData(pow.block.Nonce))
-    fmt.Printf(&quot;is valid hash : %x, %d\n&quot;, hash[:], pow.block.Nonce)
+    fmt.Printf(<span class="hljs-string">&quot;is valid hash : %x, %d\n&quot;</span>, hash[:], pow.block.Nonce)
 
     tTmp := big.Int{}
     tTmp.SetBytes(hash[:])
-    if tTmp.Cmp(&amp;pow.target)  == -1 {
-        return true
+    <span class="hljs-keyword">if</span> tTmp.Cmp(&amp;pow.target)  == <span class="hljs-number">-1</span> {
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>
     }
 
-    return false
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>
 
-    //return tTmp.Cmp(&amp;pow.target)  == -1
+    <span class="hljs-comment">//return tTmp.Cmp(&amp;pow.target)  == -1</span>
 }
 </code></pre>
 <p>在main.go文件中调用校验函数IsValid，添加如下代码：</p>
 <pre><code class="lang-go">pow := NewProofOfWork(*block)
-fmt.Printf(&quot;IsValid : %v\n&quot;, pow.IsValid())
+fmt.Printf(<span class="hljs-string">&quot;IsValid : %v\n&quot;</span>, pow.IsValid())
 </code></pre>
 <p>位置如下：</p>
 <p><img src="assets/image-20221108132744530.png" alt="image-20221108132744530"></p>
@@ -3273,38 +3269,38 @@ fmt.Printf(&quot;IsValid : %v\n&quot;, pow.IsValid())
 <p>重新编译执行，结果如下：</p>
 <p><img src="assets/image-20221108132807179.png" alt="image-20221108132807179"></p>
 <p>优化时间打印：</p>
-<pre><code class="lang-js">timeFormat := time.Unix(int64(block.TimeStamp), 0).Format(&quot;2006-01-02 15:04:05&quot;)
-fmt.Printf(&quot;时间戳: %s\n&quot;, timeFormat)
+<pre><code class="lang-js">timeFormat := time.Unix(int64(block.TimeStamp), <span class="hljs-number">0</span>).Format(<span class="hljs-string">&quot;2006-01-02 15:04:05&quot;</span>)
+fmt.Printf(<span class="hljs-string">&quot;时间戳: %s\n&quot;</span>, timeFormat)
 </code></pre>
 <h1 id="六、推导难度值">六、推导难度值</h1>
 <p>比特币系统并不是直接给定一个哈希值，而是给定一个难度数字，通过这个数字计算出一个哈希值，我们上面为了简化所以直接给定了一个哈希。现在，我们要模拟比特币模式，给定一个数字，然后推导出目标哈希值。</p>
-<pre><code class="lang-go">func NewProofOfWork(block *Block) *ProofOfWork {
+<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">NewProofOfWork</span><span class="hljs-params">(block *Block)</span> *<span class="hljs-title">ProofOfWork</span></span> {
     pow := ProofOfWork{
         block: block,
     }
 
-    //hashString := &quot;0001000000000000000000000000000000000000000000000000000000000000&quot;
-    //tmp := big.Int{}
-    //tmp.SetString(hashString, 16)
+    <span class="hljs-comment">//hashString := &quot;0001000000000000000000000000000000000000000000000000000000000000&quot;</span>
+    <span class="hljs-comment">//tmp := big.Int{}</span>
+    <span class="hljs-comment">//tmp.SetString(hashString, 16)</span>
 
-    //pow.target = &amp;tmp
+    <span class="hljs-comment">//pow.target = &amp;tmp</span>
 
-    //目标值：
-    // 0001000000000000000000000000000000000000000000000000000000000000
-    //初始值
-    // 0000000000000000000000000000000000000000000000000000000000000001 
-    //左移256位
-    //10000000000000000000000000000000000000000000000000000000000000000
-    //右移4位(16进制位数)
-    // 0001000000000000000000000000000000000000000000000000000000000000
+    <span class="hljs-comment">//目标值：</span>
+    <span class="hljs-comment">// 0001000000000000000000000000000000000000000000000000000000000000</span>
+    <span class="hljs-comment">//初始值</span>
+    <span class="hljs-comment">// 0000000000000000000000000000000000000000000000000000000000000001 </span>
+    <span class="hljs-comment">//左移256位</span>
+    <span class="hljs-comment">//10000000000000000000000000000000000000000000000000000000000000000</span>
+    <span class="hljs-comment">//右移4位(16进制位数)</span>
+    <span class="hljs-comment">// 0001000000000000000000000000000000000000000000000000000000000000</span>
 
-    targetLocal := big.NewInt(1)
-    //targetLocal.Lsh(targetLocal, 256)
-    //targetLocal.Rsh(targetLocal, difficulty)
-    targetLocal.Lsh(targetLocal, 256-difficulty)
+    targetLocal := big.NewInt(<span class="hljs-number">1</span>)
+    <span class="hljs-comment">//targetLocal.Lsh(targetLocal, 256)</span>
+    <span class="hljs-comment">//targetLocal.Rsh(targetLocal, difficulty)</span>
+    targetLocal.Lsh(targetLocal, <span class="hljs-number">256</span>-difficulty)
     pow.target = targetLocal
 
-    return &amp;pow
+    <span class="hljs-keyword">return</span> &amp;pow
 }
 </code></pre>
 <h1 id="七、总结">七、总结</h1>
@@ -3339,7 +3335,7 @@ fmt.Printf(&quot;时间戳: %s\n&quot;, timeFormat)
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第8节:day2-v2挖矿","level":"1.18.8","depth":2,"next":{"title":"第9节:day2-v3存储","level":"1.18.9","depth":2,"path":"11_精通比特币/day2-02-v3存储.md","ref":"11_精通比特币/day2-02-v3存储.md","articles":[]},"previous":{"title":"第7节:day1-Bitcoin客户端","level":"1.18.7","depth":2,"path":"11_精通比特币/day1-07-Bitcoin客户端.md","ref":"11_精通比特币/day1-07-Bitcoin客户端.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"11_精通比特币/day2-01-v2挖矿.md","mtime":"2023-09-23T13:32:55.966Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第8节:day2-v2挖矿","level":"1.18.8","depth":2,"next":{"title":"第9节:day2-v3存储","level":"1.18.9","depth":2,"path":"11_精通比特币/day2-02-v3存储.md","ref":"11_精通比特币/day2-02-v3存储.md","articles":[]},"previous":{"title":"第7节:day1-Bitcoin客户端","level":"1.18.7","depth":2,"path":"11_精通比特币/day1-07-Bitcoin客户端.md","ref":"11_精通比特币/day1-07-Bitcoin客户端.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"cn","gitbook":"*"},"file":{"path":"11_精通比特币/day2-01-v2挖矿.md","mtime":"2023-09-23T13:32:55.966Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3422,14 +3418,6 @@ fmt.Printf(&quot;时间戳: %s\n&quot;, timeFormat)
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

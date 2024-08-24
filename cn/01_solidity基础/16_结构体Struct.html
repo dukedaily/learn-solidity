@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3024,8 +3020,8 @@
 </blockquote>
 <p>自定义结构类型，将不同的数据类型组合到一个结构中，目前支持参数传递结构体。</p>
 <p>枚举和结构体都可以定义在另外一个文件中，进行import后使用</p>
-<pre><code class="lang-js">// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
 
 contract Todos {
     struct Todo {
@@ -3033,48 +3029,48 @@ contract Todos {
         bool completed;
     }
 
-    // An array of &apos;Todo&apos; structs
+    <span class="hljs-comment">// An array of &apos;Todo&apos; structs</span>
     Todo[] public todos;
 
-    function create(string memory _text) public {
-        // 3 ways to initialize a struct
-        // - calling it like a function
-        todos.push(Todo(_text, false));
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">create</span>(<span class="hljs-params">string memory _text</span>) <span class="hljs-title">public</span> </span>{
+        <span class="hljs-comment">// 3 ways to initialize a struct</span>
+        <span class="hljs-comment">// - calling it like a function</span>
+        todos.push(Todo(_text, <span class="hljs-literal">false</span>));
 
-        // key value mapping
-        todos.push(Todo({text: _text, completed: false}));
+        <span class="hljs-comment">// key value mapping</span>
+        todos.push(Todo({<span class="hljs-attr">text</span>: _text, <span class="hljs-attr">completed</span>: <span class="hljs-literal">false</span>}));
 
-        // initialize an empty struct and then update it
+        <span class="hljs-comment">// initialize an empty struct and then update it</span>
         Todo memory todo;
         todo.text = _text;
-        // todo.completed initialized to false
+        <span class="hljs-comment">// todo.completed initialized to false</span>
 
         todos.push(todo);
     }
 
-    // Solidity automatically created a getter for &apos;todos&apos; so
-    // you don&apos;t actually need this function.
-    function get(uint _index) public view returns (string memory text, bool completed) {
+    <span class="hljs-comment">// Solidity automatically created a getter for &apos;todos&apos; so</span>
+    <span class="hljs-comment">// you don&apos;t actually need this function.</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">get</span>(<span class="hljs-params">uint _index</span>) <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">string memory text, bool completed</span>) </span>{
         Todo storage todo = todos[_index];
-        return (todo.text, todo.completed);
+        <span class="hljs-keyword">return</span> (todo.text, todo.completed);
     }
 
-    // update text
-    function update(uint _index, string memory _text) public {
+    <span class="hljs-comment">// update text</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">update</span>(<span class="hljs-params">uint _index, string memory _text</span>) <span class="hljs-title">public</span> </span>{
         Todo storage todo = todos[_index];
         todo.text = _text;
     }
 
-    // update completed
-    function toggleCompleted(uint _index) public {
+    <span class="hljs-comment">// update completed</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">toggleCompleted</span>(<span class="hljs-params">uint _index</span>) <span class="hljs-title">public</span> </span>{
         Todo storage todo = todos[_index];
         todo.completed = !todo.completed;
     }
 }
 </code></pre>
 <p>在外面定义结构体：StructDeclaration.sol（说明并不是所有数据都必须写在合约之内的）</p>
-<pre><code class="lang-js">// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
 
 struct Todo {
     string text;
@@ -3082,13 +3078,13 @@ struct Todo {
 }
 </code></pre>
 <p>在主合约中引用：</p>
-<pre><code class="lang-js">// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
 
-import &quot;./StructDeclaration.sol&quot;;
+<span class="hljs-keyword">import</span> <span class="hljs-string">&quot;./StructDeclaration.sol&quot;</span>;
 
 contract Todos {
-    // An array of &apos;Todo&apos; structs
+    <span class="hljs-comment">// An array of &apos;Todo&apos; structs</span>
     Todo[] public todos;
 }
 </code></pre>
@@ -3100,8 +3096,8 @@ contract Todos {
 </li>
 <li><p>示例：</p>
 <p>函数原型：</p>
-<pre><code class="lang-js">function createOffer(Token[] memory _tokens, GeneralInfo memory _general)
-</code></pre>
+<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">createOffer</span>(<span class="hljs-params">Token[] memory _tokens, GeneralInfo memory _general</span>)
+</span></code></pre>
 <p>结构定义：</p>
 <pre><code class="lang-js">enum TokenType {
     ERC20,
@@ -3118,19 +3114,19 @@ struct Token {
 }
 
 struct GeneralInfo {
-    address loanToken; //token to borrow
-    uint256 ltv; //8000 means 80%
-    bool featuredFlag; //true, false
-    uint256 loanAmount; //amounts to borrow
-    uint256 interestRate; //1100 means 11%
-    uint256 collateralThreshold; //8000 means 80%
-    uint256 repaymentDate; //timestamp + 30days
-    uint256 offerAvailable; //timestamp + 7days
+    address loanToken; <span class="hljs-comment">//token to borrow</span>
+    uint256 ltv; <span class="hljs-comment">//8000 means 80%</span>
+    bool featuredFlag; <span class="hljs-comment">//true, false</span>
+    uint256 loanAmount; <span class="hljs-comment">//amounts to borrow</span>
+    uint256 interestRate; <span class="hljs-comment">//1100 means 11%</span>
+    uint256 collateralThreshold; <span class="hljs-comment">//8000 means 80%</span>
+    uint256 repaymentDate; <span class="hljs-comment">//timestamp + 30days</span>
+    uint256 offerAvailable; <span class="hljs-comment">//timestamp + 7days</span>
 }
 </code></pre>
 <p>正确传递参数方式如下：</p>
-<pre><code class="lang-js">tokens:     [[0, &apos;0x749B1c911170A5aFEb68d4B278cD5405C718fc7F&apos;,1000,0,0]],
-general: [&quot;0x749B1c911170A5aFEb68d4B278cD5405C718fc7F&quot;, 8000, false, 1000, 1100, 8000, 10000, 10000]
+<pre><code class="lang-js">tokens:     [[<span class="hljs-number">0</span>, <span class="hljs-string">&apos;0x749B1c911170A5aFEb68d4B278cD5405C718fc7F&apos;</span>,<span class="hljs-number">1000</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>]],
+<span class="hljs-attr">general</span>: [<span class="hljs-string">&quot;0x749B1c911170A5aFEb68d4B278cD5405C718fc7F&quot;</span>, <span class="hljs-number">8000</span>, <span class="hljs-literal">false</span>, <span class="hljs-number">1000</span>, <span class="hljs-number">1100</span>, <span class="hljs-number">8000</span>, <span class="hljs-number">10000</span>, <span class="hljs-number">10000</span>]
 </code></pre>
 </li>
 </ol>
@@ -3161,7 +3157,7 @@ general: [&quot;0x749B1c911170A5aFEb68d4B278cD5405C718fc7F&quot;, 8000, false, 1
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第16节:结构体Struct","level":"1.8.16","depth":2,"next":{"title":"第17节:storage_calldata","level":"1.8.17","depth":2,"path":"01_solidity基础/17_memory_storage_calldata.md","ref":"01_solidity基础/17_memory_storage_calldata.md","articles":[]},"previous":{"title":"第15节:枚举Enum","level":"1.8.15","depth":2,"path":"01_solidity基础/15_枚举Enum.md","ref":"01_solidity基础/15_枚举Enum.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"01_solidity基础/16_结构体Struct.md","mtime":"2023-09-23T13:07:58.211Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第16节:结构体Struct","level":"1.8.16","depth":2,"next":{"title":"第17节:storage_calldata","level":"1.8.17","depth":2,"path":"01_solidity基础/17_memory_storage_calldata.md","ref":"01_solidity基础/17_memory_storage_calldata.md","articles":[]},"previous":{"title":"第15节:枚举Enum","level":"1.8.15","depth":2,"path":"01_solidity基础/15_枚举Enum.md","ref":"01_solidity基础/15_枚举Enum.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"cn","gitbook":"*"},"file":{"path":"01_solidity基础/16_结构体Struct.md","mtime":"2023-09-23T13:07:58.211Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3244,14 +3240,6 @@ general: [&quot;0x749B1c911170A5aFEb68d4B278cD5405C718fc7F&quot;, 8000, false, 1
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

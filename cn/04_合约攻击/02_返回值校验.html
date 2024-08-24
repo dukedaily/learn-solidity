@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3024,18 +3020,18 @@
 <p>调用外部合约函数时，有些函数调用失败不会抛出错误回滚交易而是返回 <strong>false</strong>，如果忘记检查函数返回值会导致误以为调用成功。</p>
 <p>例如：approve等方法就是不安全的，因此引入了safeApprove</p>
 <p>当使用call方法调用approve时，如果没有校验返回值，则即使失败，也不会抛出异常。</p>
-<pre><code class="lang-js">// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.8;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.8</span>;
 
 contract ReturnValue {
-  function callchecked(address callee) public {
-    (bool success, ) = callee.call(&quot;&quot;);
-    require(success, &quot;call failed!&quot;);
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">callchecked</span>(<span class="hljs-params">address callee</span>) <span class="hljs-title">public</span> </span>{
+    (bool success, ) = callee.call(<span class="hljs-string">&quot;&quot;</span>);
+    <span class="hljs-built_in">require</span>(success, <span class="hljs-string">&quot;call failed!&quot;</span>);
   }
 
-  function callnotchecked(address callee) public {
-    // 未校验
-    (bool success, ) = callee.call(&quot;&quot;);
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">callnotchecked</span>(<span class="hljs-params">address callee</span>) <span class="hljs-title">public</span> </span>{
+    <span class="hljs-comment">// 未校验</span>
+    (bool success, ) = callee.call(<span class="hljs-string">&quot;&quot;</span>);
   }
 }
 </code></pre>
@@ -3066,7 +3062,7 @@ contract ReturnValue {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第2节:返回值校验","level":"1.11.2","depth":2,"next":{"title":"第3节:合约自杀导致Dos","level":"1.11.3","depth":2,"path":"04_合约攻击/03_合约自杀导致Dos.md","ref":"04_合约攻击/03_合约自杀导致Dos.md","articles":[]},"previous":{"title":"第1节:重入攻击","level":"1.11.1","depth":2,"path":"04_合约攻击/01_重入攻击.md","ref":"04_合约攻击/01_重入攻击.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"04_合约攻击/02_返回值校验.md","mtime":"2023-09-23T13:02:23.815Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第2节:返回值校验","level":"1.11.2","depth":2,"next":{"title":"第3节:合约自杀导致Dos","level":"1.11.3","depth":2,"path":"04_合约攻击/03_合约自杀导致Dos.md","ref":"04_合约攻击/03_合约自杀导致Dos.md","articles":[]},"previous":{"title":"第1节:重入攻击","level":"1.11.1","depth":2,"path":"04_合约攻击/01_重入攻击.md","ref":"04_合约攻击/01_重入攻击.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"cn","gitbook":"*"},"file":{"path":"04_合约攻击/02_返回值校验.md","mtime":"2023-09-23T13:02:23.815Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3149,14 +3145,6 @@ contract ReturnValue {
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

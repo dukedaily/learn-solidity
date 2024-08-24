@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -467,90 +463,90 @@
 <h2 id="impl">Impl</h2>
 <p>A impl is similar to a <code>lib</code> in solidity, we can bind some functions to a lib and use it with the syntax myLib.newFunction().</p>
 <p>in rust, we can use the keyword <code>impl</code>to associate functions to a <code>struct</code>, we can test it in <a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2021" target="_blank">playground</a>.</p>
-<pre><code class="lang-rust">struct Person {
-    name: String,
-    age: u8,
+<pre><code class="lang-rust"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Person</span></span> {
+    name: <span class="hljs-built_in">String</span>,
+    age: <span class="hljs-built_in">u8</span>,
 }
 
-impl Person {
-    fn new(name: String, age: u8) -&gt; Self {
-        return Person { name, age };
+<span class="hljs-keyword">impl</span> Person {
+    <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">new</span></span>(name: <span class="hljs-built_in">String</span>, age: <span class="hljs-built_in">u8</span>) -&gt; <span class="hljs-keyword">Self</span> {
+        <span class="hljs-keyword">return</span> Person { name, age };
     }
 
-    fn can_drink(&amp;self) -&gt; bool {
-        return self.age &gt;= 21;
+    <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">can_drink</span></span>(&amp;<span class="hljs-keyword">self</span>) -&gt; <span class="hljs-built_in">bool</span> {
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">self</span>.age &gt;= <span class="hljs-number">21</span>;
     }
 
-    fn get_age(&amp;self) -&gt; u8 {
-        return self.age;
+    <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">get_age</span></span>(&amp;<span class="hljs-keyword">self</span>) -&gt; <span class="hljs-built_in">u8</span> {
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">self</span>.age;
     }
 }
 
-fn main() {
-    let alice = Person::new(&quot;Alice&quot;.to_string(), 30);
-    println!(&quot;Can Alice drink? {}&quot;, alice.can_drink());
-    println!(&quot;Alice&apos;s age: {}&quot;, alice.get_age());
+<span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">main</span></span>() {
+    <span class="hljs-keyword">let</span> alice = Person::new(<span class="hljs-string">&quot;Alice&quot;</span>.to_string(), <span class="hljs-number">30</span>);
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Can Alice drink? {}&quot;</span>, alice.can_drink());
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Alice&apos;s age: {}&quot;</span>, alice.get_age());
 }
 </code></pre>
 <p>// Output:</p>
-<pre><code class="lang-sh">Can Alice drink? true
-Alice&apos;s age: 30
-</code></pre>
+<pre><code class="lang-sh">Can Alice drink? <span class="hljs-literal">true</span>
+Alice<span class="hljs-string">&apos;s age: 30
+</span></code></pre>
 <p>now we have associated three functions with struct <code>Person</code>.</p>
 <h2 id="traits">Traits</h2>
 <p>Rust Traits are a way to implement shared behavior among different impls. <del>Think of them like an interface or abstract contract in solidity ---- any contract that uses the interface must implement certain functions.</del></p>
 <p>Think of them like <code>polymorphism</code> in C++, be attention to function <code>get_speed</code> below, it accepts different instance of<code>impl</code> and gets different result accordingly.</p>
-<pre><code class="lang-rust">// Traits are defined with the `trait` keyword followed by their name
-trait Speed {
-    fn get_speed_kph(&amp;self) -&gt; f64;
+<pre><code class="lang-rust"><span class="hljs-comment">// Traits are defined with the `trait` keyword followed by their name</span>
+<span class="hljs-class"><span class="hljs-keyword">trait</span> <span class="hljs-title">Speed</span></span> {
+    <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">get_speed_kph</span></span>(&amp;<span class="hljs-keyword">self</span>) -&gt; <span class="hljs-built_in">f64</span>;
 }
 
-// Car struct
-struct Car {
-    speed_mph: f64,
+<span class="hljs-comment">// Car struct</span>
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Car</span></span> {
+    speed_mph: <span class="hljs-built_in">f64</span>,
 }
 
-// Boat struct
-struct Boat {
-    speed_knots: f64,
+<span class="hljs-comment">// Boat struct</span>
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Boat</span></span> {
+    speed_knots: <span class="hljs-built_in">f64</span>,
 }
 
-// Traits are implemented for a type using the `impl` keyword as shown below
-impl Speed for Car {
-    fn get_speed_kph(&amp;self) -&gt; f64 {
-        // Convert miles per hour to kilometers per hour
-        self.speed_mph * 1.60934
+<span class="hljs-comment">// Traits are implemented for a type using the `impl` keyword as shown below</span>
+<span class="hljs-keyword">impl</span> Speed <span class="hljs-keyword">for</span> Car {
+    <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">get_speed_kph</span></span>(&amp;<span class="hljs-keyword">self</span>) -&gt; <span class="hljs-built_in">f64</span> {
+        <span class="hljs-comment">// Convert miles per hour to kilometers per hour</span>
+        <span class="hljs-keyword">self</span>.speed_mph * <span class="hljs-number">1.60934</span>
     }
 }
 
-// We also implement the `Speed` trait for `Boat`
-impl Speed for Boat {
-    fn get_speed_kph(&amp;self) -&gt; f64 {
-        // Convert knots to kilometers per hour
-        self.speed_knots * 1.852
+<span class="hljs-comment">// We also implement the `Speed` trait for `Boat`</span>
+<span class="hljs-keyword">impl</span> Speed <span class="hljs-keyword">for</span> Boat {
+    <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">get_speed_kph</span></span>(&amp;<span class="hljs-keyword">self</span>) -&gt; <span class="hljs-built_in">f64</span> {
+        <span class="hljs-comment">// Convert knots to kilometers per hour</span>
+        <span class="hljs-keyword">self</span>.speed_knots * <span class="hljs-number">1.852</span>
     }
 }
 
-// Function to get the speed in km/h for any type implementing the Speed trait
-fn get_speed(transport: &amp;dyn Speed)-&gt; f64 {
-    return transport.get_speed_kph();
+<span class="hljs-comment">// Function to get the speed in km/h for any type implementing the Speed trait</span>
+<span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">get_speed</span></span>(transport: &amp;<span class="hljs-keyword">dyn</span> Speed)-&gt; <span class="hljs-built_in">f64</span> {
+    <span class="hljs-keyword">return</span> transport.get_speed_kph();
 }
 
-fn main() {
-    // Initialize a `Car` and `Boat` type
-    let car = Car { speed_mph: 60.0 };
-    let boat = Boat { speed_knots: 30.0 };
+<span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">main</span></span>() {
+    <span class="hljs-comment">// Initialize a `Car` and `Boat` type</span>
+    <span class="hljs-keyword">let</span> car = Car { speed_mph: <span class="hljs-number">60.0</span> };
+    <span class="hljs-keyword">let</span> boat = Boat { speed_knots: <span class="hljs-number">30.0</span> };
 
-    // Get and print the speeds in kilometers per hour
-    let car_speed_kph = car.get_speed_kph();
-    let boat_speed_kph = boat.get_speed_kph();
+    <span class="hljs-comment">// Get and print the speeds in kilometers per hour</span>
+    <span class="hljs-keyword">let</span> car_speed_kph = car.get_speed_kph();
+    <span class="hljs-keyword">let</span> boat_speed_kph = boat.get_speed_kph();
 
-    println!(&quot;Car Speed: {} km/h&quot;, car_speed_kph); // 96.5604 km/h
-    println!(&quot;Boat Speed: {} km/h&quot;, boat_speed_kph); // 55.56 km/h
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Car Speed: {} km/h&quot;</span>, car_speed_kph); <span class="hljs-comment">// 96.5604 km/h</span>
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Boat Speed: {} km/h&quot;</span>, boat_speed_kph); <span class="hljs-comment">// 55.56 km/h</span>
 
-    // polymorphism
-    println!(&quot;Polymorphism Car Speed: {} km/h&quot;, get_speed(&amp;car));
-    println!(&quot;Polymorphism Boat Speed: {} km/h&quot;, get_speed(&amp;boat));
+    <span class="hljs-comment">// polymorphism</span>
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Polymorphism Car Speed: {} km/h&quot;</span>, get_speed(&amp;car));
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Polymorphism Boat Speed: {} km/h&quot;</span>, get_speed(&amp;boat));
 }
 </code></pre>
 <p>output:</p>
@@ -559,21 +555,21 @@ fn main() {
 <p>we can use attribute-like macro to change a struct, the technique beneath the surface is <code>impl</code> we just described.</p>
 <p>we test in <code>rust_projects</code> other than anchor programs.</p>
 <pre><code class="lang-sh">mkdir rust_projects
-cd rust_projects
+<span class="hljs-built_in">cd</span> rust_projects
 cargo new day_9_1
 </code></pre>
 <p>update the day_9_1/Cargo.toml as below:</p>
-<pre><code class="lang-toml">[lib]
-proc-macro = true
+<pre><code class="lang-toml"><span class="hljs-section">[lib]</span>
+<span class="hljs-attr">proc-macro</span> = <span class="hljs-literal">true</span>
 
-[dependencies]
-syn = {version=&quot;1.0.57&quot;,features=[&quot;full&quot;,&quot;fold&quot;]}
-quote = &quot;1.0.8&quot;
+<span class="hljs-section">[dependencies]</span>
+<span class="hljs-attr">syn</span> = {version=<span class="hljs-string">&quot;1.0.57&quot;</span>,features=[<span class="hljs-string">&quot;full&quot;</span>,<span class="hljs-string">&quot;fold&quot;</span>]}
+<span class="hljs-attr">quote</span> = <span class="hljs-string">&quot;1.0.8&quot;</span>
 </code></pre>
-<h3 id="add--fields-into-a-struct">add  fields into a struct</h3>
+<h3 id="add--fields-into-a-struct">Add  fields into a struct</h3>
 <p>we will define a attribute-like macro: <code>#[foo_bar_attribute]</code> and attach it to the simple struct below: </p>
-<pre><code class="lang-rust">struct MyStruct {
-    baz: i32
+<pre><code class="lang-rust"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">MyStruct</span></span> {
+    baz: <span class="hljs-built_in">i32</span>
 }
 </code></pre>
 <p>within this macro, we will alter MyStruct by:</p>
@@ -582,70 +578,70 @@ quote = &quot;1.0.8&quot;
 <li>adding  a new function <code>double_foo</code> which returns twice the integer value of whatever foo is holding.</li>
 </ul>
 <p>update the following code to day_9_1/src/main.rs</p>
-<pre><code class="lang-rust">// day_9_1/src/main.rs
-use day_9_1::foo_bar_attribute;
+<pre><code class="lang-rust"><span class="hljs-comment">// day_9_1/src/main.rs</span>
+<span class="hljs-keyword">use</span> day_9_1::foo_bar_attribute;
 
-#[foo_bar_attribute]
-struct MyStruct {
-    baz: i32,
+<span class="hljs-meta">#[foo_bar_attribute]</span>
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">MyStruct</span></span> {
+    baz: <span class="hljs-built_in">i32</span>,
 }
 
-fn main() {
-    let demo = MyStruct::default();
-    println!(&quot;struct is {:?}&quot;, demo);
+<span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">main</span></span>() {
+    <span class="hljs-keyword">let</span> demo = MyStruct::default();
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;struct is {:?}&quot;</span>, demo);
 
-    let double_foo = demo.double_foo();
-    println!(&quot;double foo is {}&quot;, double_foo);
+    <span class="hljs-keyword">let</span> double_foo = demo.double_foo();
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;double foo is {}&quot;</span>, double_foo);
 }
 </code></pre>
 <p>create day_9_1/src/lib1.rs:</p>
-<pre><code class="lang-rust">// day_9_1/src/lib1.rs
+<pre><code class="lang-rust"><span class="hljs-comment">// day_9_1/src/lib1.rs</span>
 
-// Importing necessary external crates
-extern crate proc_macro;
-use proc_macro::TokenStream;
-use quote::quote;
-use syn::{parse_macro_input, ItemStruct};
+<span class="hljs-comment">// Importing necessary external crates</span>
+<span class="hljs-keyword">extern</span> <span class="hljs-keyword">crate</span> proc_macro;
+<span class="hljs-keyword">use</span> proc_macro::TokenStream;
+<span class="hljs-keyword">use</span> quote::quote;
+<span class="hljs-keyword">use</span> syn::{parse_macro_input, ItemStruct};
 
-// Declaring a procedural attribute-like macro using the `proc_macro_attribute` directive
-// This makes the macro usable as an attribute
+<span class="hljs-comment">// Declaring a procedural attribute-like macro using the `proc_macro_attribute` directive</span>
+<span class="hljs-comment">// This makes the macro usable as an attribute</span>
 
-#[proc_macro_attribute]
-// The function `foo_bar_attribute` takes two arguments:
-// _metadata: The arguments provided to the macro (if any)
-// _input: The TokenStream the macro is applied to
-pub fn foo_bar_attribute(_metadata: TokenStream, _input: TokenStream) -&gt; TokenStream {
-    // Parse the input TokenStream into an AST node representing a struct
-    let input = parse_macro_input!(_input as ItemStruct);
-    let struct_name = &amp;input.ident; // Get the name of the struct
+<span class="hljs-meta">#[proc_macro_attribute]</span>
+<span class="hljs-comment">// The function `foo_bar_attribute` takes two arguments:</span>
+<span class="hljs-comment">// _metadata: The arguments provided to the macro (if any)</span>
+<span class="hljs-comment">// _input: The TokenStream the macro is applied to</span>
+<span class="hljs-keyword">pub</span> <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">foo_bar_attribute</span></span>(_metadata: TokenStream, _input: TokenStream) -&gt; TokenStream {
+    <span class="hljs-comment">// Parse the input TokenStream into an AST node representing a struct</span>
+    <span class="hljs-keyword">let</span> input = parse_macro_input!(_input <span class="hljs-keyword">as</span> ItemStruct);
+    <span class="hljs-keyword">let</span> struct_name = &amp;input.ident; <span class="hljs-comment">// Get the name of the struct</span>
 
-    // Constructing the output TokenStream using the quote! macro
-    // The quote! macro allows for writing Rust code as if it were a string,
-    // but with the ability to interpolate values
+    <span class="hljs-comment">// Constructing the output TokenStream using the quote! macro</span>
+    <span class="hljs-comment">// The quote! macro allows for writing Rust code as if it were a string,</span>
+    <span class="hljs-comment">// but with the ability to interpolate values</span>
     TokenStream::from(quote! {
-        // Derive Debug trait for #struct_name to enable formatted output with `println()`
-        #[derive(Debug)]
-        // Defining a new struct #struct_name with two fields: foo and bar
-        struct #struct_name {
-            foo: i32,
-            bar: i32,
+        <span class="hljs-comment">// Derive Debug trait for #struct_name to enable formatted output with `println()`</span>
+        <span class="hljs-meta">#[derive(Debug)]</span>
+        <span class="hljs-comment">// Defining a new struct #struct_name with two fields: foo and bar</span>
+        <span class="hljs-class"><span class="hljs-keyword">struct</span> #<span class="hljs-title">struct_name</span></span> {
+            foo: <span class="hljs-built_in">i32</span>,
+            bar: <span class="hljs-built_in">i32</span>,
         }
 
-        // Implementing the Default trait for #struct_name
-        // This provides a default() method to create a new instance of #struct_name
-        impl Default for #struct_name {
-            // The default method returns a new instance of #struct_name
-            // with foo set to 10 and bar set to 20
-            fn default() -&gt; Self {
-                #struct_name { foo: 10, bar: 20}
+        <span class="hljs-comment">// Implementing the Default trait for #struct_name</span>
+        <span class="hljs-comment">// This provides a default() method to create a new instance of #struct_name</span>
+        <span class="hljs-keyword">impl</span> <span class="hljs-built_in">Default</span> <span class="hljs-keyword">for</span> #struct_name {
+            <span class="hljs-comment">// The default method returns a new instance of #struct_name</span>
+            <span class="hljs-comment">// with foo set to 10 and bar set to 20</span>
+            <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">default</span></span>() -&gt; <span class="hljs-keyword">Self</span> {
+                #struct_name { foo: <span class="hljs-number">10</span>, bar: <span class="hljs-number">20</span>}
             }
         }
 
-        impl #struct_name {
-            // Defining a method double_foo for #struct_name
-            // This method returns double the value of foo
-            fn double_foo(&amp;self) -&gt; i32 {
-                self.foo * 2
+        <span class="hljs-keyword">impl</span> #struct_name {
+            <span class="hljs-comment">// Defining a method double_foo for #struct_name</span>
+            <span class="hljs-comment">// This method returns double the value of foo</span>
+            <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">double_foo</span></span>(&amp;<span class="hljs-keyword">self</span>) -&gt; <span class="hljs-built_in">i32</span> {
+                <span class="hljs-keyword">self</span>.foo * <span class="hljs-number">2</span>
             }
         }
     })
@@ -653,42 +649,42 @@ pub fn foo_bar_attribute(_metadata: TokenStream, _input: TokenStream) -&gt; Toke
 </code></pre>
 <p>Result: <code>cargo run</code></p>
 <p><img src="assets/image-20240730212741245.png" alt="image-20240730212741245"></p>
-<h3 id="remove-fields-from-a-struct">remove fields from a struct</h3>
-<pre><code class="lang-sh">cd rust_projects
+<h3 id="remove-fields-from-a-struct">Remove fields from a struct</h3>
+<pre><code class="lang-sh"><span class="hljs-built_in">cd</span> rust_projects
 cargo new day_9_2
 </code></pre>
 <p>Main.ts</p>
-<pre><code class="lang-rust">use day_9_2::destroy_attribute;
+<pre><code class="lang-rust"><span class="hljs-keyword">use</span> day_9_2::destroy_attribute;
 
-#[destroy_attribute]
-struct MyStruct {
-    baz: i32,
-    qux: i32,
+<span class="hljs-meta">#[destroy_attribute]</span>
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">MyStruct</span></span> {
+    baz: <span class="hljs-built_in">i32</span>,
+    qux: <span class="hljs-built_in">i32</span>,
 }
 
-fn main() {
-    let demo = MyStruct { baz: 3, qux: 4 };
+<span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">main</span></span>() {
+    <span class="hljs-keyword">let</span> demo = MyStruct { baz: <span class="hljs-number">3</span>, qux: <span class="hljs-number">4</span> };
 
-    println!(&quot;struct is {:?}&quot;, demo);
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;struct is {:?}&quot;</span>, demo);
 }
 </code></pre>
 <p>lib.rs</p>
-<pre><code class="lang-rust">// src/lib.rs
-// Importing necessary external crates
-extern crate proc_macro;
-use proc_macro::TokenStream;
-use quote::quote;
-use syn::{parse_macro_input, ItemStruct};
+<pre><code class="lang-rust"><span class="hljs-comment">// src/lib.rs</span>
+<span class="hljs-comment">// Importing necessary external crates</span>
+<span class="hljs-keyword">extern</span> <span class="hljs-keyword">crate</span> proc_macro;
+<span class="hljs-keyword">use</span> proc_macro::TokenStream;
+<span class="hljs-keyword">use</span> quote::quote;
+<span class="hljs-keyword">use</span> syn::{parse_macro_input, ItemStruct};
 
-#[proc_macro_attribute]
-pub fn destroy_attribute(_metadata: TokenStream, _input: TokenStream) -&gt; TokenStream {
-    let input = parse_macro_input!(_input as ItemStruct);
-    let struct_name = &amp;input.ident; // Get the name of the struct
+<span class="hljs-meta">#[proc_macro_attribute]</span>
+<span class="hljs-keyword">pub</span> <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">destroy_attribute</span></span>(_metadata: TokenStream, _input: TokenStream) -&gt; TokenStream {
+    <span class="hljs-keyword">let</span> input = parse_macro_input!(_input <span class="hljs-keyword">as</span> ItemStruct);
+    <span class="hljs-keyword">let</span> struct_name = &amp;input.ident; <span class="hljs-comment">// Get the name of the struct</span>
 
     TokenStream::from(quote! {
-        // This returns an empty struct with the same name
-        #[derive(Debug)]
-        struct #struct_name {
+        <span class="hljs-comment">// This returns an empty struct with the same name</span>
+        <span class="hljs-meta">#[derive(Debug)]</span>
+        <span class="hljs-class"><span class="hljs-keyword">struct</span> #<span class="hljs-title">struct_name</span></span> {
         }
     })
 }
@@ -698,25 +694,25 @@ pub fn destroy_attribute(_metadata: TokenStream, _input: TokenStream) -&gt; Toke
 <p>we got two errors on the compliation stage, this means baz and qux are no longer belong to MyStruct as expected!!</p>
 <h2 id="derive-macro">Derive macro</h2>
 <p>This support a way to augment a struct without changing it, a derive macro can, among other things, attach an <code>impl</code> to a struct.</p>
-<pre><code class="lang-rust">struct Foo {
-    bar: i32,
+<pre><code class="lang-rust"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Foo</span></span> {
+    bar: <span class="hljs-built_in">i32</span>,
 }
 
-pub fn main() {
-    let foo = Foo { bar: 3 };
-    println!(&quot;{:?}&quot;, foo);
+<span class="hljs-keyword">pub</span> <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">main</span></span>() {
+    <span class="hljs-keyword">let</span> foo = Foo { bar: <span class="hljs-number">3</span> };
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;{:?}&quot;</span>, foo);
 }
 </code></pre>
 <p>The code will not compile cos structs are not &quot;printable&quot;.</p>
 <p>To make them printable, they need an <code>impl</code> with a function <code>fmt</code> which returns a string representation of the struct. If we do the following instead:</p>
-<pre><code class="lang-rust">#[derive(Debug)]
-struct Foo {
-    bar: i32,
+<pre><code class="lang-rust"><span class="hljs-meta">#[derive(Debug)]</span>
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Foo</span></span> {
+    bar: <span class="hljs-built_in">i32</span>,
 }
 
-pub fn main() {
-    let foo = Foo { bar: 3 };
-    println!(&quot;{:?}&quot;, foo);
+<span class="hljs-keyword">pub</span> <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">main</span></span>() {
+    <span class="hljs-keyword">let</span> foo = Foo { bar: <span class="hljs-number">3</span> };
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;{:?}&quot;</span>, foo);
 }
 </code></pre>
 <p>result: </p>
@@ -763,7 +759,7 @@ pub fn main() {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"09_Attribute_Custom_macro-like_procedural_macro","level":"2.4","depth":1,"next":{"title":"10_Visibility_Inherience","level":"2.5","depth":1,"path":"solana_beginner/10_Visibility_Inherience/README.md","ref":"solana_beginner/10_Visibility_Inherience/README.md","articles":[]},"previous":{"title":"08_Function-like_procedural_macro","level":"2.3","depth":1,"path":"solana_beginner/08_Function-like_procedural_macro/README.md","ref":"solana_beginner/08_Function-like_procedural_macro/README.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"en","gitbook":"*"},"file":{"path":"solana_beginner/09_Attribute_Custom_macro/README.md","mtime":"2024-08-07T13:16:15.692Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"../..","book":{"language":"en"}});
+            gitbook.page.hasChanged({"page":{"title":"09_Attribute_Custom_macro-like_procedural_macro","level":"2.4","depth":1,"next":{"title":"10_Visibility_Inherience","level":"2.5","depth":1,"path":"solana_beginner/10_Visibility_Inherience/README.md","ref":"solana_beginner/10_Visibility_Inherience/README.md","articles":[]},"previous":{"title":"08_Function-like_procedural_macro","level":"2.3","depth":1,"path":"solana_beginner/08_Function-like_procedural_macro/README.md","ref":"solana_beginner/08_Function-like_procedural_macro/README.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"en","gitbook":"*"},"file":{"path":"solana_beginner/09_Attribute_Custom_macro/README.md","mtime":"2024-08-23T23:08:58.933Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"../..","book":{"language":"en"}});
         });
     </script>
 </div>
@@ -846,14 +842,6 @@ pub fn main() {
     
         
         <script src="../../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

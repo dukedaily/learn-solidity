@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3030,41 +3026,41 @@
 <li>使用call调用合约: <strong>A.call(calldata)</strong></li>
 <li>使用delegate调用合约：<strong>A.delegatecall(calldata)</strong></li>
 </ol>
-<pre><code class="lang-js">// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
 
 contract Callee {
     uint public x;
     uint public value;
 
-    function setX(uint _x) public returns (uint) {
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setX</span>(<span class="hljs-params">uint _x</span>) <span class="hljs-title">public</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint</span>) </span>{
         x = _x;
-        return x;
+        <span class="hljs-keyword">return</span> x;
     }
 
-    function setXandSendEther(uint _x) public payable returns (uint, uint) {
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setXandSendEther</span>(<span class="hljs-params">uint _x</span>) <span class="hljs-title">public</span> <span class="hljs-title">payable</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint, uint</span>) </span>{
         x = _x;
         value = msg.value;
 
-        return (x, value);
+        <span class="hljs-keyword">return</span> (x, value);
     }
 }
 
 contract Caller {
-    // 直接在参数中进行实例化合约
-    function setX(Callee _callee, uint _x) public {
+    <span class="hljs-comment">// 直接在参数中进行实例化合约</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setX</span>(<span class="hljs-params">Callee _callee, uint _x</span>) <span class="hljs-title">public</span> </span>{
         uint x = _callee.setX(_x);
     }
 
-    // 传递地址，在内部实例化callee合约
-    function setXFromAddress(address _addr, uint _x) public {
+    <span class="hljs-comment">// 传递地址，在内部实例化callee合约</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setXFromAddress</span>(<span class="hljs-params">address _addr, uint _x</span>) <span class="hljs-title">public</span> </span>{
         Callee callee = Callee(_addr);
         callee.setX(_x);
     }
 
-    // 调用方法，并转ether
-    function setXandSendEther(Callee _callee, uint _x) public payable {
-        (uint x, uint value) = _callee.setXandSendEther{value: msg.value}(_x);
+    <span class="hljs-comment">// 调用方法，并转ether</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setXandSendEther</span>(<span class="hljs-params">Callee _callee, uint _x</span>) <span class="hljs-title">public</span> <span class="hljs-title">payable</span> </span>{
+        (uint x, uint value) = _callee.setXandSendEther{<span class="hljs-attr">value</span>: msg.value}(_x);
     }
 }
 </code></pre>
@@ -3095,7 +3091,7 @@ contract Caller {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第11节:合约间调用","level":"1.9.11","depth":2,"next":{"title":"第12节:new_create2","level":"1.9.12","depth":2,"path":"02_solidity进阶/12_new_create2.md","ref":"02_solidity进阶/12_new_create2.md","articles":[]},"previous":{"title":"第10节:fallback","level":"1.9.10","depth":2,"path":"02_solidity进阶/10_fallback.md","ref":"02_solidity进阶/10_fallback.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"02_solidity进阶/11_合约间调用.md","mtime":"2023-09-23T13:10:26.907Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第11节:合约间调用","level":"1.9.11","depth":2,"next":{"title":"第12节:new_create2","level":"1.9.12","depth":2,"path":"02_solidity进阶/12_new_create2.md","ref":"02_solidity进阶/12_new_create2.md","articles":[]},"previous":{"title":"第10节:fallback","level":"1.9.10","depth":2,"path":"02_solidity进阶/10_fallback.md","ref":"02_solidity进阶/10_fallback.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"cn","gitbook":"*"},"file":{"path":"02_solidity进阶/11_合约间调用.md","mtime":"2023-09-23T13:10:26.907Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3178,14 +3174,6 @@ contract Caller {
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

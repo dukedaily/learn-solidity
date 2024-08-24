@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3029,127 +3025,127 @@
 <li>new uint256[] (len) 语法用于对memory进行修饰，storage不需要使用new</li>
 <li>仅状态变量数组和storage支持动态扩容：push</li>
 </ol>
-<pre><code class="lang-js">// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
 
-contract Array {
-    // Several ways to initialize an array
+contract <span class="hljs-built_in">Array</span> {
+    <span class="hljs-comment">// Several ways to initialize an array</span>
     uint[] public arr;
-    uint[] public arr2 = [1, 2, 3];
-    // Fixed sized array, all elements initialize to 0
-    uint[10] public myFixedSizeArr;
+    uint[] public arr2 = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>];
+    <span class="hljs-comment">// Fixed sized array, all elements initialize to 0</span>
+    uint[<span class="hljs-number">10</span>] public myFixedSizeArr;
 
-    function get(uint i) public view returns (uint) {
-        return arr[i];
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">get</span>(<span class="hljs-params">uint i</span>) <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint</span>) </span>{
+        <span class="hljs-keyword">return</span> arr[i];
     }
 
-    // Solidity can return the entire array.
-    // But this function should be avoided for
-    // arrays that can grow indefinitely in length.
-    function getArr() public view returns (uint[] memory) {
-        return arr;
+    <span class="hljs-comment">// Solidity can return the entire array.</span>
+    <span class="hljs-comment">// But this function should be avoided for</span>
+    <span class="hljs-comment">// arrays that can grow indefinitely in length.</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getArr</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint[] memory</span>) </span>{
+        <span class="hljs-keyword">return</span> arr;
     }
 
-    function push(uint i) public {
-        // Append to array
-        // This will increase the array length by 1.
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">push</span>(<span class="hljs-params">uint i</span>) <span class="hljs-title">public</span> </span>{
+        <span class="hljs-comment">// Append to array</span>
+        <span class="hljs-comment">// This will increase the array length by 1.</span>
         arr.push(i);
     }
 
-    function pop() public {
-        // Remove last element from array
-        // This will decrease the array length by 1
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">pop</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> </span>{
+        <span class="hljs-comment">// Remove last element from array</span>
+        <span class="hljs-comment">// This will decrease the array length by 1</span>
         arr.pop();
     }
 
-    function getLength() public view returns (uint) {
-        return arr.length;
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getLength</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint</span>) </span>{
+        <span class="hljs-keyword">return</span> arr.length;
     }
 
-    function remove(uint index) public {
-        // Delete does not change the array length.
-        // It resets the value at index to it&apos;s default value,
-        // in this case 0
-        delete arr[index];
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">remove</span>(<span class="hljs-params">uint index</span>) <span class="hljs-title">public</span> </span>{
+        <span class="hljs-comment">// Delete does not change the array length.</span>
+        <span class="hljs-comment">// It resets the value at index to it&apos;s default value,</span>
+        <span class="hljs-comment">// in this case 0</span>
+        <span class="hljs-keyword">delete</span> arr[index];
     }
 
-    function examples() pure external returns(uint[] memory) {
-        // create array in memory, only fixed size can be created
-        uint[] memory a = new uint[](5);
-        return a;
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">examples</span>(<span class="hljs-params"></span>) <span class="hljs-title">pure</span> <span class="hljs-title">external</span> <span class="hljs-title">returns</span>(<span class="hljs-params">uint[] memory</span>) </span>{
+        <span class="hljs-comment">// create array in memory, only fixed size can be created</span>
+        uint[] memory a = <span class="hljs-keyword">new</span> uint[](<span class="hljs-number">5</span>);
+        <span class="hljs-keyword">return</span> a;
     }
 }
 </code></pre>
 <p>demo1：删除某个位置的元素，剩余元素向左移动（保留顺序）</p>
-<pre><code class="lang-js">// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
 
 contract ArrayRemoveByShifting {
-    // [1, 2, 3] -- remove(1) --&gt; [1, 3, 3] --&gt; [1, 3]
-    // [1, 2, 3, 4, 5, 6] -- remove(2) --&gt; [1, 2, 4, 5, 6, 6] --&gt; [1, 2, 4, 5, 6]
-    // [1, 2, 3, 4, 5, 6] -- remove(0) --&gt; [2, 3, 4, 5, 6, 6] --&gt; [2, 3, 4, 5, 6]
-    // [1] -- remove(0) --&gt; [1] --&gt; []
+    <span class="hljs-comment">// [1, 2, 3] -- remove(1) --&gt; [1, 3, 3] --&gt; [1, 3]</span>
+    <span class="hljs-comment">// [1, 2, 3, 4, 5, 6] -- remove(2) --&gt; [1, 2, 4, 5, 6, 6] --&gt; [1, 2, 4, 5, 6]</span>
+    <span class="hljs-comment">// [1, 2, 3, 4, 5, 6] -- remove(0) --&gt; [2, 3, 4, 5, 6, 6] --&gt; [2, 3, 4, 5, 6]</span>
+    <span class="hljs-comment">// [1] -- remove(0) --&gt; [1] --&gt; []</span>
 
     uint[] public arr;
 
-    function remove(uint _index) public {
-        require(_index &lt; arr.length, &quot;index out of bound&quot;);
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">remove</span>(<span class="hljs-params">uint _index</span>) <span class="hljs-title">public</span> </span>{
+        <span class="hljs-built_in">require</span>(_index &lt; arr.length, <span class="hljs-string">&quot;index out of bound&quot;</span>);
 
-        for (uint i = _index; i &lt; arr.length - 1; i++) {
-            arr[i] = arr[i + 1];
+        <span class="hljs-keyword">for</span> (uint i = _index; i &lt; arr.length - <span class="hljs-number">1</span>; i++) {
+            arr[i] = arr[i + <span class="hljs-number">1</span>];
         }
         arr.pop();
     }
 
-    function test() external {
-        arr = [1, 2, 3, 4, 5];
-        remove(2);
-        // [1, 2, 4, 5]
-        assert(arr[0] == 1);
-        assert(arr[1] == 2);
-        assert(arr[2] == 4);
-        assert(arr[3] == 5);
-        assert(arr.length == 4);
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">test</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> </span>{
+        arr = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>];
+        remove(<span class="hljs-number">2</span>);
+        <span class="hljs-comment">// [1, 2, 4, 5]</span>
+        assert(arr[<span class="hljs-number">0</span>] == <span class="hljs-number">1</span>);
+        assert(arr[<span class="hljs-number">1</span>] == <span class="hljs-number">2</span>);
+        assert(arr[<span class="hljs-number">2</span>] == <span class="hljs-number">4</span>);
+        assert(arr[<span class="hljs-number">3</span>] == <span class="hljs-number">5</span>);
+        assert(arr.length == <span class="hljs-number">4</span>);
 
-        arr = [1];
-        remove(0);
-        // []
-        assert(arr.length == 0);
+        arr = [<span class="hljs-number">1</span>];
+        remove(<span class="hljs-number">0</span>);
+        <span class="hljs-comment">// []</span>
+        assert(arr.length == <span class="hljs-number">0</span>);
     }
 }
 </code></pre>
 <p>demo2：删除某位置元素，使用最后一个元素填充（不考虑顺序）</p>
-<pre><code class="lang-js">// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
 
 contract ArrayReplaceFromEnd {
     uint[] public arr;
 
-    // Deleting an element creates a gap in the array.
-    // One trick to keep the array compact is to
-    // move the last element into the place to delete.
-    function remove(uint index) public {
-        // Move the last element into the place to delete
-        arr[index] = arr[arr.length - 1];
-        // Remove the last element
+    <span class="hljs-comment">// Deleting an element creates a gap in the array.</span>
+    <span class="hljs-comment">// One trick to keep the array compact is to</span>
+    <span class="hljs-comment">// move the last element into the place to delete.</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">remove</span>(<span class="hljs-params">uint index</span>) <span class="hljs-title">public</span> </span>{
+        <span class="hljs-comment">// Move the last element into the place to delete</span>
+        arr[index] = arr[arr.length - <span class="hljs-number">1</span>];
+        <span class="hljs-comment">// Remove the last element</span>
         arr.pop();
     }
 
-    function test() public {
-        arr = [1, 2, 3, 4];
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">test</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> </span>{
+        arr = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>];
 
-        remove(1);
-        // [1, 4, 3]
-        assert(arr.length == 3);
-        assert(arr[0] == 1);
-        assert(arr[1] == 4);
-        assert(arr[2] == 3);
+        remove(<span class="hljs-number">1</span>);
+        <span class="hljs-comment">// [1, 4, 3]</span>
+        assert(arr.length == <span class="hljs-number">3</span>);
+        assert(arr[<span class="hljs-number">0</span>] == <span class="hljs-number">1</span>);
+        assert(arr[<span class="hljs-number">1</span>] == <span class="hljs-number">4</span>);
+        assert(arr[<span class="hljs-number">2</span>] == <span class="hljs-number">3</span>);
 
-        remove(2);
-        // [1, 4]
-        assert(arr.length == 2);
-        assert(arr[0] == 1);
-        assert(arr[1] == 4);
+        remove(<span class="hljs-number">2</span>);
+        <span class="hljs-comment">// [1, 4]</span>
+        assert(arr.length == <span class="hljs-number">2</span>);
+        assert(arr[<span class="hljs-number">0</span>] == <span class="hljs-number">1</span>);
+        assert(arr[<span class="hljs-number">1</span>] == <span class="hljs-number">4</span>);
     }
 }
 </code></pre>
@@ -3180,7 +3176,7 @@ contract ArrayReplaceFromEnd {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第14节:数组Array","level":"1.8.14","depth":2,"next":{"title":"第15节:枚举Enum","level":"1.8.15","depth":2,"path":"01_solidity基础/15_枚举Enum.md","ref":"01_solidity基础/15_枚举Enum.md","articles":[]},"previous":{"title":"第13节:映射Mapping","level":"1.8.13","depth":2,"path":"01_solidity基础/13_映射Mapping.md","ref":"01_solidity基础/13_映射Mapping.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"01_solidity基础/14_数组Array.md","mtime":"2023-09-23T13:07:48.677Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第14节:数组Array","level":"1.8.14","depth":2,"next":{"title":"第15节:枚举Enum","level":"1.8.15","depth":2,"path":"01_solidity基础/15_枚举Enum.md","ref":"01_solidity基础/15_枚举Enum.md","articles":[]},"previous":{"title":"第13节:映射Mapping","level":"1.8.13","depth":2,"path":"01_solidity基础/13_映射Mapping.md","ref":"01_solidity基础/13_映射Mapping.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"cn","gitbook":"*"},"file":{"path":"01_solidity基础/14_数组Array.md","mtime":"2023-09-23T13:07:48.677Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3263,14 +3259,6 @@ contract ArrayReplaceFromEnd {
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

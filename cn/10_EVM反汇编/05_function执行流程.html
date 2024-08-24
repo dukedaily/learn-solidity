@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3025,167 +3021,171 @@
 <li>Optimizer：true，Runs：1</li>
 </ul>
 <h2 id="1-ifelse">1. IF/ELSE</h2>
-<pre><code class="lang-js">// SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.0;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: UNLICENSED</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.0</span>;
 
 contract Test {
-    uint value = 0;
-    function flow(bool x) external {
-        if (x) {
-            value = 4;
-        } else {
-            value = 9;
+    uint value = <span class="hljs-number">0</span>;
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">flow</span>(<span class="hljs-params">bool x</span>) <span class="hljs-title">external</span> </span>{
+        <span class="hljs-keyword">if</span> (x) {
+            value = <span class="hljs-number">4</span>;
+        } <span class="hljs-keyword">else</span> {
+            value = <span class="hljs-number">9</span>;
         }
     }
 }
 </code></pre>
 <p>汇编：（medium原文描述应关闭优化，与汇编数据不符，实际上应该选择 runs：1）</p>
-<pre><code class="lang-js">062 JUMPDEST |0x01|stack after arguments discarded|
-063 DUP1     |0x01|0x01|
-064 ISZERO   |0x00|0x01|
-065 PUSH1 4b |0x4b|0x00|0x01|
-067 JUMPI    |0x01|
-068 PUSH1 04 |0x04|0x01|
-070 PUSH1 00 |0x00|0x04|0x01|
-072 SSTORE   |0x01|
-073 POP      
-074 JUMP 
-075 JUMPDEST 
-076 PUSH1 09 
-078 PUSH1 00 
-080 SSTORE 
-081 POP 
-082 JUMP
+<pre><code class="lang-js"><span class="hljs-number">062</span> JUMPDEST |<span class="hljs-number">0x01</span>|stack after <span class="hljs-built_in">arguments</span> discarded|
+<span class="hljs-number">063</span> DUP1     |<span class="hljs-number">0x01</span>|<span class="hljs-number">0x01</span>|
+<span class="hljs-number">064</span> ISZERO   |<span class="hljs-number">0x00</span>|<span class="hljs-number">0x01</span>|
+<span class="hljs-number">065</span> PUSH1 4b |<span class="hljs-number">0x4b</span>|<span class="hljs-number">0x00</span>|<span class="hljs-number">0x01</span>|
+<span class="hljs-number">067</span> JUMPI    |<span class="hljs-number">0x01</span>|
+<span class="hljs-number">068</span> PUSH1 <span class="hljs-number">04</span> |<span class="hljs-number">0x04</span>|<span class="hljs-number">0x01</span>|
+<span class="hljs-number">070</span> PUSH1 <span class="hljs-number">00</span> |<span class="hljs-number">0x00</span>|<span class="hljs-number">0x04</span>|<span class="hljs-number">0x01</span>|
+<span class="hljs-number">072</span> SSTORE   |<span class="hljs-number">0x01</span>|
+<span class="hljs-number">073</span> POP      
+<span class="hljs-number">074</span> JUMP 
+<span class="hljs-number">075</span> JUMPDEST 
+<span class="hljs-number">076</span> PUSH1 <span class="hljs-number">09</span> 
+<span class="hljs-number">078</span> PUSH1 <span class="hljs-number">00</span> 
+<span class="hljs-number">080</span> SSTORE 
+<span class="hljs-number">081</span> POP 
+<span class="hljs-number">082</span> JUMP
 </code></pre>
 <ul>
 <li>只要有JUMPI，那么就一定有if或for。</li>
 </ul>
 <h2 id="2-else-if">2. ELSE IF</h2>
 <pre><code class="lang-js">
-// SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.0;
+<span class="hljs-comment">// SPDX-License-Identifier: UNLICENSED</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.0</span>;
 
 contract Test {
-    uint value = 0;
-    function flow(uint x) external {
-        if (x == 1) {
-            value = 4;
-        } else if (x == 2) {
-            value = 9;
-        } else if (x == 3) {
-            value = 14;
-        } else if (x == 4) {
-            value = 19;
-        } else {
-            value = 24;
+    uint value = <span class="hljs-number">0</span>;
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">flow</span>(<span class="hljs-params">uint x</span>) <span class="hljs-title">external</span> </span>{
+        <span class="hljs-keyword">if</span> (x == <span class="hljs-number">1</span>) {
+            value = <span class="hljs-number">4</span>;
+        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (x == <span class="hljs-number">2</span>) {
+            value = <span class="hljs-number">9</span>;
+        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (x == <span class="hljs-number">3</span>) {
+            value = <span class="hljs-number">14</span>;
+        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (x == <span class="hljs-number">4</span>) {
+            value = <span class="hljs-number">19</span>;
+        } <span class="hljs-keyword">else</span> {
+            value = <span class="hljs-number">24</span>;
         }
     }
 }
 </code></pre>
 <p>汇编：</p>
-<pre><code class="lang-js">062 JUMPDEST 
-063 DUP1 
-064 PUSH1 01 
-066 EQ 
-067 ISZERO 
-068 PUSH1 4e 
-070 JUMPI 
-071 PUSH1 04 
-073 PUSH1 00 
-075 SSTORE 
-076 POP 
-077 JUMP 
-078 JUMPDEST 
-079 DUP1 
-080 PUSH1 02 
-082 EQ 
-083 ISZERO 
-084 PUSH1 5e 
-086 JUMPI 
-087 PUSH1 09 
-089 PUSH1 00 
-091 SSTORE 
-092 POP 
-093 JUMP 
-094 JUMPDEST 
-095 DUP1 
-096 PUSH1 03 
-098 EQ 
-099 ISZERO 
-100 PUSH1 6e 
-102 JUMPI 
-103 PUSH1 0e 
-105 PUSH1 00 
-107 SSTORE 
-108 POP 
-109 JUMP 
-110 JUMPDEST 
-111 DUP1 
-112 PUSH1 04 
-114 EQ 
-115 ISZERO 
-116 PUSH1 7e 
-118 JUMPI 
-119 PUSH1 13 
-121 PUSH1 00 
-123 SSTORE 
-124 POP 
-125 JUMP 
-126 JUMPDEST 
-127 PUSH1 18 
-129 PUSH1 00 
-131 SSTORE 
-132 POP 
-133 JUMP
+<pre><code class="lang-js"><span class="hljs-number">062</span> JUMPDEST 
+<span class="hljs-number">063</span> DUP1 
+<span class="hljs-number">064</span> PUSH1 <span class="hljs-number">01</span> 
+<span class="hljs-number">066</span> EQ 
+<span class="hljs-number">067</span> ISZERO 
+<span class="hljs-number">068</span> PUSH1 4e 
+<span class="hljs-number">070</span> JUMPI 
+<span class="hljs-number">071</span> PUSH1 <span class="hljs-number">04</span> 
+<span class="hljs-number">073</span> PUSH1 <span class="hljs-number">00</span> 
+<span class="hljs-number">075</span> SSTORE 
+<span class="hljs-number">076</span> POP 
+<span class="hljs-number">077</span> JUMP 
+<span class="hljs-number">078</span> JUMPDEST 
+<span class="hljs-number">079</span> DUP1 
+<span class="hljs-number">080</span> PUSH1 <span class="hljs-number">02</span> 
+<span class="hljs-number">082</span> EQ 
+<span class="hljs-number">083</span> ISZERO 
+<span class="hljs-number">084</span> PUSH1 5e 
+<span class="hljs-number">086</span> JUMPI 
+<span class="hljs-number">087</span> PUSH1 <span class="hljs-number">09</span> 
+<span class="hljs-number">089</span> PUSH1 <span class="hljs-number">00</span> 
+<span class="hljs-number">091</span> SSTORE 
+<span class="hljs-number">092</span> POP 
+<span class="hljs-number">093</span> JUMP 
+<span class="hljs-number">094</span> JUMPDEST 
+<span class="hljs-number">095</span> DUP1 
+<span class="hljs-number">096</span> PUSH1 <span class="hljs-number">03</span> 
+<span class="hljs-number">098</span> EQ 
+<span class="hljs-number">099</span> ISZERO 
+<span class="hljs-number">100</span> PUSH1 6e 
+<span class="hljs-number">102</span> JUMPI 
+<span class="hljs-number">103</span> PUSH1 0e 
+<span class="hljs-number">105</span> PUSH1 <span class="hljs-number">00</span> 
+<span class="hljs-number">107</span> SSTORE 
+<span class="hljs-number">108</span> POP 
+<span class="hljs-number">109</span> JUMP 
+<span class="hljs-number">110</span> JUMPDEST 
+<span class="hljs-number">111</span> DUP1 
+<span class="hljs-number">112</span> PUSH1 <span class="hljs-number">04</span> 
+<span class="hljs-number">114</span> EQ 
+<span class="hljs-number">115</span> ISZERO 
+<span class="hljs-number">116</span> PUSH1 7e 
+<span class="hljs-number">118</span> JUMPI 
+<span class="hljs-number">119</span> PUSH1 <span class="hljs-number">13</span> 
+<span class="hljs-number">121</span> PUSH1 <span class="hljs-number">00</span> 
+<span class="hljs-number">123</span> SSTORE 
+<span class="hljs-number">124</span> POP 
+<span class="hljs-number">125</span> JUMP 
+<span class="hljs-number">126</span> JUMPDEST 
+<span class="hljs-number">127</span> PUSH1 <span class="hljs-number">18</span> 
+<span class="hljs-number">129</span> PUSH1 <span class="hljs-number">00</span> 
+<span class="hljs-number">131</span> SSTORE 
+<span class="hljs-number">132</span> POP 
+<span class="hljs-number">133</span> JUMP
 </code></pre>
 <p>汇编很长，但是逻辑并不复杂，只是在不断的判断和跳转，有点像我们之前需要函数的selector，按照汇编的逻辑反推，我们可以得到下面的逻辑代码，不断的进行嵌套、判断：</p>
-<pre><code class="lang-js">if (x == 1) {
-    // do something
-} else {
-    if (x == 2) {
-        // do something
-    } else {
-        if (x == 3) {
-            // do something
-        } else {
-            if (x == 4) {
-                // do something
-            } else {
-                // do something
+<pre><code class="lang-js"><span class="hljs-keyword">if</span> (x == <span class="hljs-number">1</span>) {
+    <span class="hljs-comment">// do something</span>
+} <span class="hljs-keyword">else</span> {
+    <span class="hljs-keyword">if</span> (x == <span class="hljs-number">2</span>) {
+        <span class="hljs-comment">// do something</span>
+    } <span class="hljs-keyword">else</span> {
+        <span class="hljs-keyword">if</span> (x == <span class="hljs-number">3</span>) {
+            <span class="hljs-comment">// do something</span>
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">if</span> (x == <span class="hljs-number">4</span>) {
+                <span class="hljs-comment">// do something</span>
+            } <span class="hljs-keyword">else</span> {
+                <span class="hljs-comment">// do something</span>
             }    
         }
     }
 }
 </code></pre>
 <h2 id="3-for-loops">3. For Loops</h2>
-<pre><code class="lang-js">// SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.0;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: UNLICENSED</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.0</span>;
 
 contract Test {
-    uint value = 0;
-    function flow(uint x) external {
-        for (uint i = 0; i &lt; x; i++) {
+    uint value = <span class="hljs-number">0</span>;
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">flow</span>(<span class="hljs-params">uint x</span>) <span class="hljs-title">external</span> </span>{
+        <span class="hljs-keyword">for</span> (uint i = <span class="hljs-number">0</span>; i &lt; x; i++) {
             value += i;
         }
     }
 }
 </code></pre>
 <p>我们执行完一个函数，然后点击debug，此时一般都会停在一个JUMPDEST的OPCODE上，因为里就是函数执行的入口，此时stack V中已经压入了函数参数，例如这里：</p>
-<pre><code class="lang-sh"># 汇编如下：
+<pre><code class="lang-sh"><span class="hljs-comment"># 汇编如下：</span>
 062 JUMPDEST
-063 PUSH1 00  # for里面的变量，i = 0
+063 PUSH1 00  <span class="hljs-comment"># for里面的变量，i = 0</span>
 065 JUMPDEST
 066 DUP2
 067 DUP2
-068 LT # for里面的小于号， &lt;
+068 LT <span class="hljs-comment"># for里面的小于号， &lt;</span>
 069 ISZERO
 070 PUSH1 6c
-072 JUMPI # 当条件不满足时，跳出循环♻️
+072 JUMPI <span class="hljs-comment"># 当条件不满足时，跳出循环♻️</span>
 
 
-# 当前stack数据：
+<span class="hljs-comment"># 当前stack数据：</span>
 [
-    &quot;0x000000000000000000000000000000000000000000000000000000000000000a&quot;, </code></pre>
+    <span class="hljs-string">&quot;0x000000000000000000000000000000000000000000000000000000000000000a&quot;</span>, &lt;=== 这里就是参数x=10（0a是十六进制）
+    <span class="hljs-string">&quot;0x000000000000000000000000000000000000000000000000000000000000003c&quot;</span>,
+    <span class="hljs-string">&quot;0x0000000000000000000000000000000000000000000000000000000047f4d98d&quot;</span>
+]
+</code></pre>
 <ul>
 <li>函数参数都是存储在stack中的</li>
 </ul>
@@ -3194,7 +3194,7 @@ contract Test {
 076 DUP1 
 077 DUP3 
 078 DUP3 
-079 SLOAD  # 将0存储到状态变量中
+079 SLOAD  <span class="hljs-comment"># 将0存储到状态变量中</span>
 080 PUSH1 57 
 082 SWAP2 
 083 SWAP1 
@@ -3297,35 +3297,35 @@ contract Test {
 <p>The loop lies between 2 and 8 while i &lt; x (in this example we called flow() with x = 10)</p>
 <h2 id="4-function无参数（重要！！）">4. function无参数（重要！！）</h2>
 <p>Compile it <strong>WITHOUT</strong> the optimizer (but still with solidity version 0.8.7)</p>
-<pre><code class="lang-js">// SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.0;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: UNLICENSED</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.0</span>;
 
 contract Test {
-       uint value = 0;
-       function flow() external {
+       uint value = <span class="hljs-number">0</span>;
+       <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">flow</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> </span>{
             flow2();
     }
 
-        function flow2() public {
-            value = 5;
+        <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">flow2</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> </span>{
+            value = <span class="hljs-number">5</span>;
         }
 }
 </code></pre>
 <p>flow内调用flow2的汇编如下：</p>
-<pre><code class="lang-js">071 JUMPDEST 
-072 PUSH1 4d        // byte 77
-074 PUSH1 4f         // byte 79
-076 JUMP  
-077 JUMPDEST 
-078 JUMP
-079 JUMPDEST 
-080 PUSH1 05 
-082 PUSH1 00 
-084 DUP2 
-085 SWAP1 
-086 SSTORE 
-087 POP 
-088 JUMP
+<pre><code class="lang-js"><span class="hljs-number">071</span> JUMPDEST 
+<span class="hljs-number">072</span> PUSH1 4d        <span class="hljs-comment">// byte 77</span>
+<span class="hljs-number">074</span> PUSH1 4f         <span class="hljs-comment">// byte 79</span>
+<span class="hljs-number">076</span> JUMP  
+<span class="hljs-number">077</span> JUMPDEST 
+<span class="hljs-number">078</span> JUMP
+<span class="hljs-number">079</span> JUMPDEST 
+<span class="hljs-number">080</span> PUSH1 <span class="hljs-number">05</span> 
+<span class="hljs-number">082</span> PUSH1 <span class="hljs-number">00</span> 
+<span class="hljs-number">084</span> DUP2 
+<span class="hljs-number">085</span> SWAP1 
+<span class="hljs-number">086</span> SSTORE 
+<span class="hljs-number">087</span> POP 
+<span class="hljs-number">088</span> JUMP
 </code></pre>
 <p>分析上述代码，得出结论：<strong>函数执行前后，stack中的数据一致</strong>。</p>
 <ul>
@@ -3338,17 +3338,17 @@ contract Test {
 <p><strong>这也侧面印证了函数的调用特点，执行完字函数（此处是flow2）之后，所有字函数内的变量都会清除掉。</strong></p>
 <h2 id="5-function有参数">5. Function有参数</h2>
 <p>Compile it <strong>WITHOUT</strong> the optimizer (but still with solidity version 0.8.7)</p>
-<pre><code class="lang-js">// SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.0;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: UNLICENSED</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.0</span>;
 
 contract Test {
-    uint value = 0;
+    uint value = <span class="hljs-number">0</span>;
 
-       function flow() external {
-            flow2(5);
+       <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">flow</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> </span>{
+            flow2(<span class="hljs-number">5</span>);
     }
 
-        function flow2(uint y) public {
+        <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">flow2</span>(<span class="hljs-params">uint y</span>) <span class="hljs-title">public</span> </span>{
             value = y;
         }
 }
@@ -3359,34 +3359,34 @@ contract Test {
 <p>94和95的两个pop，会将stack上的数据清除掉，恢复到执行byte 97 （flow）之前的stack状态！</p>
 <p><img src="https://duke-typora.s3.ap-southeast-1.amazonaws.com/uPic/image-20221122115519096.png" alt="image-20221122115519096"></p>
 <h2 id="6-function有返回值">6. Function有返回值</h2>
-<pre><code class="lang-js">// SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.0;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: UNLICENSED</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.0</span>;
 
 contract Test {
-    uint value = 0;
-       function flow() external {
+    uint value = <span class="hljs-number">0</span>;
+       <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">flow</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> </span>{
         uint n = flow2();
         value = n;
        }
 
-    function flow2() public returns(uint) {
-        return 5;
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">flow2</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> <span class="hljs-title">returns</span>(<span class="hljs-params">uint</span>) </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-number">5</span>;
     }
 }
 </code></pre>
 <h2 id="7-lets-bring-it-together">7. Let’s bring it together</h2>
-<pre><code class="lang-js">// SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.0;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: UNLICENSED</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.0</span>;
 
 contract Test {
-    uint value = 0;
-    function flow() external {
-        uint n = flow2(5,7);
+    uint value = <span class="hljs-number">0</span>;
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">flow</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> </span>{
+        uint n = flow2(<span class="hljs-number">5</span>,<span class="hljs-number">7</span>);
         value = n;
     }
 
-    function flow2(uint x,uint y) public returns(uint) {
-        return x;
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">flow2</span>(<span class="hljs-params">uint x,uint y</span>) <span class="hljs-title">public</span> <span class="hljs-title">returns</span>(<span class="hljs-params">uint</span>) </span>{
+        <span class="hljs-keyword">return</span> x;
     }
 }
 </code></pre>
@@ -3455,7 +3455,7 @@ contract Test {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第5节:function执行流程","level":"1.17.5","depth":2,"next":{"title":"第6节:智能合约Layout分析","level":"1.17.6","depth":2,"path":"10_EVM反汇编/06_智能合约Layout分析.md","ref":"10_EVM反汇编/06_智能合约Layout分析.md","articles":[]},"previous":{"title":"第4节:五种程序终止命令介绍","level":"1.17.4","depth":2,"path":"10_EVM反汇编/04_五种程序终止命令介绍.md","ref":"10_EVM反汇编/04_五种程序终止命令介绍.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"10_EVM反汇编/05_function执行流程.md","mtime":"2023-03-21T14:01:27.000Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第5节:function执行流程","level":"1.17.5","depth":2,"next":{"title":"第6节:智能合约Layout分析","level":"1.17.6","depth":2,"path":"10_EVM反汇编/06_智能合约Layout分析.md","ref":"10_EVM反汇编/06_智能合约Layout分析.md","articles":[]},"previous":{"title":"第4节:五种程序终止命令介绍","level":"1.17.4","depth":2,"path":"10_EVM反汇编/04_五种程序终止命令介绍.md","ref":"10_EVM反汇编/04_五种程序终止命令介绍.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"cn","gitbook":"*"},"file":{"path":"10_EVM反汇编/05_function执行流程.md","mtime":"2023-03-21T14:01:27.000Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3538,14 +3538,6 @@ contract Test {
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

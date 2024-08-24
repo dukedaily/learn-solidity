@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3045,9 +3041,9 @@ origin    https://github.com/bitcoin/bitcoin.git (push)
 <h2 id="1-图形化客户端默认安装目录">1. 图形化客户端默认安装目录</h2>
 <pre><code class="lang-js">Windows XP - C:\Documents and Settings\{username}\Application Data\Bitcoin\wallet.dat
 %appdata%
-Windows 7/8 - C:\Users\{username}\AppData\Roaming\Bitcoin\wallet.dat
-Mac OS X ~/Library/Application Support/Bitcoin/wallet.dat
-Linux ~/.bitcoin/wallet.dat
+Windows <span class="hljs-number">7</span>/<span class="hljs-number">8</span> - C:\Users\{username}\AppData\Roaming\Bitcoin\wallet.dat
+Mac OS X ~<span class="hljs-regexp">/Library/</span>Application Support/Bitcoin/wallet.dat
+Linux ~<span class="hljs-regexp">/.bitcoin/</span>wallet.dat
 </code></pre>
 <h2 id="2-创建配置文件">2. 创建配置文件</h2>
 <ul>
@@ -3064,14 +3060,14 @@ Linux ~/.bitcoin/wallet.dat
 <p>这个程序寻找默认目录，如果目录不存在会自动创建，简单粗暴。</p>
 <h2 id="5-修改配置文件">5. 修改配置文件</h2>
 <p>这个配置文件不能用//来注释汉字。</p>
-<pre><code class="lang-js">regtest=1  //这个如果不写，就是真实网路，testnet=1是测试网络testnet3，regtest=1是私有网络
-rpcbind=127.0.0.1
-rpcallowip=127.0.0.1
+<pre><code class="lang-js">regtest=<span class="hljs-number">1</span>  <span class="hljs-comment">//这个如果不写，就是真实网路，testnet=1是测试网络testnet3，regtest=1是私有网络</span>
+rpcbind=<span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span>
+rpcallowip=<span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span>
 rpcuser=test
 rpcpassword=test
-server=1
-//daemon=1  //后台
-//txindex=1
+server=<span class="hljs-number">1</span>
+<span class="hljs-comment">//daemon=1  //后台</span>
+<span class="hljs-comment">//txindex=1</span>
 </code></pre>
 <h2 id="6-启动服务">6. 启动服务</h2>
 <p>可以使用bitcoind来启动，也可以使用图形化客户端启动，两者都会读取配置文件指示来运行</p>
@@ -3146,129 +3142,129 @@ server=1
 </table>
 <h2 id="2-所有命令">2. 所有命令</h2>
 <pre><code class="lang-go">== Blockchain ==
-getbestblockhash        //最后一个区块的哈希
-getblock &quot;blockhash&quot; ( verbosity ) 
+getbestblockhash        <span class="hljs-comment">//最后一个区块的哈希</span>
+getblock <span class="hljs-string">&quot;blockhash&quot;</span> ( verbosity ) 
 getblockchaininfo
 getblockcount
 getblockhash height
-getblockheader &quot;hash&quot; ( verbose )
+getblockheader <span class="hljs-string">&quot;hash&quot;</span> ( verbose )
 getchaintips
-getchaintxstats ( nblocks blockhash ) //统计区块数量，交易数量
+getchaintxstats ( nblocks blockhash ) <span class="hljs-comment">//统计区块数量，交易数量</span>
 getdifficulty
-getmempoolancestors txid (verbose)  //必须是在内存中的交易才有效
-getmempooldescendants txid (verbose) //TODO
-getmempoolentry txid    //TODO
-getmempoolinfo    //当前内存中的交易数据，可读，别和getmemoryinfo混淆了
-getrawmempool ( verbose )  //返回交易id
-gettxout &quot;txid&quot; n ( include_mempool )  //引用交易id内的第n个output
-gettxoutproof [&quot;txid&quot;,...] ( blockhash ) //TODO
-gettxoutsetinfo //统计utxo
-preciousblock &quot;blockhash&quot; //TODO
-pruneblockchain //TODO，必须在prune mode才能删除旧区块
-savemempool //将内存交易保存到磁盘中，当前内存中有2笔交易，为何返回null TODO
-verifychain ( checklevel nblocks ) //返回true
-verifytxoutproof &quot;proof&quot; //TODO
+getmempoolancestors txid (verbose)  <span class="hljs-comment">//必须是在内存中的交易才有效</span>
+getmempooldescendants txid (verbose) <span class="hljs-comment">//TODO</span>
+getmempoolentry txid    <span class="hljs-comment">//TODO</span>
+getmempoolinfo    <span class="hljs-comment">//当前内存中的交易数据，可读，别和getmemoryinfo混淆了</span>
+getrawmempool ( verbose )  <span class="hljs-comment">//返回交易id</span>
+gettxout <span class="hljs-string">&quot;txid&quot;</span> n ( include_mempool )  <span class="hljs-comment">//引用交易id内的第n个output</span>
+gettxoutproof [<span class="hljs-string">&quot;txid&quot;</span>,...] ( blockhash ) <span class="hljs-comment">//TODO</span>
+gettxoutsetinfo <span class="hljs-comment">//统计utxo</span>
+preciousblock <span class="hljs-string">&quot;blockhash&quot;</span> <span class="hljs-comment">//TODO</span>
+pruneblockchain <span class="hljs-comment">//TODO，必须在prune mode才能删除旧区块</span>
+savemempool <span class="hljs-comment">//将内存交易保存到磁盘中，当前内存中有2笔交易，为何返回null TODO</span>
+verifychain ( checklevel nblocks ) <span class="hljs-comment">//返回true</span>
+verifytxoutproof <span class="hljs-string">&quot;proof&quot;</span> <span class="hljs-comment">//TODO</span>
 
 == Control ==
-getmemoryinfo (&quot;mode&quot;) //TODO
-help ( &quot;command&quot; )
-logging ( <include> <exclude> ) //会返回一个值全0的json，不知道如何产生数据
-stop //直接退出当前BitCoin Core，手残
-uptime //当前客户端启动多久了
+getmemoryinfo (<span class="hljs-string">&quot;mode&quot;</span>) <span class="hljs-comment">//TODO</span>
+help ( <span class="hljs-string">&quot;command&quot;</span> )
+logging ( &lt;include&gt; &lt;exclude&gt; ) <span class="hljs-comment">//会返回一个值全0的json，不知道如何产生数据</span>
+stop <span class="hljs-comment">//直接退出当前BitCoin Core，手残</span>
+uptime <span class="hljs-comment">//当前客户端启动多久了</span>
 
 == Generating ==
-generate nblocks ( maxtries ) //手动执行挖矿，每个块奖励50BTC，由默认账户挖矿
-generatetoaddress nblocks address (maxtries) //指定挖矿人
+generate nblocks ( maxtries ) <span class="hljs-comment">//手动执行挖矿，每个块奖励50BTC，由默认账户挖矿</span>
+generatetoaddress nblocks address (maxtries) <span class="hljs-comment">//指定挖矿人</span>
 
 == Mining ==
-getblocktemplate ( TemplateRequest ) //TODO，得联网？？
+getblocktemplate ( TemplateRequest ) <span class="hljs-comment">//TODO，得联网？？</span>
 getmininginfo
-getnetworkhashps ( nblocks height )   //算力？？8.913976854892111e-07
-prioritisetransaction <txid> <dummy value> <fee delta>
-submitblock &quot;hexdata&quot;  ( &quot;dummy&quot; ) //TODO
+getnetworkhashps ( nblocks height )   <span class="hljs-comment">//算力？？8.913976854892111e-07</span>
+prioritisetransaction &lt;txid&gt; &lt;dummy value&gt; &lt;fee delta&gt;
+submitblock <span class="hljs-string">&quot;hexdata&quot;</span>  ( <span class="hljs-string">&quot;dummy&quot;</span> ) <span class="hljs-comment">//TODO</span>
 
 == Network ==
-addnode &quot;node&quot; &quot;add|remove|onetry&quot;
+addnode <span class="hljs-string">&quot;node&quot;</span> <span class="hljs-string">&quot;add|remove|onetry&quot;</span>
 clearbanned
-disconnectnode &quot;[address]&quot; [nodeid]
-getaddednodeinfo ( &quot;node&quot; )
+disconnectnode <span class="hljs-string">&quot;[address]&quot;</span> [nodeid]
+getaddednodeinfo ( <span class="hljs-string">&quot;node&quot;</span> )
 getconnectioncount
 getnettotals
 getnetworkinfo
 getpeerinfo
 listbanned
 ping
-setban &quot;subnet&quot; &quot;add|remove&quot; (bantime) (absolute)
-setnetworkactive true|false
+setban <span class="hljs-string">&quot;subnet&quot;</span> <span class="hljs-string">&quot;add|remove&quot;</span> (bantime) (absolute)
+setnetworkactive <span class="hljs-literal">true</span>|<span class="hljs-literal">false</span>
 
-== Rawtransactions ==  //TODO
-combinerawtransaction [&quot;hexstring&quot;,...]
-createrawtransaction [{&quot;txid&quot;:&quot;id&quot;,&quot;vout&quot;:n},...] {&quot;address&quot;:amount,&quot;data&quot;:&quot;hex&quot;,...} ( locktime ) ( replaceable )
-decoderawtransaction &quot;hexstring&quot; ( iswitness )
-decodescript &quot;hexstring&quot;
-fundrawtransaction &quot;hexstring&quot; ( options iswitness )
-getrawtransaction &quot;txid&quot; ( verbose &quot;blockhash&quot; )
-sendrawtransaction &quot;hexstring&quot; ( allowhighfees )
-signrawtransaction &quot;hexstring&quot; ( [{&quot;txid&quot;:&quot;id&quot;,&quot;vout&quot;:n,&quot;scriptPubKey&quot;:&quot;hex&quot;,&quot;redeemScript&quot;:&quot;hex&quot;},...] [&quot;privatekey1&quot;,...] sighashtype )
+== Rawtransactions ==  <span class="hljs-comment">//TODO</span>
+combinerawtransaction [<span class="hljs-string">&quot;hexstring&quot;</span>,...]
+createrawtransaction [{<span class="hljs-string">&quot;txid&quot;</span>:<span class="hljs-string">&quot;id&quot;</span>,<span class="hljs-string">&quot;vout&quot;</span>:n},...] {<span class="hljs-string">&quot;address&quot;</span>:amount,<span class="hljs-string">&quot;data&quot;</span>:<span class="hljs-string">&quot;hex&quot;</span>,...} ( locktime ) ( replaceable )
+decoderawtransaction <span class="hljs-string">&quot;hexstring&quot;</span> ( iswitness )
+decodescript <span class="hljs-string">&quot;hexstring&quot;</span>
+fundrawtransaction <span class="hljs-string">&quot;hexstring&quot;</span> ( options iswitness )
+getrawtransaction <span class="hljs-string">&quot;txid&quot;</span> ( verbose <span class="hljs-string">&quot;blockhash&quot;</span> )
+sendrawtransaction <span class="hljs-string">&quot;hexstring&quot;</span> ( allowhighfees )
+signrawtransaction <span class="hljs-string">&quot;hexstring&quot;</span> ( [{<span class="hljs-string">&quot;txid&quot;</span>:<span class="hljs-string">&quot;id&quot;</span>,<span class="hljs-string">&quot;vout&quot;</span>:n,<span class="hljs-string">&quot;scriptPubKey&quot;</span>:<span class="hljs-string">&quot;hex&quot;</span>,<span class="hljs-string">&quot;redeemScript&quot;</span>:<span class="hljs-string">&quot;hex&quot;</span>},...] [<span class="hljs-string">&quot;privatekey1&quot;</span>,...] sighashtype )
 
 == Util ==
-createmultisig nrequired [&quot;key&quot;,...]
+createmultisig nrequired [<span class="hljs-string">&quot;key&quot;</span>,...]
 estimatefee nblocks
-estimatesmartfee conf_target (&quot;estimate_mode&quot;)
-signmessagewithprivkey &quot;privkey&quot; &quot;message&quot;
-validateaddress &quot;address&quot;
-verifymessage &quot;address&quot; &quot;signature&quot; &quot;message&quot;
+estimatesmartfee conf_target (<span class="hljs-string">&quot;estimate_mode&quot;</span>)
+signmessagewithprivkey <span class="hljs-string">&quot;privkey&quot;</span> <span class="hljs-string">&quot;message&quot;</span>
+validateaddress <span class="hljs-string">&quot;address&quot;</span>
+verifymessage <span class="hljs-string">&quot;address&quot;</span> <span class="hljs-string">&quot;signature&quot;</span> <span class="hljs-string">&quot;message&quot;</span>
 
 == Wallet ==
-abandontransaction &quot;txid&quot;
+abandontransaction <span class="hljs-string">&quot;txid&quot;</span>
 abortrescan
-addmultisigaddress nrequired [&quot;key&quot;,...] ( &quot;account&quot; &quot;address_type&quot; )
-backupwallet &quot;destination&quot;
-bumpfee &quot;txid&quot; ( options ) 
-dumpprivkey &quot;address&quot;
-dumpwallet &quot;filename&quot;
-encryptwallet &quot;passphrase&quot;
-getaccount &quot;address&quot;  //user1
-getaccountaddress &quot;account&quot;
-getaddressesbyaccount &quot;account&quot;
-getbalance ( &quot;account&quot; minconf include_watchonly )
-getnewaddress ( &quot;account&quot; &quot;address_type&quot; )
-getrawchangeaddress ( &quot;address_type&quot; )
-getreceivedbyaccount &quot;account&quot; ( minconf )
-getreceivedbyaddress &quot;address&quot; ( minconf )
-gettransaction &quot;txid&quot; ( include_watchonly )
+addmultisigaddress nrequired [<span class="hljs-string">&quot;key&quot;</span>,...] ( <span class="hljs-string">&quot;account&quot;</span> <span class="hljs-string">&quot;address_type&quot;</span> )
+backupwallet <span class="hljs-string">&quot;destination&quot;</span>
+bumpfee <span class="hljs-string">&quot;txid&quot;</span> ( options ) 
+dumpprivkey <span class="hljs-string">&quot;address&quot;</span>
+dumpwallet <span class="hljs-string">&quot;filename&quot;</span>
+encryptwallet <span class="hljs-string">&quot;passphrase&quot;</span>
+getaccount <span class="hljs-string">&quot;address&quot;</span>  <span class="hljs-comment">//user1</span>
+getaccountaddress <span class="hljs-string">&quot;account&quot;</span>
+getaddressesbyaccount <span class="hljs-string">&quot;account&quot;</span>
+getbalance ( <span class="hljs-string">&quot;account&quot;</span> minconf include_watchonly )
+getnewaddress ( <span class="hljs-string">&quot;account&quot;</span> <span class="hljs-string">&quot;address_type&quot;</span> )
+getrawchangeaddress ( <span class="hljs-string">&quot;address_type&quot;</span> )
+getreceivedbyaccount <span class="hljs-string">&quot;account&quot;</span> ( minconf )
+getreceivedbyaddress <span class="hljs-string">&quot;address&quot;</span> ( minconf )
+gettransaction <span class="hljs-string">&quot;txid&quot;</span> ( include_watchonly )
 getunconfirmedbalance
 getwalletinfo
-importaddress &quot;address&quot; ( &quot;label&quot; rescan p2sh )
-importmulti &quot;requests&quot; ( &quot;options&quot; )
-importprivkey &quot;privkey&quot; ( &quot;label&quot; ) ( rescan )
+importaddress <span class="hljs-string">&quot;address&quot;</span> ( <span class="hljs-string">&quot;label&quot;</span> rescan p2sh )
+importmulti <span class="hljs-string">&quot;requests&quot;</span> ( <span class="hljs-string">&quot;options&quot;</span> )
+importprivkey <span class="hljs-string">&quot;privkey&quot;</span> ( <span class="hljs-string">&quot;label&quot;</span> ) ( rescan )
 importprunedfunds
-importpubkey &quot;pubkey&quot; ( &quot;label&quot; rescan )
-importwallet &quot;filename&quot;
+importpubkey <span class="hljs-string">&quot;pubkey&quot;</span> ( <span class="hljs-string">&quot;label&quot;</span> rescan )
+importwallet <span class="hljs-string">&quot;filename&quot;</span>
 keypoolrefill ( newsize )
 listaccounts ( minconf include_watchonly)
 listaddressgroupings
 listlockunspent
 listreceivedbyaccount ( minconf include_empty include_watchonly)
 listreceivedbyaddress ( minconf include_empty include_watchonly)
-listsinceblock ( &quot;blockhash&quot; target_confirmations include_watchonly include_removed )
-listtransactions ( &quot;account&quot; count skip include_watchonly)
-listunspent ( minconf maxconf  [&quot;addresses&quot;,...] [include_unsafe] [query_options])
+listsinceblock ( <span class="hljs-string">&quot;blockhash&quot;</span> target_confirmations include_watchonly include_removed )
+listtransactions ( <span class="hljs-string">&quot;account&quot;</span> count skip include_watchonly)
+listunspent ( minconf maxconf  [<span class="hljs-string">&quot;addresses&quot;</span>,...] [include_unsafe] [query_options])
 listwallets
-lockunspent unlock ([{&quot;txid&quot;:&quot;txid&quot;,&quot;vout&quot;:n},...])
-move &quot;fromaccount&quot; &quot;toaccount&quot; amount ( minconf &quot;comment&quot; )
-removeprunedfunds &quot;txid&quot;
-rescanblockchain (&quot;start_height&quot;) (&quot;stop_height&quot;)
-sendfrom &quot;fromaccount&quot; &quot;toaddress&quot; amount ( minconf &quot;comment&quot; &quot;comment_to&quot; )
-sendmany &quot;fromaccount&quot; {&quot;address&quot;:amount,...} ( minconf &quot;comment&quot; [&quot;address&quot;,...] replaceable conf_target &quot;estimate_mode&quot;)
-sendtoaddress &quot;address&quot; amount ( &quot;comment&quot; &quot;comment_to&quot; subtractfeefromamount replaceable conf_target &quot;estimate_mode&quot;)
-setaccount &quot;address&quot; &quot;account&quot;
+lockunspent unlock ([{<span class="hljs-string">&quot;txid&quot;</span>:<span class="hljs-string">&quot;txid&quot;</span>,<span class="hljs-string">&quot;vout&quot;</span>:n},...])
+move <span class="hljs-string">&quot;fromaccount&quot;</span> <span class="hljs-string">&quot;toaccount&quot;</span> amount ( minconf <span class="hljs-string">&quot;comment&quot;</span> )
+removeprunedfunds <span class="hljs-string">&quot;txid&quot;</span>
+rescanblockchain (<span class="hljs-string">&quot;start_height&quot;</span>) (<span class="hljs-string">&quot;stop_height&quot;</span>)
+sendfrom <span class="hljs-string">&quot;fromaccount&quot;</span> <span class="hljs-string">&quot;toaddress&quot;</span> amount ( minconf <span class="hljs-string">&quot;comment&quot;</span> <span class="hljs-string">&quot;comment_to&quot;</span> )
+sendmany <span class="hljs-string">&quot;fromaccount&quot;</span> {<span class="hljs-string">&quot;address&quot;</span>:amount,...} ( minconf <span class="hljs-string">&quot;comment&quot;</span> [<span class="hljs-string">&quot;address&quot;</span>,...] replaceable conf_target <span class="hljs-string">&quot;estimate_mode&quot;</span>)
+sendtoaddress <span class="hljs-string">&quot;address&quot;</span> amount ( <span class="hljs-string">&quot;comment&quot;</span> <span class="hljs-string">&quot;comment_to&quot;</span> subtractfeefromamount replaceable conf_target <span class="hljs-string">&quot;estimate_mode&quot;</span>)
+setaccount <span class="hljs-string">&quot;address&quot;</span> <span class="hljs-string">&quot;account&quot;</span>
 settxfee amount
-signmessage &quot;address&quot; &quot;message&quot;
+signmessage <span class="hljs-string">&quot;address&quot;</span> <span class="hljs-string">&quot;message&quot;</span>
 walletlock
-walletpassphrase &quot;passphrase&quot; timeout
-walletpassphrasechange &quot;oldpassphrase&quot; &quot;newpassphrase&quot;
-</fee></dummy></txid></exclude></include></code></pre>
+walletpassphrase <span class="hljs-string">&quot;passphrase&quot;</span> timeout
+walletpassphrasechange <span class="hljs-string">&quot;oldpassphrase&quot;</span> <span class="hljs-string">&quot;newpassphrase&quot;</span>
+</code></pre>
 <h1 id="四-参考链接">四. 参考链接</h1>
 <ol>
 <li><a href="http://ju.outofmemory.cn/entry/345554" target="_blank">最初参考</a></li>
@@ -3302,7 +3298,7 @@ walletpassphrasechange &quot;oldpassphrase&quot; &quot;newpassphrase&quot;
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第7节:day1-Bitcoin客户端","level":"1.18.7","depth":2,"next":{"title":"第8节:day2-v2挖矿","level":"1.18.8","depth":2,"path":"11_精通比特币/day2-01-v2挖矿.md","ref":"11_精通比特币/day2-01-v2挖矿.md","articles":[]},"previous":{"title":"第6节:day1-v1链条","level":"1.18.6","depth":2,"path":"11_精通比特币/day1-06-v1链条.md","ref":"11_精通比特币/day1-06-v1链条.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"11_精通比特币/day1-07-Bitcoin客户端.md","mtime":"2023-09-23T13:32:51.913Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第7节:day1-Bitcoin客户端","level":"1.18.7","depth":2,"next":{"title":"第8节:day2-v2挖矿","level":"1.18.8","depth":2,"path":"11_精通比特币/day2-01-v2挖矿.md","ref":"11_精通比特币/day2-01-v2挖矿.md","articles":[]},"previous":{"title":"第6节:day1-v1链条","level":"1.18.6","depth":2,"path":"11_精通比特币/day1-06-v1链条.md","ref":"11_精通比特币/day1-06-v1链条.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"cn","gitbook":"*"},"file":{"path":"11_精通比特币/day1-07-Bitcoin客户端.md","mtime":"2023-09-23T13:32:51.913Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3385,14 +3381,6 @@ walletpassphrasechange &quot;oldpassphrase&quot; &quot;newpassphrase&quot;
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

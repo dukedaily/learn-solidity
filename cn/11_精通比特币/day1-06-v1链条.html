@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3051,319 +3047,319 @@
 <p><img src="assets/image-20221108130541927.png" alt="image-20221108130541927"></p>
 <h1 id="二、授课代码">二、授课代码</h1>
 <h2 id="00代码仓库">00_代码仓库</h2>
-<pre><code class="lang-go">https://github.com/dukedaily/go-bitcoin-demo
+<pre><code class="lang-go">https:<span class="hljs-comment">//github.com/dukedaily/go-bitcoin-demo</span>
 </code></pre>
 <p>创建项目：01_bitcoin</p>
 <h2 id="01v1定义创世块并打印">01_v1定义创世块并打印</h2>
-<pre><code class="lang-go">package main
+<pre><code class="lang-go"><span class="hljs-keyword">package</span> main
 
-import &quot;fmt&quot;
+<span class="hljs-keyword">import</span> <span class="hljs-string">&quot;fmt&quot;</span>
 
-const genesisInfo = &quot;The Times 03/Jan/2009 Chancellor on brink of second bailout for banks&quot;
+<span class="hljs-keyword">const</span> genesisInfo = <span class="hljs-string">&quot;The Times 03/Jan/2009 Chancellor on brink of second bailout for banks&quot;</span>
 
-type Block struct {
-        //前区块哈希值
-        PreHash []byte
-        //当前区块哈希值
-        Hash []byte
-        //区块数据
-        Data []byte
+<span class="hljs-keyword">type</span> Block <span class="hljs-keyword">struct</span> {
+        <span class="hljs-comment">//前区块哈希值</span>
+        PreHash []<span class="hljs-keyword">byte</span>
+        <span class="hljs-comment">//当前区块哈希值</span>
+        Hash []<span class="hljs-keyword">byte</span>
+        <span class="hljs-comment">//区块数据</span>
+        Data []<span class="hljs-keyword">byte</span>
 }
 
-//创建区块
-func NewBlock(data string, prevHash []byte) *Block {
+<span class="hljs-comment">//创建区块</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">NewBlock</span><span class="hljs-params">(data <span class="hljs-keyword">string</span>, prevHash []<span class="hljs-keyword">byte</span>)</span> *<span class="hljs-title">Block</span></span> {
     block := Block{
         PreHash: prevHash,
-        //Hash:
-        Data: []byte(data),
+        <span class="hljs-comment">//Hash:</span>
+        Data: []<span class="hljs-keyword">byte</span>(data),
     }
 
-    return &amp;block
+    <span class="hljs-keyword">return</span> &amp;block
 }
 
-func main() {
-    //fmt.Printf(&quot;hello\n&quot;)
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> {
+    <span class="hljs-comment">//fmt.Printf(&quot;hello\n&quot;)</span>
 
-    block := NewBlock(genesisInfo, []byte{0x0000000000000000})
-    fmt.Printf(&quot;PreHash : %x\n&quot;, block.PreHash)
-    fmt.Printf(&quot;Hash : %x\n&quot;, block.Hash)
-    fmt.Printf(&quot;Data : %s\n&quot;, block.Data)
+    block := NewBlock(genesisInfo, []<span class="hljs-keyword">byte</span>{<span class="hljs-number">0x0000000000000000</span>})
+    fmt.Printf(<span class="hljs-string">&quot;PreHash : %x\n&quot;</span>, block.PreHash)
+    fmt.Printf(<span class="hljs-string">&quot;Hash : %x\n&quot;</span>, block.Hash)
+    fmt.Printf(<span class="hljs-string">&quot;Data : %s\n&quot;</span>, block.Data)
 }
 </code></pre>
 <h2 id="02v1实现sethash函数">02_v1实现SetHash函数</h2>
-<pre><code class="lang-go">func (block *Block) SetHash() {
-    var blockByteInfo []byte //存储拼接好的数据，最后作为sha256函数的参数
-    //1. 拼接当前区块的数据
-    blockByteInfo = append(blockByteInfo, block.PreHash...)
-    blockByteInfo = append(blockByteInfo, block.Data...)
+<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(block *Block)</span> <span class="hljs-title">SetHash</span><span class="hljs-params">()</span></span> {
+    <span class="hljs-keyword">var</span> blockByteInfo []<span class="hljs-keyword">byte</span> <span class="hljs-comment">//存储拼接好的数据，最后作为sha256函数的参数</span>
+    <span class="hljs-comment">//1. 拼接当前区块的数据</span>
+    blockByteInfo = <span class="hljs-built_in">append</span>(blockByteInfo, block.PreHash...)
+    blockByteInfo = <span class="hljs-built_in">append</span>(blockByteInfo, block.Data...)
 
-    //2. 对数据进行哈希处理：sha256
-    //func Sum(data []byte) [Size]byte {
-    hash := sha256.Sum256(blockByteInfo) //传入参数时切片， 返回值是一个32位的数组
+    <span class="hljs-comment">//2. 对数据进行哈希处理：sha256</span>
+    <span class="hljs-comment">//func Sum(data []byte) [Size]byte {</span>
+    hash := sha256.Sum256(blockByteInfo) <span class="hljs-comment">//传入参数时切片， 返回值是一个32位的数组</span>
 
-    //3. 把哈希添加到我们区块Hash字段
+    <span class="hljs-comment">//3. 把哈希添加到我们区块Hash字段</span>
     block.Hash = hash[:]
 }
 </code></pre>
 <p>在NewBlock中引用</p>
-<pre><code class="lang-go">//创建区块
-func NewBlock(data string, prevHash []byte) *Block {
+<pre><code class="lang-go"><span class="hljs-comment">//创建区块</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">NewBlock</span><span class="hljs-params">(data <span class="hljs-keyword">string</span>, prevHash []<span class="hljs-keyword">byte</span>)</span> *<span class="hljs-title">Block</span></span> {
     block := Block{
         PreHash: prevHash,
-        //Hash:
-        Data: []byte(data),
+        <span class="hljs-comment">//Hash:</span>
+        Data: []<span class="hljs-keyword">byte</span>(data),
     }
 
     block.SetHash()
-    return &amp;block
+    <span class="hljs-keyword">return</span> &amp;block
 }
 </code></pre>
 <h2 id="03引入区块链结构（区块的数组）">03_引入区块链结构（区块的数组）</h2>
 <p>定义结构</p>
-<pre><code class="lang-go">//目标：实现区块链
-//将产生的区块串接起来
+<pre><code class="lang-go"><span class="hljs-comment">//目标：实现区块链</span>
+<span class="hljs-comment">//将产生的区块串接起来</span>
 
-type BlockChain struct {
-    // 定一个区块链的结构：定一个[]*Block
+<span class="hljs-keyword">type</span> BlockChain <span class="hljs-keyword">struct</span> {
+    <span class="hljs-comment">// 定一个区块链的结构：定一个[]*Block</span>
     Blocks []*Block
 }
 </code></pre>
 <p>创建区块链</p>
-<pre><code class="lang-go">func NewBlockChain() *BlockChain {
-    // 对这个区块链进行初始化，就是把创世块作为第一个元素添加进去
-    genesisBlock := NewBlock(genesisInfo, []byte{byte(0x0000000000000000)})
+<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">NewBlockChain</span><span class="hljs-params">()</span> *<span class="hljs-title">BlockChain</span></span> {
+    <span class="hljs-comment">// 对这个区块链进行初始化，就是把创世块作为第一个元素添加进去</span>
+    genesisBlock := NewBlock(genesisInfo, []<span class="hljs-keyword">byte</span>{<span class="hljs-keyword">byte</span>(<span class="hljs-number">0x0000000000000000</span>)})
     bc := BlockChain{[]*Block{genesisBlock}}
-    return &amp;bc
+    <span class="hljs-keyword">return</span> &amp;bc
 }
 </code></pre>
 <p>改写main.go</p>
-<pre><code class="lang-go">func main() {
-    //fmt.Printf(&quot;hello world!&quot;)
+<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> {
+    <span class="hljs-comment">//fmt.Printf(&quot;hello world!&quot;)</span>
 
-    //block := GenesisBlock(genesisInfo, []byte{})
+    <span class="hljs-comment">//block := GenesisBlock(genesisInfo, []byte{})</span>
     bc := NewBlockChain()
 
-    for i, block := range bc.Blocks {
-        fmt.Println(&quot;======== block height : &quot;, i, &quot;=======&quot;)
-        fmt.Printf(&quot;PreHash : %x\n&quot;, block.PreHash)
-        fmt.Printf(&quot;Hash : %x\n&quot;, block.Hash)
-        fmt.Printf(&quot;Data : %s\n&quot;, block.Data)
+    <span class="hljs-keyword">for</span> i, block := <span class="hljs-keyword">range</span> bc.Blocks {
+        fmt.Println(<span class="hljs-string">&quot;======== block height : &quot;</span>, i, <span class="hljs-string">&quot;=======&quot;</span>)
+        fmt.Printf(<span class="hljs-string">&quot;PreHash : %x\n&quot;</span>, block.PreHash)
+        fmt.Printf(<span class="hljs-string">&quot;Hash : %x\n&quot;</span>, block.Hash)
+        fmt.Printf(<span class="hljs-string">&quot;Data : %s\n&quot;</span>, block.Data)
     }
 }
 </code></pre>
 <h2 id="04v1实现addblock">04_v1实现AddBlock</h2>
-<pre><code class="lang-go">func (bc *BlockChain) AddBlock(data string) {
-    //1. 产生区块
-    // &gt;1. 数据 和前区块的哈希值
-    // &gt;2. 通过数组的下标，拿到最后一个区块的哈希值，这个哈希值就是我们新区块的前哈希值
-    blockLen := len(bc.Blocks)
-    lastBlock := bc.Blocks[blockLen-1]
-    //最后一个区块的哈希值是新区块的前哈希
+<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(bc *BlockChain)</span> <span class="hljs-title">AddBlock</span><span class="hljs-params">(data <span class="hljs-keyword">string</span>)</span></span> {
+    <span class="hljs-comment">//1. 产生区块</span>
+    <span class="hljs-comment">// &gt;1. 数据 和前区块的哈希值</span>
+    <span class="hljs-comment">// &gt;2. 通过数组的下标，拿到最后一个区块的哈希值，这个哈希值就是我们新区块的前哈希值</span>
+    blockLen := <span class="hljs-built_in">len</span>(bc.Blocks)
+    lastBlock := bc.Blocks[blockLen<span class="hljs-number">-1</span>]
+    <span class="hljs-comment">//最后一个区块的哈希值是新区块的前哈希</span>
     prevBlockHash := lastBlock.Hash
 
     block := NewBlock(data, prevBlockHash)
 
-    //2. 向bc中添加新区块
-    bc.Blocks = append(bc.Blocks, block)
+    <span class="hljs-comment">//2. 向bc中添加新区块</span>
+    bc.Blocks = <span class="hljs-built_in">append</span>(bc.Blocks, block)
 }
 </code></pre>
 <p>改写main.go</p>
-<pre><code class="lang-go">func main() {
-    //fmt.Printf(&quot;hello world!&quot;)
+<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> {
+    <span class="hljs-comment">//fmt.Printf(&quot;hello world!&quot;)</span>
 
     bc := NewBlockChain()
-    bc.AddBlock(&quot;班长向老师转了1枚比特币！&quot;)
-    bc.AddBlock(&quot;班长又向老师转了1枚比特币！&quot;)
+    bc.AddBlock(<span class="hljs-string">&quot;班长向老师转了1枚比特币！&quot;</span>)
+    bc.AddBlock(<span class="hljs-string">&quot;班长又向老师转了1枚比特币！&quot;</span>)
 
-    for i, block := range bc.Blocks {
-        fmt.Println(&quot;======== block height : &quot;, i, &quot;=======&quot;)
-        fmt.Printf(&quot;PreHash : %x\n&quot;, block.PreHash)
-        fmt.Printf(&quot;Hash : %x\n&quot;, block.Hash)
-        fmt.Printf(&quot;Data : %s\n&quot;, block.Data)
+    <span class="hljs-keyword">for</span> i, block := <span class="hljs-keyword">range</span> bc.Blocks {
+        fmt.Println(<span class="hljs-string">&quot;======== block height : &quot;</span>, i, <span class="hljs-string">&quot;=======&quot;</span>)
+        fmt.Printf(<span class="hljs-string">&quot;PreHash : %x\n&quot;</span>, block.PreHash)
+        fmt.Printf(<span class="hljs-string">&quot;Hash : %x\n&quot;</span>, block.Hash)
+        fmt.Printf(<span class="hljs-string">&quot;Data : %s\n&quot;</span>, block.Data)
     }
 }
 </code></pre>
 <h2 id="05重构代码创建blockgo-blockchaingo">05_重构代码(创建block.go blockchain.go)</h2>
 <p>创建block.go，blockchain.go，将相关代码移到各自文件中</p>
 <p>block.go</p>
-<pre><code class="lang-go">package main
+<pre><code class="lang-go"><span class="hljs-keyword">package</span> main
 
-import &quot;crypto/sha256&quot;
+<span class="hljs-keyword">import</span> <span class="hljs-string">&quot;crypto/sha256&quot;</span>
 
-const genesisInfo = &quot;The Times 03/Jan/2009 Chancellor on brink of second bailout for banks&quot;
+<span class="hljs-keyword">const</span> genesisInfo = <span class="hljs-string">&quot;The Times 03/Jan/2009 Chancellor on brink of second bailout for banks&quot;</span>
 
-type Block struct {
-    //前区块哈希值
-    PreHash []byte
-    //当前区块哈希值
-    Hash []byte
-    //区块数据
-    Data []byte
+<span class="hljs-keyword">type</span> Block <span class="hljs-keyword">struct</span> {
+    <span class="hljs-comment">//前区块哈希值</span>
+    PreHash []<span class="hljs-keyword">byte</span>
+    <span class="hljs-comment">//当前区块哈希值</span>
+    Hash []<span class="hljs-keyword">byte</span>
+    <span class="hljs-comment">//区块数据</span>
+    Data []<span class="hljs-keyword">byte</span>
 }
 
-//产生创世块
-func GenesisBlock(data string, prevBlockHash []byte) *Block {
-    return NewBlock(data, prevBlockHash)
+<span class="hljs-comment">//产生创世块</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">GenesisBlock</span><span class="hljs-params">(data <span class="hljs-keyword">string</span>, prevBlockHash []<span class="hljs-keyword">byte</span>)</span> *<span class="hljs-title">Block</span></span> {
+    <span class="hljs-keyword">return</span> NewBlock(data, prevBlockHash)
 }
 
-func NewBlock(data string, prevBlockHash []byte) *Block {
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">NewBlock</span><span class="hljs-params">(data <span class="hljs-keyword">string</span>, prevBlockHash []<span class="hljs-keyword">byte</span>)</span> *<span class="hljs-title">Block</span></span> {
     block := Block{
         PreHash: prevBlockHash,
-        Hash:    []byte{}, //先填为空，后面再进行计算
-        Data:    []byte(data)}
+        Hash:    []<span class="hljs-keyword">byte</span>{}, <span class="hljs-comment">//先填为空，后面再进行计算</span>
+        Data:    []<span class="hljs-keyword">byte</span>(data)}
 
-    //提供一个设置哈希的方法
+    <span class="hljs-comment">//提供一个设置哈希的方法</span>
     block.SetHash()
-    return &amp;block
+    <span class="hljs-keyword">return</span> &amp;block
 }
 
-func (block *Block) SetHash() {
-    var blockByteInfo []byte //存储拼接好的数据，最后作为sha256函数的参数
-    //1. 拼接当前区块的数据
-    blockByteInfo = append(blockByteInfo, block.PreHash...)
-    blockByteInfo = append(blockByteInfo, block.Data...)
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(block *Block)</span> <span class="hljs-title">SetHash</span><span class="hljs-params">()</span></span> {
+    <span class="hljs-keyword">var</span> blockByteInfo []<span class="hljs-keyword">byte</span> <span class="hljs-comment">//存储拼接好的数据，最后作为sha256函数的参数</span>
+    <span class="hljs-comment">//1. 拼接当前区块的数据</span>
+    blockByteInfo = <span class="hljs-built_in">append</span>(blockByteInfo, block.PreHash...)
+    blockByteInfo = <span class="hljs-built_in">append</span>(blockByteInfo, block.Data...)
 
-    //2. 对数据进行哈希处理：sha256
-    //func Sum(data []byte) [Size]byte {
-    hash := sha256.Sum256(blockByteInfo) //传入参数时切片， 返回值是一个32位的数组
+    <span class="hljs-comment">//2. 对数据进行哈希处理：sha256</span>
+    <span class="hljs-comment">//func Sum(data []byte) [Size]byte {</span>
+    hash := sha256.Sum256(blockByteInfo) <span class="hljs-comment">//传入参数时切片， 返回值是一个32位的数组</span>
 
-    //3. 把哈希添加到我们区块Hash字段
+    <span class="hljs-comment">//3. 把哈希添加到我们区块Hash字段</span>
     block.Hash = hash[:]
 }
 </code></pre>
 <p>blockchain.go</p>
-<pre><code class="lang-go">package main
+<pre><code class="lang-go"><span class="hljs-keyword">package</span> main
 
 
-//目标：实现区块链
-//将产生的区块串接起来
+<span class="hljs-comment">//目标：实现区块链</span>
+<span class="hljs-comment">//将产生的区块串接起来</span>
 
-type BlockChain struct {
-    // 定一个区块链的结构：定一个[]*Block
+<span class="hljs-keyword">type</span> BlockChain <span class="hljs-keyword">struct</span> {
+    <span class="hljs-comment">// 定一个区块链的结构：定一个[]*Block</span>
     Blocks []*Block
 }
 
-func NewBlockChain() *BlockChain {
-    // 对这个区块链进行初始化，就是把创世块作为第一个元素添加进去
-    genesisBlock := GenesisBlock(genesisInfo, []byte{})
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">NewBlockChain</span><span class="hljs-params">()</span> *<span class="hljs-title">BlockChain</span></span> {
+    <span class="hljs-comment">// 对这个区块链进行初始化，就是把创世块作为第一个元素添加进去</span>
+    genesisBlock := GenesisBlock(genesisInfo, []<span class="hljs-keyword">byte</span>{})
     bc := BlockChain{[]*Block{genesisBlock}}
-    return &amp;bc
+    <span class="hljs-keyword">return</span> &amp;bc
 }
 
-func (bc *BlockChain) AddBlock(data string) {
-    //1. 产生区块
-    // &gt;1. 数据 和前区块的哈希值
-    // &gt;2. 通过数组的下标，拿到最后一个区块的哈希值，这个哈希值就是我们新区块的前哈希值
-    blockLen := len(bc.Blocks)
-    lastBlock := bc.Blocks[blockLen-1]
-    //最后一个区块的哈希值是新区块的前哈希
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(bc *BlockChain)</span> <span class="hljs-title">AddBlock</span><span class="hljs-params">(data <span class="hljs-keyword">string</span>)</span></span> {
+    <span class="hljs-comment">//1. 产生区块</span>
+    <span class="hljs-comment">// &gt;1. 数据 和前区块的哈希值</span>
+    <span class="hljs-comment">// &gt;2. 通过数组的下标，拿到最后一个区块的哈希值，这个哈希值就是我们新区块的前哈希值</span>
+    blockLen := <span class="hljs-built_in">len</span>(bc.Blocks)
+    lastBlock := bc.Blocks[blockLen<span class="hljs-number">-1</span>]
+    <span class="hljs-comment">//最后一个区块的哈希值是新区块的前哈希</span>
     prevBlockHash := lastBlock.Hash
 
     block := NewBlock(data, prevBlockHash)
 
-    //2. 向bc中添加新区块
-    bc.Blocks = append(bc.Blocks, block)
+    <span class="hljs-comment">//2. 向bc中添加新区块</span>
+    bc.Blocks = <span class="hljs-built_in">append</span>(bc.Blocks, block)
 }
 </code></pre>
 <p>main文件仅保留main.go即可</p>
 <p>main.go</p>
-<pre><code class="lang-go">package main
+<pre><code class="lang-go"><span class="hljs-keyword">package</span> main
 
-import (
-    &quot;fmt&quot;
+<span class="hljs-keyword">import</span> (
+    <span class="hljs-string">&quot;fmt&quot;</span>
 )
 
-func main() {
-    //fmt.Printf(&quot;hello world!&quot;)
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> {
+    <span class="hljs-comment">//fmt.Printf(&quot;hello world!&quot;)</span>
 
-    //block := GenesisBlock(genesisInfo, []byte{})
+    <span class="hljs-comment">//block := GenesisBlock(genesisInfo, []byte{})</span>
     bc := NewBlockChain()
-    bc.AddBlock(&quot;班长向老师转了1枚比特币！&quot;)
-    bc.AddBlock(&quot;班长又向老师转了1枚比特币！&quot;)
+    bc.AddBlock(<span class="hljs-string">&quot;班长向老师转了1枚比特币！&quot;</span>)
+    bc.AddBlock(<span class="hljs-string">&quot;班长又向老师转了1枚比特币！&quot;</span>)
 
-    for i, block := range bc.Blocks {
-        fmt.Println(&quot;======== block height : &quot;, i, &quot;=======&quot;)
-        fmt.Printf(&quot;PreHash : %x\n&quot;, block.PreHash)
-        fmt.Printf(&quot;Hash : %x\n&quot;, block.Hash)
-        fmt.Printf(&quot;Data : %s\n&quot;, block.Data)
+    <span class="hljs-keyword">for</span> i, block := <span class="hljs-keyword">range</span> bc.Blocks {
+        fmt.Println(<span class="hljs-string">&quot;======== block height : &quot;</span>, i, <span class="hljs-string">&quot;=======&quot;</span>)
+        fmt.Printf(<span class="hljs-string">&quot;PreHash : %x\n&quot;</span>, block.PreHash)
+        fmt.Printf(<span class="hljs-string">&quot;Hash : %x\n&quot;</span>, block.Hash)
+        fmt.Printf(<span class="hljs-string">&quot;Data : %s\n&quot;</span>, block.Data)
     }
 }
 </code></pre>
 <h2 id="06补充block字段（完整）">06_补充Block字段（完整）</h2>
-<pre><code class="lang-go">type Block struct {
-    //版本号
-    Version uint64
+<pre><code class="lang-go"><span class="hljs-keyword">type</span> Block <span class="hljs-keyword">struct</span> {
+    <span class="hljs-comment">//版本号</span>
+    Version <span class="hljs-keyword">uint64</span>
 
-    //前区块哈希值
-    PreHash []byte
+    <span class="hljs-comment">//前区块哈希值</span>
+    PreHash []<span class="hljs-keyword">byte</span>
 
-    //梅克尔根(就是一个哈希值，v4版本介绍）
-    MerKleRoot []byte
+    <span class="hljs-comment">//梅克尔根(就是一个哈希值，v4版本介绍）</span>
+    MerKleRoot []<span class="hljs-keyword">byte</span>
 
-    //时间戳
-    TimeStamp uint64
+    <span class="hljs-comment">//时间戳</span>
+    TimeStamp <span class="hljs-keyword">uint64</span>
 
-    //难度值(调整比特币挖矿的难度)
-    Difficulty uint64
+    <span class="hljs-comment">//难度值(调整比特币挖矿的难度)</span>
+    Difficulty <span class="hljs-keyword">uint64</span>
 
-    //随机数，这就是挖矿时所要寻找的数
-    Nonce uint64
+    <span class="hljs-comment">//随机数，这就是挖矿时所要寻找的数</span>
+    Nonce <span class="hljs-keyword">uint64</span>
 
-    //当前区块哈希值(为了方便实现，所以将区块的哈希值放到了区块中)
-    Hash []byte
+    <span class="hljs-comment">//当前区块哈希值(为了方便实现，所以将区块的哈希值放到了区块中)</span>
+    Hash []<span class="hljs-keyword">byte</span>
 
-    //区块数据
-    Data []byte
+    <span class="hljs-comment">//区块数据</span>
+    Data []<span class="hljs-keyword">byte</span>
 }
 </code></pre>
 <p>改写NewBlock</p>
-<pre><code class="lang-go">func NewBlock(data string, prevBlockHash []byte) *Block {
+<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">NewBlock</span><span class="hljs-params">(data <span class="hljs-keyword">string</span>, prevBlockHash []<span class="hljs-keyword">byte</span>)</span> *<span class="hljs-title">Block</span></span> {
     block := Block{
-        Version:    00,
+        Version:    <span class="hljs-number">00</span>,
         PreHash:    prevBlockHash,
-        MerKleRoot: []byte{}, //先填为空，v4版本再详解
-        TimeStamp:  uint64(time.Now().Unix()),
-        Difficulty: 100,
-        Nonce:      100,
-        //Hash:    []byte{}, //先填为空，后面再进行计算
-        Data: []byte(data)}
+        MerKleRoot: []<span class="hljs-keyword">byte</span>{}, <span class="hljs-comment">//先填为空，v4版本再详解</span>
+        TimeStamp:  <span class="hljs-keyword">uint64</span>(time.Now().Unix()),
+        Difficulty: <span class="hljs-number">100</span>,
+        Nonce:      <span class="hljs-number">100</span>,
+        <span class="hljs-comment">//Hash:    []byte{}, //先填为空，后面再进行计算</span>
+        Data: []<span class="hljs-keyword">byte</span>(data)}
 
-    //提供一个设置哈希的方法
+    <span class="hljs-comment">//提供一个设置哈希的方法</span>
     block.SetHash()
-    return &amp;block
+    <span class="hljs-keyword">return</span> &amp;block
 }
 </code></pre>
 <h2 id="07根据完整block重写sethash">07_根据完整Block重写SetHash</h2>
-<pre><code class="lang-go">func (block *Block) SetHash() {
-    var blockByteInfo []byte //存储拼接好的数据，最后作为sha256函数的参数
-    //1. 拼接当前区块的数据
-    blockByteInfo = append(blockByteInfo, block.PreHash...)
-    blockByteInfo = append(blockByteInfo, block.Data...)
-    blockByteInfo = append(blockByteInfo, block.MerKleRoot...)
-    blockByteInfo = append(blockByteInfo, uint64ToByte(block.Version)...)
-    blockByteInfo = append(blockByteInfo, uint64ToByte(block.TimeStamp)...)
-    blockByteInfo = append(blockByteInfo, uint64ToByte(block.Difficulty)...)
-    blockByteInfo = append(blockByteInfo, uint64ToByte(block.Nonce)...)
+<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(block *Block)</span> <span class="hljs-title">SetHash</span><span class="hljs-params">()</span></span> {
+    <span class="hljs-keyword">var</span> blockByteInfo []<span class="hljs-keyword">byte</span> <span class="hljs-comment">//存储拼接好的数据，最后作为sha256函数的参数</span>
+    <span class="hljs-comment">//1. 拼接当前区块的数据</span>
+    blockByteInfo = <span class="hljs-built_in">append</span>(blockByteInfo, block.PreHash...)
+    blockByteInfo = <span class="hljs-built_in">append</span>(blockByteInfo, block.Data...)
+    blockByteInfo = <span class="hljs-built_in">append</span>(blockByteInfo, block.MerKleRoot...)
+    blockByteInfo = <span class="hljs-built_in">append</span>(blockByteInfo, uint64ToByte(block.Version)...)
+    blockByteInfo = <span class="hljs-built_in">append</span>(blockByteInfo, uint64ToByte(block.TimeStamp)...)
+    blockByteInfo = <span class="hljs-built_in">append</span>(blockByteInfo, uint64ToByte(block.Difficulty)...)
+    blockByteInfo = <span class="hljs-built_in">append</span>(blockByteInfo, uint64ToByte(block.Nonce)...)
 
-    //2. 对数据进行哈希处理：sha256
-    //func Sum(data []byte) [Size]byte {
-    hash := sha256.Sum256(blockByteInfo) //传入参数时切片， 返回值是一个32位的数组
+    <span class="hljs-comment">//2. 对数据进行哈希处理：sha256</span>
+    <span class="hljs-comment">//func Sum(data []byte) [Size]byte {</span>
+    hash := sha256.Sum256(blockByteInfo) <span class="hljs-comment">//传入参数时切片， 返回值是一个32位的数组</span>
 
-    //3. 把哈希添加到我们区块Hash字段
+    <span class="hljs-comment">//3. 把哈希添加到我们区块Hash字段</span>
     block.Hash = hash[:]
 }
 </code></pre>
 <h3 id="-辅助函数">- 辅助函数</h3>
-<pre><code class="lang-go">func uint64ToByte(num uint64) []byte {
-    //func Write(w io.Writer, order ByteOrder, data interface{}) error {
-    var buffer bytes.Buffer
-    //将数据以二进制形式保存到buffer中
-    err := binary.Write(&amp;buffer, binary.BigEndian/*大端对齐vs小端对齐*/, num)
-    if err != nil {
+<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">uint64ToByte</span><span class="hljs-params">(num <span class="hljs-keyword">uint64</span>)</span> []<span class="hljs-title">byte</span></span> {
+    <span class="hljs-comment">//func Write(w io.Writer, order ByteOrder, data interface{}) error {</span>
+    <span class="hljs-keyword">var</span> buffer bytes.Buffer
+    <span class="hljs-comment">//将数据以二进制形式保存到buffer中</span>
+    err := binary.Write(&amp;buffer, binary.BigEndian<span class="hljs-comment">/*大端对齐vs小端对齐*/</span>, num)
+    <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
         log.Panic(err)
     }
 
-    return buffer.Bytes()
+    <span class="hljs-keyword">return</span> buffer.Bytes()
 }
 </code></pre>
 <h3 id="-binary序列化">- binary序列化</h3>
@@ -3409,68 +3405,68 @@ func main() {
 <h3 id="-demo验证">- demo验证</h3>
 <pre><code class="lang-js">package main
 
-import (
-   &quot;fmt&quot;
-   &quot;unsafe&quot; //go语言的sizeof
+<span class="hljs-keyword">import</span> (
+   <span class="hljs-string">&quot;fmt&quot;</span>
+   <span class="hljs-string">&quot;unsafe&quot;</span> <span class="hljs-comment">//go语言的sizeof</span>
 )
 
-func main() {
-   s := int16(0x1234)
-   b := int8(s)
-    //0x1234
-    // 低 --------》 高
-    // 12 34  -&gt; 大端 -&gt; 高尾端
-    // 34 12  -&gt; 小端 -&gt; 低尾端
+func <span class="hljs-function"><span class="hljs-title">main</span>(<span class="hljs-params"></span>)</span> {
+   <span class="hljs-attr">s</span> := int16(<span class="hljs-number">0x1234</span>)
+   <span class="hljs-attr">b</span> := int8(s)
+    <span class="hljs-comment">//0x1234</span>
+    <span class="hljs-comment">// 低 --------》 高</span>
+    <span class="hljs-comment">// 12 34  -&gt; 大端 -&gt; 高尾端</span>
+    <span class="hljs-comment">// 34 12  -&gt; 小端 -&gt; 低尾端</span>
 
-   fmt.Println(&quot;int16字节大小为&quot;, unsafe.Sizeof(s)) //结果为2
-   if 0x34 == b {
-      fmt.Println(&quot;little endian&quot;)
-   } else {
-      fmt.Println(&quot;big endian&quot;)
+   fmt.Println(<span class="hljs-string">&quot;int16字节大小为&quot;</span>, unsafe.Sizeof(s)) <span class="hljs-comment">//结果为2</span>
+   <span class="hljs-keyword">if</span> <span class="hljs-number">0x34</span> == b {
+      fmt.Println(<span class="hljs-string">&quot;little endian&quot;</span>)
+   } <span class="hljs-keyword">else</span> {
+      fmt.Println(<span class="hljs-string">&quot;big endian&quot;</span>)
    }
 }
 </code></pre>
 <h2 id="09使用bytesjoin改写sethash函数">09_使用bytes.Join改写SetHash函数</h2>
 <p>demo/stringJoin.go</p>
-<pre><code class="lang-go">package main
+<pre><code class="lang-go"><span class="hljs-keyword">package</span> main
 
-import (
-    &quot;strings&quot;
-    &quot;fmt&quot;
+<span class="hljs-keyword">import</span> (
+    <span class="hljs-string">&quot;strings&quot;</span>
+    <span class="hljs-string">&quot;fmt&quot;</span>
 )
 
-func main()  {
-    strArray := []string{&quot;hello&quot;, &quot;world&quot;, &quot;itcast&quot;}
-    result := strings.Join(strArray, &quot;+&quot;)
-    fmt.Printf(&quot;result :%s\n&quot;, result)
-    result = strings.Join(strArray, &quot;&quot;)
-    fmt.Printf(&quot;result :%s\n&quot;, result)
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>  {
+    strArray := []<span class="hljs-keyword">string</span>{<span class="hljs-string">&quot;hello&quot;</span>, <span class="hljs-string">&quot;world&quot;</span>, <span class="hljs-string">&quot;itcast&quot;</span>}
+    result := strings.Join(strArray, <span class="hljs-string">&quot;+&quot;</span>)
+    fmt.Printf(<span class="hljs-string">&quot;result :%s\n&quot;</span>, result)
+    result = strings.Join(strArray, <span class="hljs-string">&quot;&quot;</span>)
+    fmt.Printf(<span class="hljs-string">&quot;result :%s\n&quot;</span>, result)
 }
 </code></pre>
 <p>demo/bytesJoin.go</p>
-<pre><code class="lang-go">package main
+<pre><code class="lang-go"><span class="hljs-keyword">package</span> main
 
-import (
-    &quot;bytes&quot;
-    &quot;fmt&quot;
+<span class="hljs-keyword">import</span> (
+    <span class="hljs-string">&quot;bytes&quot;</span>
+    <span class="hljs-string">&quot;fmt&quot;</span>
 )
 
-func main()  {
-    //func Join(s [][]byte, sep []byte) []byte {
-    byteArray := [][]byte{
-        []byte(&quot;Hello&quot;),
-        []byte(&quot;World&quot;),
-        []byte(&quot;Itcast&quot;)}
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>  {
+    <span class="hljs-comment">//func Join(s [][]byte, sep []byte) []byte {</span>
+    byteArray := [][]<span class="hljs-keyword">byte</span>{
+        []<span class="hljs-keyword">byte</span>(<span class="hljs-string">&quot;Hello&quot;</span>),
+        []<span class="hljs-keyword">byte</span>(<span class="hljs-string">&quot;World&quot;</span>),
+        []<span class="hljs-keyword">byte</span>(<span class="hljs-string">&quot;Itcast&quot;</span>)}
 
-    result := bytes.Join(byteArray, []byte(&quot;&quot;))
-    fmt.Printf(&quot;result : %s\n&quot;, string(result))
+    result := bytes.Join(byteArray, []<span class="hljs-keyword">byte</span>(<span class="hljs-string">&quot;&quot;</span>))
+    fmt.Printf(<span class="hljs-string">&quot;result : %s\n&quot;</span>, <span class="hljs-keyword">string</span>(result))
 }
 </code></pre>
 <p>改写SetHash</p>
-<pre><code class="lang-go">func (block *Block) SetHash() {
-    var blockByteInfo []byte //存储拼接好的数据，最后作为sha256函数的参数
-    //1. 拼接当前区块的数据
-    /*
+<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(block *Block)</span> <span class="hljs-title">SetHash</span><span class="hljs-params">()</span></span> {
+    <span class="hljs-keyword">var</span> blockByteInfo []<span class="hljs-keyword">byte</span> <span class="hljs-comment">//存储拼接好的数据，最后作为sha256函数的参数</span>
+    <span class="hljs-comment">//1. 拼接当前区块的数据</span>
+    <span class="hljs-comment">/*
     blockByteInfo = append(blockByteInfo, block.PreHash...)
     blockByteInfo = append(blockByteInfo, block.Data...)
     blockByteInfo = append(blockByteInfo, block.MerKleRoot...)
@@ -3478,9 +3474,9 @@ func main()  {
     blockByteInfo = append(blockByteInfo, uint64ToByte(block.TimeStamp)...)
     blockByteInfo = append(blockByteInfo, uint64ToByte(block.Difficulty)...)
     blockByteInfo = append(blockByteInfo, uint64ToByte(block.Nonce)...)
-    */
+    */</span>
 
-    tmp := [][]byte{
+    tmp := [][]<span class="hljs-keyword">byte</span>{
         block.PreHash,
         block.Data,
         block.MerKleRoot,
@@ -3489,7 +3485,7 @@ func main()  {
         uint64ToByte(block.Difficulty),
         uint64ToByte(block.Nonce)}
 
-    blockByteInfo = bytes.Join(tmp, []byte(&quot;&quot;))
+    blockByteInfo = bytes.Join(tmp, []<span class="hljs-keyword">byte</span>(<span class="hljs-string">&quot;&quot;</span>))
     ...
 }
 </code></pre>
@@ -3520,7 +3516,7 @@ func main()  {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第6节:day1-v1链条","level":"1.18.6","depth":2,"next":{"title":"第7节:day1-Bitcoin客户端","level":"1.18.7","depth":2,"path":"11_精通比特币/day1-07-Bitcoin客户端.md","ref":"11_精通比特币/day1-07-Bitcoin客户端.md","articles":[]},"previous":{"title":"第5节:day1-比特币结构","level":"1.18.5","depth":2,"path":"11_精通比特币/day1-05-比特币结构.md","ref":"11_精通比特币/day1-05-比特币结构.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"11_精通比特币/day1-06-v1链条.md","mtime":"2023-09-23T13:32:47.893Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第6节:day1-v1链条","level":"1.18.6","depth":2,"next":{"title":"第7节:day1-Bitcoin客户端","level":"1.18.7","depth":2,"path":"11_精通比特币/day1-07-Bitcoin客户端.md","ref":"11_精通比特币/day1-07-Bitcoin客户端.md","articles":[]},"previous":{"title":"第5节:day1-比特币结构","level":"1.18.5","depth":2,"path":"11_精通比特币/day1-05-比特币结构.md","ref":"11_精通比特币/day1-05-比特币结构.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"cn","gitbook":"*"},"file":{"path":"11_精通比特币/day1-06-v1链条.md","mtime":"2023-09-23T13:32:47.893Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3603,14 +3599,6 @@ func main()  {
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

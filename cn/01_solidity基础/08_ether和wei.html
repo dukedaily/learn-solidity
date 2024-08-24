@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3027,17 +3023,17 @@
 <li>不含任何后缀的默认单位是 wei</li>
 <li>1 gwei = 10^9 wei</li>
 </ul>
-<pre><code class="lang-js">// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
 
 contract EtherUnits {
-    uint public oneWei = 1 wei;
-    // 1 wei is equal to 1
-    bool public isOneWei = 1 wei == 1;
+    uint public oneWei = <span class="hljs-number">1</span> wei;
+    <span class="hljs-comment">// 1 wei is equal to 1</span>
+    bool public isOneWei = <span class="hljs-number">1</span> wei == <span class="hljs-number">1</span>;
 
-    uint public oneEther = 1 ether;
-    // 1 ether is equal to 10^18 wei
-    bool public isOneEther = 1 ether == 1e18;
+    uint public oneEther = <span class="hljs-number">1</span> ether;
+    <span class="hljs-comment">// 1 ether is equal to 10^18 wei</span>
+    bool public isOneEther = <span class="hljs-number">1</span> ether == <span class="hljs-number">1e18</span>;
 }
 </code></pre>
 
@@ -3067,7 +3063,7 @@ contract EtherUnits {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第8节:ether和wei","level":"1.8.8","depth":2,"next":{"title":"第9节:gas和gasprice","level":"1.8.9","depth":2,"path":"01_solidity基础/09_gas和gasprice.md","ref":"01_solidity基础/09_gas和gasprice.md","articles":[]},"previous":{"title":"第7节:读写状态变量","level":"1.8.7","depth":2,"path":"01_solidity基础/07_读写状态变量.md","ref":"01_solidity基础/07_读写状态变量.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"01_solidity基础/08_ether和wei.md","mtime":"2023-09-23T13:07:17.978Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第8节:ether和wei","level":"1.8.8","depth":2,"next":{"title":"第9节:gas和gasprice","level":"1.8.9","depth":2,"path":"01_solidity基础/09_gas和gasprice.md","ref":"01_solidity基础/09_gas和gasprice.md","articles":[]},"previous":{"title":"第7节:读写状态变量","level":"1.8.7","depth":2,"path":"01_solidity基础/07_读写状态变量.md","ref":"01_solidity基础/07_读写状态变量.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"cn","gitbook":"*"},"file":{"path":"01_solidity基础/08_ether和wei.md","mtime":"2023-09-23T13:07:17.978Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3150,14 +3146,6 @@ contract EtherUnits {
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

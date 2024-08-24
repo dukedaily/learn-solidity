@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3034,17 +3030,17 @@
 <h2 id="二、合约">二、合约</h2>
 <h3 id="1-core">1. core</h3>
 <pre><code class="lang-sh">yarn &amp;&amp; yarn compile
-yarn test
+yarn <span class="hljs-built_in">test</span>
 </code></pre>
 <h3 id="2-periphery">2. periphery</h3>
 <pre><code class="lang-sh">yarn &amp;&amp; yarn compile
-yarn test
+yarn <span class="hljs-built_in">test</span>
 </code></pre>
 <h3 id="3-deploy工厂合约">3. deploy工厂合约</h3>
 <ol>
 <li>部署factory前，先在factory中添加代码，用于计算：INIT_CODE_HASH</li>
 </ol>
-<pre><code class="lang-sh">    bytes32 public constant INIT_CODE_PAIR_HASH = keccak256(abi.encodePacked(type(UniswapV2Pair).creationCode));
+<pre><code class="lang-sh">    bytes32 public constant INIT_CODE_PAIR_HASH = keccak256(abi.encodePacked(<span class="hljs-built_in">type</span>(UniswapV2Pair).creationCode));
 </code></pre>
 <p><img src="https://duke-typora.s3.ap-southeast-1.amazonaws.com/uPic/image-20211215220204063.png" alt="image-20211215220204063"></p>
 <ol>
@@ -3054,11 +3050,11 @@ yarn test
 <ol>
 <li>部署router2</li>
 </ol>
-<pre><code class="lang-sh">WETH = &apos;0xd0a1e359811322d97991e03f863a0c30c2cf029c&apos;
+<pre><code class="lang-sh">WETH = <span class="hljs-string">&apos;0xd0a1e359811322d97991e03f863a0c30c2cf029c&apos;</span>
 factory: 0xd41130E9142c64Da60908d2a6Bd0eD191Bc6d7E4
 router2: 0xDC292C81e24efB77Bc69e6d3727E3727EC1bF170 (verify)
 
-INIT_CODE_HASH = &apos;0x1a2b467a96f24f635e38aa0d5eb137af393113cb941125f3cbf3d93857eb6e69&apos;
+INIT_CODE_HASH = <span class="hljs-string">&apos;0x1a2b467a96f24f635e38aa0d5eb137af393113cb941125f3cbf3d93857eb6e69&apos;</span>
 
 Aave DAI:  0xff795577d9ac8bd7d90ee22b6c1703490b6512fd
 Aave WBTC:  0xd1b98b6607330172f1d991521145a22bce793277
@@ -3069,14 +3065,14 @@ Aave WBTC:  0xd1b98b6607330172f1d991521145a22bce793277
 <pre><code class="lang-sh">git@github.com:dukedaily/uniswap-sdk-v2.git
 </code></pre>
 <p>clone到本地：</p>
-<pre><code class="lang-sh">git clone git@github.com:dukedaily/uniswap-sdk-v2.git
+<pre><code class="lang-sh">git <span class="hljs-built_in">clone</span> git@github.com:dukedaily/uniswap-sdk-v2.git
 </code></pre>
 <p>修改uniswap/sdk中的数据，替换为我们部署的FACTORY_ADDRESS和INIT_CODE_HASH：</p>
-<pre><code class="lang-sh"># uniswap-sdk-v2/src/constants.ts
+<pre><code class="lang-sh"><span class="hljs-comment"># uniswap-sdk-v2/src/constants.ts</span>
 
-export const FACTORY_ADDRESS = &apos;0xd41130E9142c64Da60908d2a6Bd0eD191Bc6d7E4&apos;
+<span class="hljs-built_in">export</span> const FACTORY_ADDRESS = <span class="hljs-string">&apos;0xd41130E9142c64Da60908d2a6Bd0eD191Bc6d7E4&apos;</span>
 
-export const INIT_CODE_HASH = &apos;0x1a2b467a96f24f635e38aa0d5eb137af393113cb941125f3cbf3d93857eb6e69&apos;
+<span class="hljs-built_in">export</span> const INIT_CODE_HASH = <span class="hljs-string">&apos;0x1a2b467a96f24f635e38aa0d5eb137af393113cb941125f3cbf3d93857eb6e69&apos;</span>
 </code></pre>
 <p>安装&amp;编译：</p>
 <pre><code class="lang-sh">yarn &amp;yarn build
@@ -3085,46 +3081,46 @@ export const INIT_CODE_HASH = &apos;0x1a2b467a96f24f635e38aa0d5eb137af393113cb94
 <h2 id="四、interface">四、interface</h2>
 <h3 id="1-引用sdk">1. 引用sdk</h3>
 <p>下载工程：使用v2.6.5版本，之后的版本有治理功能，我们不需要。</p>
-<pre><code class="lang-sh">git clone https://github.com/Uniswap/uniswap-interface.git
-cd uniswap-interface &amp;&amp; git checkout v2.6.5
+<pre><code class="lang-sh">git <span class="hljs-built_in">clone</span> https://github.com/Uniswap/uniswap-interface.git
+<span class="hljs-built_in">cd</span> uniswap-interface &amp;&amp; git checkout v2.6.5
 </code></pre>
 <p>v2.6.5版本的interface在package.json中，使用的sdk版本为：</p>
-<pre><code class="lang-sh">@uniswap/sdk&quot;: &quot;3.0.3-beta.1&quot;,
-</code></pre>
+<pre><code class="lang-sh">@uniswap/sdk<span class="hljs-string">&quot;: &quot;</span>3.0.3-beta.1<span class="hljs-string">&quot;,
+</span></code></pre>
 <p>但是当前uniswap官网上已经不提供这个版本了，我们上面clone的工程就是这个版本的。我们会替换掉这个默认的版本，修改package.json，将</p>
-<pre><code class="lang-sh">&quot;@uniswap/sdk&quot;: &quot;3.0.3-beta.1&quot;,
+<pre><code class="lang-sh"><span class="hljs-string">&quot;@uniswap/sdk&quot;</span>: <span class="hljs-string">&quot;3.0.3-beta.1&quot;</span>,
 </code></pre>
 <p>修改为：</p>
-<pre><code class="lang-sh"> &quot;@uniswap/sdk&quot;: &quot;git://github.com/dukedaily/uniswap-sdk-v2.git&quot;,
+<pre><code class="lang-sh"> <span class="hljs-string">&quot;@uniswap/sdk&quot;</span>: <span class="hljs-string">&quot;git://github.com/dukedaily/uniswap-sdk-v2.git&quot;</span>,
 </code></pre>
 <p>表示这个sdk去我们的github工程中下载。</p>
 <h3 id="2-自定义token列表">2. 自定义token列表</h3>
 <p>token.json，上传到gist中：<a href="https://gist.github.com/，" target="_blank">https://gist.github.com/，</a></p>
 <pre><code class="lang-json">{
-    &quot;name&quot;: &quot;DAI Aave List&quot;,
-    &quot;version&quot;: {
-        &quot;major&quot;: 1,
-        &quot;minor&quot;: 0,
-        &quot;patch&quot;: 0
+    <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;DAI Aave List&quot;</span>,
+    <span class="hljs-string">&quot;version&quot;</span>: {
+        <span class="hljs-string">&quot;major&quot;</span>: <span class="hljs-number">1</span>,
+        <span class="hljs-string">&quot;minor&quot;</span>: <span class="hljs-number">0</span>,
+        <span class="hljs-string">&quot;patch&quot;</span>: <span class="hljs-number">0</span>
     },
-    &quot;logoURI&quot;: &quot;https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0/logo.png&quot;,
-    &quot;timestamp&quot;: &quot;2021-07-25 00:00:00.000+00:00&quot;,
-    &quot;tokens&quot;: [
+    <span class="hljs-string">&quot;logoURI&quot;</span>: <span class="hljs-string">&quot;https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0/logo.png&quot;</span>,
+    <span class="hljs-string">&quot;timestamp&quot;</span>: <span class="hljs-string">&quot;2021-07-25 00:00:00.000+00:00&quot;</span>,
+    <span class="hljs-string">&quot;tokens&quot;</span>: [
         {
-            &quot;chainId&quot;: 42,
-            &quot;address&quot;: &quot;0xff795577d9ac8bd7d90ee22b6c1703490b6512fd&quot;,
-            &quot;name&quot;: &quot;DAIAAVE Token&quot;,
-            &quot;symbol&quot;: &quot;DAI&quot;,
-            &quot;decimals&quot;: 18,
-            &quot;logoURI&quot;: &quot;https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0/logo.png&quot;
+            <span class="hljs-string">&quot;chainId&quot;</span>: <span class="hljs-number">42</span>,
+            <span class="hljs-string">&quot;address&quot;</span>: <span class="hljs-string">&quot;0xff795577d9ac8bd7d90ee22b6c1703490b6512fd&quot;</span>,
+            <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;DAIAAVE Token&quot;</span>,
+            <span class="hljs-string">&quot;symbol&quot;</span>: <span class="hljs-string">&quot;DAI&quot;</span>,
+            <span class="hljs-string">&quot;decimals&quot;</span>: <span class="hljs-number">18</span>,
+            <span class="hljs-string">&quot;logoURI&quot;</span>: <span class="hljs-string">&quot;https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0/logo.png&quot;</span>
         },
         {
-            &quot;chainId&quot;: 42,
-            &quot;address&quot;: &quot;0xd1b98b6607330172f1d991521145a22bce793277&quot;,
-            &quot;name&quot;: &quot;WBTCAAVE Token&quot;,
-            &quot;symbol&quot;: &quot;WBTC&quot;,
-            &quot;decimals&quot;: 8,
-            &quot;logoURI&quot;: &quot;https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0/logo.png&quot;
+            <span class="hljs-string">&quot;chainId&quot;</span>: <span class="hljs-number">42</span>,
+            <span class="hljs-string">&quot;address&quot;</span>: <span class="hljs-string">&quot;0xd1b98b6607330172f1d991521145a22bce793277&quot;</span>,
+            <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;WBTCAAVE Token&quot;</span>,
+            <span class="hljs-string">&quot;symbol&quot;</span>: <span class="hljs-string">&quot;WBTC&quot;</span>,
+            <span class="hljs-string">&quot;decimals&quot;</span>: <span class="hljs-number">8</span>,
+            <span class="hljs-string">&quot;logoURI&quot;</span>: <span class="hljs-string">&quot;https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0/logo.png&quot;</span>
         }
 
     ]
@@ -3137,7 +3133,7 @@ cd uniswap-interface &amp;&amp; git checkout v2.6.5
 <p><img src="https://duke-typora.s3.ap-southeast-1.amazonaws.com/uPic/image-20211215222139155.png" alt="image-20211215222139155"></p>
 <h3 id="3-修改路由地址">3. 修改路由地址</h3>
 <p>index.ts中：</p>
-<pre><code class="lang-js">export const ROUTER_ADDRESS = &apos;0xDC292C81e24efB77Bc69e6d3727E3727EC1bF170&apos;
+<pre><code class="lang-js"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> ROUTER_ADDRESS = <span class="hljs-string">&apos;0xDC292C81e24efB77Bc69e6d3727E3727EC1bF170&apos;</span>
 </code></pre>
 <p>依次执行如下命令：</p>
 <pre><code class="lang-sh">yarn &amp;yarn build
@@ -3185,7 +3181,7 @@ yarn start
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第16节:uniswapV2部署文档","level":"1.23.1","depth":2,"next":{"title":"第16节:aave部署步骤文档","level":"1.23.2","depth":2,"path":"16_主流项目部署文档/02_aaveV2部署.md","ref":"16_主流项目部署文档/02_aaveV2部署.md","articles":[]},"previous":{"title":"第十六:主流项目部署文档","level":"1.23","depth":1,"path":"16_主流项目部署文档/README.md","ref":"16_主流项目部署文档/README.md","articles":[{"title":"第16节:uniswapV2部署文档","level":"1.23.1","depth":2,"path":"16_主流项目部署文档/01_uniswapV2部署.md","ref":"16_主流项目部署文档/01_uniswapV2部署.md","articles":[]},{"title":"第16节:aave部署步骤文档","level":"1.23.2","depth":2,"path":"16_主流项目部署文档/02_aaveV2部署.md","ref":"16_主流项目部署文档/02_aaveV2部署.md","articles":[]},{"title":"第16节: compound V2部署步骤文档","level":"1.23.3","depth":2,"path":"16_主流项目部署文档/03_compoundV2部署.md","ref":"16_主流项目部署文档/03_compoundV2部署.md","articles":[]}]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"16_主流项目部署文档/01_uniswapV2部署.md","mtime":"2023-09-23T13:27:50.005Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第16节:uniswapV2部署文档","level":"1.23.1","depth":2,"next":{"title":"第16节:aave部署步骤文档","level":"1.23.2","depth":2,"path":"16_主流项目部署文档/02_aaveV2部署.md","ref":"16_主流项目部署文档/02_aaveV2部署.md","articles":[]},"previous":{"title":"第十六:主流项目部署文档","level":"1.23","depth":1,"path":"16_主流项目部署文档/README.md","ref":"16_主流项目部署文档/README.md","articles":[{"title":"第16节:uniswapV2部署文档","level":"1.23.1","depth":2,"path":"16_主流项目部署文档/01_uniswapV2部署.md","ref":"16_主流项目部署文档/01_uniswapV2部署.md","articles":[]},{"title":"第16节:aave部署步骤文档","level":"1.23.2","depth":2,"path":"16_主流项目部署文档/02_aaveV2部署.md","ref":"16_主流项目部署文档/02_aaveV2部署.md","articles":[]},{"title":"第16节: compound V2部署步骤文档","level":"1.23.3","depth":2,"path":"16_主流项目部署文档/03_compoundV2部署.md","ref":"16_主流项目部署文档/03_compoundV2部署.md","articles":[]}]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"cn","gitbook":"*"},"file":{"path":"16_主流项目部署文档/01_uniswapV2部署.md","mtime":"2023-09-23T13:27:50.005Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3268,14 +3264,6 @@ yarn start
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

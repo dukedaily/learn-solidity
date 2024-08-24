@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3124,14 +3120,14 @@
 <p>浏览器截图：</p>
 <p><img src="assets/image-20221108124054129.png" alt="image-20221108124054129"></p>
 <p>代码：</p>
-<pre><code class="lang-js">import ( &quot;crypto/sha256&quot; &quot;fmt&quot; )
+<pre><code class="lang-js"><span class="hljs-keyword">import</span> ( <span class="hljs-string">&quot;crypto/sha256&quot;</span> <span class="hljs-string">&quot;fmt&quot;</span> )
 
-func main() {
-  var data = &quot;helloworld&quot;
+func <span class="hljs-function"><span class="hljs-title">main</span>(<span class="hljs-params"></span>)</span> {
+  <span class="hljs-keyword">var</span> data = <span class="hljs-string">&quot;helloworld&quot;</span>
 
-  //10s中左右
-  for i := 0; i &lt; 1000000; i++ {
-      hash := sha256.Sum256([]byte(data + string(i))) fmt.Printf(&quot;hash : %x, %d\n&quot;, string(hash[:]), i)
+  <span class="hljs-comment">//10s中左右</span>
+  <span class="hljs-keyword">for</span> i := <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">1000000</span>; i++ {
+      <span class="hljs-attr">hash</span> := sha256.Sum256([]byte(data + string(i))) fmt.Printf(<span class="hljs-string">&quot;hash : %x, %d\n&quot;</span>, string(hash[:]), i)
   }
 }
 </code></pre>
@@ -3181,39 +3177,39 @@ func main() {
 <li>base64只是编码，并不具有加密作用。</li>
 </ul>
 <h3 id="-代码">- 代码</h3>
-<pre><code class="lang-go">package main
+<pre><code class="lang-go"><span class="hljs-keyword">package</span> main
 
-import (
-    &quot;encoding/base64&quot;
-    &quot;fmt&quot;
-    &quot;log&quot;
+<span class="hljs-keyword">import</span> (
+    <span class="hljs-string">&quot;encoding/base64&quot;</span>
+    <span class="hljs-string">&quot;fmt&quot;</span>
+    <span class="hljs-string">&quot;log&quot;</span>
 )
 
-func main() {
-    input := []byte(&quot;区块链学员中有一群神秘的大佬，他们家里有矿！&quot;)
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> {
+    input := []<span class="hljs-keyword">byte</span>(<span class="hljs-string">&quot;区块链学员中有一群神秘的大佬，他们家里有矿！&quot;</span>)
 
-    // 演示base64编码
+    <span class="hljs-comment">// 演示base64编码</span>
     encodeString := base64.StdEncoding.EncodeToString(input)
     fmt.Println(encodeString)
 
-    // 对上面的编码结果进行base64解码
+    <span class="hljs-comment">// 对上面的编码结果进行base64解码</span>
     decodeBytes, err := base64.StdEncoding.DecodeString(encodeString)
-    if err != nil {
+    <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
         log.Fatalln(err)
     }
-    fmt.Println(string(decodeBytes))
+    fmt.Println(<span class="hljs-keyword">string</span>(decodeBytes))
 
     fmt.Println()
 
-    // 如果要用在url中，需要使用URLEncoding
-    uEnc := base64.URLEncoding.EncodeToString([]byte(input))
+    <span class="hljs-comment">// 如果要用在url中，需要使用URLEncoding</span>
+    uEnc := base64.URLEncoding.EncodeToString([]<span class="hljs-keyword">byte</span>(input))
     fmt.Println(uEnc)
 
     uDec, err := base64.URLEncoding.DecodeString(uEnc)
-    if err != nil {
+    <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
         log.Fatalln(err)
     }
-    fmt.Println(string(uDec))
+    fmt.Println(<span class="hljs-keyword">string</span>(uDec))
 }
 </code></pre>
 <h2 id="2-base58（比特币生成地址）">2. Base58（比特币生成地址）</h2>
@@ -3258,7 +3254,7 @@ func main() {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第4节:day1-比特币依赖技术","level":"1.18.4","depth":2,"next":{"title":"第5节:day1-比特币结构","level":"1.18.5","depth":2,"path":"11_精通比特币/day1-05-比特币结构.md","ref":"11_精通比特币/day1-05-比特币结构.md","articles":[]},"previous":{"title":"第3节:day1-比特币概述","level":"1.18.3","depth":2,"path":"11_精通比特币/day1-03-比特币概述.md","ref":"11_精通比特币/day1-03-比特币概述.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"11_精通比特币/day1-04-比特币依赖技术.md","mtime":"2023-09-23T13:32:38.698Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第4节:day1-比特币依赖技术","level":"1.18.4","depth":2,"next":{"title":"第5节:day1-比特币结构","level":"1.18.5","depth":2,"path":"11_精通比特币/day1-05-比特币结构.md","ref":"11_精通比特币/day1-05-比特币结构.md","articles":[]},"previous":{"title":"第3节:day1-比特币概述","level":"1.18.3","depth":2,"path":"11_精通比特币/day1-03-比特币概述.md","ref":"11_精通比特币/day1-03-比特币概述.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"cn","gitbook":"*"},"file":{"path":"11_精通比特币/day1-04-比特币依赖技术.md","mtime":"2023-09-23T13:32:38.698Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3341,14 +3337,6 @@ func main() {
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

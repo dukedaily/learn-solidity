@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3023,11 +3019,11 @@
 <p>职场进阶: <a href="https://dukeweb3.com" target="_blank">https://dukeweb3.com</a></p>
 </blockquote>
 <p>枚举可以避免魔数，让程序更加易读，更好的进行状态管理，默认第一个值是：0</p>
-<pre><code class="lang-js">// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
 
 contract Enum {
-    // Enum representing shipping status
+    <span class="hljs-comment">// Enum representing shipping status</span>
     enum Status {
         Pending,
         Shipped,
@@ -3036,33 +3032,33 @@ contract Enum {
         Canceled
     }
 
-    // Default value is the first element listed in
-    // definition of the type, in this case &quot;Pending&quot;
+    <span class="hljs-comment">// Default value is the first element listed in</span>
+    <span class="hljs-comment">// definition of the type, in this case &quot;Pending&quot;</span>
     Status public status;
 
-    // Returns uint
-    // Pending  - 0
-    // Shipped  - 1
-    // Accepted - 2
-    // Rejected - 3
-    // Canceled - 4
-    function get() public view returns (Status) {
-        return status;
+    <span class="hljs-comment">// Returns uint</span>
+    <span class="hljs-comment">// Pending  - 0</span>
+    <span class="hljs-comment">// Shipped  - 1</span>
+    <span class="hljs-comment">// Accepted - 2</span>
+    <span class="hljs-comment">// Rejected - 3</span>
+    <span class="hljs-comment">// Canceled - 4</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">get</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">Status</span>) </span>{
+        <span class="hljs-keyword">return</span> status;
     }
 
-    // Update status by passing uint into input
-    function set(Status _status) public {
+    <span class="hljs-comment">// Update status by passing uint into input</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">set</span>(<span class="hljs-params">Status _status</span>) <span class="hljs-title">public</span> </span>{
         status = _status;
     }
 
-    // You can update to a specific enum like this
-    function cancel() public {
+    <span class="hljs-comment">// You can update to a specific enum like this</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">cancel</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> </span>{
         status = Status.Canceled;
     }
 
-    // delete resets the enum to its first value, 0
-    function reset() public {
-        delete status;
+    <span class="hljs-comment">// delete resets the enum to its first value, 0</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">reset</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> </span>{
+        <span class="hljs-keyword">delete</span> status;
     }
 }
 </code></pre>
@@ -3093,7 +3089,7 @@ contract Enum {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第15节:枚举Enum","level":"1.8.15","depth":2,"next":{"title":"第16节:结构体Struct","level":"1.8.16","depth":2,"path":"01_solidity基础/16_结构体Struct.md","ref":"01_solidity基础/16_结构体Struct.md","articles":[]},"previous":{"title":"第14节:数组Array","level":"1.8.14","depth":2,"path":"01_solidity基础/14_数组Array.md","ref":"01_solidity基础/14_数组Array.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"01_solidity基础/15_枚举Enum.md","mtime":"2023-09-23T13:07:54.491Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第15节:枚举Enum","level":"1.8.15","depth":2,"next":{"title":"第16节:结构体Struct","level":"1.8.16","depth":2,"path":"01_solidity基础/16_结构体Struct.md","ref":"01_solidity基础/16_结构体Struct.md","articles":[]},"previous":{"title":"第14节:数组Array","level":"1.8.14","depth":2,"path":"01_solidity基础/14_数组Array.md","ref":"01_solidity基础/14_数组Array.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"cn","gitbook":"*"},"file":{"path":"01_solidity基础/15_枚举Enum.md","mtime":"2023-09-23T13:07:54.491Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3176,14 +3172,6 @@ contract Enum {
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

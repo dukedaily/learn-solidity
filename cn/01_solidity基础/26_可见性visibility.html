@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3030,70 +3026,70 @@
 <li>external：仅允许外部地址(EOA或CA)调用，合约内部及子合约都不能调用；(早期版本可以使用this调用external方法)</li>
 </ul>
 <p>另，状态变量可以被修饰为：publi, private, internal，但是无法修饰为external</p>
-<pre><code class="lang-js">// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
 
 contract Base {
-    // Private function can only be called
-    // - inside this contract
-    // Contracts that inherit this contract cannot call this function.
-    function privateFunc() private pure returns (string memory) {
-        return &quot;private function called&quot;;
+    <span class="hljs-comment">// Private function can only be called</span>
+    <span class="hljs-comment">// - inside this contract</span>
+    <span class="hljs-comment">// Contracts that inherit this contract cannot call this function.</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">privateFunc</span>(<span class="hljs-params"></span>) <span class="hljs-title">private</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-params">string memory</span>) </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;private function called&quot;</span>;
     }
 
-    function testPrivateFunc() public pure returns (string memory) {
-        return privateFunc();
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">testPrivateFunc</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-params">string memory</span>) </span>{
+        <span class="hljs-keyword">return</span> privateFunc();
     }
 
-    // Internal function can be called
-    // - inside this contract
-    // - inside contracts that inherit this contract
-    function internalFunc() internal pure returns (string memory) {
-        return &quot;internal function called&quot;;
+    <span class="hljs-comment">// Internal function can be called</span>
+    <span class="hljs-comment">// - inside this contract</span>
+    <span class="hljs-comment">// - inside contracts that inherit this contract</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">internalFunc</span>(<span class="hljs-params"></span>) <span class="hljs-title">internal</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-params">string memory</span>) </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;internal function called&quot;</span>;
     }
 
-    function testInternalFunc() public pure virtual returns (string memory) {
-        return internalFunc();
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">testInternalFunc</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> <span class="hljs-title">pure</span> <span class="hljs-title">virtual</span> <span class="hljs-title">returns</span> (<span class="hljs-params">string memory</span>) </span>{
+        <span class="hljs-keyword">return</span> internalFunc();
     }
 
-    // Public functions can be called
-    // - inside this contract
-    // - inside contracts that inherit this contract
-    // - by other contracts and accounts
-    function publicFunc() public pure returns (string memory) {
-        return &quot;public function called&quot;;
+    <span class="hljs-comment">// Public functions can be called</span>
+    <span class="hljs-comment">// - inside this contract</span>
+    <span class="hljs-comment">// - inside contracts that inherit this contract</span>
+    <span class="hljs-comment">// - by other contracts and accounts</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">publicFunc</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-params">string memory</span>) </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;public function called&quot;</span>;
     }
 
-    // External functions can only be called
-    // - by other contracts and accounts
-    function externalFunc() external pure returns (string memory) {
-        return &quot;external function called&quot;;
+    <span class="hljs-comment">// External functions can only be called</span>
+    <span class="hljs-comment">// - by other contracts and accounts</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">externalFunc</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-params">string memory</span>) </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;external function called&quot;</span>;
     }
 
-    // This function will not compile since we&apos;re trying to call
-    // an external function here.
-    // function testExternalFunc() public pure returns (string memory) {
-    //     return externalFunc();
-    // }
+    <span class="hljs-comment">// This function will not compile since we&apos;re trying to call</span>
+    <span class="hljs-comment">// an external function here.</span>
+    <span class="hljs-comment">// function testExternalFunc() public pure returns (string memory) {</span>
+    <span class="hljs-comment">//     return externalFunc();</span>
+    <span class="hljs-comment">// }</span>
 
-    // State variables
-    string private privateVar = &quot;my private variable&quot;;
-    string internal internalVar = &quot;my internal variable&quot;;
-    string public publicVar = &quot;my public variable&quot;;
-    // State variables cannot be external so this code won&apos;t compile.
-    // string external externalVar = &quot;my external variable&quot;;
+    <span class="hljs-comment">// State variables</span>
+    string private privateVar = <span class="hljs-string">&quot;my private variable&quot;</span>;
+    string internal internalVar = <span class="hljs-string">&quot;my internal variable&quot;</span>;
+    string public publicVar = <span class="hljs-string">&quot;my public variable&quot;</span>;
+    <span class="hljs-comment">// State variables cannot be external so this code won&apos;t compile.</span>
+    <span class="hljs-comment">// string external externalVar = &quot;my external variable&quot;;</span>
 }
 
 contract Child is Base {
-    // Inherited contracts do not have access to private functions
-    // and state variables.
-    // function testPrivateFunc() public pure returns (string memory) {
-    //     return privateFunc();
-    // }
+    <span class="hljs-comment">// Inherited contracts do not have access to private functions</span>
+    <span class="hljs-comment">// and state variables.</span>
+    <span class="hljs-comment">// function testPrivateFunc() public pure returns (string memory) {</span>
+    <span class="hljs-comment">//     return privateFunc();</span>
+    <span class="hljs-comment">// }</span>
 
-    // Internal function call be called inside child contracts.
-    function testInternalFunc() public pure override returns (string memory) {
-        return internalFunc();
+    <span class="hljs-comment">// Internal function call be called inside child contracts.</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">testInternalFunc</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> <span class="hljs-title">pure</span> <span class="hljs-title">override</span> <span class="hljs-title">returns</span> (<span class="hljs-params">string memory</span>) </span>{
+        <span class="hljs-keyword">return</span> internalFunc();
     }
 }
 </code></pre>
@@ -3124,7 +3120,7 @@ contract Child is Base {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第26节:可见性visibility","level":"1.8.26","depth":2,"next":{"title":"第27节:abstract","level":"1.8.27","depth":2,"path":"01_solidity基础/27_abstract.md","ref":"01_solidity基础/27_abstract.md","articles":[]},"previous":{"title":"第25节:构造函数","level":"1.8.25","depth":2,"path":"01_solidity基础/25_构造函数.md","ref":"01_solidity基础/25_构造函数.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"01_solidity基础/26_可见性visibility.md","mtime":"2023-09-23T13:08:40.841Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第26节:可见性visibility","level":"1.8.26","depth":2,"next":{"title":"第27节:abstract","level":"1.8.27","depth":2,"path":"01_solidity基础/27_abstract.md","ref":"01_solidity基础/27_abstract.md","articles":[]},"previous":{"title":"第25节:构造函数","level":"1.8.25","depth":2,"path":"01_solidity基础/25_构造函数.md","ref":"01_solidity基础/25_构造函数.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"cn","gitbook":"*"},"file":{"path":"01_solidity基础/26_可见性visibility.md","mtime":"2023-09-23T13:08:40.841Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3207,14 +3203,6 @@ contract Child is Base {
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3081,8 +3077,8 @@
 </ol>
 <h3 id="两个事件">两个事件</h3>
 <p><code>MultisigWallet</code>合约有<code>2</code>个事件，<code>ExecutionSuccess</code>和<code>ExecutionFailure</code>，分别在交易成功和失败时释放，参数为交易哈希。</p>
-<pre><code class="lang-js">event ExecutionSuccess(bytes32 txHash);    // 交易成功事件
-event ExecutionFailure(bytes32 txHash);    // 交易失败事件
+<pre><code class="lang-js">event ExecutionSuccess(bytes32 txHash);    <span class="hljs-comment">// 交易成功事件</span>
+event ExecutionFailure(bytes32 txHash);    <span class="hljs-comment">// 交易失败事件</span>
 </code></pre>
 <h3 id="五个状态变量">五个状态变量</h3>
 <ol>
@@ -3092,57 +3088,59 @@ event ExecutionFailure(bytes32 txHash);    // 交易失败事件
 <li><code>threshold</code>：多签执行门槛，交易至少有n个多签人签名才能被执行。</li>
 <li><code>nonce</code>：初始为<code>0</code>，随着多签合约每笔成功执行的交易递增的值，可以防止签名重放攻击。</li>
 </ol>
-<pre><code class="lang-js">    address[] public owners;                   // 多签持有人数组 
-    mapping(address =&gt; bool) public isOwner;   // 记录一个地址是否为多签持有人
-    uint256 public ownerCount;                 // 多签持有人数量
-    uint256 public threshold;                  // 多签执行门槛，交易至少有n个多签人签名才能被执行。
-    uint256 public nonce;                      // nonce，防止签名重放攻击
+<pre><code class="lang-js">    address[] public owners;                   <span class="hljs-comment">// 多签持有人数组 </span>
+    mapping(<span class="hljs-function"><span class="hljs-params">address</span> =&gt;</span> bool) public isOwner;   <span class="hljs-comment">// 记录一个地址是否为多签持有人</span>
+    uint256 public ownerCount;                 <span class="hljs-comment">// 多签持有人数量</span>
+    uint256 public threshold;                  <span class="hljs-comment">// 多签执行门槛，交易至少有n个多签人签名才能被执行。</span>
+    uint256 public nonce;                      <span class="hljs-comment">// nonce，防止签名重放攻击</span>
 </code></pre>
 <h3 id="六个函数">六个函数</h3>
 <ol>
 <li><p>构造函数：调用<code>_setupOwners()</code>，初始化和多签持有人和执行门槛相关的变量。</p>
-<pre><code class="lang-js">// 构造函数，初始化owners, isOwner, ownerCount, threshold 
-constructor(address[] memory _owners, uint256 _threshold) {
+<pre><code class="lang-js"><span class="hljs-comment">// 构造函数，初始化owners, isOwner, ownerCount, threshold </span>
+<span class="hljs-function"><span class="hljs-title">constructor</span>(<span class="hljs-params">address[] memory _owners, uint256 _threshold</span>)</span> {
     _setupOwners(_owners, _threshold);
 }
 </code></pre>
 </li>
 <li><p><code>_setupOwners()</code>：在合约部署时被构造函数调用，初始化<code>owners</code>，<code>isOwner</code>，<code>ownerCount</code>，<code>threshold</code>状态变量。传入的参数中，执行门槛需大于等于<code>1</code>且小于等于多签人数；多签地址不能为<code>0</code>地址且不能重复。</p>
-<pre><code class="lang-js">function _setupOwners(address[] memory _owners, uint256 _threshold) internal {
-    // threshold没被初始化过
-    require(threshold == 0, &quot;001&quot;);
-    // 多签执行门槛 小于 多签人数
-    require(_threshold <= _owners.length, "002"); 多签执行门槛至少为1 require(_threshold>= 1, &quot;003&quot;);
+<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_setupOwners</span>(<span class="hljs-params">address[] memory _owners, uint256 _threshold</span>) <span class="hljs-title">internal</span> </span>{
+    <span class="hljs-comment">// threshold没被初始化过</span>
+    <span class="hljs-built_in">require</span>(threshold == <span class="hljs-number">0</span>, <span class="hljs-string">&quot;001&quot;</span>);
+    <span class="hljs-comment">// 多签执行门槛 小于 多签人数</span>
+    <span class="hljs-built_in">require</span>(_threshold &lt;= _owners.length, <span class="hljs-string">&quot;002&quot;</span>);
+    <span class="hljs-comment">// 多签执行门槛至少为1</span>
+    <span class="hljs-built_in">require</span>(_threshold &gt;= <span class="hljs-number">1</span>, <span class="hljs-string">&quot;003&quot;</span>);
 
-    for (uint256 i = 0; i &lt; _owners.length; i++) {
+    <span class="hljs-keyword">for</span> (uint256 i = <span class="hljs-number">0</span>; i &lt; _owners.length; i++) {
         address owner = _owners[i];
-        // 多签人不能为0地址，本合约地址，不能重复
-        require(owner != address(0) &amp;&amp; owner != address(this) &amp;&amp; !isOwner[owner], &quot;004&quot;);
+        <span class="hljs-comment">// 多签人不能为0地址，本合约地址，不能重复</span>
+        <span class="hljs-built_in">require</span>(owner != address(<span class="hljs-number">0</span>) &amp;&amp; owner != address(<span class="hljs-built_in">this</span>) &amp;&amp; !isOwner[owner], <span class="hljs-string">&quot;004&quot;</span>);
         owners.push(owner);
-        isOwner[owner] = true;
+        isOwner[owner] = <span class="hljs-literal">true</span>;
     }
     ownerCount = _owners.length;
     threshold = _threshold;
 }
-</=></code></pre>
+</code></pre>
 </li>
 <li><p><code>execTransaction()</code>：在收集足够的多签签名后，验证签名并执行交易。传入的参数为目标地址<code>to</code>，发送的以太坊数额<code>value</code>，数据<code>data</code>，以及打包签名<code>signatures</code>。打包签名就是将收集的多签人对交易哈希的签名，按多签持有人地址从小到大顺序，打包到一个[bytes]数据中。这一步调用了<code>encodeTransactionData()</code>编码交易，调用了<code>checkSignatures()</code>检验签名是否有效、数量是否达到执行门槛。</p>
-<pre><code class="lang-js">function execTransaction(
+<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">execTransaction</span>(<span class="hljs-params">
     address to,
     uint256 value,
     bytes memory data,
     bytes memory signatures
-) public payable virtual returns (bool success) {
-    // 编码交易数据，计算哈希
+</span>) <span class="hljs-title">public</span> <span class="hljs-title">payable</span> <span class="hljs-title">virtual</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bool success</span>) </span>{
+    <span class="hljs-comment">// 编码交易数据，计算哈希</span>
     bytes32 txHash = encodeTransactionData(to, value, data, nonce, block.chainid);
     nonce++;
-    // 检查签名
+    <span class="hljs-comment">// 检查签名</span>
     checkSignatures(txHash, signatures);
-    // 利用call执行交易，并获取交易结果
-    (success, ) = to.call{value: value}(data);
-    require(success , &quot;005&quot;);
-    if (success) emit ExecutionSuccess(txHash);
-    else emit ExecutionFailure(txHash);
+    <span class="hljs-comment">// 利用call执行交易，并获取交易结果</span>
+    (success, ) = to.call{<span class="hljs-attr">value</span>: value}(data);
+    <span class="hljs-built_in">require</span>(success , <span class="hljs-string">&quot;005&quot;</span>);
+    <span class="hljs-keyword">if</span> (success) emit ExecutionSuccess(txHash);
+    <span class="hljs-keyword">else</span> emit ExecutionFailure(txHash);
 }
 </code></pre>
 </li>
@@ -3152,63 +3150,63 @@ constructor(address[] memory _owners, uint256 _threshold) {
 <li>利用 <code>currentOwner &gt; lastOwner</code> 确定签名来自不同多签（多签地址递增）；</li>
 <li>利用<code>isOwner[currentOwner]</code>确定签名者为多签持有人。</li>
 </ul>
-<pre><code class="lang-js">function checkSignatures(bytes32 dataHash, bytes memory signatures) public view {
-    // 读取多签执行门槛
+<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">checkSignatures</span>(<span class="hljs-params">bytes32 dataHash, bytes memory signatures</span>) <span class="hljs-title">public</span> <span class="hljs-title">view</span> </span>{
+    <span class="hljs-comment">// 读取多签执行门槛</span>
     uint256 _threshold = threshold;
-    require(_threshold &gt; 0, &quot;006&quot;);
+    <span class="hljs-built_in">require</span>(_threshold &gt; <span class="hljs-number">0</span>, <span class="hljs-string">&quot;006&quot;</span>);
 
-    // 检查签名长度足够长
-    require(signatures.length &gt;= _threshold * 65, &quot;007&quot;);
+    <span class="hljs-comment">// 检查签名长度足够长</span>
+    <span class="hljs-built_in">require</span>(signatures.length &gt;= _threshold * <span class="hljs-number">65</span>, <span class="hljs-string">&quot;007&quot;</span>);
 
-    // 通过一个循环，检查收集的签名是否有效
-    // 大概思路：
-    // 1. 用ecdsa先验证签名是否有效
-    // 2. 利用 currentOwner &gt; lastOwner 确定签名来自不同多签（多签地址递增）
-    // 3. 利用 isOwner[currentOwner] 确定签名者为多签持有人
-    address lastOwner = address(0); 
+    <span class="hljs-comment">// 通过一个循环，检查收集的签名是否有效</span>
+    <span class="hljs-comment">// 大概思路：</span>
+    <span class="hljs-comment">// 1. 用ecdsa先验证签名是否有效</span>
+    <span class="hljs-comment">// 2. 利用 currentOwner &gt; lastOwner 确定签名来自不同多签（多签地址递增）</span>
+    <span class="hljs-comment">// 3. 利用 isOwner[currentOwner] 确定签名者为多签持有人</span>
+    address lastOwner = address(<span class="hljs-number">0</span>); 
     address currentOwner;
     uint8 v;
     bytes32 r;
     bytes32 s;
     uint256 i;
-    for (i = 0; i &lt; _threshold; i++) {
+    <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; _threshold; i++) {
         (v, r, s) = signatureSplit(signatures, i);
-        // 利用ecrecover检查签名是否有效
-        currentOwner = ecrecover(keccak256(abi.encodePacked(&quot;\x19Ethereum Signed Message:\n32&quot;, dataHash)), v, r, s);
-        require(currentOwner &gt; lastOwner &amp;&amp; isOwner[currentOwner], &quot;008&quot;);
+        <span class="hljs-comment">// 利用ecrecover检查签名是否有效</span>
+        currentOwner = ecrecover(keccak256(abi.encodePacked(<span class="hljs-string">&quot;\x19Ethereum Signed Message:\n32&quot;</span>, dataHash)), v, r, s);
+        <span class="hljs-built_in">require</span>(currentOwner &gt; lastOwner &amp;&amp; isOwner[currentOwner], <span class="hljs-string">&quot;008&quot;</span>);
         lastOwner = currentOwner;
     }
 }
 </code></pre>
 </li>
 <li><p><code>signatureSplit()</code>：将单个签名从打包的签名分离出来，参数分别为打包签名<code>signatures</code>和要读取的签名位置<code>pos</code>。利用了内联汇编，将签名的<code>r</code>，<code>s</code>，和<code>v</code>三个值分离出来。</p>
-<pre><code class="lang-js">function signatureSplit(bytes memory signatures, uint256 pos)
-    internal
-    pure
-    returns (
+<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">signatureSplit</span>(<span class="hljs-params">bytes memory signatures, uint256 pos</span>)
+    <span class="hljs-title">internal</span>
+    <span class="hljs-title">pure</span>
+    <span class="hljs-title">returns</span> (<span class="hljs-params">
         uint8 v,
         bytes32 r,
         bytes32 s
-    )
-{
-    // 签名的格式：{bytes32 r}{bytes32 s}{uint8 v}
+    </span>)
+</span>{
+    <span class="hljs-comment">// 签名的格式：{bytes32 r}{bytes32 s}{uint8 v}</span>
     assembly {
-        let signaturePos := mul(0x41, pos)
-        r := mload(add(signatures, add(signaturePos, 0x20)))
-        s := mload(add(signatures, add(signaturePos, 0x40)))
-        v := and(mload(add(signatures, add(signaturePos, 0x41))), 0xff)
+        <span class="hljs-keyword">let</span> signaturePos := mul(<span class="hljs-number">0x41</span>, pos)
+        <span class="hljs-attr">r</span> := mload(add(signatures, add(signaturePos, <span class="hljs-number">0x20</span>)))
+        <span class="hljs-attr">s</span> := mload(add(signatures, add(signaturePos, <span class="hljs-number">0x40</span>)))
+        <span class="hljs-attr">v</span> := and(mload(add(signatures, add(signaturePos, <span class="hljs-number">0x41</span>))), <span class="hljs-number">0xff</span>)
     }
 }
 </code></pre>
 </li>
 <li><p><code>encodeTransactionData()</code>：将交易数据打包并计算哈希，利用了<code>abi.encode()</code>和<code>keccak256()</code>函数。这个函数可以计算出一个交易的哈希，然后在链下让多签人签名并收集，再调用<code>execTransaction()</code>函数执行。</p>
-<pre><code class="lang-js">function encodeTransactionData(
+<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">encodeTransactionData</span>(<span class="hljs-params">
     address to,
     uint256 value,
     bytes memory data,
     uint256 _nonce,
     uint256 chainid
-) public pure returns (bytes32) {
+</span>) <span class="hljs-title">public</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bytes32</span>) </span>{
     bytes32 safeTxHash =
         keccak256(
             abi.encode(
@@ -3219,146 +3217,148 @@ constructor(address[] memory _owners, uint256 _threshold) {
                 chainid
             )
         );
-    return safeTxHash;
+    <span class="hljs-keyword">return</span> safeTxHash;
 }
 </code></pre>
 </li>
 </ol>
 <h3 id="完整代码">完整代码</h3>
-<pre><code class="lang-js">// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.4;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.4</span>;
 
-/// 基于签名的多签钱包，由gnosis safe合约简化而来，教学使用。
+<span class="hljs-comment">/// 基于签名的多签钱包，由gnosis safe合约简化而来，教学使用。</span>
 contract MultisigWallet {
-    event ExecutionSuccess(bytes32 txHash);    // 交易成功事件
-    event ExecutionFailure(bytes32 txHash);    // 交易失败事件
+    event ExecutionSuccess(bytes32 txHash);    <span class="hljs-comment">// 交易成功事件</span>
+    event ExecutionFailure(bytes32 txHash);    <span class="hljs-comment">// 交易失败事件</span>
 
-    address[] public owners;                   // 多签持有人数组 
-    mapping(address =&gt; bool) public isOwner;   // 记录一个地址是否为多签
-    uint256 public ownerCount;                 // 多签持有人数量
-    uint256 public threshold;                  // 多签执行门槛，交易至少有n个多签人签名才能被执行。
-    uint256 public nonce;                      // nonce，防止签名重放攻击
+    address[] public owners;                   <span class="hljs-comment">// 多签持有人数组 </span>
+    mapping(<span class="hljs-function"><span class="hljs-params">address</span> =&gt;</span> bool) public isOwner;   <span class="hljs-comment">// 记录一个地址是否为多签</span>
+    uint256 public ownerCount;                 <span class="hljs-comment">// 多签持有人数量</span>
+    uint256 public threshold;                  <span class="hljs-comment">// 多签执行门槛，交易至少有n个多签人签名才能被执行。</span>
+    uint256 public nonce;                      <span class="hljs-comment">// nonce，防止签名重放攻击</span>
 
     receive() external payable {}
 
-    // 构造函数，初始化owners, isOwner, ownerCount, threshold 
-    constructor(address[] memory _owners,uint256 _threshold) {
+    <span class="hljs-comment">// 构造函数，初始化owners, isOwner, ownerCount, threshold </span>
+    <span class="hljs-function"><span class="hljs-title">constructor</span>(<span class="hljs-params">address[] memory _owners,uint256 _threshold</span>)</span> {
         _setupOwners(_owners, _threshold);
     }
 
-    /// @dev 初始化owners, isOwner, ownerCount,threshold 
-    /// @param _owners: 多签持有人数组
-    /// @param _threshold: 多签执行门槛，至少有几个多签人签署了交易
-    function _setupOwners(address[] memory _owners, uint256 _threshold) internal {
-        // threshold没被初始化过
-        require(threshold == 0, &quot;001&quot;);
-        // 多签执行门槛 小于 多签人数
-        require(_threshold <= _owners.length, "002"); 多签执行门槛至少为1 require(_threshold>= 1, &quot;003&quot;);
+    <span class="hljs-comment">/// @dev 初始化owners, isOwner, ownerCount,threshold </span>
+    <span class="hljs-comment">/// @param _owners: 多签持有人数组</span>
+    <span class="hljs-comment">/// @param _threshold: 多签执行门槛，至少有几个多签人签署了交易</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_setupOwners</span>(<span class="hljs-params">address[] memory _owners, uint256 _threshold</span>) <span class="hljs-title">internal</span> </span>{
+        <span class="hljs-comment">// threshold没被初始化过</span>
+        <span class="hljs-built_in">require</span>(threshold == <span class="hljs-number">0</span>, <span class="hljs-string">&quot;001&quot;</span>);
+        <span class="hljs-comment">// 多签执行门槛 小于 多签人数</span>
+        <span class="hljs-built_in">require</span>(_threshold &lt;= _owners.length, <span class="hljs-string">&quot;002&quot;</span>);
+        <span class="hljs-comment">// 多签执行门槛至少为1</span>
+        <span class="hljs-built_in">require</span>(_threshold &gt;= <span class="hljs-number">1</span>, <span class="hljs-string">&quot;003&quot;</span>);
 
-        for (uint256 i = 0; i &lt; _owners.length; i++) {
+        <span class="hljs-keyword">for</span> (uint256 i = <span class="hljs-number">0</span>; i &lt; _owners.length; i++) {
             address owner = _owners[i];
-            // 多签人不能为0地址，本合约地址，不能重复
-            require(owner != address(0) &amp;&amp; owner != address(this) &amp;&amp; !isOwner[owner], &quot;004&quot;);
+            <span class="hljs-comment">// 多签人不能为0地址，本合约地址，不能重复</span>
+            <span class="hljs-built_in">require</span>(owner != address(<span class="hljs-number">0</span>) &amp;&amp; owner != address(<span class="hljs-built_in">this</span>) &amp;&amp; !isOwner[owner], <span class="hljs-string">&quot;004&quot;</span>);
             owners.push(owner);
-            isOwner[owner] = true;
+            isOwner[owner] = <span class="hljs-literal">true</span>;
         }
         ownerCount = _owners.length;
         threshold = _threshold;
     }
 
-    /// @dev 在收集足够的多签签名后，执行交易
-    /// @param to 目标合约地址
-    /// @param value msg.value，支付的以太坊
-    /// @param data calldata
-    /// @param signatures 打包的签名，对应的多签地址由小到达，方便检查。 ({bytes32 r}{bytes32 s}{uint8 v}) (第一个多签的签名, 第二个多签的签名 ... )
-    function execTransaction(
+    <span class="hljs-comment">/// @dev 在收集足够的多签签名后，执行交易</span>
+    <span class="hljs-comment">/// @param to 目标合约地址</span>
+    <span class="hljs-comment">/// @param value msg.value，支付的以太坊</span>
+    <span class="hljs-comment">/// @param data calldata</span>
+    <span class="hljs-comment">/// @param signatures 打包的签名，对应的多签地址由小到达，方便检查。 ({bytes32 r}{bytes32 s}{uint8 v}) (第一个多签的签名, 第二个多签的签名 ... )</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">execTransaction</span>(<span class="hljs-params">
         address to,
         uint256 value,
         bytes memory data,
         bytes memory signatures
-    ) public payable virtual returns (bool success) {
-        // 编码交易数据，计算哈希
+    </span>) <span class="hljs-title">public</span> <span class="hljs-title">payable</span> <span class="hljs-title">virtual</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bool success</span>) </span>{
+        <span class="hljs-comment">// 编码交易数据，计算哈希</span>
         bytes32 txHash = encodeTransactionData(to, value, data, nonce, block.chainid);
-        nonce++;  // 增加nonce
-        checkSignatures(txHash, signatures); // 检查签名
-        // 利用call执行交易，并获取交易结果
-        (success, ) = to.call{value: value}(data);
-        require(success , &quot;005&quot;);
-        if (success) emit ExecutionSuccess(txHash);
-        else emit ExecutionFailure(txHash);
+        nonce++;  <span class="hljs-comment">// 增加nonce</span>
+        checkSignatures(txHash, signatures); <span class="hljs-comment">// 检查签名</span>
+        <span class="hljs-comment">// 利用call执行交易，并获取交易结果</span>
+        (success, ) = to.call{<span class="hljs-attr">value</span>: value}(data);
+        <span class="hljs-built_in">require</span>(success , <span class="hljs-string">&quot;005&quot;</span>);
+        <span class="hljs-keyword">if</span> (success) emit ExecutionSuccess(txHash);
+        <span class="hljs-keyword">else</span> emit ExecutionFailure(txHash);
     }
 
-    /**
-     * @dev 检查签名和交易数据是否对应。如果是无效签名，交易会revert
-     * @param dataHash 交易数据哈希
-     * @param signatures 几个多签签名打包在一起
-     */
-    function checkSignatures(
+    <span class="hljs-comment">/**
+     * <span class="hljs-doctag">@dev </span>检查签名和交易数据是否对应。如果是无效签名，交易会revert
+     * <span class="hljs-doctag">@param </span>dataHash 交易数据哈希
+     * <span class="hljs-doctag">@param </span>signatures 几个多签签名打包在一起
+     */</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">checkSignatures</span>(<span class="hljs-params">
         bytes32 dataHash,
         bytes memory signatures
-    ) public view {
-        // 读取多签执行门槛
+    </span>) <span class="hljs-title">public</span> <span class="hljs-title">view</span> </span>{
+        <span class="hljs-comment">// 读取多签执行门槛</span>
         uint256 _threshold = threshold;
-        require(_threshold &gt; 0, &quot;006&quot;);
+        <span class="hljs-built_in">require</span>(_threshold &gt; <span class="hljs-number">0</span>, <span class="hljs-string">&quot;006&quot;</span>);
 
-        // 检查签名长度足够长
-        require(signatures.length &gt;= _threshold * 65, &quot;007&quot;);
+        <span class="hljs-comment">// 检查签名长度足够长</span>
+        <span class="hljs-built_in">require</span>(signatures.length &gt;= _threshold * <span class="hljs-number">65</span>, <span class="hljs-string">&quot;007&quot;</span>);
 
-        // 通过一个循环，检查收集的签名是否有效
-        // 大概思路：
-        // 1. 用ecdsa先验证签名是否有效
-        // 2. 利用 currentOwner &gt; lastOwner 确定签名来自不同多签（多签地址递增）
-        // 3. 利用 isOwner[currentOwner] 确定签名者为多签持有人
-        address lastOwner = address(0); 
+        <span class="hljs-comment">// 通过一个循环，检查收集的签名是否有效</span>
+        <span class="hljs-comment">// 大概思路：</span>
+        <span class="hljs-comment">// 1. 用ecdsa先验证签名是否有效</span>
+        <span class="hljs-comment">// 2. 利用 currentOwner &gt; lastOwner 确定签名来自不同多签（多签地址递增）</span>
+        <span class="hljs-comment">// 3. 利用 isOwner[currentOwner] 确定签名者为多签持有人</span>
+        address lastOwner = address(<span class="hljs-number">0</span>); 
         address currentOwner;
         uint8 v;
         bytes32 r;
         bytes32 s;
         uint256 i;
-        for (i = 0; i &lt; _threshold; i++) {
+        <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; _threshold; i++) {
             (v, r, s) = signatureSplit(signatures, i);
-            // 利用ecrecover检查签名是否有效
-            currentOwner = ecrecover(keccak256(abi.encodePacked(&quot;\x19Ethereum Signed Message:\n32&quot;, dataHash)), v, r, s);
-            require(currentOwner &gt; lastOwner &amp;&amp; isOwner[currentOwner], &quot;008&quot;);
+            <span class="hljs-comment">// 利用ecrecover检查签名是否有效</span>
+            currentOwner = ecrecover(keccak256(abi.encodePacked(<span class="hljs-string">&quot;\x19Ethereum Signed Message:\n32&quot;</span>, dataHash)), v, r, s);
+            <span class="hljs-built_in">require</span>(currentOwner &gt; lastOwner &amp;&amp; isOwner[currentOwner], <span class="hljs-string">&quot;008&quot;</span>);
             lastOwner = currentOwner;
         }
     }
 
-    /// 将单个签名从打包的签名分离出来
-    /// @param signatures 打包的多签
-    /// @param pos 要读取的多签index.
-    function signatureSplit(bytes memory signatures, uint256 pos)
-        internal
-        pure
-        returns (
+    <span class="hljs-comment">/// 将单个签名从打包的签名分离出来</span>
+    <span class="hljs-comment">/// @param signatures 打包的多签</span>
+    <span class="hljs-comment">/// @param pos 要读取的多签index.</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">signatureSplit</span>(<span class="hljs-params">bytes memory signatures, uint256 pos</span>)
+        <span class="hljs-title">internal</span>
+        <span class="hljs-title">pure</span>
+        <span class="hljs-title">returns</span> (<span class="hljs-params">
             uint8 v,
             bytes32 r,
             bytes32 s
-        )
-    {
-        // 签名的格式：{bytes32 r}{bytes32 s}{uint8 v}
+        </span>)
+    </span>{
+        <span class="hljs-comment">// 签名的格式：{bytes32 r}{bytes32 s}{uint8 v}</span>
         assembly {
-            let signaturePos := mul(0x41, pos)
-            r := mload(add(signatures, add(signaturePos, 0x20)))
-            s := mload(add(signatures, add(signaturePos, 0x40)))
-            v := and(mload(add(signatures, add(signaturePos, 0x41))), 0xff)
+            <span class="hljs-keyword">let</span> signaturePos := mul(<span class="hljs-number">0x41</span>, pos)
+            <span class="hljs-attr">r</span> := mload(add(signatures, add(signaturePos, <span class="hljs-number">0x20</span>)))
+            <span class="hljs-attr">s</span> := mload(add(signatures, add(signaturePos, <span class="hljs-number">0x40</span>)))
+            <span class="hljs-attr">v</span> := and(mload(add(signatures, add(signaturePos, <span class="hljs-number">0x41</span>))), <span class="hljs-number">0xff</span>)
         }
     }
 
-    /// @dev 编码交易数据
-    /// @param to 目标合约地址
-    /// @param value msg.value，支付的以太坊
-    /// @param data calldata
-    /// @param _nonce 交易的nonce.
-    /// @param chainid 链id
-    /// @return 交易哈希bytes.
-    function encodeTransactionData(
+    <span class="hljs-comment">/// @dev 编码交易数据</span>
+    <span class="hljs-comment">/// @param to 目标合约地址</span>
+    <span class="hljs-comment">/// @param value msg.value，支付的以太坊</span>
+    <span class="hljs-comment">/// @param data calldata</span>
+    <span class="hljs-comment">/// @param _nonce 交易的nonce.</span>
+    <span class="hljs-comment">/// @param chainid 链id</span>
+    <span class="hljs-comment">/// @return 交易哈希bytes.</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">encodeTransactionData</span>(<span class="hljs-params">
         address to,
         uint256 value,
         bytes memory data,
         uint256 _nonce,
         uint256 chainid
-    ) public pure returns (bytes32) {
+    </span>) <span class="hljs-title">public</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bytes32</span>) </span>{
         bytes32 safeTxHash =
             keccak256(
                 abi.encode(
@@ -3369,10 +3369,10 @@ contract MultisigWallet {
                     chainid
                 )
             );
-        return safeTxHash;
+        <span class="hljs-keyword">return</span> safeTxHash;
     }
 }
-</=></code></pre>
+</code></pre>
 <h2 id="remix验证">Remix验证</h2>
 <ol>
 <li>部署合约，设置为2/3多签，合约地址（goerli）：0x511592F1431f6c9018dA27F58dF944acd7Eac472；</li>
@@ -3381,43 +3381,43 @@ contract MultisigWallet {
 Owner2：0xC4109e427A149239e6C1E35Bb2eCD0015B6500B8
 Owner3：0x572ed8c1Aa486e6a016A7178E41e9Fc1E59CAe63
 
-[&quot;0xE8191108261f3234f1C2acA52a0D5C11795Aef9E&quot;,&quot;0xC4109e427A149239e6C1E35Bb2eCD0015B6500B8&quot;,&quot;0x572ed8c1Aa486e6a016A7178E41e9Fc1E59CAe63&quot;], 2
+[<span class="hljs-string">&quot;0xE8191108261f3234f1C2acA52a0D5C11795Aef9E&quot;</span>,<span class="hljs-string">&quot;0xC4109e427A149239e6C1E35Bb2eCD0015B6500B8&quot;</span>,<span class="hljs-string">&quot;0x572ed8c1Aa486e6a016A7178E41e9Fc1E59CAe63&quot;</span>], 2
 </code></pre>
 <ol>
 <li>转账<code>0.1 ETH</code>到多签合约地址（略）；</li>
 <li>构建转账交易，将0.1ETH转账到Owner1地址，我们将对这笔交易进行多方签名，满足2/3后，发送转账交易（我们要对这笔交易对hash值进行签名，使用encodeTransactionData完成hash计算）,</li>
 </ol>
-<pre><code class="lang-sh"># 参数
+<pre><code class="lang-sh"><span class="hljs-comment"># 参数</span>
 to: 0xE8191108261f3234f1C2acA52a0D5C11795Aef9E
 value: 100000000000000000
 data: 0x
 _nonce: 0
 chainid: 5
 
-# 结果（待签名信息）
+<span class="hljs-comment"># 结果（待签名信息）</span>
 交易哈希：0xeaa5d901b5c497a883b2d1ad5321ead3a41a7443c50dfb4bc140ccd792c19d1c
 </code></pre>
 <ol>
 <li>利用Remix中ACCOUNT旁边的笔记图案的按钮进行签名，内容输入上面的交易哈希，获得签名，任选个钱包即可，注意地址顺序要：由小到大，在校验签名时有大小判断。</li>
 </ol>
-<pre><code class="lang-sh"># 签名地址1: 0x572ed8c1Aa486e6a016A7178E41e9Fc1E59CAe63, 
-# 待签名hash内容：0xeaa5d901b5c497a883b2d1ad5321ead3a41a7443c50dfb4bc140ccd792c19d1c
-# EIP191 hash：0x8c2479bfdefe6a60aa53abb32917d80e50506fa79cd0dd1a66217c9606a3af24
+<pre><code class="lang-sh"><span class="hljs-comment"># 签名地址1: 0x572ed8c1Aa486e6a016A7178E41e9Fc1E59CAe63, </span>
+<span class="hljs-comment"># 待签名hash内容：0xeaa5d901b5c497a883b2d1ad5321ead3a41a7443c50dfb4bc140ccd792c19d1c</span>
+<span class="hljs-comment"># EIP191 hash：0x8c2479bfdefe6a60aa53abb32917d80e50506fa79cd0dd1a66217c9606a3af24</span>
 
-# signature1：
+<span class="hljs-comment"># signature1：</span>
 0xa8529b2e088d3bd2ad05582f810f5d56b0ca412578d7a177ab35b3fadbb10e040009fba2108da2d871f7c704611735a304c5f3c6f4bb34b3fc245f40c029188a1c
 
 
 
-# 签名地址2: 0xC4109e427A149239e6C1E35Bb2eCD0015B6500B8
-# 待签名hash内容：0xeaa5d901b5c497a883b2d1ad5321ead3a41a7443c50dfb4bc140ccd792c19d1c
-# EIP191 hash：0x8c2479bfdefe6a60aa53abb32917d80e50506fa79cd0dd1a66217c9606a3af24
+<span class="hljs-comment"># 签名地址2: 0xC4109e427A149239e6C1E35Bb2eCD0015B6500B8</span>
+<span class="hljs-comment"># 待签名hash内容：0xeaa5d901b5c497a883b2d1ad5321ead3a41a7443c50dfb4bc140ccd792c19d1c</span>
+<span class="hljs-comment"># EIP191 hash：0x8c2479bfdefe6a60aa53abb32917d80e50506fa79cd0dd1a66217c9606a3af24</span>
 
-# signature2：
+<span class="hljs-comment"># signature2：</span>
 0x88bce1e1d3460d43c95ef6d163f6dddc655bd22b78e4489ce50be18c08b6fe1067521326d216bbee7a637ee9b1a4da3468d6938516cc8fb5803eed0cb3d96f831b
 
 
-# 拼接后到signature为：（去除0x）
+<span class="hljs-comment"># 拼接后到signature为：（去除0x）</span>
 0xa8529b2e088d3bd2ad05582f810f5d56b0ca412578d7a177ab35b3fadbb10e040009fba2108da2d871f7c704611735a304c5f3c6f4bb34b3fc245f40c029188a1c88bce1e1d3460d43c95ef6d163f6dddc655bd22b78e4489ce50be18c08b6fe1067521326d216bbee7a637ee9b1a4da3468d6938516cc8fb5803eed0cb3d96f831b
 </code></pre>
 <ol>
@@ -3463,7 +3463,7 @@ chainid: 5
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第8节:世界杯竞猜_多签钱包","level":"1.15.12","depth":2,"next":{"title":"第9节:世界杯竞猜_Go交互","level":"1.15.13","depth":2,"path":"08_项目实战-世界杯竞猜/09_世界杯竞猜_Go交互合约.md","ref":"08_项目实战-世界杯竞猜/09_世界杯竞猜_Go交互合约.md","articles":[]},"previous":{"title":"第7节:世界杯竞猜_链下签名","level":"1.15.11","depth":2,"path":"08_项目实战-世界杯竞猜/07_世界杯竞猜_链下签名.md","ref":"08_项目实战-世界杯竞猜/07_世界杯竞猜_链下签名.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"08_项目实战-世界杯竞猜/08_世界杯竞猜_多签钱包.md","mtime":"2023-09-23T13:48:35.111Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第8节:世界杯竞猜_多签钱包","level":"1.15.12","depth":2,"next":{"title":"第9节:世界杯竞猜_Go交互","level":"1.15.13","depth":2,"path":"08_项目实战-世界杯竞猜/09_世界杯竞猜_Go交互合约.md","ref":"08_项目实战-世界杯竞猜/09_世界杯竞猜_Go交互合约.md","articles":[]},"previous":{"title":"第7节:世界杯竞猜_链下签名","level":"1.15.11","depth":2,"path":"08_项目实战-世界杯竞猜/07_世界杯竞猜_链下签名.md","ref":"08_项目实战-世界杯竞猜/07_世界杯竞猜_链下签名.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"cn","gitbook":"*"},"file":{"path":"08_项目实战-世界杯竞猜/08_世界杯竞猜_多签钱包.md","mtime":"2023-09-23T13:48:35.111Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3546,14 +3546,6 @@ chainid: 5
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

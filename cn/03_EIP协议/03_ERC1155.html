@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3027,10 +3023,10 @@
 </li>
 <li><p>setURI的时候，填写的是metadata.json，不是图片的url，使用pinata服务存储图片和metadata.json：</p>
 <pre><code class="lang-js">{
-    &quot;description&quot;: &quot;this is a nft1155 metadata json desc&quot;,
-    //&quot;image&quot;: &quot;ipfs://QmTfK2CeRBkRqSZHmnekdZYSBrsKLQ6U5Px8MWtGf1Eqta&quot;,
-    &quot;image&quot;: &quot;https://gateway.pinata.cloud/ipfs/QmTfK2CeRBkRqSZHmnekdZYSBrsKLQ6U5Px8MWtGf1Eqta&quot;,
-    &quot;name&quot;: &quot;duke nft&quot;
+    <span class="hljs-string">&quot;description&quot;</span>: <span class="hljs-string">&quot;this is a nft1155 metadata json desc&quot;</span>,
+    <span class="hljs-comment">//&quot;image&quot;: &quot;ipfs://QmTfK2CeRBkRqSZHmnekdZYSBrsKLQ6U5Px8MWtGf1Eqta&quot;,</span>
+    <span class="hljs-string">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://gateway.pinata.cloud/ipfs/QmTfK2CeRBkRqSZHmnekdZYSBrsKLQ6U5Px8MWtGf1Eqta&quot;</span>,
+    <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;duke nft&quot;</span>
 }
 </code></pre>
 </li>
@@ -3042,65 +3038,65 @@
 </li>
 </ol>
 <h2 id="更好的合约：">更好的合约：</h2>
-<pre><code class="lang-js">// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.0</span>;
 
-import &quot;@openzeppelin/contracts/token/ERC1155/extensions/ERC1155URIStorage.sol&quot;;
+<span class="hljs-keyword">import</span> <span class="hljs-string">&quot;@openzeppelin/contracts/token/ERC1155/extensions/ERC1155URIStorage.sol&quot;</span>;
 
 contract MockErc1155Token is ERC1155URIStorage {
     string public name;
     string public symbol;
     uint256 public tokenCounter;
 
-    constructor(string memory _name, string memory _symbol) ERC1155(&quot;&quot;) {
+    <span class="hljs-title">constructor</span>(<span class="hljs-params">string memory _name, string memory _symbol</span>) <span class="hljs-title">ERC1155</span>(<span class="hljs-params"><span class="hljs-string">&quot;&quot;</span></span>) {
         name = _name;
         symbol = _symbol;
     }
 
-    function createCollectible(string memory tokenURI, uint256 _amount)
-        external
-        returns (uint256)
-    {
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">createCollectible</span>(<span class="hljs-params">string memory tokenURI, uint256 _amount</span>)
+        <span class="hljs-title">external</span>
+        <span class="hljs-title">returns</span> (<span class="hljs-params">uint256</span>)
+    </span>{
         uint256 newItemId = tokenCounter;
-        _mint(_msgSender(), newItemId, _amount, &quot;&quot;);
+        _mint(_msgSender(), newItemId, _amount, <span class="hljs-string">&quot;&quot;</span>);
         _setURI(newItemId, tokenURI);
 
-        tokenCounter = tokenCounter + 1;
-        return newItemId;
+        tokenCounter = tokenCounter + <span class="hljs-number">1</span>;
+        <span class="hljs-keyword">return</span> newItemId;
     }
 
-    // function mint(uint256 _id, uint256 _amount) external {
-    //     _mint(_msgSender(), _id, _amount, &quot;&quot;);
-    // }
+    <span class="hljs-comment">// function mint(uint256 _id, uint256 _amount) external {</span>
+    <span class="hljs-comment">//     _mint(_msgSender(), _id, _amount, &quot;&quot;);</span>
+    <span class="hljs-comment">// }</span>
 
-    // function mintBatch(uint256[] memory _ids, uint256[] memory _amounts)
-    //     external
-    // {
-    //     _mintBatch(_msgSender(), _ids, _amounts, &quot;&quot;);
-    // }
+    <span class="hljs-comment">// function mintBatch(uint256[] memory _ids, uint256[] memory _amounts)</span>
+    <span class="hljs-comment">//     external</span>
+    <span class="hljs-comment">// {</span>
+    <span class="hljs-comment">//     _mintBatch(_msgSender(), _ids, _amounts, &quot;&quot;);</span>
+    <span class="hljs-comment">// }</span>
 
-    function burn(uint256 _id, uint256 _amount) external {
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">burn</span>(<span class="hljs-params">uint256 _id, uint256 _amount</span>) <span class="hljs-title">external</span> </span>{
         _burn(msg.sender, _id, _amount);
     }
 
-    function burnBatch(uint256[] memory _ids, uint256[] memory _amounts)
-        external
-    {
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">burnBatch</span>(<span class="hljs-params">uint256[] memory _ids, uint256[] memory _amounts</span>)
+        <span class="hljs-title">external</span>
+    </span>{
         _burnBatch(msg.sender, _ids, _amounts);
     }
 
-    function burnForMint(
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">burnForMint</span>(<span class="hljs-params">
         address _from,
         uint256[] memory _burnIds,
         uint256[] memory _burnAmounts,
         uint256[] memory _mintIds,
         uint256[] memory _mintAmounts
-    ) external {
+    </span>) <span class="hljs-title">external</span> </span>{
         _burnBatch(_from, _burnIds, _burnAmounts);
-        _mintBatch(_from, _mintIds, _mintAmounts, &quot;&quot;);
+        _mintBatch(_from, _mintIds, _mintAmounts, <span class="hljs-string">&quot;&quot;</span>);
     }
 
-    function setURI(uint256 _id, string memory _uri) external {
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setURI</span>(<span class="hljs-params">uint256 _id, string memory _uri</span>) <span class="hljs-title">external</span> </span>{
         _setURI(_id, _uri);
     }
 }
@@ -3132,7 +3128,7 @@ contract MockErc1155Token is ERC1155URIStorage {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第3节:ERC1155","level":"1.10.3","depth":2,"next":{"title":"第4节:ERC165","level":"1.10.4","depth":2,"path":"03_EIP协议/04_ERC165.md","ref":"03_EIP协议/04_ERC165.md","articles":[]},"previous":{"title":"第2节:ERC721","level":"1.10.2","depth":2,"path":"03_EIP协议/02_ERC721.md","ref":"03_EIP协议/02_ERC721.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"03_EIP协议/03_ERC1155.md","mtime":"2023-03-21T14:01:27.000Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第3节:ERC1155","level":"1.10.3","depth":2,"next":{"title":"第4节:ERC165","level":"1.10.4","depth":2,"path":"03_EIP协议/04_ERC165.md","ref":"03_EIP协议/04_ERC165.md","articles":[]},"previous":{"title":"第2节:ERC721","level":"1.10.2","depth":2,"path":"03_EIP协议/02_ERC721.md","ref":"03_EIP协议/02_ERC721.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"cn","gitbook":"*"},"file":{"path":"03_EIP协议/03_ERC1155.md","mtime":"2023-03-21T14:01:27.000Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3215,14 +3211,6 @@ contract MockErc1155Token is ERC1155URIStorage {
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

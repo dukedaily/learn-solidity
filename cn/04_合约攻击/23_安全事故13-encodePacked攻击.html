@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3020,35 +3016,35 @@
                                 <h1 id="第23节：安全事故13-encodepacked攻击">第23节：安全事故13-encodePacked攻击</h1>
 <p>abi.encodePacked() 采用非填充序列化，当序列化参数包含多个变长数组时，攻击者可以在保持所有元素顺序不变的前提下，改变两个变长数组的元素，如此序列化的结果相同。</p>
 <p>在下面的代码中：通过构造 addUser 的输入，攻击者可以将 regularUsers 的成员加入 admins 成员，但是构造的输入和原输入的签名相同。</p>
-<pre><code class="lang-js">// SPDX-License-Identifier: MIT
-pragma solidity 0.8.11;
-import &quot;./ECDSA.sol&quot;;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
+pragma solidity <span class="hljs-number">0.8</span><span class="hljs-number">.11</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-string">&quot;./ECDSA.sol&quot;</span>;
 
 contract AccessControl {
-    using ECDSA for bytes32;
-    mapping(address =&gt; bool) isAdmin;
-    mapping(address =&gt; bool) isRegularUser;
+    using ECDSA <span class="hljs-keyword">for</span> bytes32;
+    mapping(<span class="hljs-function"><span class="hljs-params">address</span> =&gt;</span> bool) isAdmin;
+    mapping(<span class="hljs-function"><span class="hljs-params">address</span> =&gt;</span> bool) isRegularUser;
 
-    // Add admins and regular users.
-    function addUsers(
+    <span class="hljs-comment">// Add admins and regular users.</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addUsers</span>(<span class="hljs-params">
         address[] calldata admins,
         address[] calldata regularUsers,
         bytes calldata signature
-    )
-        external
-    {
-        if (!isAdmin[msg.sender]) {
-            // Allow calls to be relayed with an admin&apos;s signature.
+    </span>)
+        <span class="hljs-title">external</span>
+    </span>{
+        <span class="hljs-keyword">if</span> (!isAdmin[msg.sender]) {
+            <span class="hljs-comment">// Allow calls to be relayed with an admin&apos;s signature.</span>
 
             bytes32 hash = keccak256(abi.encodePacked(admins, regularUsers));
             address signer = hash.toEthSignedMessageHash().recover(signature);
-            require(isAdmin[signer], &quot;Only admins can add users.&quot;);
+            <span class="hljs-built_in">require</span>(isAdmin[signer], <span class="hljs-string">&quot;Only admins can add users.&quot;</span>);
         }
-        for (uint256 i = 0; i &lt; admins.length; i++) {
-            isAdmin[admins[i]] = true;
+        <span class="hljs-keyword">for</span> (uint256 i = <span class="hljs-number">0</span>; i &lt; admins.length; i++) {
+            isAdmin[admins[i]] = <span class="hljs-literal">true</span>;
         }
-        for (uint256 i = 0; i &lt; regularUsers.length; i++) {
-            isRegularUser[regularUsers[i]] = true;
+        <span class="hljs-keyword">for</span> (uint256 i = <span class="hljs-number">0</span>; i &lt; regularUsers.length; i++) {
+            isRegularUser[regularUsers[i]] = <span class="hljs-literal">true</span>;
         }
     }
 }
@@ -3081,7 +3077,7 @@ contract AccessControl {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第23节:安全事故13-encodePacked攻击","level":"1.11.17","depth":2,"next":{"title":"第24节:安全事故14-短地址攻击","level":"1.11.18","depth":2,"path":"04_合约攻击/24_安全事故14-短地址攻击.md","ref":"04_合约攻击/24_安全事故14-短地址攻击.md","articles":[]},"previous":{"title":"第22节:安全事故12-DOS攻击","level":"1.11.16","depth":2,"path":"04_合约攻击/22_安全事故12-DOS攻击.md","ref":"04_合约攻击/22_安全事故12-DOS攻击.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"04_合约攻击/23_安全事故13-encodePacked攻击.md","mtime":"2023-03-21T14:01:27.000Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第23节:安全事故13-encodePacked攻击","level":"1.11.17","depth":2,"next":{"title":"第24节:安全事故14-短地址攻击","level":"1.11.18","depth":2,"path":"04_合约攻击/24_安全事故14-短地址攻击.md","ref":"04_合约攻击/24_安全事故14-短地址攻击.md","articles":[]},"previous":{"title":"第22节:安全事故12-DOS攻击","level":"1.11.16","depth":2,"path":"04_合约攻击/22_安全事故12-DOS攻击.md","ref":"04_合约攻击/22_安全事故12-DOS攻击.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"cn","gitbook":"*"},"file":{"path":"04_合约攻击/23_安全事故13-encodePacked攻击.md","mtime":"2023-03-21T14:01:27.000Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3164,14 +3160,6 @@ contract AccessControl {
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

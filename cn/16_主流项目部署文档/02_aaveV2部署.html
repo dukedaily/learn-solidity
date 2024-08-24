@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3069,20 +3065,20 @@ UiPoolDataProvider: 0xD74c7b782B50C02fbB7aD48D4117D157D415A68A
 <p>执行，记录地址，放在前端页面的：baseUniswapAdapter字段</p>
 <pre><code class="lang-sh">npx hardhat --network kovan deploy-UniswapRepayAdapter --provider 0x604393277F9941756eF0660e52a891D80DDA9A8D --router 0xDC292C81e24efB77Bc69e6d3727E3727EC1bF170 --weth 0xd0a1e359811322d97991e03f863a0c30c2cf029c
 
-#0xaA0871B294198B81311108fC1E6a7e09C09aBD97，自己
+<span class="hljs-comment">#0xaA0871B294198B81311108fC1E6a7e09C09aBD97，自己</span>
 </code></pre>
 <p>执行，记录地址，这个就是UiPoolDataProviderV2，==注意是V2==，放在前端页面的：uiPoolDataProvider字段</p>
 <p>==（自动部署脚本好像已经部署这个了）==（是的，不需要自己部署了）</p>
 <pre><code class="lang-sh">npm run dev:deployUIProviderV2
 
-#0x6062ad399E47BF75AEa0b3c5BE7077c1E8664Dcb，官方
-#0x65c596620a4370DE9ed110e6594538b1E71E8bb7，自己
+<span class="hljs-comment">#0x6062ad399E47BF75AEa0b3c5BE7077c1E8664Dcb，官方</span>
+<span class="hljs-comment">#0x65c596620a4370DE9ed110e6594538b1E71E8bb7，自己</span>
 </code></pre>
 <p>执行，记录地址，放在前端页面的：uiIncentiveDataProvider字段</p>
 <pre><code class="lang-sh">npm run dev:deployUIIncentivesProviderV2
 
-#0x9842E5B7b7C6cEDfB1952a388e050582Ff95645b，官方
-#0xeCF1236E20a5bDF828a1FbA4FAaAC8ad991752F7，自己
+<span class="hljs-comment">#0x9842E5B7b7C6cEDfB1952a388e050582Ff95645b，官方</span>
+<span class="hljs-comment">#0xeCF1236E20a5bDF828a1FbA4FAaAC8ad991752F7，自己</span>
 </code></pre>
 <h2 id="3-经验小结">3. 经验小结</h2>
 <ol>
@@ -3178,9 +3174,9 @@ gas used: 781715
 </table>
 <h1 id="二、部署自己的资产chainlink">二、部署自己的资产&amp;chainlink</h1>
 <p>运行：这个token源码中对mint没有权限校验，可以添加上。</p>
-<pre><code class="lang-sh">#npx hardhat dev:deploy-all-mock-tokens --network kovan --verify
+<pre><code class="lang-sh"><span class="hljs-comment">#npx hardhat dev:deploy-all-mock-tokens --network kovan --verify</span>
 
-#不要加verify了，已经verify过了，否则很慢
+<span class="hljs-comment">#不要加verify了，已经verify过了，否则很慢</span>
 npx hardhat dev:deploy-all-mock-tokens --network kovan
 </code></pre>
 <table>
@@ -3240,57 +3236,57 @@ npx hardhat dev:deploy-all-mock-tokens --network kovan
 <h2 id="0-aave追踪uniswap价格">0. aave追踪uniswap价格</h2>
 <p>前端页面也使用这个，symbol和decimals分别是：ETH,8，其他币种分别填写WBTC,18等。</p>
 <pre><code class="lang-js">
-// File: chainlinkMock/ours/IERC20.sol
+<span class="hljs-comment">// File: chainlinkMock/ours/IERC20.sol</span>
 
-/**
+<span class="hljs-comment">/**
  *Submitted for verification at Etherscan.io on 2022-01-12
- */
+ */</span>
 
-// File: contracts/IERC20.sol
+<span class="hljs-comment">// File: contracts/IERC20.sol</span>
 
-// OpenZeppelin Contracts v4.4.1 (token/ERC20/IERC20.sol)
+<span class="hljs-comment">// OpenZeppelin Contracts v4.4.1 (token/ERC20/IERC20.sol)</span>
 
-pragma solidity &gt;=0.5.0;
+pragma solidity &gt;=<span class="hljs-number">0.5</span><span class="hljs-number">.0</span>;
 
-/**
- * @dev Interface of the ERC20 standard as defined in the EIP.
- */
+<span class="hljs-comment">/**
+ * <span class="hljs-doctag">@dev </span>Interface of the ERC20 standard as defined in the EIP.
+ */</span>
 interface IERC20 {
-  /**
-   * @dev Returns the decimals.
-   */
-  function decimals() external view returns (uint256);
+  <span class="hljs-comment">/**
+   * <span class="hljs-doctag">@dev </span>Returns the decimals.
+   */</span>
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">decimals</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint256</span>)</span>;
 
-  /**
-   * @dev Returns the amount of tokens in existence.
-   */
-  function totalSupply() external view returns (uint256);
+  <span class="hljs-comment">/**
+   * <span class="hljs-doctag">@dev </span>Returns the amount of tokens in existence.
+   */</span>
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">totalSupply</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint256</span>)</span>;
 
-  /**
-   * @dev Returns the amount of tokens owned by `account`.
-   */
-  function balanceOf(address account) external view returns (uint256);
+  <span class="hljs-comment">/**
+   * <span class="hljs-doctag">@dev </span>Returns the amount of tokens owned by `account`.
+   */</span>
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">balanceOf</span>(<span class="hljs-params">address account</span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint256</span>)</span>;
 
-  /**
-   * @dev Moves `amount` tokens from the caller&apos;s account to `recipient`.
+  <span class="hljs-comment">/**
+   * <span class="hljs-doctag">@dev </span>Moves `amount` tokens from the caller&apos;s account to `recipient`.
    *
    * Returns a boolean value indicating whether the operation succeeded.
    *
    * Emits a {Transfer} event.
-   */
-  function transfer(address recipient, uint256 amount) external returns (bool);
+   */</span>
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">transfer</span>(<span class="hljs-params">address recipient, uint256 amount</span>) <span class="hljs-title">external</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bool</span>)</span>;
 
-  /**
-   * @dev Returns the remaining number of tokens that `spender` will be
+  <span class="hljs-comment">/**
+   * <span class="hljs-doctag">@dev </span>Returns the remaining number of tokens that `spender` will be
    * allowed to spend on behalf of `owner` through {transferFrom}. This is
    * zero by default.
    *
    * This value changes when {approve} or {transferFrom} are called.
-   */
-  function allowance(address owner, address spender) external view returns (uint256);
+   */</span>
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">allowance</span>(<span class="hljs-params">address owner, address spender</span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint256</span>)</span>;
 
-  /**
-   * @dev Sets `amount` as the allowance of `spender` over the caller&apos;s tokens.
+  <span class="hljs-comment">/**
+   * <span class="hljs-doctag">@dev </span>Sets `amount` as the allowance of `spender` over the caller&apos;s tokens.
    *
    * Returns a boolean value indicating whether the operation succeeded.
    *
@@ -3302,76 +3298,76 @@ interface IERC20 {
    * https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729
    *
    * Emits an {Approval} event.
-   */
-  function approve(address spender, uint256 amount) external returns (bool);
+   */</span>
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">approve</span>(<span class="hljs-params">address spender, uint256 amount</span>) <span class="hljs-title">external</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bool</span>)</span>;
 
-  /**
-   * @dev Moves `amount` tokens from `sender` to `recipient` using the
+  <span class="hljs-comment">/**
+   * <span class="hljs-doctag">@dev </span>Moves `amount` tokens from `sender` to `recipient` using the
    * allowance mechanism. `amount` is then deducted from the caller&apos;s
    * allowance.
    *
    * Returns a boolean value indicating whether the operation succeeded.
    *
    * Emits a {Transfer} event.
-   */
-  function transferFrom(
+   */</span>
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">transferFrom</span>(<span class="hljs-params">
     address sender,
     address recipient,
     uint256 amount
-  ) external returns (bool);
+  </span>) <span class="hljs-title">external</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bool</span>)</span>;
 
-  /**
-   * @dev Emitted when `value` tokens are moved from one account (`from`) to
+  <span class="hljs-comment">/**
+   * <span class="hljs-doctag">@dev </span>Emitted when `value` tokens are moved from one account (`from`) to
    * another (`to`).
    *
    * Note that `value` may be zero.
-   */
-  event Transfer(address indexed from, address indexed to, uint256 value);
+   */</span>
+  event Transfer(address indexed <span class="hljs-keyword">from</span>, address indexed to, uint256 value);
 
-  /**
-   * @dev Emitted when the allowance of a `spender` for an `owner` is set by
+  <span class="hljs-comment">/**
+   * <span class="hljs-doctag">@dev </span>Emitted when the allowance of a `spender` for an `owner` is set by
    * a call to {approve}. `value` is the new allowance.
-   */
+   */</span>
   event Approval(address indexed owner, address indexed spender, uint256 value);
 }
 
-// File: chainlinkMock/ours/IUniswapV2Pair.sol
+<span class="hljs-comment">// File: chainlinkMock/ours/IUniswapV2Pair.sol</span>
 
-pragma solidity &gt;=0.5.0;
+pragma solidity &gt;=<span class="hljs-number">0.5</span><span class="hljs-number">.0</span>;
 
 interface IUniswapV2Pair {
   event Approval(address indexed owner, address indexed spender, uint256 value);
-  event Transfer(address indexed from, address indexed to, uint256 value);
+  event Transfer(address indexed <span class="hljs-keyword">from</span>, address indexed to, uint256 value);
 
-  function name() external pure returns (string memory);
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">name</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-params">string memory</span>)</span>;
 
-  function symbol() external pure returns (string memory);
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">symbol</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-params">string memory</span>)</span>;
 
-  function decimals() external pure returns (uint8);
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">decimals</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint8</span>)</span>;
 
-  function totalSupply() external view returns (uint256);
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">totalSupply</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint256</span>)</span>;
 
-  function balanceOf(address owner) external view returns (uint256);
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">balanceOf</span>(<span class="hljs-params">address owner</span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint256</span>)</span>;
 
-  function allowance(address owner, address spender) external view returns (uint256);
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">allowance</span>(<span class="hljs-params">address owner, address spender</span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint256</span>)</span>;
 
-  function approve(address spender, uint256 value) external returns (bool);
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">approve</span>(<span class="hljs-params">address spender, uint256 value</span>) <span class="hljs-title">external</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bool</span>)</span>;
 
-  function transfer(address to, uint256 value) external returns (bool);
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">transfer</span>(<span class="hljs-params">address to, uint256 value</span>) <span class="hljs-title">external</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bool</span>)</span>;
 
-  function transferFrom(
-    address from,
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">transferFrom</span>(<span class="hljs-params">
+    address <span class="hljs-keyword">from</span>,
     address to,
     uint256 value
-  ) external returns (bool);
+  </span>) <span class="hljs-title">external</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bool</span>)</span>;
 
-  function DOMAIN_SEPARATOR() external view returns (bytes32);
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">DOMAIN_SEPARATOR</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bytes32</span>)</span>;
 
-  function PERMIT_TYPEHASH() external pure returns (bytes32);
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">PERMIT_TYPEHASH</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bytes32</span>)</span>;
 
-  function nonces(address owner) external view returns (uint256);
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">nonces</span>(<span class="hljs-params">address owner</span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint256</span>)</span>;
 
-  function permit(
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">permit</span>(<span class="hljs-params">
     address owner,
     address spender,
     uint256 value,
@@ -3379,7 +3375,7 @@ interface IUniswapV2Pair {
     uint8 v,
     bytes32 r,
     bytes32 s
-  ) external;
+  </span>) <span class="hljs-title">external</span></span>;
 
   event Mint(address indexed sender, uint256 amount0, uint256 amount1);
   event Burn(address indexed sender, uint256 amount0, uint256 amount1, address indexed to);
@@ -3393,51 +3389,51 @@ interface IUniswapV2Pair {
   );
   event Sync(uint112 reserve0, uint112 reserve1);
 
-  function MINIMUM_LIQUIDITY() external pure returns (uint256);
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">MINIMUM_LIQUIDITY</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint256</span>)</span>;
 
-  function factory() external view returns (address);
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">factory</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">address</span>)</span>;
 
-  function token0() external view returns (address);
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">token0</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">address</span>)</span>;
 
-  function token1() external view returns (address);
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">token1</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">address</span>)</span>;
 
-  function getReserves()
-    external
-    view
-    returns (
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getReserves</span>(<span class="hljs-params"></span>)
+    <span class="hljs-title">external</span>
+    <span class="hljs-title">view</span>
+    <span class="hljs-title">returns</span> (<span class="hljs-params">
       uint112 reserve0,
       uint112 reserve1,
       uint32 blockTimestampLast
-    );
+    </span>)</span>;
 
-  function price0CumulativeLast() external view returns (uint256);
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">price0CumulativeLast</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint256</span>)</span>;
 
-  function price1CumulativeLast() external view returns (uint256);
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">price1CumulativeLast</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint256</span>)</span>;
 
-  function kLast() external view returns (uint256);
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">kLast</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint256</span>)</span>;
 
-  function mint(address to) external returns (uint256 liquidity);
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">mint</span>(<span class="hljs-params">address to</span>) <span class="hljs-title">external</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint256 liquidity</span>)</span>;
 
-  function burn(address to) external returns (uint256 amount0, uint256 amount1);
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">burn</span>(<span class="hljs-params">address to</span>) <span class="hljs-title">external</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint256 amount0, uint256 amount1</span>)</span>;
 
-  function swap(
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">swap</span>(<span class="hljs-params">
     uint256 amount0Out,
     uint256 amount1Out,
     address to,
     bytes calldata data
-  ) external;
+  </span>) <span class="hljs-title">external</span></span>;
 
-  function skim(address to) external;
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">skim</span>(<span class="hljs-params">address to</span>) <span class="hljs-title">external</span></span>;
 
-  function sync() external;
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sync</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span></span>;
 
-  function initialize(address, address) external;
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">initialize</span>(<span class="hljs-params">address, address</span>) <span class="hljs-title">external</span></span>;
 }
 
-// File: chainlinkMock/ours/mockChainlinkFollowUniswap.sol
+<span class="hljs-comment">// File: chainlinkMock/ours/mockChainlinkFollowUniswap.sol</span>
 
 
-pragma solidity 0.6.12;
+pragma solidity <span class="hljs-number">0.6</span><span class="hljs-number">.12</span>;
 
 
 
@@ -3446,16 +3442,16 @@ contract MockAggregator {
   string public symbol;
   address public addr;
   uint256 public decimals;
-  mapping(bytes32 =&gt; address) symbolPairs;
+  mapping(<span class="hljs-function"><span class="hljs-params">bytes32</span> =&gt;</span> address) symbolPairs;
 
-  bytes32 ETH = keccak256(abi.encodePacked(&apos;ETH&apos;));
-  bytes32 DAI = keccak256(abi.encodePacked(&apos;DAI&apos;));
-  bytes32 WBTC = keccak256(abi.encodePacked(&apos;WBTC&apos;));
-  bytes32 CHAINLINK = keccak256(abi.encodePacked(&apos;CHAINLINK&apos;));
-  bytes32 MKR = keccak256(abi.encodePacked(&apos;MKR&apos;));
-  bytes32 USDC = keccak256(abi.encodePacked(&apos;USDC&apos;));
+  bytes32 ETH = keccak256(abi.encodePacked(<span class="hljs-string">&apos;ETH&apos;</span>));
+  bytes32 DAI = keccak256(abi.encodePacked(<span class="hljs-string">&apos;DAI&apos;</span>));
+  bytes32 WBTC = keccak256(abi.encodePacked(<span class="hljs-string">&apos;WBTC&apos;</span>));
+  bytes32 CHAINLINK = keccak256(abi.encodePacked(<span class="hljs-string">&apos;CHAINLINK&apos;</span>));
+  bytes32 MKR = keccak256(abi.encodePacked(<span class="hljs-string">&apos;MKR&apos;</span>));
+  bytes32 USDC = keccak256(abi.encodePacked(<span class="hljs-string">&apos;USDC&apos;</span>));
 
-  /*
+  <span class="hljs-comment">/*
   dai addr：0x749B1c911170A5aFEb68d4B278cD5405C718fc7F
 
   token地址比dai大的：
@@ -3468,22 +3464,22 @@ contract MockAggregator {
   1. 0x5D14d5F575a8B17801633fccaa5C0Ed78e657BdA, wbtc
   2. 0x3878E7d2a355FB01a06db656690Cb8795f6663F2, usdc（清算使用）
 
-  */
+  */</span>
 
-  //dai: token0
-  //eth: token1
-  //pair地址
-  address public ethDaiPairAddr = 0xc2a84f8e6a1a6011ccE0854C482217def6FbA8eE;
-  address public wbtcDaiPairAddr = 0x7a30b9AAe79374c440D5f7A0388696C8bfB76677;
-  address public chainlinkDaiPairAddr = 0xCdD4b06f6FF77B8D338FAB21606B8356A1C7ed14;
-  address public usdcPair = 0x5170C73cc49A68bEA24eEEea5f2ea0a070999484;
+  <span class="hljs-comment">//dai: token0</span>
+  <span class="hljs-comment">//eth: token1</span>
+  <span class="hljs-comment">//pair地址</span>
+  address public ethDaiPairAddr = <span class="hljs-number">0xc2a84f8e6a1a6011ccE0854C482217def6FbA8eE</span>;
+  address public wbtcDaiPairAddr = <span class="hljs-number">0x7a30b9AAe79374c440D5f7A0388696C8bfB76677</span>;
+  address public chainlinkDaiPairAddr = <span class="hljs-number">0xCdD4b06f6FF77B8D338FAB21606B8356A1C7ed14</span>;
+  address public usdcPair = <span class="hljs-number">0x5170C73cc49A68bEA24eEEea5f2ea0a070999484</span>;
 
-  //大小写居然还有关系，直接使用remix提示的地址来更新就行了。
-  address public mkrDaiPairAddr = 0x560CcA4DE9eB4f42021F1A383825AB906ffFFA4c;
+  <span class="hljs-comment">//大小写居然还有关系，直接使用remix提示的地址来更新就行了。</span>
+  address public mkrDaiPairAddr = <span class="hljs-number">0x560CcA4DE9eB4f42021F1A383825AB906ffFFA4c</span>;
 
-  address public daiAddr = 0x749B1c911170A5aFEb68d4B278cD5405C718fc7F;
+  address public daiAddr = <span class="hljs-number">0x749B1c911170A5aFEb68d4B278cD5405C718fc7F</span>;
 
-  constructor(string memory _symbol, uint256 _decimals) public {
+  <span class="hljs-title">constructor</span>(<span class="hljs-params">string memory _symbol, uint256 _decimals</span>) <span class="hljs-title">public</span> {
     symbolPairs[ETH] = ethDaiPairAddr;
     symbolPairs[DAI] = ethDaiPairAddr;
     symbolPairs[WBTC] = wbtcDaiPairAddr;
@@ -3492,74 +3488,74 @@ contract MockAggregator {
     symbolPairs[USDC] = usdcPair;
 
     bytes32 symbol_ = keccak256(abi.encodePacked(_symbol));
-    require(symbolPairs[symbol_] != address(0), &apos;not support token symbol!&apos;);
+    <span class="hljs-built_in">require</span>(symbolPairs[symbol_] != address(<span class="hljs-number">0</span>), <span class="hljs-string">&apos;not support token symbol!&apos;</span>);
     symbol = _symbol;
     decimals = _decimals;
   }
 
-  function latestAnswer() external view returns (uint256) {
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">latestAnswer</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint256</span>) </span>{
     bytes32 symbol_ = keccak256(abi.encodePacked(symbol));
     (uint256 priceTmp, uint256 decimalsTmp) = getTokenPriceToDai(ethDaiPairAddr);
 
-    if (symbol_ == ETH) {
-      return (priceTmp * 10**decimals) / 10**decimalsTmp;
-    } else if (symbol_ == DAI) {
-      return 10**decimals / (priceTmp / 10**decimalsTmp);
-    } else {
-      return getTokenPriceToEth(symbolPairs[symbol_]);
+    <span class="hljs-keyword">if</span> (symbol_ == ETH) {
+      <span class="hljs-keyword">return</span> (priceTmp * <span class="hljs-number">10</span>**decimals) / <span class="hljs-number">10</span>**decimalsTmp;
+    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (symbol_ == DAI) {
+      <span class="hljs-keyword">return</span> <span class="hljs-number">10</span>**decimals / (priceTmp / <span class="hljs-number">10</span>**decimalsTmp);
+    } <span class="hljs-keyword">else</span> {
+      <span class="hljs-keyword">return</span> getTokenPriceToEth(symbolPairs[symbol_]);
     }
   }
 
-  // calculate price based on pair reserves
-  function getTokenPriceToEth(address pairAddress) public view returns (uint256) {
-    //数量，这个币种的精度，wbc，8；chainlink，18
+  <span class="hljs-comment">// calculate price based on pair reserves</span>
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getTokenPriceToEth</span>(<span class="hljs-params">address pairAddress</span>) <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint256</span>) </span>{
+    <span class="hljs-comment">//数量，这个币种的精度，wbc，8；chainlink，18</span>
     (uint256 toDaiPrice, uint256 decimals1) = getTokenPriceToDai(pairAddress);
     (uint256 daiEthPrice, uint256 decimals2) = getTokenPriceToDai(ethDaiPairAddr);
-    uint256 v1 = toDaiPrice*10**decimals / 10**decimals1;
-    uint256 v2 = daiEthPrice / 10**decimals2;
+    uint256 v1 = toDaiPrice*<span class="hljs-number">10</span>**decimals / <span class="hljs-number">10</span>**decimals1;
+    uint256 v2 = daiEthPrice / <span class="hljs-number">10</span>**decimals2;
 
-    return (v1 / v2);
+    <span class="hljs-keyword">return</span> (v1 / v2);
   }
 
-  // calculate price based on pair reserves
-  function getTokenPriceToDai(address pairAddress) public view returns (uint256, uint256) {
+  <span class="hljs-comment">// calculate price based on pair reserves</span>
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getTokenPriceToDai</span>(<span class="hljs-params">address pairAddress</span>) <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint256, uint256</span>) </span>{
     IUniswapV2Pair pair = IUniswapV2Pair(pairAddress);
     IERC20 token0 = IERC20(pair.token0());
     IERC20 token1 = IERC20(pair.token1());
 
     (uint256 Res0, uint256 Res1, ) = pair.getReserves();
-    if (address(token0) == daiAddr) {
-      //比dai地址大,eth, link
-      uint256 res0 = Res0 * (10**token1.decimals());
+    <span class="hljs-keyword">if</span> (address(token0) == daiAddr) {
+      <span class="hljs-comment">//比dai地址大,eth, link</span>
+      uint256 res0 = Res0 * (<span class="hljs-number">10</span>**token1.decimals());
 
-      //103453 * 10^decimals
-      return (res0 / Res1, token0.decimals());
+      <span class="hljs-comment">//103453 * 10^decimals</span>
+      <span class="hljs-keyword">return</span> (res0 / Res1, token0.decimals());
     }
 
-    //mkr, usdc
-    uint256 res1 = Res1 * (10**token0.decimals());
-    return (res1 / Res0, token1.decimals());
+    <span class="hljs-comment">//mkr, usdc</span>
+    uint256 res1 = Res1 * (<span class="hljs-number">10</span>**token0.decimals());
+    <span class="hljs-keyword">return</span> (res1 / Res0, token1.decimals());
   }
 }
 </code></pre>
 <p>调用方法，参考：</p>
-<pre><code class="lang-js">import { ethers } from &quot;ethers&quot;;
-const { ethereum } = window;
-if (ethereum) {
-    var provider = new ethers.providers.Web3Provider(ethereum);
+<pre><code class="lang-js"><span class="hljs-keyword">import</span> { ethers } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;ethers&quot;</span>;
+<span class="hljs-keyword">const</span> { ethereum } = <span class="hljs-built_in">window</span>;
+<span class="hljs-keyword">if</span> (ethereum) {
+    <span class="hljs-keyword">var</span> provider = <span class="hljs-keyword">new</span> ethers.providers.Web3Provider(ethereum);
 }
 
-const uniswapUsdcAddress = &quot;0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc&quot;;
-const uniswapAbi = ... // get the abi from https://etherscan.io/address/0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc#code
+<span class="hljs-keyword">const</span> uniswapUsdcAddress = <span class="hljs-string">&quot;0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc&quot;</span>;
+<span class="hljs-keyword">const</span> uniswapAbi = ... <span class="hljs-comment">// get the abi from https://etherscan.io/address/0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc#code</span>
 
-const getUniswapContract = async address =&gt; await new ethers.Contract(address, uniswapAbi, provider);
+<span class="hljs-keyword">const</span> getUniswapContract = <span class="hljs-keyword">async</span> address =&gt; <span class="hljs-keyword">await</span> <span class="hljs-keyword">new</span> ethers.Contract(address, uniswapAbi, provider);
 
-const getEthUsdPrice = async () =&gt; await getUniswapContract(uniswapUsdcAddress)
-    .then(contract =&gt; contract.getReserves())
-    .then(reserves =&gt; Number(reserves._reserve0) / Number(reserves._reserve1) * 1e12); // times 10^12 because usdc only has 6 decimals
+<span class="hljs-keyword">const</span> getEthUsdPrice = <span class="hljs-keyword">async</span> () =&gt; <span class="hljs-keyword">await</span> getUniswapContract(uniswapUsdcAddress)
+    .then(<span class="hljs-function"><span class="hljs-params">contract</span> =&gt;</span> contract.getReserves())
+    .then(<span class="hljs-function"><span class="hljs-params">reserves</span> =&gt;</span> <span class="hljs-built_in">Number</span>(reserves._reserve0) / <span class="hljs-built_in">Number</span>(reserves._reserve1) * <span class="hljs-number">1e12</span>); <span class="hljs-comment">// times 10^12 because usdc only has 6 decimals</span>
 </code></pre>
 <p>chainlink所有的价格都是对标ETH的，例如：</p>
-<pre><code class="lang-sh">DAI: &apos;0x22B58f1EbEDfCA50feF632bD73368b2FdA96D541&apos;
+<pre><code class="lang-sh">DAI: <span class="hljs-string">&apos;0x22B58f1EbEDfCA50feF632bD73368b2FdA96D541&apos;</span>
 </code></pre>
 <p><img src="https://duke-typora.s3.ap-southeast-1.amazonaws.com/uPic/image-20220106164452409.png" alt="image-20220106164452409"></p>
 <ol>
@@ -3568,7 +3564,7 @@ const getEthUsdPrice = async () =&gt; await getUniswapContract(uniswapUsdcAddres
 <li>所有对ETH的资产，chainlink，decimal都是18位。</li>
 </ol>
 <h2 id="2-使用自己资产部署">2. 使用自己资产部署</h2>
-<pre><code class="lang-sh">N# Contracts: 20
+<pre><code class="lang-sh">N<span class="hljs-comment"># Contracts: 20</span>
 LendingPoolAddressesProvider: 0x8bD206df9853d23bE158A9F7065Cf60A7A5F05DF
 LendingPool: 0x57110816Db545D4A3910dDba38fB17221a8EB506
 LendingPoolConfigurator: 0x13A25AEAEFCe2b501f5D7c9D0C728c04A5411f4e
@@ -3593,12 +3589,12 @@ UiPoolDataProvider: 0x071E4378Fe60153925C8aC858DAA1C91CFCf2557
 <p>baseUniswapAdapter:(前端使用)</p>
 <pre><code class="lang-sh">npx hardhat --network kovan deploy-UniswapRepayAdapter --provider 0x8bD206df9853d23bE158A9F7065Cf60A7A5F05DF --router 0xDC292C81e24efB77Bc69e6d3727E3727EC1bF170 --weth 0xd0a1e359811322d97991e03f863a0c30c2cf029c
 
-#0x5A88CCf2a7C0adA99ef602570a9864c195cc818B
+<span class="hljs-comment">#0x5A88CCf2a7C0adA99ef602570a9864c195cc818B</span>
 </code></pre>
 <p>uiIncentiveDataProvider:(前端使用)</p>
 <pre><code class="lang-sh">npm run dev:deployUIIncentivesProviderV2
 
-#0xF826701Bb4Db3d60255280D9a0F8bD7aBA83927C
+<span class="hljs-comment">#0xF826701Bb4Db3d60255280D9a0F8bD7aBA83927C</span>
 </code></pre>
 <h2 id="3-verify">3. verify</h2>
 <p>aave工程化代码写的真好啊，考虑的非常周全了。</p>
@@ -3613,8 +3609,8 @@ UiPoolDataProvider: 0x071E4378Fe60153925C8aC858DAA1C91CFCf2557
 <p>对某个asset的市场进行暂停使用，可以执行如下命令。</p>
 <pre><code class="lang-sh">hh full:freeze --pool Aave --network kovan
 
-#内部会调用freezeReserve(MKR地址)
-#注意emergencyAdmin和PoolAdmin是两个地址，emergencyAdmin是index：1， PoolAdmin是index：0。
+<span class="hljs-comment">#内部会调用freezeReserve(MKR地址)</span>
+<span class="hljs-comment">#注意emergencyAdmin和PoolAdmin是两个地址，emergencyAdmin是index：1， PoolAdmin是index：0。</span>
 </code></pre>
 <h2 id="3-如果错误了点击了其他市场">3. 如果错误了点击了其他市场</h2>
 <p>需要清理浏览器cache，否则一直出现网络错误。</p>
@@ -3628,7 +3624,7 @@ UiPoolDataProvider: 0x071E4378Fe60153925C8aC858DAA1C91CFCf2557
 <pre><code class="lang-sh">npm run dev:deployUIProviderV2
 </code></pre>
 <p>将地址更新到aave-ui中的ui-config/networks.ts中：</p>
-<pre><code class="lang-sh">uiPoolDataProvider: &apos;0x60311E24f29208C2E3490F8e66414Ded4C75Ee32&apos;, //duke 自己的
+<pre><code class="lang-sh">uiPoolDataProvider: <span class="hljs-string">&apos;0x60311E24f29208C2E3490F8e66414Ded4C75Ee32&apos;</span>, //duke 自己的
 </code></pre>
 </li>
 </ol>
@@ -3665,7 +3661,7 @@ UiPoolDataProvider: 0x071E4378Fe60153925C8aC858DAA1C91CFCf2557
 <pre><code class="lang-sh">http://localhost:3000/deposit/0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-0xd0a1e359811322d97991e03f863a0c30c2cf029c0x604393277f9941756ef0660e52a891d80dda9a8d/confirmation?amount=0.1
 </code></pre>
 <p>通过将rpc修改为我们自己的alchemy之后，这个问题暂时没有再出现：</p>
-<pre><code class="lang-sh">    publicJsonRPCUrl: [&apos;https://eth-kovan.alchemyapi.io/v2/-qZ8NcwdvM8gsbxWyFl_Iw9znBN5UV3t&apos;, &apos;https://kovan.poa.network&apos;],
+<pre><code class="lang-sh">    publicJsonRPCUrl: [<span class="hljs-string">&apos;https://eth-kovan.alchemyapi.io/v2/-qZ8NcwdvM8gsbxWyFl_Iw9znBN5UV3t&apos;</span>, <span class="hljs-string">&apos;https://kovan.poa.network&apos;</span>],
 </code></pre>
 <h3 id="14-错误4：">1.4 错误4：</h3>
 <p>当使用自己的资产和chainlink配置到ui中后，一直展示上面的Reload错误，这个是因为:uiPoolDataProvider引起的（切换成官方的就可以正常显示）。部署这个合约的两个参数是两个ETH/USD的地址，我改成自己的了，也许少了方法。</p>
@@ -3681,12 +3677,12 @@ UiPoolDataProvider: 0x071E4378Fe60153925C8aC858DAA1C91CFCf2557
 <ol>
 <li>修改package.json，这里经常出错，注意是：https，个人账户.github.io，repo名字</li>
 </ol>
-<pre><code class="lang-sh">  &quot;homepage&quot;: &quot;https://chfry-finance.github.io/chfry-aave-interface&quot;,
+<pre><code class="lang-sh">  <span class="hljs-string">&quot;homepage&quot;</span>: <span class="hljs-string">&quot;https://chfry-finance.github.io/chfry-aave-interface&quot;</span>,
 </code></pre>
 <ol>
 <li>添加deploy命令</li>
 </ol>
-<pre><code class="lang-sh">    &quot;deploy&quot;: &quot;gh-pages -d build&quot;,
+<pre><code class="lang-sh">    <span class="hljs-string">&quot;deploy&quot;</span>: <span class="hljs-string">&quot;gh-pages -d build&quot;</span>,
 </code></pre>
 <ol>
 <li>进行编译&amp;部署</li>
@@ -3708,17 +3704,17 @@ npm run deploy
 </ol>
 <h1 id="三、dsa联调">三、DSA联调</h1>
 <p>aave官方地址：</p>
-<pre><code class="lang-js">    // Aave Lending Pool Provider    
+<pre><code class="lang-js">    <span class="hljs-comment">// Aave Lending Pool Provider    </span>
         AaveLendingPoolProviderInterface internal constant aaveProvider =
         AaveLendingPoolProviderInterface(
-            0x88757f2f99175387aB4C6a4b3067c77A695b0349
+            <span class="hljs-number">0x88757f2f99175387aB4C6a4b3067c77A695b0349</span>
         );
-    // Aave Protocol Data Provider
+    <span class="hljs-comment">// Aave Protocol Data Provider</span>
     AaveDataProviderInterface internal constant aaveData =
-        AaveDataProviderInterface(0x3c73A5E5785cAC854D468F727c606C07488a29D6);
+        AaveDataProviderInterface(<span class="hljs-number">0x3c73A5E5785cAC854D468F727c606C07488a29D6</span>);
 
     AavePriceOracleInterface internal constant aavePrice =
-        AavePriceOracleInterface(0xB8bE51E6563BB312Cbb2aa26e352516c25c26ac1);
+        AavePriceOracleInterface(<span class="hljs-number">0xB8bE51E6563BB312Cbb2aa26e352516c25c26ac1</span>);
 </code></pre>
 <p>使用我自己部署的地址（自己的token，自己的chainlink）</p>
 <pre><code class="lang-sh">AaveLendingPoolProviderInterface: 0x8bD206df9853d23bE158A9F7065Cf60A7A5F05DF
@@ -3752,7 +3748,7 @@ AavePriceOracleInterface:  0x4578344f10246e3dc96b7D2c6E7854fF3798678A
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第16节:aave部署步骤文档","level":"1.23.2","depth":2,"next":{"title":"第16节: compound V2部署步骤文档","level":"1.23.3","depth":2,"path":"16_主流项目部署文档/03_compoundV2部署.md","ref":"16_主流项目部署文档/03_compoundV2部署.md","articles":[]},"previous":{"title":"第16节:uniswapV2部署文档","level":"1.23.1","depth":2,"path":"16_主流项目部署文档/01_uniswapV2部署.md","ref":"16_主流项目部署文档/01_uniswapV2部署.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"16_主流项目部署文档/02_aaveV2部署.md","mtime":"2023-09-23T13:27:54.322Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第16节:aave部署步骤文档","level":"1.23.2","depth":2,"next":{"title":"第16节: compound V2部署步骤文档","level":"1.23.3","depth":2,"path":"16_主流项目部署文档/03_compoundV2部署.md","ref":"16_主流项目部署文档/03_compoundV2部署.md","articles":[]},"previous":{"title":"第16节:uniswapV2部署文档","level":"1.23.1","depth":2,"path":"16_主流项目部署文档/01_uniswapV2部署.md","ref":"16_主流项目部署文档/01_uniswapV2部署.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"cn","gitbook":"*"},"file":{"path":"16_主流项目部署文档/02_aaveV2部署.md","mtime":"2023-09-23T13:27:54.322Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3835,14 +3831,6 @@ AavePriceOracleInterface:  0x4578344f10246e3dc96b7D2c6E7854fF3798678A
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

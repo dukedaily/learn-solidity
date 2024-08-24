@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3026,14 +3022,14 @@
 </ol>
 <p>其中，每一个Role都有自己的AdminRole，这个AdminRole可以对Role成员进行维护（增删），例如如下代码中，我们定义了一个权限 <code>BITVERSE_ADMIN_ROLE</code></p>
 <p>并对它设置了管理员权限：DEFAULT_ADMIN_ROLE。</p>
-<pre><code class="lang-js">bytes32 private constant BITVERSE_ADMIN_ROLE = keccak256(&quot;BITVERSE_ADMIN&quot;);
+<pre><code class="lang-js">bytes32 private constant BITVERSE_ADMIN_ROLE = keccak256(<span class="hljs-string">&quot;BITVERSE_ADMIN&quot;</span>);
 
-constructor() {
-  // 将 BITVERSE_ADMIN_ROLE 的管理员权限设置为：BITVERSE_ADMIN_ROLE
-  // 这个是默认的，任何ROLE的默认ADMIN_ROLE都是DEFAULT_ADMIN_ROLE，即：0x00
+<span class="hljs-function"><span class="hljs-title">constructor</span>(<span class="hljs-params"></span>)</span> {
+  <span class="hljs-comment">// 将 BITVERSE_ADMIN_ROLE 的管理员权限设置为：BITVERSE_ADMIN_ROLE</span>
+  <span class="hljs-comment">// 这个是默认的，任何ROLE的默认ADMIN_ROLE都是DEFAULT_ADMIN_ROLE，即：0x00</span>
   _setRoleAdmin(BITVERSE_ADMIN_ROLE, DEFAULT_ADMIN_ROLE);
 
-  // 给root地址添加DEFAULT_ADMIN_ROLE权限
+  <span class="hljs-comment">// 给root地址添加DEFAULT_ADMIN_ROLE权限</span>
   _setupRole(DEFAULT_ADMIN_ROLE, root);
 }
 </code></pre>
@@ -3047,21 +3043,21 @@ constructor() {
 <li><code>DEFAULT_ADMIN_ROLE</code>的member之一为root，即root可以管理<code>BitVerseAdminRole</code>下面的members，包括添加信member或者删除当前某个member</li>
 </ol>
 <p>使用方式：</p>
-<pre><code class="lang-js">// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.9;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.9</span>;
 
-import &quot;@openzeppelin/contracts/token/ERC20/ERC20.sol&quot;;
-import &quot;@openzeppelin/contracts/access/AccessControl.sol&quot;;
+<span class="hljs-keyword">import</span> <span class="hljs-string">&quot;@openzeppelin/contracts/token/ERC20/ERC20.sol&quot;</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-string">&quot;@openzeppelin/contracts/access/AccessControl.sol&quot;</span>;
 
 contract MyToken is ERC20, AccessControl {
-    bytes32 public constant MINTER_ROLE = keccak256(&quot;MINTER_ROLE&quot;);
+    bytes32 public constant MINTER_ROLE = keccak256(<span class="hljs-string">&quot;MINTER_ROLE&quot;</span>);
 
-    constructor() ERC20(&quot;MyToken&quot;, &quot;MTK&quot;) {
+    <span class="hljs-title">constructor</span>(<span class="hljs-params"></span>) <span class="hljs-title">ERC20</span>(<span class="hljs-params"><span class="hljs-string">&quot;MyToken&quot;</span>, <span class="hljs-string">&quot;MTK&quot;</span></span>) {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(MINTER_ROLE, msg.sender);
     }
 
-    function mint(address to, uint256 amount) public onlyRole(MINTER_ROLE) {
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">mint</span>(<span class="hljs-params">address to, uint256 amount</span>) <span class="hljs-title">public</span> <span class="hljs-title">onlyRole</span>(<span class="hljs-params">MINTER_ROLE</span>) </span>{
         _mint(to, amount);
     }
 }
@@ -3093,7 +3089,7 @@ contract MyToken is ERC20, AccessControl {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第1节:AccessControl","level":"1.20.1","depth":2,"next":{"title":"第2节:EnumerableSet","level":"1.20.2","depth":2,"path":"13_openzeppelin解析/02_EnumerableSet.md","ref":"13_openzeppelin解析/02_EnumerableSet.md","articles":[]},"previous":{"title":"第十三章:openzeppelin解析","level":"1.20","depth":1,"path":"13_openzeppelin解析/README.md","ref":"13_openzeppelin解析/README.md","articles":[{"title":"第1节:AccessControl","level":"1.20.1","depth":2,"path":"13_openzeppelin解析/01_accessControl.md","ref":"13_openzeppelin解析/01_accessControl.md","articles":[]},{"title":"第2节:EnumerableSet","level":"1.20.2","depth":2,"path":"13_openzeppelin解析/02_EnumerableSet.md","ref":"13_openzeppelin解析/02_EnumerableSet.md","articles":[]},{"title":"第3节:EnumerableMap","level":"1.20.3","depth":2,"path":"13_openzeppelin解析/03_EnumerableMap.md","ref":"13_openzeppelin解析/03_EnumerableMap.md","articles":[]},{"title":"第4节:BitMaps","level":"1.20.4","depth":2,"path":"13_openzeppelin解析/04_BitMaps.md","ref":"13_openzeppelin解析/04_BitMaps.md","articles":[]},{"title":"第5节:DoubleEndedQueue","level":"1.20.5","depth":2,"path":"13_openzeppelin解析/05_DoubleEndedQueue.md","ref":"13_openzeppelin解析/05_DoubleEndedQueue.md","articles":[]},{"title":"第6节:ECDSA","level":"1.20.6","depth":2,"path":"13_openzeppelin解析/06_ECDSA.md","ref":"13_openzeppelin解析/06_ECDSA.md","articles":[]},{"title":"第7节:SignatureChecker","level":"1.20.7","depth":2,"path":"13_openzeppelin解析/07_SignatureChecker.md","ref":"13_openzeppelin解析/07_SignatureChecker.md","articles":[]},{"title":"第8节:EIP712","level":"1.20.8","depth":2,"path":"13_openzeppelin解析/08_EIP712.md","ref":"13_openzeppelin解析/08_EIP712.md","articles":[]}]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"13_openzeppelin解析/01_accessControl.md","mtime":"2023-03-21T14:01:28.000Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第1节:AccessControl","level":"1.20.1","depth":2,"next":{"title":"第2节:EnumerableSet","level":"1.20.2","depth":2,"path":"13_openzeppelin解析/02_EnumerableSet.md","ref":"13_openzeppelin解析/02_EnumerableSet.md","articles":[]},"previous":{"title":"第十三章:openzeppelin解析","level":"1.20","depth":1,"path":"13_openzeppelin解析/README.md","ref":"13_openzeppelin解析/README.md","articles":[{"title":"第1节:AccessControl","level":"1.20.1","depth":2,"path":"13_openzeppelin解析/01_accessControl.md","ref":"13_openzeppelin解析/01_accessControl.md","articles":[]},{"title":"第2节:EnumerableSet","level":"1.20.2","depth":2,"path":"13_openzeppelin解析/02_EnumerableSet.md","ref":"13_openzeppelin解析/02_EnumerableSet.md","articles":[]},{"title":"第3节:EnumerableMap","level":"1.20.3","depth":2,"path":"13_openzeppelin解析/03_EnumerableMap.md","ref":"13_openzeppelin解析/03_EnumerableMap.md","articles":[]},{"title":"第4节:BitMaps","level":"1.20.4","depth":2,"path":"13_openzeppelin解析/04_BitMaps.md","ref":"13_openzeppelin解析/04_BitMaps.md","articles":[]},{"title":"第5节:DoubleEndedQueue","level":"1.20.5","depth":2,"path":"13_openzeppelin解析/05_DoubleEndedQueue.md","ref":"13_openzeppelin解析/05_DoubleEndedQueue.md","articles":[]},{"title":"第6节:ECDSA","level":"1.20.6","depth":2,"path":"13_openzeppelin解析/06_ECDSA.md","ref":"13_openzeppelin解析/06_ECDSA.md","articles":[]},{"title":"第7节:SignatureChecker","level":"1.20.7","depth":2,"path":"13_openzeppelin解析/07_SignatureChecker.md","ref":"13_openzeppelin解析/07_SignatureChecker.md","articles":[]},{"title":"第8节:EIP712","level":"1.20.8","depth":2,"path":"13_openzeppelin解析/08_EIP712.md","ref":"13_openzeppelin解析/08_EIP712.md","articles":[]}]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"cn","gitbook":"*"},"file":{"path":"13_openzeppelin解析/01_accessControl.md","mtime":"2023-03-21T14:01:28.000Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3176,14 +3172,6 @@ contract MyToken is ERC20, AccessControl {
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

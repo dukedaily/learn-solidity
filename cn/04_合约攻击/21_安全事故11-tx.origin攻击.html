@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3024,34 +3020,34 @@
 <li>没有增加重入检查</li>
 <li>校验条件错误：tx.origin == owner，这个在重入时是无效的</li>
 </ol>
-<pre><code class="lang-js">// SPDX-License-Identifier: MIT
-pragma solidity 0.8.11;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
+pragma solidity <span class="hljs-number">0.8</span><span class="hljs-number">.11</span>;
 
-// THIS CONTRACT CONTAINS A BUG - DO NOT USE
+<span class="hljs-comment">// THIS CONTRACT CONTAINS A BUG - DO NOT USE</span>
 contract MyWallet {
     address owner;
-    constructor() {
+    <span class="hljs-function"><span class="hljs-title">constructor</span>(<span class="hljs-params"></span>)</span> {
         owner = msg.sender;
     }
     receive () external payable {
     }
-    function transferTo(address payable dest, uint amount) public {
-        // THE BUG IS RIGHT HERE, you must use msg.sender instead of tx.origin
-        require(tx.origin == owner);
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">transferTo</span>(<span class="hljs-params">address payable dest, uint amount</span>) <span class="hljs-title">public</span> </span>{
+        <span class="hljs-comment">// THE BUG IS RIGHT HERE, you must use msg.sender instead of tx.origin</span>
+        <span class="hljs-built_in">require</span>(tx.origin == owner);
 
-          // At this point, the caller&apos;s code is executed, and can call withdrawBalance again
-        (bool success, ) = dest.call{value: amount}(&quot;&quot;); 
-        require(success);
+          <span class="hljs-comment">// At this point, the caller&apos;s code is executed, and can call withdrawBalance again</span>
+        (bool success, ) = dest.call{<span class="hljs-attr">value</span>: amount}(<span class="hljs-string">&quot;&quot;</span>); 
+        <span class="hljs-built_in">require</span>(success);
     }
 }
 
 interface UserWallet {
-    function transferTo(address payable dest, uint amount) external;
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">transferTo</span>(<span class="hljs-params">address payable dest, uint amount</span>) <span class="hljs-title">external</span></span>;
 }
 
 contract Attack {
     address payable owner;
-    constructor() {
+    <span class="hljs-function"><span class="hljs-title">constructor</span>(<span class="hljs-params"></span>)</span> {
         owner = payable(msg.sender);
     }
     receive() external payable {
@@ -3093,7 +3089,7 @@ contract Attack {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第21节:安全事故11-tx.origin攻击","level":"1.11.15","depth":2,"next":{"title":"第22节:安全事故12-DOS攻击","level":"1.11.16","depth":2,"path":"04_合约攻击/22_安全事故12-DOS攻击.md","ref":"04_合约攻击/22_安全事故12-DOS攻击.md","articles":[]},"previous":{"title":"第20节:安全事故10-delegatecall攻击","level":"1.11.14","depth":2,"path":"04_合约攻击/20_安全事故10-delegatecall攻击.md","ref":"04_合约攻击/20_安全事故10-delegatecall攻击.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"04_合约攻击/21_安全事故11-tx.origin攻击.md","mtime":"2023-03-21T14:01:27.000Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第21节:安全事故11-tx.origin攻击","level":"1.11.15","depth":2,"next":{"title":"第22节:安全事故12-DOS攻击","level":"1.11.16","depth":2,"path":"04_合约攻击/22_安全事故12-DOS攻击.md","ref":"04_合约攻击/22_安全事故12-DOS攻击.md","articles":[]},"previous":{"title":"第20节:安全事故10-delegatecall攻击","level":"1.11.14","depth":2,"path":"04_合约攻击/20_安全事故10-delegatecall攻击.md","ref":"04_合约攻击/20_安全事故10-delegatecall攻击.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"cn","gitbook":"*"},"file":{"path":"04_合约攻击/21_安全事故11-tx.origin攻击.md","mtime":"2023-03-21T14:01:27.000Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3176,14 +3172,6 @@ contract Attack {
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3021,58 +3017,58 @@
 <p><a href="https://medium.com/@TrustChain/reversing-and-debugging-evm-the-end-of-time-part-4-3eafe5b0511a" target="_blank">Reversing and Debugging EVM Smart contracts: 5 Instructions to end/abort the Execution</a></p>
 <h2 id="1-stop">1. Stop</h2>
 <p>消耗0gas，不返回任何数据。</p>
-<pre><code class="lang-js">// SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.0;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: UNLICENSED</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.0</span>;
 
 contract Test {
-    function test() external {
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">test</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> </span>{
 
     }
 }
 </code></pre>
 <p>得到汇编如下：</p>
-<pre><code class="lang-js">045 JUMPDEST |function signature discarded|
-046 PUSH1 33 |0x33|
-048 PUSH1 35 |0x35|0x33|
-050 JUMP     |0x33|
-053 JUMPDEST |0x33|
-054 JUMP     ||
-051 JUMPDEST ||
-052 STOP     ||
-053 JUMPDEST
-054 JUMP
-</code></pre>
+<pre><code class="lang-js"><span class="hljs-number">045</span> JUMPDEST |<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">signature</span> <span class="hljs-title">discarded</span>|
+046 <span class="hljs-title">PUSH1</span> 33 |0<span class="hljs-title">x33</span>|
+048 <span class="hljs-title">PUSH1</span> 35 |0<span class="hljs-title">x35</span>|0<span class="hljs-title">x33</span>|
+050 <span class="hljs-title">JUMP</span>     |0<span class="hljs-title">x33</span>|
+053 <span class="hljs-title">JUMPDEST</span> |0<span class="hljs-title">x33</span>|
+054 <span class="hljs-title">JUMP</span>     ||
+051 <span class="hljs-title">JUMPDEST</span> ||
+052 <span class="hljs-title">STOP</span>     ||
+053 <span class="hljs-title">JUMPDEST</span>
+054 <span class="hljs-title">JUMP</span>
+</span></code></pre>
 <ul>
 <li>注意：50 byte时，跳转到0x35（53 byte）位置，54byte时，进一步跳转到0x33处（51 byte）位置，最后STOP退出，此时内存中数据为空，栈中只有signature，所以返回数据为空。</li>
 <li>消耗gas为0</li>
 </ul>
 <h2 id="2-return">2. Return</h2>
-<pre><code class="lang-js">// SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.0;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: UNLICENSED</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.0</span>;
 
 contract Test {
-    function test() external returns(uint) {
-        return(8);
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">test</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> <span class="hljs-title">returns</span>(<span class="hljs-params">uint</span>) </span>{
+        <span class="hljs-keyword">return</span>(<span class="hljs-number">8</span>);
     }
 }
 </code></pre>
 <p>得到汇编如下：（打开优化开关，run 1）</p>
-<pre><code class="lang-js">045 JUMPDEST ||
-046 PUSH1 08 |0x08|  the return value of test()
-048 PUSH1 40 |0x40|0x08|
-050 MLOAD    |0x80|0x08|  mload(0x40) mloads the free memory pointer（内存中的值不会被清除或覆盖）
-051 SWAP1    |0x08|0x80|
-052 DUP2     |0x80|0x08|0x80|（DUP2的意思是，复制栈上第2个元素，即下标为1的元素）
-053 MSTORE   |0x80|       mstore(0x80,0x08) store the return value in memory[0x80]，把08放到0x80中
-054 PUSH1 20 |0x20|0x80|
-056 ADD      |0xa0|
-057 PUSH1 40 |0x40|0xa0|
-059 MLOAD    |0x80|0xa0|  从0x40中将0x80压入栈中
-060 DUP1     |0x80|0x80|0xa0|
-061 SWAP2    |0xa0|0x80|0x80|
-062 SUB      |0x20|0x80|
-063 SWAP1    |0x80|0x20|
-064 RETURN   ||
+<pre><code class="lang-js"><span class="hljs-number">045</span> JUMPDEST ||
+<span class="hljs-number">046</span> PUSH1 <span class="hljs-number">08</span> |<span class="hljs-number">0x08</span>|  the <span class="hljs-keyword">return</span> value <span class="hljs-keyword">of</span> test()
+<span class="hljs-number">048</span> PUSH1 <span class="hljs-number">40</span> |<span class="hljs-number">0x40</span>|<span class="hljs-number">0x08</span>|
+<span class="hljs-number">050</span> MLOAD    |<span class="hljs-number">0x80</span>|<span class="hljs-number">0x08</span>|  mload(<span class="hljs-number">0x40</span>) mloads the free memory pointer（内存中的值不会被清除或覆盖）
+<span class="hljs-number">051</span> SWAP1    |<span class="hljs-number">0x08</span>|<span class="hljs-number">0x80</span>|
+<span class="hljs-number">052</span> DUP2     |<span class="hljs-number">0x80</span>|<span class="hljs-number">0x08</span>|<span class="hljs-number">0x80</span>|（DUP2的意思是，复制栈上第<span class="hljs-number">2</span>个元素，即下标为<span class="hljs-number">1</span>的元素）
+<span class="hljs-number">053</span> MSTORE   |<span class="hljs-number">0x80</span>|       mstore(<span class="hljs-number">0x80</span>,<span class="hljs-number">0x08</span>) store the <span class="hljs-keyword">return</span> value <span class="hljs-keyword">in</span> memory[<span class="hljs-number">0x80</span>]，把<span class="hljs-number">08</span>放到<span class="hljs-number">0x80</span>中
+<span class="hljs-number">054</span> PUSH1 <span class="hljs-number">20</span> |<span class="hljs-number">0x20</span>|<span class="hljs-number">0x80</span>|
+<span class="hljs-number">056</span> ADD      |<span class="hljs-number">0xa0</span>|
+<span class="hljs-number">057</span> PUSH1 <span class="hljs-number">40</span> |<span class="hljs-number">0x40</span>|<span class="hljs-number">0xa0</span>|
+<span class="hljs-number">059</span> MLOAD    |<span class="hljs-number">0x80</span>|<span class="hljs-number">0xa0</span>|  从<span class="hljs-number">0x40</span>中将<span class="hljs-number">0x80</span>压入栈中
+<span class="hljs-number">060</span> DUP1     |<span class="hljs-number">0x80</span>|<span class="hljs-number">0x80</span>|<span class="hljs-number">0xa0</span>|
+<span class="hljs-number">061</span> SWAP2    |<span class="hljs-number">0xa0</span>|<span class="hljs-number">0x80</span>|<span class="hljs-number">0x80</span>|
+<span class="hljs-number">062</span> SUB      |<span class="hljs-number">0x20</span>|<span class="hljs-number">0x80</span>|
+<span class="hljs-number">063</span> SWAP1    |<span class="hljs-number">0x80</span>|<span class="hljs-number">0x20</span>|
+<span class="hljs-number">064</span> RETURN   ||
 </code></pre>
 <ul>
 <li>消耗gas为0</li>
@@ -3080,11 +3076,11 @@ contract Test {
 <li>如上分析，最终内存0x80中会存放08数值。</li>
 </ul>
 <h2 id="3-revert">3. Revert</h2>
-<pre><code class="lang-js">pragma solidity ^0.8.0;
+<pre><code class="lang-js">pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.0</span>;
 
 contract Test {
-    function test() external returns(uint) {
-        revert(&quot;eight&quot;);
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">test</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> <span class="hljs-title">returns</span>(<span class="hljs-params">uint</span>) </span>{
+        revert(<span class="hljs-string">&quot;eight&quot;</span>);
     }
 }
 </code></pre>
@@ -3094,7 +3090,7 @@ contract Test {
 072 MLOAD             |0x80|
 073 PUSH3 461bcd      |0x461bcd|0x80|
 077 PUSH1 e5          |0xe5|0x461bcd|0x80|
-079 SHL               |0x08c379a000...000|0x80|  binary shift 197 times (e5 in hex), YES a binary shift can modify hex numbers...
+079 SHL               |0x08c379a000...000|0x80|  binary <span class="hljs-built_in">shift</span> 197 <span class="hljs-built_in">times</span> (e5 <span class="hljs-keyword">in</span> hex), YES a binary <span class="hljs-built_in">shift</span> can modify hex numbers...
 080 DUP2              |0x80|0x08c379a000...000|0x80|
 081 MSTORE            |0x80|
 082 PUSH1 20          |0x20|0x80|
@@ -3148,12 +3144,12 @@ contract Test {
 <p>The compiler appends by default the IPFS hash of the metadata file to the end of the bytecode (for details, see below) of each contract, so that you can retrieve the file in an authenticated way without having to resort to a centralized data provider. The other available options are the Swarm hash and not appending the metadata hash to the bytecode. These can be configured via the <a href="https://docs.soliditylang.org/en/v0.8.13/using-the-compiler.html#compiler-api" target="_blank">Standard JSON Interface</a>.</p>
 </blockquote>
 <h2 id="5-selfdestruct">5. SelfDestruct</h2>
-<pre><code class="lang-js">// SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.0;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: UNLICENSED</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.0</span>;
 
 contract Test {
-    function test() external {
-        selfdestruct(payable(0x0000000000000000000000000000000000000000));
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">test</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> </span>{
+        selfdestruct(payable(<span class="hljs-number">0x0000000000000000000000000000000000000000</span>));
     }
 }
 </code></pre>
@@ -3202,7 +3198,7 @@ contract Test {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第4节:五种程序终止命令介绍","level":"1.17.4","depth":2,"next":{"title":"第5节:function执行流程","level":"1.17.5","depth":2,"path":"10_EVM反汇编/05_function执行流程.md","ref":"10_EVM反汇编/05_function执行流程.md","articles":[]},"previous":{"title":"第3节:各种类型是如何存储的","level":"1.17.3","depth":2,"path":"10_EVM反汇编/03_各种类型是如何存储的.md","ref":"10_EVM反汇编/03_各种类型是如何存储的.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"10_EVM反汇编/04_五种程序终止命令介绍.md","mtime":"2023-03-21T14:01:27.000Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第4节:五种程序终止命令介绍","level":"1.17.4","depth":2,"next":{"title":"第5节:function执行流程","level":"1.17.5","depth":2,"path":"10_EVM反汇编/05_function执行流程.md","ref":"10_EVM反汇编/05_function执行流程.md","articles":[]},"previous":{"title":"第3节:各种类型是如何存储的","level":"1.17.3","depth":2,"path":"10_EVM反汇编/03_各种类型是如何存储的.md","ref":"10_EVM反汇编/03_各种类型是如何存储的.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"cn","gitbook":"*"},"file":{"path":"10_EVM反汇编/04_五种程序终止命令介绍.md","mtime":"2023-03-21T14:01:27.000Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3285,14 +3281,6 @@ contract Test {
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

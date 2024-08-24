@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3032,42 +3028,42 @@
 </li>
 <li>当使用transfer或者send对合约进行转账时，fallback函数的gaslimit限定为2300 gas</li>
 </ol>
-<pre><code class="lang-js">// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
 
 contract Fallback {
     event Log(uint gas);
 
-    // Fallback function must be declared as external.
+    <span class="hljs-comment">// Fallback function must be declared as external.</span>
     fallback() external payable {
-        // send / transfer (forwards 2300 gas to this fallback function)
-        // call (forwards all of the gas)
+        <span class="hljs-comment">// send / transfer (forwards 2300 gas to this fallback function)</span>
+        <span class="hljs-comment">// call (forwards all of the gas)</span>
         emit Log(gasleft());
     }
 
-    // Helper function to check the balance of this contract
-    function getBalance() public view returns (uint) {
-        return address(this).balance;
+    <span class="hljs-comment">// Helper function to check the balance of this contract</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getBalance</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint</span>) </span>{
+        <span class="hljs-keyword">return</span> address(<span class="hljs-built_in">this</span>).balance;
     }
 }
 
 contract SendToFallback {
-    function transferToFallback(address payable _to) public payable {
-          // Log event:  &quot;gas&quot;: &quot;2254&quot;
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">transferToFallback</span>(<span class="hljs-params">address payable _to</span>) <span class="hljs-title">public</span> <span class="hljs-title">payable</span> </span>{
+          <span class="hljs-comment">// Log event:  &quot;gas&quot;: &quot;2254&quot;</span>
         _to.transfer(msg.value);
     }
 
-    function callFallback(address payable _to) public payable {
-        // Log event:  &quot;gas&quot;: &quot;6110&quot;
-        (bool sent, ) = _to.call{value: msg.value}(&quot;&quot;);
-        require(sent, &quot;Failed to send Ether&quot;);
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">callFallback</span>(<span class="hljs-params">address payable _to</span>) <span class="hljs-title">public</span> <span class="hljs-title">payable</span> </span>{
+        <span class="hljs-comment">// Log event:  &quot;gas&quot;: &quot;6110&quot;</span>
+        (bool sent, ) = _to.call{<span class="hljs-attr">value</span>: msg.value}(<span class="hljs-string">&quot;&quot;</span>);
+        <span class="hljs-built_in">require</span>(sent, <span class="hljs-string">&quot;Failed to send Ether&quot;</span>);
     }
 
-     function callNoExistFunc(address payable _to) public payable {
-        // call no exist funtion will call fallback by default 
-        // Log event:  &quot;gas&quot;: &quot;5146&quot;
-        (bool sent, ) = _to.call{value: msg.value}(abi.encodeWithSignature(&quot;noExistFunc()&quot;));
-        require(sent, &quot;Failed to call&quot;);
+     <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">callNoExistFunc</span>(<span class="hljs-params">address payable _to</span>) <span class="hljs-title">public</span> <span class="hljs-title">payable</span> </span>{
+        <span class="hljs-comment">// call no exist funtion will call fallback by default </span>
+        <span class="hljs-comment">// Log event:  &quot;gas&quot;: &quot;5146&quot;</span>
+        (bool sent, ) = _to.call{<span class="hljs-attr">value</span>: msg.value}(abi.encodeWithSignature(<span class="hljs-string">&quot;noExistFunc()&quot;</span>));
+        <span class="hljs-built_in">require</span>(sent, <span class="hljs-string">&quot;Failed to call&quot;</span>);
     }
 }
 </code></pre>
@@ -3098,7 +3094,7 @@ contract SendToFallback {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第10节:fallback","level":"1.9.10","depth":2,"next":{"title":"第11节:合约间调用","level":"1.9.11","depth":2,"path":"02_solidity进阶/11_合约间调用.md","ref":"02_solidity进阶/11_合约间调用.md","articles":[]},"previous":{"title":"第9节:delegatecall","level":"1.9.9","depth":2,"path":"02_solidity进阶/09_delegatecall.md","ref":"02_solidity进阶/09_delegatecall.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"02_solidity进阶/10_fallback.md","mtime":"2023-09-23T13:10:23.188Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第10节:fallback","level":"1.9.10","depth":2,"next":{"title":"第11节:合约间调用","level":"1.9.11","depth":2,"path":"02_solidity进阶/11_合约间调用.md","ref":"02_solidity进阶/11_合约间调用.md","articles":[]},"previous":{"title":"第9节:delegatecall","level":"1.9.9","depth":2,"path":"02_solidity进阶/09_delegatecall.md","ref":"02_solidity进阶/09_delegatecall.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"cn","gitbook":"*"},"file":{"path":"02_solidity进阶/10_fallback.md","mtime":"2023-09-23T13:10:23.188Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3181,14 +3177,6 @@ contract SendToFallback {
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

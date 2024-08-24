@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3025,162 +3021,162 @@
 <li>EIP-721: <a href="https://eips.ethereum.org/EIPS/eip-721" target="_blank">https://eips.ethereum.org/EIPS/eip-721</a></li>
 </ol>
 <h2 id="标准接口">标准接口</h2>
-<pre><code class="lang-js">// SPDX-License-Identifier: MIT
-// OpenZeppelin Contracts (last updated v4.6.0) (token/ERC721/IERC721.sol)
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
+<span class="hljs-comment">// OpenZeppelin Contracts (last updated v4.6.0) (token/ERC721/IERC721.sol)</span>
 
-pragma solidity ^0.8.0;
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.0</span>;
 
 interface IERC165 {
-    function supportsInterface(bytes4 interfaceID) external view returns (bool);
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">supportsInterface</span>(<span class="hljs-params">bytes4 interfaceID</span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bool</span>)</span>;
 }
 
 interface IERC721 is IERC165 {
-      // 3 EVENTS
-    event Transfer(address indexed from, address indexed to, uint256 indexed tokenId);
+      <span class="hljs-comment">// 3 EVENTS</span>
+    event Transfer(address indexed <span class="hljs-keyword">from</span>, address indexed to, uint256 indexed tokenId);
     event Approval(address indexed owner, address indexed approved, uint256 indexed tokenId);
     event ApprovalForAll(address indexed owner, address indexed operator, bool approved);
 
-      // 9 REQUIRED FUNCTIONS
-    function balanceOf(address owner) external view returns (uint256 balance);
-    function ownerOf(uint256 tokenId) external view returns (address owner);
-    function safeTransferFrom(
-        address from,
+      <span class="hljs-comment">// 9 REQUIRED FUNCTIONS</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">balanceOf</span>(<span class="hljs-params">address owner</span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint256 balance</span>)</span>;
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ownerOf</span>(<span class="hljs-params">uint256 tokenId</span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">address owner</span>)</span>;
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">safeTransferFrom</span>(<span class="hljs-params">
+        address <span class="hljs-keyword">from</span>,
         address to,
         uint256 tokenId,
         bytes calldata data
-    ) external;
+    </span>) <span class="hljs-title">external</span></span>;
 
-    function safeTransferFrom(
-        address from,
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">safeTransferFrom</span>(<span class="hljs-params">
+        address <span class="hljs-keyword">from</span>,
         address to,
         uint256 tokenId
-    ) external;
+    </span>) <span class="hljs-title">external</span></span>;
 
-      function transferFrom(
-        address from,
+      <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">transferFrom</span>(<span class="hljs-params">
+        address <span class="hljs-keyword">from</span>,
         address to,
         uint256 tokenId
-    ) external;
+    </span>) <span class="hljs-title">external</span></span>;
 
-    function approve(address to, uint256 tokenId) external;
-    function setApprovalForAll(address operator, bool _approved) external;
-    function getApproved(uint256 tokenId) external view returns (address operator);
-    function isApprovedForAll(address owner, address operator) external view returns (bool);
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">approve</span>(<span class="hljs-params">address to, uint256 tokenId</span>) <span class="hljs-title">external</span></span>;
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setApprovalForAll</span>(<span class="hljs-params">address operator, bool _approved</span>) <span class="hljs-title">external</span></span>;
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getApproved</span>(<span class="hljs-params">uint256 tokenId</span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">address operator</span>)</span>;
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isApprovedForAll</span>(<span class="hljs-params">address owner, address operator</span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bool</span>)</span>;
 
 
-      // 3 OPTIONAL FUNCTIONS
-    function name() external view returns (string _name);
-    function symbol() external view returns (string _symbol);
-    function tokenURI(uint256 _tokenId) external view returns (string);
+      <span class="hljs-comment">// 3 OPTIONAL FUNCTIONS</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">name</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">string _name</span>)</span>;
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">symbol</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">string _symbol</span>)</span>;
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">tokenURI</span>(<span class="hljs-params">uint256 _tokenId</span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">string</span>)</span>;
 }
 </code></pre>
 <h2 id="部署">部署</h2>
-<pre><code class="lang-js">// SPDX-License-Identifier: MIT
-pragma solidity 0.8.13;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
+pragma solidity <span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
 
-import &quot;@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol&quot;;
-/*
+<span class="hljs-keyword">import</span> <span class="hljs-string">&quot;@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol&quot;</span>;
+<span class="hljs-comment">/*
 1. 一个ERC721合约也是一个集合，可以有N多个token，但是每一个都是不一样的，有唯一的id
 2. 每个tokenid可以关联一个URI，一般是.json文件，里面有三个字段，进而变成一个独一无二的展示，所以是NFT，三个字段为：
     - description：nft描述
     - url：nft图片存储在ipfs上的哈希值
     - name：nft名字
-*/
+*/</span>
 
 contract SimpleCollectible is ERC721URIStorage {
     uint256 public tokenCounter;
-    constructor () public ERC721 (&quot;Dogie&quot;, &quot;DOG&quot;){
-        tokenCounter = 0;
+    <span class="hljs-title">constructor</span> (<span class="hljs-params"></span>) <span class="hljs-title">public</span> <span class="hljs-title">ERC721</span> (<span class="hljs-params"><span class="hljs-string">&quot;Dogie&quot;</span>, <span class="hljs-string">&quot;DOG&quot;</span></span>){
+        tokenCounter = <span class="hljs-number">0</span>;
     }
 
-    function createCollectible(string memory tokenURI) public returns (uint256) {
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">createCollectible</span>(<span class="hljs-params">string memory tokenURI</span>) <span class="hljs-title">public</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint256</span>) </span>{
         uint256 newItemId = tokenCounter;
         _safeMint(msg.sender, newItemId);
         _setTokenURI(newItemId, tokenURI);
-        tokenCounter = tokenCounter + 1;
-        return newItemId;
+        tokenCounter = tokenCounter + <span class="hljs-number">1</span>;
+        <span class="hljs-keyword">return</span> newItemId;
     }
 
-    function _baseURI() internal view override returns (string memory) {
-        return &quot;https://gateway.pinata.cloud/ipfs/&quot;;
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_baseURI</span>(<span class="hljs-params"></span>) <span class="hljs-title">internal</span> <span class="hljs-title">view</span> <span class="hljs-title">override</span> <span class="hljs-title">returns</span> (<span class="hljs-params">string memory</span>) </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;https://gateway.pinata.cloud/ipfs/&quot;</span>;
     }
 
-    //1. createCollectible(QmTfK2CeRBkRqSZHmnekdZYSBrsKLQ6U5Px8MWtGf1Eqta)
-    //2. tokenURI(0)
-    //3. 浏览器请求：https://gateway.pinata.cloud/ipfs/QmTfK2CeRBkRqSZHmnekdZYSBrsKLQ6U5Px8MWtGf1Eqta
+    <span class="hljs-comment">//1. createCollectible(QmTfK2CeRBkRqSZHmnekdZYSBrsKLQ6U5Px8MWtGf1Eqta)</span>
+    <span class="hljs-comment">//2. tokenURI(0)</span>
+    <span class="hljs-comment">//3. 浏览器请求：https://gateway.pinata.cloud/ipfs/QmTfK2CeRBkRqSZHmnekdZYSBrsKLQ6U5Px8MWtGf1Eqta</span>
 }
 </code></pre>
 <h2 id="接受者为合约时">接受者为合约时</h2>
 <p>to如果是合约地址，则to合约必须实现onERC721Received接口，因为有回调校验，如果to是EOA则不需要实现该接口。</p>
-<pre><code class="lang-js">// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.0</span>;
 
 interface IERC721Receiver {
-    function onERC721Received(
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">onERC721Received</span>(<span class="hljs-params">
         address operator,
-        address from,
+        address <span class="hljs-keyword">from</span>,
         uint256 tokenId,
         bytes calldata data
-    ) external returns (bytes4);
+    </span>) <span class="hljs-title">external</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bytes4</span>)</span>;
 }
 
 contract ERC721Holder is IERC721Receiver {
-    function onERC721Received(
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">onERC721Received</span>(<span class="hljs-params">
         address,
         address,
         uint256,
         bytes memory
-    ) public virtual override returns (bytes4) {
-        return this.onERC721Received.selector;
+    </span>) <span class="hljs-title">public</span> <span class="hljs-title">virtual</span> <span class="hljs-title">override</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bytes4</span>) </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.onERC721Received.selector;
     }
 }
 </code></pre>
 <h2 id="完整代码">完整代码</h2>
-<pre><code class="lang-js">// SPDX-License-Identifier: MIT
-pragma solidity 0.8.13;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
+pragma solidity <span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
 
-// 里面继承了IERC721Receiver.sol接口
-import &quot;@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol&quot;;
-/*
+<span class="hljs-comment">// 里面继承了IERC721Receiver.sol接口</span>
+<span class="hljs-keyword">import</span> <span class="hljs-string">&quot;@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol&quot;</span>;
+<span class="hljs-comment">/*
 1. 一个ERC721合约也是一个集合，可以有N多个token，但是每一个都是不一样的，有唯一的id
 2. 每个tokenid可以关联一个图片（URI），进而变成一个独一无二的展示，所以是NFT
-*/
+*/</span>
 
 contract SimpleCollectible is ERC721URIStorage {
     uint256 public tokenCounter;
-    constructor () public ERC721 (&quot;Dogie&quot;, &quot;DOG&quot;){
+    <span class="hljs-title">constructor</span> (<span class="hljs-params"></span>) <span class="hljs-title">public</span> <span class="hljs-title">ERC721</span> (<span class="hljs-params"><span class="hljs-string">&quot;Dogie&quot;</span>, <span class="hljs-string">&quot;DOG&quot;</span></span>){
     }
 
-    function createCollectible(string memory tokenURI) public returns (uint256) {
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">createCollectible</span>(<span class="hljs-params">string memory tokenURI</span>) <span class="hljs-title">public</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint256</span>) </span>{
         uint256 newItemId = tokenCounter;
         _safeMint(msg.sender, newItemId);
         _setTokenURI(newItemId, tokenURI);
-        tokenCounter = tokenCounter + 1;
-        return newItemId;
+        tokenCounter = tokenCounter + <span class="hljs-number">1</span>;
+        <span class="hljs-keyword">return</span> newItemId;
     }
 
-  // 注释掉
-    // function _baseURI() internal view override returns (string memory) {
-    //     return &quot;https://gateway.pinata.cloud/ipfs/&quot;;
-    // }
+  <span class="hljs-comment">// 注释掉</span>
+    <span class="hljs-comment">// function _baseURI() internal view override returns (string memory) {</span>
+    <span class="hljs-comment">//     return &quot;https://gateway.pinata.cloud/ipfs/&quot;;</span>
+    <span class="hljs-comment">// }</span>
 }
 
 contract ERC721Holder is IERC721Receiver {
-    function onERC721Received(
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">onERC721Received</span>(<span class="hljs-params">
         address,
         address,
         uint256,
         bytes memory
-    ) public virtual override returns (bytes4) {
-        return this.onERC721Received.selector;
+    </span>) <span class="hljs-title">public</span> <span class="hljs-title">virtual</span> <span class="hljs-title">override</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bytes4</span>) </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.onERC721Received.selector;
     }
 }
 </code></pre>
 <h2 id="测试">测试</h2>
-<pre><code class="lang-js">      // QmSiaLLeuBKPvqAQz2VQWJHUJMz6xjMgagePha4kPd38TB是json文件的hash
-    //1. createCollectible(QmSiaLLeuBKPvqAQz2VQWJHUJMz6xjMgagePha4kPd38TB)
-    //2. tokenURI(0)
-    //3. 浏览器请求：https://gateway.pinata.cloud/ipfs/QmSiaLLeuBKPvqAQz2VQWJHUJMz6xjMgagePha4kPd38TB
+<pre><code class="lang-js">      <span class="hljs-comment">// QmSiaLLeuBKPvqAQz2VQWJHUJMz6xjMgagePha4kPd38TB是json文件的hash</span>
+    <span class="hljs-comment">//1. createCollectible(QmSiaLLeuBKPvqAQz2VQWJHUJMz6xjMgagePha4kPd38TB)</span>
+    <span class="hljs-comment">//2. tokenURI(0)</span>
+    <span class="hljs-comment">//3. 浏览器请求：https://gateway.pinata.cloud/ipfs/QmSiaLLeuBKPvqAQz2VQWJHUJMz6xjMgagePha4kPd38TB</span>
 </code></pre>
 <p>其中的hash值为这个nft图片的描述文件的哈希：metadata.json，</p>
 <ol>
@@ -3188,9 +3184,9 @@ contract ERC721Holder is IERC721Receiver {
 <li>图片的哈希为：QmTfK2CeRBkRqSZHmnekdZYSBrsKLQ6U5Px8MWtGf1Eqta</li>
 </ol>
 <pre><code class="lang-sh">{
-  &quot;description&quot;: &quot;this is a nft1155 metadata json desc&quot;,
-  &quot;image&quot;: &quot;https://gateway.pinata.cloud/ipfs/QmTfK2CeRBkRqSZHmnekdZYSBrsKLQ6U5Px8MWtGf1Eqta&quot;,
-  &quot;name&quot;: &quot;duke nft&quot;
+  <span class="hljs-string">&quot;description&quot;</span>: <span class="hljs-string">&quot;this is a nft1155 metadata json desc&quot;</span>,
+  <span class="hljs-string">&quot;image&quot;</span>: <span class="hljs-string">&quot;https://gateway.pinata.cloud/ipfs/QmTfK2CeRBkRqSZHmnekdZYSBrsKLQ6U5Px8MWtGf1Eqta&quot;</span>,
+  <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;duke nft&quot;</span>
 }
 </code></pre>
 <h2 id="总结">总结</h2>
@@ -3202,20 +3198,20 @@ contract ERC721Holder is IERC721Receiver {
 <ul>
 <li>ERC721</li>
 </ul>
-<pre><code class="lang-js">// 对单个id进行approve    
-function approve(address to, uint256 tokenId) public virtual override;
+<pre><code class="lang-js"><span class="hljs-comment">// 对单个id进行approve    </span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">approve</span>(<span class="hljs-params">address to, uint256 tokenId</span>) <span class="hljs-title">public</span> <span class="hljs-title">virtual</span> <span class="hljs-title">override</span></span>;
 
-// 对某个地址授权所有的token
-function setApprovalForAll(address operator, bool approved) public virtual override;
+<span class="hljs-comment">// 对某个地址授权所有的token</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setApprovalForAll</span>(<span class="hljs-params">address operator, bool approved</span>) <span class="hljs-title">public</span> <span class="hljs-title">virtual</span> <span class="hljs-title">override</span></span>;
 </code></pre>
 <ul>
 <li>ERC1155</li>
 </ul>
-<pre><code class="lang-js">// 每个对单个id的授权！！
-// what -》不支持！
+<pre><code class="lang-js"><span class="hljs-comment">// 每个对单个id的授权！！</span>
+<span class="hljs-comment">// what -》不支持！</span>
 
-// 对某个地址授权所有的token
-function setApprovalForAll(address operator, bool approved) external;
+<span class="hljs-comment">// 对某个地址授权所有的token</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setApprovalForAll</span>(<span class="hljs-params">address operator, bool approved</span>) <span class="hljs-title">external</span></span>;
 </code></pre>
 <h2 id="erc721a">ERC721A</h2>
 <p><a href="https://github.com/chiru-labs/ERC721A" target="_blank">ERC721A</a>是一套实现了IERC721接口的合约，它的优势是在批量mint时，可以节约gas，知名NFT项目<a href="https://etherscan.io/token/0xed5af388653567af2f388e6224dc7c4b3241c544#code" target="_blank">Azuki</a>就是由这个合约开发的</p>
@@ -3247,7 +3243,7 @@ function setApprovalForAll(address operator, bool approved) external;
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第2节:ERC721","level":"1.10.2","depth":2,"next":{"title":"第3节:ERC1155","level":"1.10.3","depth":2,"path":"03_EIP协议/03_ERC1155.md","ref":"03_EIP协议/03_ERC1155.md","articles":[]},"previous":{"title":"第1节:ERC20","level":"1.10.1","depth":2,"path":"03_EIP协议/01_ERC20.md","ref":"03_EIP协议/01_ERC20.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"03_EIP协议/02_ERC721.md","mtime":"2023-04-04T11:06:04.000Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第2节:ERC721","level":"1.10.2","depth":2,"next":{"title":"第3节:ERC1155","level":"1.10.3","depth":2,"path":"03_EIP协议/03_ERC1155.md","ref":"03_EIP协议/03_ERC1155.md","articles":[]},"previous":{"title":"第1节:ERC20","level":"1.10.1","depth":2,"path":"03_EIP协议/01_ERC20.md","ref":"03_EIP协议/01_ERC20.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"cn","gitbook":"*"},"file":{"path":"03_EIP协议/02_ERC721.md","mtime":"2023-04-04T11:06:04.000Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3330,14 +3326,6 @@ function setApprovalForAll(address operator, bool approved) external;
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

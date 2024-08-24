@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3023,22 +3019,22 @@
 <p>职场进阶: <a href="https://dukeweb3.com" target="_blank">https://dukeweb3.com</a></p>
 </blockquote>
 <p>try/catch仅可以捕捉在调用external函数或创建合约中抛出的异常信息。</p>
-<pre><code class="lang-js">// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
 
-// External contract used for try / catch examples
+<span class="hljs-comment">// External contract used for try / catch examples</span>
 contract Foo {
     address public owner;
 
-    constructor(address _owner) {
-        require(_owner != address(0), &quot;invalid address&quot;);
-        assert(_owner != 0x0000000000000000000000000000000000000001);
+    <span class="hljs-function"><span class="hljs-title">constructor</span>(<span class="hljs-params">address _owner</span>)</span> {
+        <span class="hljs-built_in">require</span>(_owner != address(<span class="hljs-number">0</span>), <span class="hljs-string">&quot;invalid address&quot;</span>);
+        assert(_owner != <span class="hljs-number">0x0000000000000000000000000000000000000001</span>);
         owner = _owner;
     }
 
-    function myFunc(uint x) public pure returns (string memory) {
-        require(x != 0, &quot;require failed&quot;);
-        return &quot;my func was called&quot;;
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">myFunc</span>(<span class="hljs-params">uint x</span>) <span class="hljs-title">public</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-params">string memory</span>) </span>{
+        <span class="hljs-built_in">require</span>(x != <span class="hljs-number">0</span>, <span class="hljs-string">&quot;require failed&quot;</span>);
+        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;my func was called&quot;</span>;
     }
 }
 
@@ -3048,35 +3044,35 @@ contract Bar {
 
     Foo public foo;
 
-    constructor() {
-        // This Foo contract is used for example of try catch with external call
-        foo = new Foo(msg.sender);
+    <span class="hljs-function"><span class="hljs-title">constructor</span>(<span class="hljs-params"></span>)</span> {
+        <span class="hljs-comment">// This Foo contract is used for example of try catch with external call</span>
+        foo = <span class="hljs-keyword">new</span> Foo(msg.sender);
     }
 
-    // Example of try / catch with external call
-    // tryCatchExternalCall(0) =&gt; Log(&quot;external call failed&quot;)
-    // tryCatchExternalCall(1) =&gt; Log(&quot;my func was called&quot;)
-    function tryCatchExternalCall(uint _i) public {
-        try foo.myFunc(_i) returns (string memory result) {
+    <span class="hljs-comment">// Example of try / catch with external call</span>
+    <span class="hljs-comment">// tryCatchExternalCall(0) =&gt; Log(&quot;external call failed&quot;)</span>
+    <span class="hljs-comment">// tryCatchExternalCall(1) =&gt; Log(&quot;my func was called&quot;)</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">tryCatchExternalCall</span>(<span class="hljs-params">uint _i</span>) <span class="hljs-title">public</span> </span>{
+        <span class="hljs-keyword">try</span> foo.myFunc(_i) returns (string memory result) {
             emit Log(result);
-        } catch {
-            emit Log(&quot;external call failed&quot;);
+        } <span class="hljs-keyword">catch</span> {
+            emit Log(<span class="hljs-string">&quot;external call failed&quot;</span>);
         }
     }
 
-    // Example of try / catch with contract creation
-    // tryCatchNewContract(0x0000000000000000000000000000000000000000) =&gt; Log(&quot;invalid address&quot;)
-    // tryCatchNewContract(0x0000000000000000000000000000000000000001) =&gt; LogBytes(&quot;&quot;)
-    // tryCatchNewContract(0x0000000000000000000000000000000000000002) =&gt; Log(&quot;Foo created&quot;)
-    function tryCatchNewContract(address _owner) public {
-        try new Foo(_owner) returns (Foo foo) {
-            // you can use variable foo here
-            emit Log(&quot;Foo created&quot;);
-        } catch Error(string memory reason) {
-            // catch failing revert() and require()
+    <span class="hljs-comment">// Example of try / catch with contract creation</span>
+    <span class="hljs-comment">// tryCatchNewContract(0x0000000000000000000000000000000000000000) =&gt; Log(&quot;invalid address&quot;)</span>
+    <span class="hljs-comment">// tryCatchNewContract(0x0000000000000000000000000000000000000001) =&gt; LogBytes(&quot;&quot;)</span>
+    <span class="hljs-comment">// tryCatchNewContract(0x0000000000000000000000000000000000000002) =&gt; Log(&quot;Foo created&quot;)</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">tryCatchNewContract</span>(<span class="hljs-params">address _owner</span>) <span class="hljs-title">public</span> </span>{
+        <span class="hljs-keyword">try</span> <span class="hljs-keyword">new</span> Foo(_owner) returns (Foo foo) {
+            <span class="hljs-comment">// you can use variable foo here</span>
+            emit Log(<span class="hljs-string">&quot;Foo created&quot;</span>);
+        } <span class="hljs-keyword">catch</span> <span class="hljs-function"><span class="hljs-title">Error</span>(<span class="hljs-params">string memory reason</span>)</span> {
+            <span class="hljs-comment">// catch failing revert() and require()</span>
             emit Log(reason);
-        } catch (bytes memory reason) {
-            // catch failing assert()
+        } <span class="hljs-keyword">catch</span> (bytes memory reason) {
+            <span class="hljs-comment">// catch failing assert()</span>
             emit LogBytes(reason);
         }
     }
@@ -3110,7 +3106,7 @@ contract Bar {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第14节:try_catch","level":"1.9.14","depth":2,"next":{"title":"第15节:import","level":"1.9.15","depth":2,"path":"02_solidity进阶/15_import.md","ref":"02_solidity进阶/15_import.md","articles":[]},"previous":{"title":"第13节:delete","level":"1.9.13","depth":2,"path":"02_solidity进阶/13_delete.md","ref":"02_solidity进阶/13_delete.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"02_solidity进阶/14_try_catch.md","mtime":"2023-09-23T13:10:39.226Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第14节:try_catch","level":"1.9.14","depth":2,"next":{"title":"第15节:import","level":"1.9.15","depth":2,"path":"02_solidity进阶/15_import.md","ref":"02_solidity进阶/15_import.md","articles":[]},"previous":{"title":"第13节:delete","level":"1.9.13","depth":2,"path":"02_solidity进阶/13_delete.md","ref":"02_solidity进阶/13_delete.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"cn","gitbook":"*"},"file":{"path":"02_solidity进阶/14_try_catch.md","mtime":"2023-09-23T13:10:39.226Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3193,14 +3189,6 @@ contract Bar {
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

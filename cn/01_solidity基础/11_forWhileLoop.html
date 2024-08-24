@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3026,26 +3022,26 @@
 <li>solidity支持for, while, do while循环；</li>
 <li>尽量不要使用没有边界的循环，因为会导致达到gas limit，进而导致交易执行失败，因此很少使用while和do while</li>
 </ol>
-<pre><code class="lang-js">// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
 
 contract Loop {
-    function loop() public {
-        // for loop
-        for (uint i = 0; i &lt; 10; i++) {
-            if (i == 3) {
-                // Skip to next iteration with continue
-                continue;
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">loop</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> </span>{
+        <span class="hljs-comment">// for loop</span>
+        <span class="hljs-keyword">for</span> (uint i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++) {
+            <span class="hljs-keyword">if</span> (i == <span class="hljs-number">3</span>) {
+                <span class="hljs-comment">// Skip to next iteration with continue</span>
+                <span class="hljs-keyword">continue</span>;
             }
-            if (i == 5) {
-                // Exit loop with break
-                break;
+            <span class="hljs-keyword">if</span> (i == <span class="hljs-number">5</span>) {
+                <span class="hljs-comment">// Exit loop with break</span>
+                <span class="hljs-keyword">break</span>;
             }
         }
 
-        // while loop
+        <span class="hljs-comment">// while loop</span>
         uint j;
-        while (j &lt; 10) {
+        <span class="hljs-keyword">while</span> (j &lt; <span class="hljs-number">10</span>) {
             j++;
         }
     }
@@ -3078,7 +3074,7 @@ contract Loop {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第11节:forWhileLoop","level":"1.8.11","depth":2,"next":{"title":"第12节:bytes和string","level":"1.8.12","depth":2,"path":"01_solidity基础/12_bytes和string.md","ref":"01_solidity基础/12_bytes和string.md","articles":[]},"previous":{"title":"第10节:ifElse","level":"1.8.10","depth":2,"path":"01_solidity基础/10_ifElse.md","ref":"01_solidity基础/10_ifElse.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"01_solidity基础/11_forWhileLoop.md","mtime":"2023-09-23T13:07:36.192Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第11节:forWhileLoop","level":"1.8.11","depth":2,"next":{"title":"第12节:bytes和string","level":"1.8.12","depth":2,"path":"01_solidity基础/12_bytes和string.md","ref":"01_solidity基础/12_bytes和string.md","articles":[]},"previous":{"title":"第10节:ifElse","level":"1.8.10","depth":2,"path":"01_solidity基础/10_ifElse.md","ref":"01_solidity基础/10_ifElse.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"cn","gitbook":"*"},"file":{"path":"01_solidity基础/11_forWhileLoop.md","mtime":"2023-09-23T13:07:36.192Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3161,14 +3157,6 @@ contract Loop {
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

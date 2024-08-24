@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3068,50 +3064,50 @@
 <p><img src="assets/image-20221009070445434.png" alt="image-20221009070445434"></p>
 <p>ERC20协议是标准的以太坊Token协议，它也是一个合约代码，只要在该合约内部实现了特定的6个方法，就会被系统判定为代币合约，<strong>具体总结为：6个必要接口，2个必要事件，3个可选接口</strong>，详情如下：</p>
 <p>6个必要接口：</p>
-<pre><code class="lang-JavaScript">// FHT Token: 总发行量：1000w，decimal：18
+<pre><code class="lang-JavaScript"><span class="hljs-comment">// FHT Token: 总发行量：1000w，decimal：18</span>
 
-// 总发行量：10000000 * 10**18
-function totalSupply() public view returns (uint256)
+<span class="hljs-comment">// 总发行量：10000000 * 10**18</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">totalSupply</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint256</span>)
 
-// 内部维护一个mapping, 返回余额
-function balanceOf(address _owner) public view returns (uint256 balance)
+// 内部维护一个<span class="hljs-title">mapping</span>, 返回余额
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">balanceOf</span>(<span class="hljs-params">address _owner</span>) <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint256 balance</span>)
 
-// token持有人调用，进行转账（写操作，花钱）
+// <span class="hljs-title">token</span>持有人调用，进行转账（写操作，花钱）
 // 张三 -&gt; 李四， 100 * 10**18
-function transfer(address _to, uint256 _value) public returns (bool success)
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">transfer</span>(<span class="hljs-params">address _to, uint256 _value</span>) <span class="hljs-title">public</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bool success</span>)
 
 // 张三，李四，王五
-// 张三是token持有人, owner， 1w
-function approve(address _spender, uint256 _value) public returns (bool success)
-// 张三调用approve的时候，会在内部修改allownce，mapping
-// allownace[张三][李四] += 1w
+// 张三是<span class="hljs-title">token</span>持有人, <span class="hljs-title">owner</span>， 1<span class="hljs-title">w</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">approve</span>(<span class="hljs-params">address _spender, uint256 _value</span>) <span class="hljs-title">public</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bool success</span>)
+// 张三调用<span class="hljs-title">approve</span>的时候，会在内部修改<span class="hljs-title">allownce</span>，<span class="hljs-title">mapping</span>
+// <span class="hljs-title">allownace</span>[张三][李四] += 1<span class="hljs-title">w</span>
 
-function allowance(address _owner, address _spender) public view returns (uint256 remaining)
-// 李四是被授权人, spender
-// 王五接受token的人, receiver
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">allowance</span>(<span class="hljs-params">address _owner, address _spender</span>) <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint256 remaining</span>)
+// 李四是被授权人, <span class="hljs-title">spender</span>
+// 王五接受<span class="hljs-title">token</span>的人, <span class="hljs-title">receiver</span>
 
-// 李四是张三的授权人，李四调用transferFrom来给王五转账
-function transferFrom(address _from, address _to, uint256 _value) public returns (bool success)
-</code></pre>
+// 李四是张三的授权人，李四调用<span class="hljs-title">transferFrom</span>来给王五转账
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">transferFrom</span>(<span class="hljs-params">address _from, address _to, uint256 _value</span>) <span class="hljs-title">public</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bool success</span>)
+</span></span></span></span></span></span></code></pre>
 <p>2个必要事件</p>
-<pre><code class="lang-js">// 在tranfer 和transferFrom内部使用
+<pre><code class="lang-js"><span class="hljs-comment">// 在tranfer 和transferFrom内部使用</span>
 event Transfer(address indexed _from, address indexed _to, uint256 _value)
 
-// 在approve方法中使用
+<span class="hljs-comment">// 在approve方法中使用</span>
 event Approval(address indexed _owner, address indexed _spender, uint256 _value)
 </code></pre>
 <p>3个可选接口</p>
-<pre><code class="lang-js">// FHT Token
-function name() public view returns (string)
+<pre><code class="lang-js"><span class="hljs-comment">// FHT Token</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">name</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">string</span>)
 
-// FHT
-function symbol() public view returns (string) 
+// <span class="hljs-title">FHT</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">symbol</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">string</span>) 
 
-// USDT:  6, 10000000 * 10**6
-// WBTC:  8, 10000000 * 10**8
-// 其他Token：18, 10000000 * 10**18
-function decimals() public view returns (uint8)
-</code></pre>
+// <span class="hljs-title">USDT</span>:  6, 10000000 * 10**6
+// <span class="hljs-title">WBTC</span>:  8, 10000000 * 10**8
+// 其他<span class="hljs-title">Token</span>：18, 10000000 * 10**18
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">decimals</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint8</span>)
+</span></span></span></code></pre>
 <p>其中，approve逻辑是我们最常使用的，与之配合的方法是transferFrom，其关系如下图：</p>
 <p><img src="https://duke-typora.s3.ap-southeast-1.amazonaws.com/uPic/approve%E6%B5%81%E7%A8%8B%E5%9B%BE.jpg" alt="approve流程图"></p>
 <p>其中关系为：</p>
@@ -3131,18 +3127,18 @@ function decimals() public view returns (uint8)
 <li>发行量Total Amounts：10,000,000</li>
 </ul>
 <p>在我们的项目中，创建tokens/WorldCupToken.sol，填写内容如下：</p>
-<pre><code class="lang-JavaScript">pragma solidity ^0.8.10;
+<pre><code class="lang-JavaScript">pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.10</span>;
 
-import &quot;@openzeppelin/contracts/token/ERC20/ERC20.sol&quot;;
+<span class="hljs-keyword">import</span> <span class="hljs-string">&quot;@openzeppelin/contracts/token/ERC20/ERC20.sol&quot;</span>;
 
-//合约继承，使用 is
+<span class="hljs-comment">//合约继承，使用 is</span>
 contract FHTToken is ERC20 {
-    // 2. 一次性mint出来，不允许后续mint
-    constructor(
+    <span class="hljs-comment">// 2. 一次性mint出来，不允许后续mint</span>
+    <span class="hljs-title">constructor</span>(<span class="hljs-params">
         string memory name_,
         string memory symbol_,
         uint256 totalSupply_
-    ) ERC20(name_, symbol_) {
+    </span>) <span class="hljs-title">ERC20</span>(<span class="hljs-params">name_, symbol_</span>) {
         _mint(msg.sender, totalSupply_);
     }
 }
@@ -3153,37 +3149,37 @@ contract FHTToken is ERC20 {
 <p>下图为openzeppeline/cntracts包里面支持的合约，涉及到：标准合约，准入控制，代理合约，工具合约等，后续我们会专门讲解里面的功能。</p>
 <p><img src="assets/image-20221008155705857.png" alt="image-20221008155705857"></p>
 <p>编写部署脚本：</p>
-<pre><code class="lang-js">import { ethers } from &quot;hardhat&quot;;
+<pre><code class="lang-js"><span class="hljs-keyword">import</span> { ethers } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;hardhat&quot;</span>;
 
-async function main() {
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">main</span>(<span class="hljs-params"></span>) </span>{
 
-  const totalSupply = ethers.utils.parseUnits(&apos;10000000&apos;, 18)
-  console.log(&apos;totalSupply:&apos;, totalSupply);
+  <span class="hljs-keyword">const</span> totalSupply = ethers.utils.parseUnits(<span class="hljs-string">&apos;10000000&apos;</span>, <span class="hljs-number">18</span>)
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;totalSupply:&apos;</span>, totalSupply);
 
-  const FHTToken = await ethers.getContractFactory(&apos;WorldCupToken&apos;);
-  const fht = await FHTToken.deploy(&quot;World Cup Token&quot;, &quot;WCT&quot;, totalSupply);
+  <span class="hljs-keyword">const</span> FHTToken = <span class="hljs-keyword">await</span> ethers.getContractFactory(<span class="hljs-string">&apos;WorldCupToken&apos;</span>);
+  <span class="hljs-keyword">const</span> fht = <span class="hljs-keyword">await</span> FHTToken.deploy(<span class="hljs-string">&quot;World Cup Token&quot;</span>, <span class="hljs-string">&quot;WCT&quot;</span>, totalSupply);
 
-  await fht.deployed();
+  <span class="hljs-keyword">await</span> fht.deployed();
 
-  console.log(`new World Cup Token deployed to ${fht.address}`);
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`new World Cup Token deployed to <span class="hljs-subst">${fht.address}</span>`</span>);
 }
 
-// We recommend this pattern to be able to use async/await everywhere
-// and properly handle errors.
-main().catch((error) =&gt; {
-  console.error(error);
-  process.exitCode = 1;
+<span class="hljs-comment">// We recommend this pattern to be able to use async/await everywhere</span>
+<span class="hljs-comment">// and properly handle errors.</span>
+main().catch(<span class="hljs-function">(<span class="hljs-params">error</span>) =&gt;</span> {
+  <span class="hljs-built_in">console</span>.error(error);
+  process.exitCode = <span class="hljs-number">1</span>;
 });
 </code></pre>
 <p>编译部署合约：</p>
-<pre><code class="lang-sh"># new World Cup Token deployed to 0xB500D338D6cd608D867015295483E38758CC7711
+<pre><code class="lang-sh"><span class="hljs-comment"># new World Cup Token deployed to 0xB500D338D6cd608D867015295483E38758CC7711</span>
 npx hardhat run scripts/deployMockERc20.ts --network goerli
 
-# 常规verify方法
-#npx hardhat verify 0x27716a01Ef4eBd9001dE035A89d86593588D92BC &quot;World Cup Token&quot; &quot;WCT&quot; &quot;10000000000000000000000000&quot; --network goerli
+<span class="hljs-comment"># 常规verify方法</span>
+<span class="hljs-comment">#npx hardhat verify 0x27716a01Ef4eBd9001dE035A89d86593588D92BC &quot;World Cup Token&quot; &quot;WCT&quot; &quot;10000000000000000000000000&quot; --network goerli</span>
 </code></pre>
 <p>当有多个代码相同时，verify方法：</p>
-<pre><code class="lang-sh"> npx hardhat verify --contract contracts/tokens/WorldCupToken.sol:WorldCupToken 0xB500D338D6cd608D867015295483E38758CC7711 &quot;World Cup Token&quot; &quot;WCT&quot; &quot;10000000000000000000000000&quot; --network goerli
+<pre><code class="lang-sh"> npx hardhat verify --contract contracts/tokens/WorldCupToken.sol:WorldCupToken 0xB500D338D6cd608D867015295483E38758CC7711 <span class="hljs-string">&quot;World Cup Token&quot;</span> <span class="hljs-string">&quot;WCT&quot;</span> <span class="hljs-string">&quot;10000000000000000000000000&quot;</span> --network goerli
 </code></pre>
 <p>在浏览器查看，效果如下：</p>
 <p><img src="assets/image-20221008163326175.png" alt="image-20221008163326175"></p>
@@ -3228,7 +3224,7 @@ npx hardhat run scripts/deployMockERc20.ts --network goerli
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第3节:世界杯竞猜_ERC20","level":"1.15.7","depth":2,"next":{"title":"第4节:世界杯竞猜_subgraph","level":"1.15.8","depth":2,"path":"08_项目实战-世界杯竞猜/04_世界杯竞猜_subgraph.md","ref":"08_项目实战-世界杯竞猜/04_世界杯竞猜_subgraph.md","articles":[]},"previous":{"title":"第2节:世界杯竞猜_hardhat","level":"1.15.6","depth":2,"path":"08_项目实战-世界杯竞猜/02_世界杯竞猜_hardhat.md","ref":"08_项目实战-世界杯竞猜/02_世界杯竞猜_hardhat.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"08_项目实战-世界杯竞猜/03_世界杯竞猜_ERC20.md","mtime":"2023-09-23T13:48:35.110Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第3节:世界杯竞猜_ERC20","level":"1.15.7","depth":2,"next":{"title":"第4节:世界杯竞猜_subgraph","level":"1.15.8","depth":2,"path":"08_项目实战-世界杯竞猜/04_世界杯竞猜_subgraph.md","ref":"08_项目实战-世界杯竞猜/04_世界杯竞猜_subgraph.md","articles":[]},"previous":{"title":"第2节:世界杯竞猜_hardhat","level":"1.15.6","depth":2,"path":"08_项目实战-世界杯竞猜/02_世界杯竞猜_hardhat.md","ref":"08_项目实战-世界杯竞猜/02_世界杯竞猜_hardhat.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"cn","gitbook":"*"},"file":{"path":"08_项目实战-世界杯竞猜/03_世界杯竞猜_ERC20.md","mtime":"2023-09-23T13:48:35.110Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3311,14 +3307,6 @@ npx hardhat run scripts/deployMockERc20.ts --network goerli
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

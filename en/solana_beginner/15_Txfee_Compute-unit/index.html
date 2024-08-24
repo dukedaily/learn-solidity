@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -480,58 +476,58 @@
 <pre><code class="lang-rust">anchor new day_15
 </code></pre>
 <p>We can see this in action with this little example, start with an empty solana program like so:</p>
-<pre><code class="lang-rust">use anchor_lang::prelude::*;
+<pre><code class="lang-rust"><span class="hljs-keyword">use</span> anchor_lang::prelude::*;
 
-declare_id!(&quot;7UsJTs46HiU3QzaHaH2eYWURXSYUZkUbWyt5m9kYyiMj&quot;);
+declare_id!(<span class="hljs-string">&quot;7UsJTs46HiU3QzaHaH2eYWURXSYUZkUbWyt5m9kYyiMj&quot;</span>);
 
-#[program]
-pub mod day_15 {
-    use super::*;
+<span class="hljs-meta">#[program]</span>
+<span class="hljs-keyword">pub</span> <span class="hljs-keyword">mod</span> day_15 {
+    <span class="hljs-keyword">use</span> super::*;
 
-    pub fn initialize(ctx: Context<initialize>) -&gt; Result<()> {
-        Ok(())
+    <span class="hljs-keyword">pub</span> <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">initialize</span></span>(ctx: Context&lt;Initialize&gt;) -&gt; <span class="hljs-built_in">Result</span>&lt;()&gt; {
+        <span class="hljs-literal">Ok</span>(())
     }
 }
 
-#[derive(Accounts)]
-pub struct Initialize {}
-</()></initialize></code></pre>
+<span class="hljs-meta">#[derive(Accounts)]</span>
+<span class="hljs-keyword">pub</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Initialize</span></span> {}
+</code></pre>
 <p>update the testcase to:</p>
-<pre><code class="lang-ts">import * as anchor from &quot;@coral-xyz/anchor&quot;;
-import { Program } from &quot;@coral-xyz/anchor&quot;;
-import { Day15 } from &apos;../target/types/day_15&apos;;
+<pre><code class="lang-ts"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> anchor <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@coral-xyz/anchor&quot;</span>;
+<span class="hljs-keyword">import</span> { Program } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@coral-xyz/anchor&quot;</span>;
+<span class="hljs-keyword">import</span> { Day15 } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;../target/types/day_15&apos;</span>;
 
-describe(&quot;day_15&quot;, () =&gt; {
+describe(<span class="hljs-string">&quot;day_15&quot;</span>, <span class="hljs-function">() =&gt;</span> {
   anchor.setProvider(anchor.AnchorProvider.env());
-  const program = anchor.workspace.Day15 as Program<day15>;
+  <span class="hljs-keyword">const</span> program = anchor.workspace.Day15 <span class="hljs-keyword">as</span> Program&lt;Day15&gt;;
 
-  // replace this with your own address by run cmd: `solana address`
-  const localAddress = &apos;HjU6xSZme7ER6Qhk841nczwXijBZ9e1GWLqdPxW6gS9w&apos;
-  const defaultKeypair = new anchor.web3.PublicKey(localAddress)
+  <span class="hljs-comment">// replace this with your own address by run cmd: `solana address`</span>
+  <span class="hljs-keyword">const</span> localAddress = <span class="hljs-string">&apos;HjU6xSZme7ER6Qhk841nczwXijBZ9e1GWLqdPxW6gS9w&apos;</span>
+  <span class="hljs-keyword">const</span> defaultKeypair = <span class="hljs-keyword">new</span> anchor.web3.PublicKey(localAddress)
 
-  it(&quot;should get compoute units!&quot;, async () =&gt; {
-    let bal1 = await program.provider.connection.getBalance(defaultKeypair)
-    console.log(&apos;before: &apos;, bal1);
+  it(<span class="hljs-string">&quot;should get compoute units!&quot;</span>, <span class="hljs-keyword">async</span> () =&gt; {
+    <span class="hljs-keyword">let</span> bal1 = <span class="hljs-keyword">await</span> program.provider.connection.getBalance(defaultKeypair)
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;before: &apos;</span>, bal1);
 
-    let tx = await program.methods.initialize().rpc();
-    let bal2 = await program.provider.connection.getBalance(defaultKeypair)
-    console.log(&apos;after: &apos;, bal2);
-    console.log(&apos;diff: &apos;, bal1 - bal2);
+    <span class="hljs-keyword">let</span> tx = <span class="hljs-keyword">await</span> program.methods.initialize().rpc();
+    <span class="hljs-keyword">let</span> bal2 = <span class="hljs-keyword">await</span> program.provider.connection.getBalance(defaultKeypair)
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;after: &apos;</span>, bal2);
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;diff: &apos;</span>, bal1 - bal2);
   })
 })
-</day15></code></pre>
+</code></pre>
 <p>result:</p>
 <p><img src="assets/image-20240820044717388.png" alt="image-20240820044717388"></p>
 <p>the <code>solana logs</code> shows only 221 CUs are consumed, yet the diff is 5056 CU by comparsion the balance before and after.</p>
 <p>Let&apos;s add some complexity to our program and see what happens:</p>
-<pre><code class="lang-rust">    pub fn more_code(ctx: Context<initialize>) -&gt; Result<()> {
-        let mut v = Vec::new();
-        for i in 0..200 {
+<pre><code class="lang-rust">    <span class="hljs-keyword">pub</span> <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">more_code</span></span>(ctx: Context&lt;Initialize&gt;) -&gt; <span class="hljs-built_in">Result</span>&lt;()&gt; {
+        <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut</span> v = <span class="hljs-built_in">Vec</span>::new();
+        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">0</span>..<span class="hljs-number">200</span> {
             v.push(i);
         }
-        Ok(())
+        <span class="hljs-literal">Ok</span>(())
     }
-</()></initialize></code></pre>
+</code></pre>
 <p>and run again:</p>
 <p><img src="assets/image-20240820045624829.png" alt="image-20240820045624829"></p>
 <p>We can see that this costs more compute units, almost 20 times our first example, but this doesn&apos;t not affect our transaction fees. This is expected and shows that truly, compute units do not affect the tx fees paid by users.</p>
@@ -546,56 +542,56 @@ describe(&quot;day_15&quot;, () =&gt; {
 <h2 id="smaller-integers-save-cu">Smaller integers save CU</h2>
 <p>The larger the value types used, the larger the CU consumed, so it&apos;s best to use smaller types where applicable.</p>
 <p>add this on top of <code>day_15/src/lib.rs</code>:</p>
-<pre><code class="lang-sh">use solana_program::log::sol_log_compute_units;
+<pre><code class="lang-sh">use solana_program::<span class="hljs-built_in">log</span>::sol_log_compute_units;
 </code></pre>
 <p>add this in <code>day_15/src/Cargo.toml</code>:</p>
-<pre><code class="lang-toml">[dependencies]
-anchor-lang = &quot;0.30.1&quot;
-solana-program = &quot;2.0.5&quot; # Make sure the version matches your Solana toolchain
+<pre><code class="lang-toml"><span class="hljs-section">[dependencies]</span>
+<span class="hljs-attr">anchor-lang</span> = <span class="hljs-string">&quot;0.30.1&quot;</span>
+<span class="hljs-attr">solana-program</span> = <span class="hljs-string">&quot;2.0.5&quot;</span> <span class="hljs-comment"># Make sure the version matches your Solana toolchain</span>
 </code></pre>
 <p>update the code:</p>
-<pre><code class="lang-rust">    pub fn save_units(ctx: Context<initialize>) -&gt; Result<()> {
-        // Measure compute units before any operations
+<pre><code class="lang-rust">    <span class="hljs-keyword">pub</span> <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">save_units</span></span>(ctx: Context&lt;Initialize&gt;) -&gt; <span class="hljs-built_in">Result</span>&lt;()&gt; {
+        <span class="hljs-comment">// Measure compute units before any operations</span>
         sol_log_compute_units();
 
-        let mut v1 = Vec::new();
-        for i in 0..10 {
+        <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut</span> v1 = <span class="hljs-built_in">Vec</span>::new();
+        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">0</span>..<span class="hljs-number">10</span> {
             v1.push(i);
         }
-        // Measure compute units after creating v1
+        <span class="hljs-comment">// Measure compute units after creating v1</span>
         sol_log_compute_units();
 
-        let mut v2: Vec<u64> = Vec::new();
-        for i in 0..10 {
+        <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut</span> v2: <span class="hljs-built_in">Vec</span>&lt;<span class="hljs-built_in">u64</span>&gt; = <span class="hljs-built_in">Vec</span>::new();
+        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">0</span>..<span class="hljs-number">10</span> {
             v2.push(i);
         }
-        // Measure compute units after creating v2
+        <span class="hljs-comment">// Measure compute units after creating v2</span>
         sol_log_compute_units();
 
-        let mut v3: Vec<i32> = Vec::new();
-        for i in 0..10 {
+        <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut</span> v3: <span class="hljs-built_in">Vec</span>&lt;<span class="hljs-built_in">i32</span>&gt; = <span class="hljs-built_in">Vec</span>::new();
+        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">0</span>..<span class="hljs-number">10</span> {
             v3.push(i);
         }
-        // Measure compute units after creating v3
+        <span class="hljs-comment">// Measure compute units after creating v3</span>
         sol_log_compute_units();
 
-        let mut v4: Vec<i64> = Vec::new();
-        for i in 0..10 {
+        <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut</span> v4: <span class="hljs-built_in">Vec</span>&lt;<span class="hljs-built_in">i64</span>&gt; = <span class="hljs-built_in">Vec</span>::new();
+        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">0</span>..<span class="hljs-number">10</span> {
             v4.push(i);
         }
-        // Measure compute units after creating v3
+        <span class="hljs-comment">// Measure compute units after creating v3</span>
         sol_log_compute_units();
 
-        let mut v5: Vec<u8> = Vec::new();
-        for i in 0..10 {
+        <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut</span> v5: <span class="hljs-built_in">Vec</span>&lt;<span class="hljs-built_in">u8</span>&gt; = <span class="hljs-built_in">Vec</span>::new();
+        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">0</span>..<span class="hljs-number">10</span> {
             v5.push(i);
         }
-        // Measure compute units after creating v3
+        <span class="hljs-comment">// Measure compute units after creating v3</span>
         sol_log_compute_units();
 
-        Ok(())
+        <span class="hljs-literal">Ok</span>(())
     }
-</u8></i64></i32></u64></()></initialize></code></pre>
+</code></pre>
 <p>run test case:</p>
 <p><img src="assets/image-20240820054437838.png" alt="image-20240820054437838"></p>
 <p>it is showed as expected, the larger value types used, the more CU costed.</p>
@@ -641,7 +637,7 @@ solana-program = &quot;2.0.5&quot; # Make sure the version matches your Solana t
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"15_Txfee_Compute-unit","level":"3.5","depth":1,"next":{"title":"16_Accounts_Overview","level":"4.1","depth":1,"path":"solana_beginner/16_Accounts_Overview/README.md","ref":"solana_beginner/16_Accounts_Overview/README.md","articles":[]},"previous":{"title":"14_Tx.Origin_onlyOwner","level":"3.4","depth":1,"path":"solana_beginner/14_Tx.Origin_onlyOwner/README.md","ref":"solana_beginner/14_Tx.Origin_onlyOwner/README.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"en","gitbook":"*"},"file":{"path":"solana_beginner/15_Txfee_Compute-unit/README.md","mtime":"2024-08-19T21:55:52.666Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"../..","book":{"language":"en"}});
+            gitbook.page.hasChanged({"page":{"title":"15_Txfee_Compute-unit","level":"3.5","depth":1,"next":{"title":"16_Accounts_Overview","level":"4.1","depth":1,"path":"solana_beginner/16_Accounts_Overview/README.md","ref":"solana_beginner/16_Accounts_Overview/README.md","articles":[]},"previous":{"title":"14_Tx.Origin_onlyOwner","level":"3.4","depth":1,"path":"solana_beginner/14_Tx.Origin_onlyOwner/README.md","ref":"solana_beginner/14_Tx.Origin_onlyOwner/README.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"en","gitbook":"*"},"file":{"path":"solana_beginner/15_Txfee_Compute-unit/README.md","mtime":"2024-08-23T23:07:22.108Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"../..","book":{"language":"en"}});
         });
     </script>
 </div>
@@ -724,14 +720,6 @@ solana-program = &quot;2.0.5&quot; # Make sure the version matches your Solana t
     
         
         <script src="../../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

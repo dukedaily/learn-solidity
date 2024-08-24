@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3022,38 +3018,38 @@
 <p>小白入门：<a href="https://github.com/dukedaily/solidity-expert" target="_blank">https://github.com/dukedaily/solidity-expert</a> ，欢迎star转发，文末加V入群。</p>
 </blockquote>
 <p>在如下代码中，存在msg.value被重复使用的问题：在delegatecall中，msg.value与当前batch函数中msg.value一致，这可能导致错误。</p>
-<pre><code class="lang-js">function batch(bytes[] calldata calls, bool revertOnFail) external payable returns(bool[] memory success, bytes[] memory results) {
-  successes = new bool[](calls.length);
-  results = new bytes[](calls.length);
+<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">batch</span>(<span class="hljs-params">bytes[] calldata calls, bool revertOnFail</span>) <span class="hljs-title">external</span> <span class="hljs-title">payable</span> <span class="hljs-title">returns</span>(<span class="hljs-params">bool[] memory success, bytes[] memory results</span>) </span>{
+  successes = <span class="hljs-keyword">new</span> bool[](calls.length);
+  results = <span class="hljs-keyword">new</span> bytes[](calls.length);
 
-  for (uint256 i=0; i&lt; calls.length; i++) {
-    (bool success, bytes memory result) = address(this).delegatecall(calls[i]);
-    require(success || !revertOnFail, _getReyerMsg(result));
+  <span class="hljs-keyword">for</span> (uint256 i=<span class="hljs-number">0</span>; i&lt; calls.length; i++) {
+    (bool success, bytes memory result) = address(<span class="hljs-built_in">this</span>).delegatecall(calls[i]);
+    <span class="hljs-built_in">require</span>(success || !revertOnFail, _getReyerMsg(result));
     successes[i] = success;
     results[i] = result;
   }
 }
 </code></pre>
 <p>我们写一个测试案例：</p>
-<pre><code class="lang-js">// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
 
 contract batch {
     uint public num;
     address public sender;
     uint public value;
 
-    function mintBatch(uint _num) public payable {
-        // Proxy&apos;s storage is set, Implementation is not modified.
-        for (uint i = 0; i &lt; _num; i++) {
-          (bool success, bytes memory data) = address(this).delegatecall(
-              abi.encodeWithSignature(&quot;mint(uint256)&quot;, _num)
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">mintBatch</span>(<span class="hljs-params">uint _num</span>) <span class="hljs-title">public</span> <span class="hljs-title">payable</span> </span>{
+        <span class="hljs-comment">// Proxy&apos;s storage is set, Implementation is not modified.</span>
+        <span class="hljs-keyword">for</span> (uint i = <span class="hljs-number">0</span>; i &lt; _num; i++) {
+          (bool success, bytes memory data) = address(<span class="hljs-built_in">this</span>).delegatecall(
+              abi.encodeWithSignature(<span class="hljs-string">&quot;mint(uint256)&quot;</span>, _num)
           );
         }
     }
 
-    function mint(uint _num) public payable {
-        require(msg.value == 1 ether, &quot;error&quot;);
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">mint</span>(<span class="hljs-params">uint _num</span>) <span class="hljs-title">public</span> <span class="hljs-title">payable</span> </span>{
+        <span class="hljs-built_in">require</span>(msg.value == <span class="hljs-number">1</span> ether, <span class="hljs-string">&quot;error&quot;</span>);
         num = _num;
         sender = msg.sender;
         value += msg.value;
@@ -3097,7 +3093,7 @@ contract batch {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第16节:安全事故6-msgvalue持久化问题","level":"1.11.10","depth":2,"next":{"title":"第17节:安全事故7-用EOA来call方法攻击","level":"1.11.11","depth":2,"path":"04_合约攻击/17_安全事故7-用EOA来call方法攻击.md","ref":"04_合约攻击/17_安全事故7-用EOA来call方法攻击.md","articles":[]},"previous":{"title":"第15节:安全事故5-出块相关攻击","level":"1.11.9","depth":2,"path":"04_合约攻击/15_安全事故5-出块相关攻击.md","ref":"04_合约攻击/15_安全事故5-出块相关攻击.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"04_合约攻击/16_安全事故6-msgvalue持久化问题.md","mtime":"2023-09-23T13:02:23.857Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第16节:安全事故6-msgvalue持久化问题","level":"1.11.10","depth":2,"next":{"title":"第17节:安全事故7-用EOA来call方法攻击","level":"1.11.11","depth":2,"path":"04_合约攻击/17_安全事故7-用EOA来call方法攻击.md","ref":"04_合约攻击/17_安全事故7-用EOA来call方法攻击.md","articles":[]},"previous":{"title":"第15节:安全事故5-出块相关攻击","level":"1.11.9","depth":2,"path":"04_合约攻击/15_安全事故5-出块相关攻击.md","ref":"04_合约攻击/15_安全事故5-出块相关攻击.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"cn","gitbook":"*"},"file":{"path":"04_合约攻击/16_安全事故6-msgvalue持久化问题.md","mtime":"2023-09-23T13:02:23.857Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3180,14 +3176,6 @@ contract batch {
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

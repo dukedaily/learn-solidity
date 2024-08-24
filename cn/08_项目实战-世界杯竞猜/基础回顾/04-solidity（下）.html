@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3041,65 +3037,65 @@
 <li>接口中不能定义状态变量；</li>
 <li><a href="https://medium.com/upstate-interactive/solidity-how-to-know-when-to-use-abstract-contracts-vs-interfaces-874cab860c56" target="_blank">abstract和interface的区别</a></li>
 </ol>
-<pre><code class="lang-js">// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
 
 contract Counter {
     uint public count;
 
-    function increment() external {
-        count += 1;
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">increment</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> </span>{
+        count += <span class="hljs-number">1</span>;
     }
 }
 
 interface IBase {
-    function count() external view returns (uint);
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">count</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint</span>)</span>;
 }
 
 interface ICounter is IBase {
-      // uint num;
-    function increment() external;
+      <span class="hljs-comment">// uint num;</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">increment</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span></span>;
 }
 
 contract MyContract {
-    function incrementCounter(address _counter) external {
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">incrementCounter</span>(<span class="hljs-params">address _counter</span>) <span class="hljs-title">external</span> </span>{
         ICounter(_counter).increment();
     }
 
-    function getCount(address _counter) external view returns (uint) {
-        return ICounter(_counter).count();
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getCount</span>(<span class="hljs-params">address _counter</span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint</span>) </span>{
+        <span class="hljs-keyword">return</span> ICounter(_counter).count();
     }
 }
 </code></pre>
 <p>uniswap demo:</p>
-<pre><code class="lang-js">// Uniswap example
+<pre><code class="lang-js"><span class="hljs-comment">// Uniswap example</span>
 interface UniswapV2Factory {
-    function getPair(address tokenA, address tokenB)
-        external
-        view
-        returns (address pair);
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getPair</span>(<span class="hljs-params">address tokenA, address tokenB</span>)
+        <span class="hljs-title">external</span>
+        <span class="hljs-title">view</span>
+        <span class="hljs-title">returns</span> (<span class="hljs-params">address pair</span>)</span>;
 }
 
 interface UniswapV2Pair {
-    function getReserves()
-        external
-        view
-        returns (
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getReserves</span>(<span class="hljs-params"></span>)
+        <span class="hljs-title">external</span>
+        <span class="hljs-title">view</span>
+        <span class="hljs-title">returns</span> (<span class="hljs-params">
             uint112 reserve0,
             uint112 reserve1,
             uint32 blockTimestampLast
-        );
+        </span>)</span>;
 }
 
 contract UniswapExample {
-    address private factory = 0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f;
-    address private dai = 0x6B175474E89094C44Da98b954EedeAC495271d0F;
-    address private weth = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;
+    address private factory = <span class="hljs-number">0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f</span>;
+    address private dai = <span class="hljs-number">0x6B175474E89094C44Da98b954EedeAC495271d0F</span>;
+    address private weth = <span class="hljs-number">0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2</span>;
 
-    function getTokenReserves() external view returns (uint, uint) {
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getTokenReserves</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint, uint</span>) </span>{
         address pair = UniswapV2Factory(factory).getPair(dai, weth);
         (uint reserve0, uint reserve1, ) = UniswapV2Pair(pair).getReserves();
-        return (reserve0, reserve1);
+        <span class="hljs-keyword">return</span> (reserve0, reserve1);
     }
 }
 </code></pre>
@@ -3114,82 +3110,82 @@ contract UniswapExample {
 </ol>
 </li>
 </ol>
-<pre><code class="lang-js">// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
 
-// 1. 只有internal方法，会内嵌到调用合约中
+<span class="hljs-comment">// 1. 只有internal方法，会内嵌到调用合约中</span>
 library SafeMath {
 
-    function add(uint x, uint y) internal pure returns (uint) {
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">add</span>(<span class="hljs-params">uint x, uint y</span>) <span class="hljs-title">internal</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint</span>) </span>{
         uint z = x + y;
-        require(z &gt;= x, &quot;uint overflow&quot;);
+        <span class="hljs-built_in">require</span>(z &gt;= x, <span class="hljs-string">&quot;uint overflow&quot;</span>);
 
-        return z;
+        <span class="hljs-keyword">return</span> z;
     }
 }
 
-library Math {
-    function sqrt(uint y) internal pure returns (uint z) {
-        if (y &gt; 3) {
+library <span class="hljs-built_in">Math</span> {
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sqrt</span>(<span class="hljs-params">uint y</span>) <span class="hljs-title">internal</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint z</span>) </span>{
+        <span class="hljs-keyword">if</span> (y &gt; <span class="hljs-number">3</span>) {
             z = y;
-            uint x = y / 2 + 1;
-            while (x &lt; z) {
+            uint x = y / <span class="hljs-number">2</span> + <span class="hljs-number">1</span>;
+            <span class="hljs-keyword">while</span> (x &lt; z) {
                 z = x;
-                x = (y / x + x) / 2;
+                x = (y / x + x) / <span class="hljs-number">2</span>;
             }
-        } else if (y != 0) {
-            z = 1;
+        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (y != <span class="hljs-number">0</span>) {
+            z = <span class="hljs-number">1</span>;
         }
-        // else z = 0 (default value)
+        <span class="hljs-comment">// else z = 0 (default value)</span>
     }
 }
 
 contract TestSafeMath {
-      // 对uint类型增加SafeMath的方法，
-      // 1. 后续定义的uint变量就会自动绑定SafeMath提供的方法: uint x;
-      // 2. 这个变量会作为第一个参数传递给函数: x.add(y);
-    using SafeMath for uint;
+      <span class="hljs-comment">// 对uint类型增加SafeMath的方法，</span>
+      <span class="hljs-comment">// 1. 后续定义的uint变量就会自动绑定SafeMath提供的方法: uint x;</span>
+      <span class="hljs-comment">// 2. 这个变量会作为第一个参数传递给函数: x.add(y);</span>
+    using SafeMath <span class="hljs-keyword">for</span> uint;
 
-    uint public MAX_UINT = 2**256 - 1;
+    uint public MAX_UINT = <span class="hljs-number">2</span>**<span class="hljs-number">256</span> - <span class="hljs-number">1</span>;
 
-      // 用法1：x.方法(y)
-    function testAdd(uint x, uint y) public pure returns (uint) {
-       //return x.add(y);
-      return SafeMath.add(x,y);
+      <span class="hljs-comment">// 用法1：x.方法(y)</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">testAdd</span>(<span class="hljs-params">uint x, uint y</span>) <span class="hljs-title">public</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint</span>) </span>{
+       <span class="hljs-comment">//return x.add(y);</span>
+      <span class="hljs-keyword">return</span> SafeMath.add(x,y);
     }
 
-      // 用法2：库.方法(x)
-    function testSquareRoot(uint x) public pure returns (uint) {
-        return Math.sqrt(x);
+      <span class="hljs-comment">// 用法2：库.方法(x)</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">testSquareRoot</span>(<span class="hljs-params">uint x</span>) <span class="hljs-title">public</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint</span>) </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">Math</span>.sqrt(x);
     }
 }
 
-// 2. 存在public方法时，会单独部署库合约，并且第一个参数是状态变量类型
-library Array {
-      // 修改调用者状态变量的方式，第一个参数是状态变量本身
-    function remove(uint[] storage arr, uint index) public {
-        // Move the last element into the place to delete
-        require(arr.length &gt; 0, &quot;Can&apos;t remove from empty array&quot;);
-        arr[index] = arr[arr.length - 1];
+<span class="hljs-comment">// 2. 存在public方法时，会单独部署库合约，并且第一个参数是状态变量类型</span>
+library <span class="hljs-built_in">Array</span> {
+      <span class="hljs-comment">// 修改调用者状态变量的方式，第一个参数是状态变量本身</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">remove</span>(<span class="hljs-params">uint[] storage arr, uint index</span>) <span class="hljs-title">public</span> </span>{
+        <span class="hljs-comment">// Move the last element into the place to delete</span>
+        <span class="hljs-built_in">require</span>(arr.length &gt; <span class="hljs-number">0</span>, <span class="hljs-string">&quot;Can&apos;t remove from empty array&quot;</span>);
+        arr[index] = arr[arr.length - <span class="hljs-number">1</span>];
         arr.pop();
     }
 }
 
 contract TestArray {
-    using Array for uint[];
+    using <span class="hljs-built_in">Array</span> <span class="hljs-keyword">for</span> uint[];
 
     uint[] public arr;
 
-    function testArrayRemove() public {
-        for (uint i = 0; i &lt; 3; i++) {
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">testArrayRemove</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> </span>{
+        <span class="hljs-keyword">for</span> (uint i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">3</span>; i++) {
             arr.push(i);
         }
 
-        arr.remove(1);
+        arr.remove(<span class="hljs-number">1</span>);
 
-        assert(arr.length == 2);
-        assert(arr[0] == 0);
-        assert(arr[1] == 2);
+        assert(arr.length == <span class="hljs-number">2</span>);
+        assert(arr[<span class="hljs-number">0</span>] == <span class="hljs-number">0</span>);
+        assert(arr[<span class="hljs-number">1</span>] == <span class="hljs-number">2</span>);
     }
 }
 </code></pre>
@@ -3200,93 +3196,93 @@ contract TestArray {
 <li>abi.<strong>encodePacked</strong>：与abi.encode类似，但是生成的bytes是压缩过的（有些类型不会自动填充，无法传递给合约调用）。</li>
 <li>手册：<a href="https://docs.soliditylang.org/en/v0.8.13/abi-spec.html?highlight=abi.encodePacked#non-standard-packed-mode" target="_blank">https://docs.soliditylang.org/en/v0.8.13/abi-spec.html?highlight=abi.encodePacked#non-standard-packed-mode</a></li>
 </ol>
-<pre><code class="lang-js">// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
 
 contract AbiDecode {
     struct MyStruct {
         string name;
-        uint[2] nums;
+        uint[<span class="hljs-number">2</span>] nums;
     }
 
-    // input: 10, 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4, [1,&quot;2&quot;,3], [&quot;duke&quot;, [10,20]]
-    // output: 0x000000000000000000000000000000000000000000000000000000000000000a0000000000000000000000005b38da6a701c568545dcfcb03fcb875f56beddc40000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000030000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000030000000000000000000000000000000000000000000000000000000000000060000000000000000000000000000000000000000000000000000000000000000a0000000000000000000000000000000000000000000000000000000000000014000000000000000000000000000000000000000000000000000000000000000064756b6500000000000000000000000000000000000000000000000000000000
-    //  output长度：832位16进制字符（去除0x)，832 / 32 = 26 （一定是32字节的整数倍，不足填0）
-    function encode(
+    <span class="hljs-comment">// input: 10, 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4, [1,&quot;2&quot;,3], [&quot;duke&quot;, [10,20]]</span>
+    <span class="hljs-comment">// output: 0x000000000000000000000000000000000000000000000000000000000000000a0000000000000000000000005b38da6a701c568545dcfcb03fcb875f56beddc40000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000030000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000030000000000000000000000000000000000000000000000000000000000000060000000000000000000000000000000000000000000000000000000000000000a0000000000000000000000000000000000000000000000000000000000000014000000000000000000000000000000000000000000000000000000000000000064756b6500000000000000000000000000000000000000000000000000000000</span>
+    <span class="hljs-comment">//  output长度：832位16进制字符（去除0x)，832 / 32 = 26 （一定是32字节的整数倍，不足填0）</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">encode</span>(<span class="hljs-params">
         uint x,
         address addr,
         uint[] calldata arr,
         MyStruct calldata myStruct
-    ) external pure returns (bytes memory) {
-        return abi.encode(x, addr, arr, myStruct);
+    </span>) <span class="hljs-title">external</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bytes memory</span>) </span>{
+        <span class="hljs-keyword">return</span> abi.encode(x, addr, arr, myStruct);
     }
 
-    function decode(bytes calldata data)
-        external
-        pure
-        returns (
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">decode</span>(<span class="hljs-params">bytes calldata data</span>)
+        <span class="hljs-title">external</span>
+        <span class="hljs-title">pure</span>
+        <span class="hljs-title">returns</span> (<span class="hljs-params">
             uint x,
             address addr,
             uint[] memory arr,
             MyStruct memory myStruct
-        )
-    {
+        </span>)
+    </span>{
         (x, addr, arr, myStruct) = abi.decode(data, (uint, address, uint[], MyStruct));
 
-        /* decode output: 
+        <span class="hljs-comment">/* decode output: 
             0: uint256: x 10
             1: address: addr 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4
             2: uint256[]: arr 1,2,3
             3: tuple(string,uint256[2]): myStruct ,10,20
-        */
+        */</span>
     }
 
-    // 可以只decode其中部分字段，而不用全部decode，当前案例中，只有第一个字段被解析了，其余为默认值
-    function decodeLess(bytes calldata data)
-        external
-        pure
-        returns (
+    <span class="hljs-comment">// 可以只decode其中部分字段，而不用全部decode，当前案例中，只有第一个字段被解析了，其余为默认值</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">decodeLess</span>(<span class="hljs-params">bytes calldata data</span>)
+        <span class="hljs-title">external</span>
+        <span class="hljs-title">pure</span>
+        <span class="hljs-title">returns</span> (<span class="hljs-params">
             uint x,
             address addr,
             uint[] memory arr,
             MyStruct memory myStruct
-        )
-    {
+        </span>)
+    </span>{
         (x) = abi.decode(data, (uint));
 
-        /* decode output: 
+        <span class="hljs-comment">/* decode output: 
             0: uint256: x 10
             1: address: addr 0x0000000000000000000000000000000000000000
             2: uint256[]: arr
             3: tuple(string,uint256[2]): myStruct ,0,0
-        */
+        */</span>
     }
 
-    // input: -1, 0x42, 0x03, &quot;Hello, world!&quot;
-    function encodePacked(
+    <span class="hljs-comment">// input: -1, 0x42, 0x03, &quot;Hello, world!&quot;</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">encodePacked</span>(<span class="hljs-params">
         int16 x,
         bytes1 y,
         uint16 z,
         string memory s
-    ) external view returns (bytes memory) {
+    </span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bytes memory</span>) </span>{
 
-        // encodePacked 不支持struct和mapping
-        return abi.encodePacked(x, y, z, s);
+        <span class="hljs-comment">// encodePacked 不支持struct和mapping</span>
+        <span class="hljs-keyword">return</span> abi.encodePacked(x, y, z, s);
 
-        /*
+        <span class="hljs-comment">/*
         0xffff42000348656c6c6f2c20776f726c6421
           ^^^^                                 int16(-1)
               ^^                               bytes1(0x42)
                 ^^^^                           uint16(0x03)
                     ^^^^^^^^^^^^^^^^^^^^^^^^^^ string(&quot;Hello, world!&quot;) without a length field
-        */
+        */</span>
     }
 
-      // 可以用encodePacked来拼接字符串
-      // output string: ipfs://bafybeidmrsvehl4ehipm5qqvgegi33r6/100.json
-      function encodePackedTest() public  pure returns (string memory) {
-        string memory uri = &quot;ipfs://bafybeidmrsvehl4ehipm5qqvgegi33r6/&quot;;
-        return string(abi.encodePacked(uri, &quot;100&quot;, &quot;.json&quot;));
+      <span class="hljs-comment">// 可以用encodePacked来拼接字符串</span>
+      <span class="hljs-comment">// output string: ipfs://bafybeidmrsvehl4ehipm5qqvgegi33r6/100.json</span>
+      <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">encodePackedTest</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span>  <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-params">string memory</span>) </span>{
+        string memory uri = <span class="hljs-string">&quot;ipfs://bafybeidmrsvehl4ehipm5qqvgegi33r6/&quot;</span>;
+        <span class="hljs-keyword">return</span> string(abi.encodePacked(uri, <span class="hljs-string">&quot;100&quot;</span>, <span class="hljs-string">&quot;.json&quot;</span>));
     }
 }
 </code></pre>
@@ -3296,39 +3292,39 @@ contract AbiDecode {
 <li>用于生成唯一id；</li>
 <li>生成数据指纹；</li>
 </ol>
-<pre><code class="lang-js">// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
 
 contract HashFunction {
-    function hash(
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">hash</span>(<span class="hljs-params">
         string memory _text,
         uint _num,
         address _addr
-    ) public pure returns (bytes32) {
-        return keccak256(abi.encodePacked(_text, _num, _addr));
+    </span>) <span class="hljs-title">public</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bytes32</span>) </span>{
+        <span class="hljs-keyword">return</span> keccak256(abi.encodePacked(_text, _num, _addr));
     }
 
-    // Example of hash collision
-    // Hash collision can occur when you pass more than one dynamic data type
-    // to abi.encodePacked. In such case, you should use abi.encode instead.
-    function collision(string memory _text, string memory _anotherText)
-        public
-        pure
-        returns (bytes32)
-    {
-        // encodePacked(AAA, BBB) -&gt; AAABBB
-        // encodePacked(AA, ABBB) -&gt; AAABBB
-        return keccak256(abi.encodePacked(_text, _anotherText));
+    <span class="hljs-comment">// Example of hash collision</span>
+    <span class="hljs-comment">// Hash collision can occur when you pass more than one dynamic data type</span>
+    <span class="hljs-comment">// to abi.encodePacked. In such case, you should use abi.encode instead.</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">collision</span>(<span class="hljs-params">string memory _text, string memory _anotherText</span>)
+        <span class="hljs-title">public</span>
+        <span class="hljs-title">pure</span>
+        <span class="hljs-title">returns</span> (<span class="hljs-params">bytes32</span>)
+    </span>{
+        <span class="hljs-comment">// encodePacked(AAA, BBB) -&gt; AAABBB</span>
+        <span class="hljs-comment">// encodePacked(AA, ABBB) -&gt; AAABBB</span>
+        <span class="hljs-keyword">return</span> keccak256(abi.encodePacked(_text, _anotherText));
     }
 }
 
 contract GuessTheMagicWord {
     bytes32 public answer =
-        0x60298f78cc0b47170ba79c10aa3851d7648bd96f2f8e46a19dbc777c36fb0c00;
+        <span class="hljs-number">0x60298f78cc0b47170ba79c10aa3851d7648bd96f2f8e46a19dbc777c36fb0c00</span>;
 
-    // Magic word is &quot;Solidity&quot;
-    function guess(string memory _word) public view returns (bool) {
-        return keccak256(abi.encodePacked(_word)) == answer;
+    <span class="hljs-comment">// Magic word is &quot;Solidity&quot;</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">guess</span>(<span class="hljs-params">string memory _word</span>) <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bool</span>) </span>{
+        <span class="hljs-keyword">return</span> keccak256(abi.encodePacked(_word)) == answer;
     }
 }
 </code></pre>
@@ -3347,11 +3343,11 @@ contract GuessTheMagicWord {
 <li>receive() external payable：msg.data为空时调用（为接收ether而生，仅solidity 0.6版本之后)</li>
 <li>fallback() external payable：msg.data非空时调用（为执行default逻辑而生，<strong>顺便支持接收ether</strong>）</li>
 </ol>
-<pre><code class="lang-js">// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
 
 contract ReceiveEther {
-    /*
+    <span class="hljs-comment">/*
     Which function is called, fallback() or receive()?
 
                 sender ether
@@ -3365,54 +3361,54 @@ contract ReceiveEther {
         yes     no
        /          \
   receive()     fallback()
-  */
+  */</span>
 
     string public message;
 
-    // Function to receive Ether. msg.data must be empty
+    <span class="hljs-comment">// Function to receive Ether. msg.data must be empty</span>
     receive() external payable {
-        message = &quot;receive called!&quot;;
+        message = <span class="hljs-string">&quot;receive called!&quot;</span>;
     }
 
-    // Fallback function is called when msg.data is not empty
+    <span class="hljs-comment">// Fallback function is called when msg.data is not empty</span>
     fallback() external payable {
-        message = &quot;fallback called!&quot;;
+        message = <span class="hljs-string">&quot;fallback called!&quot;</span>;
     }
 
-    function getBalance() public view returns (uint) {
-        return address(this).balance;
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getBalance</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint</span>) </span>{
+        <span class="hljs-keyword">return</span> address(<span class="hljs-built_in">this</span>).balance;
     }
 
-    function setMsg(string memory _msg) public {
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setMsg</span>(<span class="hljs-params">string memory _msg</span>) <span class="hljs-title">public</span> </span>{
         message = _msg;
     }
 }
 
 contract SendEther {
-    function sendViaTransfer(address payable _to) public payable {
-        // This function is no longer recommended for sending Ether. (不建议使用)
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sendViaTransfer</span>(<span class="hljs-params">address payable _to</span>) <span class="hljs-title">public</span> <span class="hljs-title">payable</span> </span>{
+        <span class="hljs-comment">// This function is no longer recommended for sending Ether. (不建议使用)</span>
         _to.transfer(msg.value);
     }
 
-    function sendViaSend(address payable _to) public payable {
-        // Send returns a boolean value indicating success or failure.
-        // This function is not recommended for sending Ether. (不建议使用)
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sendViaSend</span>(<span class="hljs-params">address payable _to</span>) <span class="hljs-title">public</span> <span class="hljs-title">payable</span> </span>{
+        <span class="hljs-comment">// Send returns a boolean value indicating success or failure.</span>
+        <span class="hljs-comment">// This function is not recommended for sending Ether. (不建议使用)</span>
         bool sent = _to.send(msg.value);
-        require(sent, &quot;Failed to send Ether&quot;);
+        <span class="hljs-built_in">require</span>(sent, <span class="hljs-string">&quot;Failed to send Ether&quot;</span>);
     }
 
-    function sendViaCallFallback(address payable _to) public payable {
-        // Call returns a boolean value indicating success or failure.
-        // This is the current recommended method to use. (推荐使用)
-        (bool sent, bytes memory data) = _to.call{value: msg.value}(abi.encodeWithSignature(&quot;noExistFuncTest()&quot;));
-        require(sent, &quot;Failed to send Ether&quot;);
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sendViaCallFallback</span>(<span class="hljs-params">address payable _to</span>) <span class="hljs-title">public</span> <span class="hljs-title">payable</span> </span>{
+        <span class="hljs-comment">// Call returns a boolean value indicating success or failure.</span>
+        <span class="hljs-comment">// This is the current recommended method to use. (推荐使用)</span>
+        (bool sent, bytes memory data) = _to.call{<span class="hljs-attr">value</span>: msg.value}(abi.encodeWithSignature(<span class="hljs-string">&quot;noExistFuncTest()&quot;</span>));
+        <span class="hljs-built_in">require</span>(sent, <span class="hljs-string">&quot;Failed to send Ether&quot;</span>);
     }
 
-    function sendViaCallReceive(address payable _to) public payable {
-        // Call returns a boolean value indicating success or failure.
-        // This is the current recommended method to use.(推荐使用)
-        (bool sent, bytes memory data) = _to.call{value: msg.value}(&quot;&quot;);
-        require(sent, &quot;Failed to send Ether&quot;);
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sendViaCallReceive</span>(<span class="hljs-params">address payable _to</span>) <span class="hljs-title">public</span> <span class="hljs-title">payable</span> </span>{
+        <span class="hljs-comment">// Call returns a boolean value indicating success or failure.</span>
+        <span class="hljs-comment">// This is the current recommended method to use.(推荐使用)</span>
+        (bool sent, bytes memory data) = _to.call{<span class="hljs-attr">value</span>: msg.value}(<span class="hljs-string">&quot;&quot;</span>);
+        <span class="hljs-built_in">require</span>(sent, <span class="hljs-string">&quot;Failed to send Ether&quot;</span>);
     }
 }
 </code></pre>
@@ -3438,39 +3434,39 @@ contract SendEther {
 <li><p>调用不存在的方法（又不存在fallback）时，交易会调用成功，但是第一个参数为：false，所以使用call调用后一定要检查success状态</p>
 </li>
 </ul>
-<pre><code class="lang-js">// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
 
 contract Receiver {
     event Received(address caller, uint amount, string message);
 
     fallback() external payable {
-        emit Received(msg.sender, msg.value, &quot;Fallback was called&quot;);
+        emit Received(msg.sender, msg.value, <span class="hljs-string">&quot;Fallback was called&quot;</span>);
     }
 
-    function foo(string memory _message, uint _x) public payable returns (uint) {
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params">string memory _message, uint _x</span>) <span class="hljs-title">public</span> <span class="hljs-title">payable</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint</span>) </span>{
         emit Received(msg.sender, msg.value, _message);
 
-        return _x + 1;
+        <span class="hljs-keyword">return</span> _x + <span class="hljs-number">1</span>;
     }
 }
 
 contract Caller {
     event Response(bool success, bytes data);
 
-    function testCallFoo(address payable _addr) public payable {
-        // You can send ether and specify a custom gas amount
-        (bool success, bytes memory data) = _addr.call{value: msg.value, gas: 5000}(
-            abi.encodeWithSignature(&quot;foo(string,uint256)&quot;, &quot;call foo&quot;, 123)
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">testCallFoo</span>(<span class="hljs-params">address payable _addr</span>) <span class="hljs-title">public</span> <span class="hljs-title">payable</span> </span>{
+        <span class="hljs-comment">// You can send ether and specify a custom gas amount</span>
+        (bool success, bytes memory data) = _addr.call{<span class="hljs-attr">value</span>: msg.value, <span class="hljs-attr">gas</span>: <span class="hljs-number">5000</span>}(
+            abi.encodeWithSignature(<span class="hljs-string">&quot;foo(string,uint256)&quot;</span>, <span class="hljs-string">&quot;call foo&quot;</span>, <span class="hljs-number">123</span>)
         );
 
         emit Response(success, data);
     }
 
-    // Calling a function that does not exist triggers the fallback function.
-    function testCallDoesNotExist(address _addr) public {
+    <span class="hljs-comment">// Calling a function that does not exist triggers the fallback function.</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">testCallDoesNotExist</span>(<span class="hljs-params">address _addr</span>) <span class="hljs-title">public</span> </span>{
         (bool success, bytes memory data) = _addr.call(
-            abi.encodeWithSignature(&quot;doesNotExist()&quot;)
+            abi.encodeWithSignature(<span class="hljs-string">&quot;doesNotExist()&quot;</span>)
         );
 
         emit Response(success, data);
@@ -3484,12 +3480,12 @@ contract Caller {
 <li>与CALL相同，但是不允许修改任何状态变量，是为了安全🔐考虑而新增的OPCODE</li>
 <li>在Transparent模式的代理合约逻辑中，就使用了staticcall，从而让proxyAmin能够免费的调用父合约的admin函数，从而从slot中返回代理合约的管理员。这部分会在合约升级章节介绍。</li>
 </ul>
-<pre><code class="lang-js">    function getProxyAdmin(TransparentUpgradeableProxy proxy) public view virtual returns (address) {
-        // We need to manually run the static call since the getter cannot be flagged as view
-        // bytes4(keccak256(&quot;admin()&quot;)) == 0xf851a440
-        (bool success, bytes memory returndata) = address(proxy).staticcall(hex&quot;f851a440&quot;);
-        require(success);
-        return abi.decode(returndata, (address));
+<pre><code class="lang-js">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getProxyAdmin</span>(<span class="hljs-params">TransparentUpgradeableProxy proxy</span>) <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">virtual</span> <span class="hljs-title">returns</span> (<span class="hljs-params">address</span>) </span>{
+        <span class="hljs-comment">// We need to manually run the static call since the getter cannot be flagged as view</span>
+        <span class="hljs-comment">// bytes4(keccak256(&quot;admin()&quot;)) == 0xf851a440</span>
+        (bool success, bytes memory returndata) = address(proxy).staticcall(hex<span class="hljs-string">&quot;f851a440&quot;</span>);
+        <span class="hljs-built_in">require</span>(success);
+        <span class="hljs-keyword">return</span> abi.decode(returndata, (address));
     }
 </code></pre>
 <h2 id="delegatecall">delegatecall</h2>
@@ -3499,16 +3495,16 @@ contract Caller {
 <li>使用delegatecall的前提是：A合约和B合约有相同的状态变量。</li>
 </ol>
 <p><img src="https://duke-typora.s3.amazonaws.com/ipic/2023-03-06-085436.png" alt="image-20220510094354223"></p>
-<pre><code class="lang-js">// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
 
 contract Implementation {
-    // NOTE: storage layout must be the same as contract A
+    <span class="hljs-comment">// <span class="hljs-doctag">NOTE:</span> storage layout must be the same as contract A</span>
     uint public num;
     address public sender;
     uint public value;
 
-    function setVars(uint _num) public payable {
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setVars</span>(<span class="hljs-params">uint _num</span>) <span class="hljs-title">public</span> <span class="hljs-title">payable</span> </span>{
         num = _num;
         sender = msg.sender;
         value = msg.value;
@@ -3516,28 +3512,28 @@ contract Implementation {
 }
 
 contract ImplementationV2 {
-    // NOTE: storage layout must be the same as contract A
+    <span class="hljs-comment">// <span class="hljs-doctag">NOTE:</span> storage layout must be the same as contract A</span>
     uint public num;
     address public sender;
     uint public value;
 
-    function setVars(uint _num) public payable {
-        num = _num*2;
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setVars</span>(<span class="hljs-params">uint _num</span>) <span class="hljs-title">public</span> <span class="hljs-title">payable</span> </span>{
+        num = _num*<span class="hljs-number">2</span>;
         sender = msg.sender;
         value = msg.value;
     }
 }
 
-// 注意：执行后，Proxy中的sender值为EOA的地址，而不是A合约的地址  (调用链EOA-&gt; Proxy::setVars -&gt; Implementation::setVars)
-contract Proxy {
+<span class="hljs-comment">// 注意：执行后，Proxy中的sender值为EOA的地址，而不是A合约的地址  (调用链EOA-&gt; Proxy::setVars -&gt; Implementation::setVars)</span>
+contract <span class="hljs-built_in">Proxy</span> {
     uint public num;
     address public sender;
     uint public value;
 
-    function setVars(address _impl, uint _num) public payable {
-        // Proxy&apos;s storage is set, Implementation is not modified.
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setVars</span>(<span class="hljs-params">address _impl, uint _num</span>) <span class="hljs-title">public</span> <span class="hljs-title">payable</span> </span>{
+        <span class="hljs-comment">// Proxy&apos;s storage is set, Implementation is not modified.</span>
         (bool success, bytes memory data) = _impl.delegatecall(
-            abi.encodeWithSignature(&quot;setVars(uint256)&quot;, _num)
+            abi.encodeWithSignature(<span class="hljs-string">&quot;setVars(uint256)&quot;</span>, _num)
         );
     }
 }
@@ -3574,73 +3570,73 @@ assembly {
 <ol>
 <li>使用new方式创建：</li>
 </ol>
-<pre><code class="lang-js">// 内部调用create
-new ContractName(参数...)
+<pre><code class="lang-js"><span class="hljs-comment">// 内部调用create</span>
+<span class="hljs-keyword">new</span> ContractName(参数...)
 
-// 内部调用create2
-// 在0.8.0版本之后，new增加了salt选项，从而支持了create2的特性（通过salt可以计算出创建合约的地址）。
-new ContractName{salt: _salt}(参数...)
+<span class="hljs-comment">// 内部调用create2</span>
+<span class="hljs-comment">// 在0.8.0版本之后，new增加了salt选项，从而支持了create2的特性（通过salt可以计算出创建合约的地址）。</span>
+<span class="hljs-keyword">new</span> ContractName{<span class="hljs-attr">salt</span>: _salt}(参数...)
 </code></pre>
 <p>demo验证：</p>
-<pre><code class="lang-js">// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
 
 contract Car {
     address public owner;
     string public model;
     address public carAddr;
 
-    constructor(address _owner, string memory _model) payable {
+    <span class="hljs-title">constructor</span>(<span class="hljs-params">address _owner, string memory _model</span>) <span class="hljs-title">payable</span> {
         owner = _owner;
         model = _model;
-        carAddr = address(this);
+        carAddr = address(<span class="hljs-built_in">this</span>);
     }
 }
 
 contract CarFactory {
     Car[] public cars;
 
-    function create(address _owner, string memory _model) public {
-        Car car = new Car(_owner, _model);
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">create</span>(<span class="hljs-params">address _owner, string memory _model</span>) <span class="hljs-title">public</span> </span>{
+        Car car = <span class="hljs-keyword">new</span> Car(_owner, _model);
         cars.push(car);
     }
 
-    function createAndSendEther(address _owner, string memory _model) public payable {
-        Car car = (new Car){value: msg.value}(_owner, _model);
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">createAndSendEther</span>(<span class="hljs-params">address _owner, string memory _model</span>) <span class="hljs-title">public</span> <span class="hljs-title">payable</span> </span>{
+        Car car = (<span class="hljs-keyword">new</span> Car){<span class="hljs-attr">value</span>: msg.value}(_owner, _model);
         cars.push(car);
     }
 
-    function create2(
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">create2</span>(<span class="hljs-params">
         address _owner,
         string memory _model,
         bytes32 _salt
-    ) public {
-        Car car = (new Car){salt: _salt}(_owner, _model);
+    </span>) <span class="hljs-title">public</span> </span>{
+        Car car = (<span class="hljs-keyword">new</span> Car){<span class="hljs-attr">salt</span>: _salt}(_owner, _model);
         cars.push(car);
     }
 
-    function create2AndSendEther(
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">create2AndSendEther</span>(<span class="hljs-params">
         address _owner,
         string memory _model,
         bytes32 _salt
-    ) public payable {
-        Car car = (new Car){value: msg.value, salt: _salt}(_owner, _model);
+    </span>) <span class="hljs-title">public</span> <span class="hljs-title">payable</span> </span>{
+        Car car = (<span class="hljs-keyword">new</span> Car){<span class="hljs-attr">value</span>: msg.value, <span class="hljs-attr">salt</span>: _salt}(_owner, _model);
         cars.push(car);
     }
 
-    function getCar(uint _index)
-        public
-        view
-        returns (
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getCar</span>(<span class="hljs-params">uint _index</span>)
+        <span class="hljs-title">public</span>
+        <span class="hljs-title">view</span>
+        <span class="hljs-title">returns</span> (<span class="hljs-params">
             address owner,
             string memory model,
             address carAddr,
             uint balance
-        )
-    {
+        </span>)
+    </span>{
         Car car = cars[_index];
 
-        return (car.owner(), car.model(), car.carAddr(), address(car).balance);
+        <span class="hljs-keyword">return</span> (car.owner(), car.model(), car.carAddr(), address(car).balance);
     }
 }
 </code></pre>
@@ -3653,41 +3649,41 @@ contract CarFactory {
 <li>使用call调用合约: <strong>A.call(calldata)</strong></li>
 <li>使用delegate调用合约：<strong>A.delegatecall(calldata)</strong></li>
 </ol>
-<pre><code class="lang-js">// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
 
 contract Callee {
     uint public x;
     uint public value;
 
-    function setX(uint _x) public returns (uint) {
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setX</span>(<span class="hljs-params">uint _x</span>) <span class="hljs-title">public</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint</span>) </span>{
         x = _x;
-        return x;
+        <span class="hljs-keyword">return</span> x;
     }
 
-    function setXandSendEther(uint _x) public payable returns (uint, uint) {
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setXandSendEther</span>(<span class="hljs-params">uint _x</span>) <span class="hljs-title">public</span> <span class="hljs-title">payable</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint, uint</span>) </span>{
         x = _x;
         value = msg.value;
 
-        return (x, value);
+        <span class="hljs-keyword">return</span> (x, value);
     }
 }
 
 contract Caller {
-    // 直接在参数中进行实例化合约
-    function setX(Callee _callee, uint _x) public {
+    <span class="hljs-comment">// 直接在参数中进行实例化合约</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setX</span>(<span class="hljs-params">Callee _callee, uint _x</span>) <span class="hljs-title">public</span> </span>{
         uint x = _callee.setX(_x);
     }
 
-    // 传递地址，在内部实例化callee合约
-    function setXFromAddress(address _addr, uint _x) public {
+    <span class="hljs-comment">// 传递地址，在内部实例化callee合约</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setXFromAddress</span>(<span class="hljs-params">address _addr, uint _x</span>) <span class="hljs-title">public</span> </span>{
         Callee callee = Callee(_addr);
         callee.setX(_x);
     }
 
-    // 调用方法，并转ether
-    function setXandSendEther(Callee _callee, uint _x) public payable {
-        (uint x, uint value) = _callee.setXandSendEther{value: msg.value}(_x);
+    <span class="hljs-comment">// 调用方法，并转ether</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setXandSendEther</span>(<span class="hljs-params">Callee _callee, uint _x</span>) <span class="hljs-title">public</span> <span class="hljs-title">payable</span> </span>{
+        (uint x, uint value) = _callee.setXandSendEther{<span class="hljs-attr">value</span>: msg.value}(_x);
     }
 }
 </code></pre>
@@ -3720,7 +3716,7 @@ contract Caller {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第d节:世界杯竞猜_solidity（下）","level":"1.15.4","depth":2,"next":{"title":"第1节:世界杯竞猜_solidity","level":"1.15.5","depth":2,"path":"08_项目实战-世界杯竞猜/01_世界杯竞猜_solidity.md","ref":"08_项目实战-世界杯竞猜/01_世界杯竞猜_solidity.md","articles":[]},"previous":{"title":"第c节:世界杯竞猜_solidity（上）","level":"1.15.3","depth":2,"path":"08_项目实战-世界杯竞猜/基础回顾/03-solidity（上）.md","ref":"08_项目实战-世界杯竞猜/基础回顾/03-solidity（上）.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"08_项目实战-世界杯竞猜/基础回顾/04-solidity（下）.md","mtime":"2023-09-23T13:24:18.849Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"../..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第d节:世界杯竞猜_solidity（下）","level":"1.15.4","depth":2,"next":{"title":"第1节:世界杯竞猜_solidity","level":"1.15.5","depth":2,"path":"08_项目实战-世界杯竞猜/01_世界杯竞猜_solidity.md","ref":"08_项目实战-世界杯竞猜/01_世界杯竞猜_solidity.md","articles":[]},"previous":{"title":"第c节:世界杯竞猜_solidity（上）","level":"1.15.3","depth":2,"path":"08_项目实战-世界杯竞猜/基础回顾/03-solidity（上）.md","ref":"08_项目实战-世界杯竞猜/基础回顾/03-solidity（上）.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"cn","gitbook":"*"},"file":{"path":"08_项目实战-世界杯竞猜/基础回顾/04-solidity（下）.md","mtime":"2023-09-23T13:24:18.849Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"../..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3803,14 +3799,6 @@ contract Caller {
     
         
         <script src="../../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

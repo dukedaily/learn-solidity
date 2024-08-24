@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3027,76 +3023,76 @@
 <li>私钥签名</li>
 <li>广播签名交易</li>
 </ol>
-<pre><code class="lang-go">package main
+<pre><code class="lang-go"><span class="hljs-keyword">package</span> main
 
-import (
-    &quot;context&quot;
-    &quot;crypto/ecdsa&quot;
-    &quot;fmt&quot;
-    &quot;log&quot;
-    &quot;math/big&quot;
+<span class="hljs-keyword">import</span> (
+    <span class="hljs-string">&quot;context&quot;</span>
+    <span class="hljs-string">&quot;crypto/ecdsa&quot;</span>
+    <span class="hljs-string">&quot;fmt&quot;</span>
+    <span class="hljs-string">&quot;log&quot;</span>
+    <span class="hljs-string">&quot;math/big&quot;</span>
 
-    &quot;github.com/ethereum/go-ethereum/common&quot;
-    &quot;github.com/ethereum/go-ethereum/core/types&quot;
-    &quot;github.com/ethereum/go-ethereum/crypto&quot;
-    &quot;github.com/ethereum/go-ethereum/ethclient&quot;
+    <span class="hljs-string">&quot;github.com/ethereum/go-ethereum/common&quot;</span>
+    <span class="hljs-string">&quot;github.com/ethereum/go-ethereum/core/types&quot;</span>
+    <span class="hljs-string">&quot;github.com/ethereum/go-ethereum/crypto&quot;</span>
+    <span class="hljs-string">&quot;github.com/ethereum/go-ethereum/ethclient&quot;</span>
 
-    utils &quot;code/main/utils&quot;
+    utils <span class="hljs-string">&quot;code/main/utils&quot;</span>
 )
 
-func main() {
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> {
     client, err := ethclient.Dial(utils.BscTestnetRpc)
-    if err != nil {
+    <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
         log.Fatal(err)
     }
 
     privateKey, err := crypto.HexToECDSA(utils.HardhatPrivateKey)
-    if err != nil {
+    <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
         log.Fatal(err)
     }
 
     publicKey := privateKey.Public()
     publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
-    if !ok {
-        log.Fatal(&quot;cannot assert type: publicKey is not of type *ecdsa.PublicKey&quot;)
+    <span class="hljs-keyword">if</span> !ok {
+        log.Fatal(<span class="hljs-string">&quot;cannot assert type: publicKey is not of type *ecdsa.PublicKey&quot;</span>)
     }
 
     fromAddress := crypto.PubkeyToAddress(*publicKeyECDSA)
     nonce, err := client.PendingNonceAt(context.Background(), fromAddress)
-    if err != nil {
+    <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
         log.Fatal(err)
     }
 
-    value := big.NewInt(10000000000000000) // in wei (0.01 eth)
-    gasLimit := uint64(21000)              // in units
+    value := big.NewInt(<span class="hljs-number">10000000000000000</span>) <span class="hljs-comment">// in wei (0.01 eth)</span>
+    gasLimit := <span class="hljs-keyword">uint64</span>(<span class="hljs-number">21000</span>)              <span class="hljs-comment">// in units</span>
     gasPrice, err := client.SuggestGasPrice(context.Background())
-    if err != nil {
+    <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
         log.Fatal(err)
     }
 
-    toAddress := common.HexToAddress(&quot;0xE8191108261f3234f1C2acA52a0D5C11795Aef9E&quot;)
-    var data []byte
+    toAddress := common.HexToAddress(<span class="hljs-string">&quot;0xE8191108261f3234f1C2acA52a0D5C11795Aef9E&quot;</span>)
+    <span class="hljs-keyword">var</span> data []<span class="hljs-keyword">byte</span>
     tx := types.NewTransaction(nonce, toAddress, value, gasLimit, gasPrice, data)
 
     chainID, err := client.NetworkID(context.Background())
-    if err != nil {
+    <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
         log.Fatal(err)
     }
 
-    // 私钥签名
+    <span class="hljs-comment">// 私钥签名</span>
     signedTx, err := types.SignTx(tx, types.NewEIP155Signer(chainID), privateKey)
-    if err != nil {
+    <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
         log.Fatal(err)
     }
 
-    // 广播
+    <span class="hljs-comment">// 广播</span>
     err = client.SendTransaction(context.Background(), signedTx)
-    if err != nil {
+    <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
         log.Fatal(err)
     }
 
-    // https://testnet.bscscan.com/tx/0x07ed05b331dd9668fc4f80fee155d08a8d819194750b34469014adc368667070
-    fmt.Printf(&quot;tx sent: %s&quot;, signedTx.Hash().Hex())
+    <span class="hljs-comment">// https://testnet.bscscan.com/tx/0x07ed05b331dd9668fc4f80fee155d08a8d819194750b34469014adc368667070</span>
+    fmt.Printf(<span class="hljs-string">&quot;tx sent: %s&quot;</span>, signedTx.Hash().Hex())
 }
 </code></pre>
 <p>执行结果，<a href="https://testnet.bscscan.com/tx/0x07ed05b331dd9668fc4f80fee155d08a8d819194750b34469014adc368667070" target="_blank">点击查看</a></p>
@@ -3128,7 +3124,7 @@ func main() {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第3节:SendTx转账","level":"1.21.3","depth":2,"next":{"title":"第4节:SendRawTx转账","level":"1.21.4","depth":2,"path":"14_Golang合约交互/04_SendRawTx转账.md","ref":"14_Golang合约交互/04_SendRawTx转账.md","articles":[]},"previous":{"title":"第2节:读写合约","level":"1.21.2","depth":2,"path":"14_Golang合约交互/02_读写合约.md","ref":"14_Golang合约交互/02_读写合约.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"14_Golang合约交互/03_SendTx转账.md","mtime":"2023-09-23T13:27:27.324Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第3节:SendTx转账","level":"1.21.3","depth":2,"next":{"title":"第4节:SendRawTx转账","level":"1.21.4","depth":2,"path":"14_Golang合约交互/04_SendRawTx转账.md","ref":"14_Golang合约交互/04_SendRawTx转账.md","articles":[]},"previous":{"title":"第2节:读写合约","level":"1.21.2","depth":2,"path":"14_Golang合约交互/02_读写合约.md","ref":"14_Golang合约交互/02_读写合约.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"cn","gitbook":"*"},"file":{"path":"14_Golang合约交互/03_SendTx转账.md","mtime":"2023-09-23T13:27:27.324Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3211,14 +3207,6 @@ func main() {
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3052,58 +3048,58 @@
 <h2 id="2-demo演示">2. demo演示</h2>
 <p>下载<a href="https://github.com/boltdb/bolt.git" target="_blank">bolt</a>数据库，放在GOPATH目录下</p>
 <p>创建文件boltDemo.go，填写如下内容：</p>
-<pre><code class="lang-go">package main
+<pre><code class="lang-go"><span class="hljs-keyword">package</span> main
 
-import (
-    &quot;bolt&quot;
-    &quot;os&quot;
-    &quot;fmt&quot;
+<span class="hljs-keyword">import</span> (
+    <span class="hljs-string">&quot;bolt&quot;</span>
+    <span class="hljs-string">&quot;os&quot;</span>
+    <span class="hljs-string">&quot;fmt&quot;</span>
 )
 
-func main() {
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> {
 
-    //1. 打开数据库
-    db, err := bolt.Open(&quot;test.db&quot;, 0600, nil)
+    <span class="hljs-comment">//1. 打开数据库</span>
+    db, err := bolt.Open(<span class="hljs-string">&quot;test.db&quot;</span>, <span class="hljs-number">0600</span>, <span class="hljs-literal">nil</span>)
 
-    if err != nil {
-        fmt.Println(&quot;bolt.Open failed!&quot;, err)
-        os.Exit(1)
+    <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
+        fmt.Println(<span class="hljs-string">&quot;bolt.Open failed!&quot;</span>, err)
+        os.Exit(<span class="hljs-number">1</span>)
     }
 
-    //2.写数据库
-    db.Update(func(tx *bolt.Tx) error {
-        bucket := tx.Bucket([]byte(&quot;firstBucket&quot;))
+    <span class="hljs-comment">//2.写数据库</span>
+    db.Update(<span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(tx *bolt.Tx)</span> <span class="hljs-title">error</span></span> {
+        bucket := tx.Bucket([]<span class="hljs-keyword">byte</span>(<span class="hljs-string">&quot;firstBucket&quot;</span>))
 
-        var err error
-        if bucket == nil {
-            bucket, err = tx.CreateBucket([]byte(&quot;firstBucket&quot;))
-            if err != nil {
-                fmt.Println(&quot;createBucket failed!&quot;, err)
-                os.Exit(1)
+        <span class="hljs-keyword">var</span> err error
+        <span class="hljs-keyword">if</span> bucket == <span class="hljs-literal">nil</span> {
+            bucket, err = tx.CreateBucket([]<span class="hljs-keyword">byte</span>(<span class="hljs-string">&quot;firstBucket&quot;</span>))
+            <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
+                fmt.Println(<span class="hljs-string">&quot;createBucket failed!&quot;</span>, err)
+                os.Exit(<span class="hljs-number">1</span>)
             }
         }
 
-        bucket.Put([]byte(&quot;aaaa&quot;), []byte(&quot;HelloWorld!&quot;))
-        bucket.Put([]byte(&quot;bbbb&quot;), []byte(&quot;HelloItcast!&quot;))
-        return nil
+        bucket.Put([]<span class="hljs-keyword">byte</span>(<span class="hljs-string">&quot;aaaa&quot;</span>), []<span class="hljs-keyword">byte</span>(<span class="hljs-string">&quot;HelloWorld!&quot;</span>))
+        bucket.Put([]<span class="hljs-keyword">byte</span>(<span class="hljs-string">&quot;bbbb&quot;</span>), []<span class="hljs-keyword">byte</span>(<span class="hljs-string">&quot;HelloItcast!&quot;</span>))
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>
     })
 
-    //3.读取数据库
-    var value []byte
+    <span class="hljs-comment">//3.读取数据库</span>
+    <span class="hljs-keyword">var</span> value []<span class="hljs-keyword">byte</span>
 
-    db.View(func(tx *bolt.Tx) error {
-        bucket := tx.Bucket([]byte(&quot;firstBucket&quot;))
-        if bucket == nil {
-            fmt.Println(&quot;Bucket is nil!&quot;)
-            os.Exit(1)
+    db.View(<span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(tx *bolt.Tx)</span> <span class="hljs-title">error</span></span> {
+        bucket := tx.Bucket([]<span class="hljs-keyword">byte</span>(<span class="hljs-string">&quot;firstBucket&quot;</span>))
+        <span class="hljs-keyword">if</span> bucket == <span class="hljs-literal">nil</span> {
+            fmt.Println(<span class="hljs-string">&quot;Bucket is nil!&quot;</span>)
+            os.Exit(<span class="hljs-number">1</span>)
         }
 
-        value = bucket.Get([]byte(&quot;aaaa&quot;))
-        fmt.Println(&quot;aaaa =&gt; &quot;, string(value))
-        value = bucket.Get([]byte(&quot;bbbb&quot;))
-        fmt.Println(&quot;bbbb =&gt; &quot;, string(value))
+        value = bucket.Get([]<span class="hljs-keyword">byte</span>(<span class="hljs-string">&quot;aaaa&quot;</span>))
+        fmt.Println(<span class="hljs-string">&quot;aaaa =&gt; &quot;</span>, <span class="hljs-keyword">string</span>(value))
+        value = bucket.Get([]<span class="hljs-keyword">byte</span>(<span class="hljs-string">&quot;bbbb&quot;</span>))
+        fmt.Println(<span class="hljs-string">&quot;bbbb =&gt; &quot;</span>, <span class="hljs-keyword">string</span>(value))
 
-        return nil
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>
     })
 }
 </code></pre>
@@ -3120,24 +3116,24 @@ func main() {
 <li>更新”last“ 这个key对应的值，这个值就是最后一个区块的哈希值，用于新区块的创建添加。</li>
 </ul>
 <h1 id="二、改写blockchain结构">二、改写BlockChain结构</h1>
-<pre><code class="lang-go">//使用bolt改写
-type BlockChain struct {
-    //操作数据库的句柄
+<pre><code class="lang-go"><span class="hljs-comment">//使用bolt改写</span>
+<span class="hljs-keyword">type</span> BlockChain <span class="hljs-keyword">struct</span> {
+    <span class="hljs-comment">//操作数据库的句柄</span>
     db *bolt.DB
 
-    //尾巴，存储最后一个区块的哈希
-    tail []byte
+    <span class="hljs-comment">//尾巴，存储最后一个区块的哈希</span>
+    tail []<span class="hljs-keyword">byte</span>
 }
 </code></pre>
 <h1 id="三、改写newblockchain">三、改写NewBlockChain</h1>
 <h2 id="1-分析">1. 分析</h2>
-<pre><code class="lang-go">//- 提供一个创建BlockChain的方法
-func NewBlockChain() *BlockChain {
+<pre><code class="lang-go"><span class="hljs-comment">//- 提供一个创建BlockChain的方法</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">NewBlockChain</span><span class="hljs-params">()</span> *<span class="hljs-title">BlockChain</span></span> {
 
-    var db *bolt.DB
-    var lastHash []byte
+    <span class="hljs-keyword">var</span> db *bolt.DB
+    <span class="hljs-keyword">var</span> lastHash []<span class="hljs-keyword">byte</span>
 
-    /*
+    <span class="hljs-comment">/*
     1. 打开数据库(没有的话就创建)
     2. 找到抽屉（bucket），如果找到，就返回bucket，如果没有找到，我们要创建bucket，通过名字创建
         a. 找到了
@@ -3147,9 +3143,9 @@ func NewBlockChain() *BlockChain {
             1. 创建bucket，通过名字
             2. 添加创世块数据
             3. 更新&quot;last&quot;这个key的value（创世块的哈希值）
-    */
+    */</span>
 
-    return &amp;BlockChain{db, lastHash}
+    <span class="hljs-keyword">return</span> &amp;BlockChain{db, lastHash}
 }
 </code></pre>
 <h2 id="2-代码">2. 代码</h2>
@@ -3160,12 +3156,12 @@ func NewBlockChain() *BlockChain {
 <li>再处理bucket创建逻辑</li>
 <li>不要从boltTest复用代码，重新敲一遍</li>
 </ol>
-<pre><code class="lang-go">//- 提供一个创建BlockChain的方法
-func NewBlockChain() *BlockChain {
+<pre><code class="lang-go"><span class="hljs-comment">//- 提供一个创建BlockChain的方法</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">NewBlockChain</span><span class="hljs-params">()</span> *<span class="hljs-title">BlockChain</span></span> {
 
-    var lastHash []byte
+    <span class="hljs-keyword">var</span> lastHash []<span class="hljs-keyword">byte</span>
 
-    /*
+    <span class="hljs-comment">/*
     1. 打开数据库(没有的话就创建)
     2. 找到抽屉（bucket），如果找到，就返回bucket，如果没有找到，我们要创建bucket，通过名字创建
         a. 找到了
@@ -3176,48 +3172,48 @@ func NewBlockChain() *BlockChain {
             2. 添加创世块数据
             3. 更新&quot;last&quot;这个key的value（创世块的哈希值）
 
-    */
+    */</span>
 
-    db, err := bolt.Open(blockChainDb, 0600, nil)
+    db, err := bolt.Open(blockChainDb, <span class="hljs-number">0600</span>, <span class="hljs-literal">nil</span>)
 
-    if err != nil {
-        fmt.Println(&quot;bolt.Open failed!&quot;, err)
-        os.Exit(1)
+    <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
+        fmt.Println(<span class="hljs-string">&quot;bolt.Open failed!&quot;</span>, err)
+        os.Exit(<span class="hljs-number">1</span>)
     }
 
 
-    db.Update(func(tx *bolt.Tx) error {
-        bucket := tx.Bucket([]byte(blockBucket))
+    db.Update(<span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(tx *bolt.Tx)</span> <span class="hljs-title">error</span></span> {
+        bucket := tx.Bucket([]<span class="hljs-keyword">byte</span>(blockBucket))
 
-        var err error
-        //如果是空的，表明这个bucket没有创建，我们就要去创建它，然后再写数据。
-        if bucket == nil {
-            bucket, err = tx.CreateBucket([]byte(blockBucket))
-            if err != nil {
-                fmt.Println(&quot;createBucket failed!&quot;, err)
-                os.Exit(1)
+        <span class="hljs-keyword">var</span> err error
+        <span class="hljs-comment">//如果是空的，表明这个bucket没有创建，我们就要去创建它，然后再写数据。</span>
+        <span class="hljs-keyword">if</span> bucket == <span class="hljs-literal">nil</span> {
+            bucket, err = tx.CreateBucket([]<span class="hljs-keyword">byte</span>(blockBucket))
+            <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
+                fmt.Println(<span class="hljs-string">&quot;createBucket failed!&quot;</span>, err)
+                os.Exit(<span class="hljs-number">1</span>)
             }
 
-            //抽屉准备好了，开始写区块数据，区块哪里来？？
-            genesisBlock := NewBlock(&quot;Genesis Block!!!&quot;, []byte{})
+            <span class="hljs-comment">//抽屉准备好了，开始写区块数据，区块哪里来？？</span>
+            genesisBlock := NewBlock(<span class="hljs-string">&quot;Genesis Block!!!&quot;</span>, []<span class="hljs-keyword">byte</span>{})
 
-            bucket.Put(genesisBlock.Hash, genesisBlock.toByte()/*block的字节流！*/) //TODO
-            bucket.Put([]byte(last), genesisBlock.Hash)
+            bucket.Put(genesisBlock.Hash, genesisBlock.toByte()<span class="hljs-comment">/*block的字节流！*/</span>) <span class="hljs-comment">//TODO</span>
+            bucket.Put([]<span class="hljs-keyword">byte</span>(last), genesisBlock.Hash)
 
-            //这个别忘了，我们需要返回它
+            <span class="hljs-comment">//这个别忘了，我们需要返回它</span>
             lastHash = genesisBlock.Hash
-            return nil
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>
 
-        //抽屉已经存在，直接读取即可
-        } else {
-            //获取最后一个区块的哈希
-            lastHash = bucket.Get([]byte(last))
+        <span class="hljs-comment">//抽屉已经存在，直接读取即可</span>
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-comment">//获取最后一个区块的哈希</span>
+            lastHash = bucket.Get([]<span class="hljs-keyword">byte</span>(last))
         }
 
-        return nil
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>
     })
 
-    return &amp;BlockChain{db, lastHash}
+    <span class="hljs-keyword">return</span> &amp;BlockChain{db, lastHash}
 }
 </code></pre>
 <h1 id="四、序列化反序列化">四、序列化/反序列化</h1>
@@ -3240,38 +3236,38 @@ func NewBlockChain() *BlockChain {
 <li>使用gob进行反序列化（解码）得到Person结构</li>
 <li><strong>记住，这里所有的结构都用地址传递即可</strong></li>
 </ul>
-<pre><code class="lang-go">package main
+<pre><code class="lang-go"><span class="hljs-keyword">package</span> main
 
-import (
-    &quot;encoding/gob&quot;
-    &quot;bytes&quot;
-    &quot;fmt&quot;
+<span class="hljs-keyword">import</span> (
+    <span class="hljs-string">&quot;encoding/gob&quot;</span>
+    <span class="hljs-string">&quot;bytes&quot;</span>
+    <span class="hljs-string">&quot;fmt&quot;</span>
 )
 
-type Person struct {
-    //大写
-    Name string
-    Age int
+<span class="hljs-keyword">type</span> Person <span class="hljs-keyword">struct</span> {
+    <span class="hljs-comment">//大写</span>
+    Name <span class="hljs-keyword">string</span>
+    Age <span class="hljs-keyword">int</span>
 }
 
-func main()  {
-    var buffer bytes.Buffer
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>  {
+    <span class="hljs-keyword">var</span> buffer bytes.Buffer
     encoder := gob.NewEncoder(&amp;buffer)
 
-    lily := Person{ &quot;Lily&quot;, 28}
+    lily := Person{ <span class="hljs-string">&quot;Lily&quot;</span>, <span class="hljs-number">28</span>}
 
     err := encoder.Encode(&amp;lily)
-    if err != nil {
-        fmt.Println(&quot;encode failed!&quot;, err)
+    <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
+        fmt.Println(<span class="hljs-string">&quot;encode failed!&quot;</span>, err)
     }
 
-    fmt.Println(&quot;after serialize :&quot;, buffer)
-    var LILY Person
+    fmt.Println(<span class="hljs-string">&quot;after serialize :&quot;</span>, buffer)
+    <span class="hljs-keyword">var</span> LILY Person
 
     decoder := gob.NewDecoder(&amp;buffer)
     err = decoder.Decode(&amp;LILY)
-    if err != nil {
-        fmt.Println(&quot;decode failed!&quot;, err)
+    <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
+        fmt.Println(<span class="hljs-string">&quot;decode failed!&quot;</span>, err)
     }
 
     fmt.Println(LILY)
@@ -3279,56 +3275,56 @@ func main()  {
 </code></pre>
 <h2 id="5serialize函数">5.Serialize函数</h2>
 <pre><code class="lang-go">/序列化:将结构转化成字节流，在网络上按字节传输。
-func (block *Block)Serialize() []byte {
-    //将block数据转换成字节流
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(block *Block)</span><span class="hljs-title">Serialize</span><span class="hljs-params">()</span> []<span class="hljs-title">byte</span></span> {
+    <span class="hljs-comment">//将block数据转换成字节流</span>
 
-    var buffer bytes.Buffer
-    //创建一个编码器
+    <span class="hljs-keyword">var</span> buffer bytes.Buffer
+    <span class="hljs-comment">//创建一个编码器</span>
     encoder := gob.NewEncoder(&amp;buffer)
 
-    //编码，将block编码成buffer
+    <span class="hljs-comment">//编码，将block编码成buffer</span>
     err := encoder.Encode(block)
 
-    if err != nil {
-        fmt.Println(&quot;encode failed!&quot;, err)
-        os.Exit(1)
+    <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
+        fmt.Println(<span class="hljs-string">&quot;encode failed!&quot;</span>, err)
+        os.Exit(<span class="hljs-number">1</span>)
     }
 
-    return buffer.Bytes()
+    <span class="hljs-keyword">return</span> buffer.Bytes()
 }
 </code></pre>
 <h2 id="6deserialize函数">6.Deserialize函数</h2>
-<pre><code class="lang-go">// 反序列化:将接受到的字节流转换成目标结构。
-func Deserialize(data []byte) Block {
-    var block Block
-    var buffer bytes.Buffer
+<pre><code class="lang-go"><span class="hljs-comment">// 反序列化:将接受到的字节流转换成目标结构。</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">Deserialize</span><span class="hljs-params">(data []<span class="hljs-keyword">byte</span>)</span> <span class="hljs-title">Block</span></span> {
+    <span class="hljs-keyword">var</span> block Block
+    <span class="hljs-keyword">var</span> buffer bytes.Buffer
 
-    //将data写入buffer
+    <span class="hljs-comment">//将data写入buffer</span>
     _, err := buffer.Write(data)
-    if err != nil {
-        fmt.Println(&quot;buffer.Read failed!&quot;, err)
-        os.Exit(1)
+    <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
+        fmt.Println(<span class="hljs-string">&quot;buffer.Read failed!&quot;</span>, err)
+        os.Exit(<span class="hljs-number">1</span>)
     }
 
-    //创建decoder
+    <span class="hljs-comment">//创建decoder</span>
     decoder := gob.NewDecoder(&amp;buffer)
 
-    //将buffer数据转换成block
+    <span class="hljs-comment">//将buffer数据转换成block</span>
     err = decoder.Decode(&amp;block)
-    if err != nil {
-        fmt.Println(&quot;decode failed!&quot;, err)
-        os.Exit(1)
+    <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
+        fmt.Println(<span class="hljs-string">&quot;decode failed!&quot;</span>, err)
+        os.Exit(<span class="hljs-number">1</span>)
     }
 
-    return block
+    <span class="hljs-keyword">return</span> block
 }
 </code></pre>
 <h1 id="五、改写addblock">五、改写AddBlock</h1>
 <p>记得两件事，put数据，更新lastHash</p>
 <h2 id="1-代码">1. 代码</h2>
-<pre><code class="lang-go">func (bc *BlockChain)AddBlock(data string)  {
+<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(bc *BlockChain)</span><span class="hljs-title">AddBlock</span><span class="hljs-params">(data <span class="hljs-keyword">string</span>)</span></span>  {
 
-    /*
+    <span class="hljs-comment">/*
     //获取最后一个区块
     lastBlock := bc.blocks[len(bc.blocks) -1]
     //获取最后一个区块的哈希,作为最新（当前）区块的前哈希
@@ -3336,49 +3332,49 @@ func Deserialize(data []byte) Block {
 
     block := NewBlock(data, prevHash)
     bc.blocks = append(bc.blocks, &amp;block)
-    */
+    */</span>
 
-    //获取最后区块的哈希值
+    <span class="hljs-comment">//获取最后区块的哈希值</span>
     lastBlockHash := bc.tail
 
-    //创建新区块
+    <span class="hljs-comment">//创建新区块</span>
     newBlock := NewBlock(data, lastBlockHash)
 
 
-    bc.db.Update(func(tx *bolt.Tx) error {
-        bucket := tx.Bucket([]byte(blockBucket))
+    bc.db.Update(<span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(tx *bolt.Tx)</span> <span class="hljs-title">error</span></span> {
+        bucket := tx.Bucket([]<span class="hljs-keyword">byte</span>(blockBucket))
 
-        //如果是空的，表明这个bucket没有创建，我们就要去创建它，然后再写数据。
-        if bucket == nil {
-            fmt.Println(&quot;bucket should not be nil!!&quot;)
-            os.Exit(1)
-        } else{
-            //添加区块
-            bucket.Put(newBlock.Hash, newBlock.toByte()/*block的字节流！*/) //TODO
-            //更新最后区块的哈希值
-            bucket.Put([]byte(last), newBlock.Hash)
+        <span class="hljs-comment">//如果是空的，表明这个bucket没有创建，我们就要去创建它，然后再写数据。</span>
+        <span class="hljs-keyword">if</span> bucket == <span class="hljs-literal">nil</span> {
+            fmt.Println(<span class="hljs-string">&quot;bucket should not be nil!!&quot;</span>)
+            os.Exit(<span class="hljs-number">1</span>)
+        } <span class="hljs-keyword">else</span>{
+            <span class="hljs-comment">//添加区块</span>
+            bucket.Put(newBlock.Hash, newBlock.toByte()<span class="hljs-comment">/*block的字节流！*/</span>) <span class="hljs-comment">//TODO</span>
+            <span class="hljs-comment">//更新最后区块的哈希值</span>
+            bucket.Put([]<span class="hljs-keyword">byte</span>(last), newBlock.Hash)
 
-            //这个别忘了，我们需要返回它
+            <span class="hljs-comment">//这个别忘了，我们需要返回它</span>
             bc.tail = newBlock.Hash
-            return nil
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>
         }
-        return nil
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>
     })
 }
 </code></pre>
 <h1 id="六、第一次测试">六、第一次测试</h1>
 <h2 id="1-修改maingo">1. 修改main.go</h2>
 <p>将main函数中的打印部分去掉</p>
-<pre><code class="lang-go">package main
+<pre><code class="lang-go"><span class="hljs-keyword">package</span> main
 
-func main() {
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> {
 
     bc := NewBlockChain()
-    bc.AddBlock(&quot;HelloWorld!&quot;)
-    bc.AddBlock(&quot;Hello Itcast!&quot;)
-    bc.AddBlock(&quot;Hello i11111!&quot;)
-    //block的数组
-    /*
+    bc.AddBlock(<span class="hljs-string">&quot;HelloWorld!&quot;</span>)
+    bc.AddBlock(<span class="hljs-string">&quot;Hello Itcast!&quot;</span>)
+    bc.AddBlock(<span class="hljs-string">&quot;Hello i11111!&quot;</span>)
+    <span class="hljs-comment">//block的数组</span>
+    <span class="hljs-comment">/*
     for index, block := range bc.blocks {
         fmt.Println(&quot; ============== current block index :&quot;, index)
         fmt.Printf(&quot;Version : %d\n&quot;, block.Version)
@@ -3392,7 +3388,7 @@ func main() {
         pow := NewProofOfWork(*block)
         fmt.Printf(&quot;IsValid : %v\n&quot;, pow.IsValid())
     }
-    */
+    */</span>
 }
 </code></pre>
 <h2 id="2-编译执行">2. 编译执行</h2>
@@ -3416,125 +3412,125 @@ func main() {
 <h2 id="0-bolt自带迭代器">0. bolt自带迭代器</h2>
 <p><strong>特点：bolt内部使用key的大小进行自动排序，而不是按照插入顺序排序，所以不适用我们的区块打印</strong></p>
 <p><strong>请自行验证遍历key打印输出</strong>，代码如下</p>
-<pre><code class="lang-js">func (bc *BlockChain) Printchain() {
+<pre><code class="lang-js">func (bc *BlockChain) <span class="hljs-function"><span class="hljs-title">Printchain</span>(<span class="hljs-params"></span>)</span> {
 
     bc.db.View(func(tx *bolt.Tx) error {
-        // Assume bucket exists and has keys
-        b := tx.Bucket([]byte(&quot;blockBucket&quot;))
+        <span class="hljs-comment">// Assume bucket exists and has keys</span>
+        <span class="hljs-attr">b</span> := tx.Bucket([]byte(<span class="hljs-string">&quot;blockBucket&quot;</span>))
 
-        //从第一个key-&gt; value 进行遍历，到最后一个固定的key时直接返回
+        <span class="hljs-comment">//从第一个key-&gt; value 进行遍历，到最后一个固定的key时直接返回</span>
         b.ForEach(func(k, v []byte) error {
-            if bytes.Equal(k, []byte(&quot;LastHashKey&quot;)) {
-                return nil
+            <span class="hljs-keyword">if</span> bytes.Equal(k, []byte(<span class="hljs-string">&quot;LastHashKey&quot;</span>)) {
+                <span class="hljs-keyword">return</span> nil
             }
 
-            block := Deserialize(v)
-            //fmt.Printf(&quot;key=%x, value=%s\n&quot;, k, v)
-            fmt.Printf(&quot;===========================\n\n&quot;)
-            fmt.Printf(&quot;版本号: %d\n&quot;, block.Version)
-            fmt.Printf(&quot;前区块哈希值: %x\n&quot;, block.PrevHash)
-            fmt.Printf(&quot;梅克尔根: %x\n&quot;, block.MerkelRoot)
-            fmt.Printf(&quot;时间戳: %d\n&quot;, block.TimeStamp)
-            fmt.Printf(&quot;难度值(随便写的）: %d\n&quot;, block.Difficulty)
-            fmt.Printf(&quot;随机数 : %d\n&quot;, block.Nonce)
-            fmt.Printf(&quot;当前区块哈希值: %x\n&quot;, block.Hash)
-            fmt.Printf(&quot;区块数据 :%s\n&quot;, block.Data)
-            return nil
+            <span class="hljs-attr">block</span> := Deserialize(v)
+            <span class="hljs-comment">//fmt.Printf(&quot;key=%x, value=%s\n&quot;, k, v)</span>
+            fmt.Printf(<span class="hljs-string">&quot;===========================\n\n&quot;</span>)
+            fmt.Printf(<span class="hljs-string">&quot;版本号: %d\n&quot;</span>, block.Version)
+            fmt.Printf(<span class="hljs-string">&quot;前区块哈希值: %x\n&quot;</span>, block.PrevHash)
+            fmt.Printf(<span class="hljs-string">&quot;梅克尔根: %x\n&quot;</span>, block.MerkelRoot)
+            fmt.Printf(<span class="hljs-string">&quot;时间戳: %d\n&quot;</span>, block.TimeStamp)
+            fmt.Printf(<span class="hljs-string">&quot;难度值(随便写的）: %d\n&quot;</span>, block.Difficulty)
+            fmt.Printf(<span class="hljs-string">&quot;随机数 : %d\n&quot;</span>, block.Nonce)
+            fmt.Printf(<span class="hljs-string">&quot;当前区块哈希值: %x\n&quot;</span>, block.Hash)
+            fmt.Printf(<span class="hljs-string">&quot;区块数据 :%s\n&quot;</span>, block.Data)
+            <span class="hljs-keyword">return</span> nil
         })
-        return nil
+        <span class="hljs-keyword">return</span> nil
     })
 }
 </code></pre>
 <h2 id="1-定义迭代器结构">1. 定义迭代器结构</h2>
 <p>我们自定义迭代器，实现区块遍历，决堤步骤：创建文件BlockChainIterator.go，添加如下代码：</p>
-<pre><code class="lang-go">//1. 定义一个区块链迭代器的结构
-type BlockChainIterator struct {
+<pre><code class="lang-go"><span class="hljs-comment">//1. 定义一个区块链迭代器的结构</span>
+<span class="hljs-keyword">type</span> BlockChainIterator <span class="hljs-keyword">struct</span> {
     db *bolt.DB
 
-    //指向当前的区块
-    current_point []byte 
+    <span class="hljs-comment">//指向当前的区块</span>
+    current_point []<span class="hljs-keyword">byte</span> 
 }
 </code></pre>
 <h2 id="2-定义迭代器创建函数">2. 定义迭代器创建函数</h2>
-<pre><code class="lang-go">func NewBlockChainIterator(bc *BlockChain) BlockChainIterator {
+<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">NewBlockChainIterator</span><span class="hljs-params">(bc *BlockChain)</span> <span class="hljs-title">BlockChainIterator</span></span> {
 
-    var it BlockChainIterator
+    <span class="hljs-keyword">var</span> it BlockChainIterator
 
     it.db = bc.db
     it.current_point = bc.tail
 
-    return it
+    <span class="hljs-keyword">return</span> it
 }
 </code></pre>
 <h2 id="3-定义迭代器访问函数">3. 定义迭代器访问函数</h2>
-<pre><code class="lang-go">//一般叫Next(),迭代器的访问函数
-func (it *BlockChainIterator)GetBlockAndMoveLeft() Block {
-    var block Block
-    //1. 获取block
-    it.db.View(func(tx *bolt.Tx) error {
-        bucket := tx.Bucket([]byte(blockBucket))
+<pre><code class="lang-go"><span class="hljs-comment">//一般叫Next(),迭代器的访问函数</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(it *BlockChainIterator)</span><span class="hljs-title">GetBlockAndMoveLeft</span><span class="hljs-params">()</span> <span class="hljs-title">Block</span></span> {
+    <span class="hljs-keyword">var</span> block Block
+    <span class="hljs-comment">//1. 获取block</span>
+    it.db.View(<span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(tx *bolt.Tx)</span> <span class="hljs-title">error</span></span> {
+        bucket := tx.Bucket([]<span class="hljs-keyword">byte</span>(blockBucket))
 
-        //如果是空的，报错。
-        if bucket == nil {
-            fmt.Println(&quot;bucket should not be nil!!&quot;)
-            os.Exit(1)
-        } else{
+        <span class="hljs-comment">//如果是空的，报错。</span>
+        <span class="hljs-keyword">if</span> bucket == <span class="hljs-literal">nil</span> {
+            fmt.Println(<span class="hljs-string">&quot;bucket should not be nil!!&quot;</span>)
+            os.Exit(<span class="hljs-number">1</span>)
+        } <span class="hljs-keyword">else</span>{
 
-            //根据当前的current_pointer获取block
-            //这是一个字节流，需要反序列化
+            <span class="hljs-comment">//根据当前的current_pointer获取block</span>
+            <span class="hljs-comment">//这是一个字节流，需要反序列化</span>
             current_block_tmp := bucket.Get(it.current_point)
-            //fmt.Println(&quot;current_block_tmp : &quot;, current_block_tmp)
+            <span class="hljs-comment">//fmt.Println(&quot;current_block_tmp : &quot;, current_block_tmp)</span>
             current_block := Deserialize(current_block_tmp)
 
-            //这就拿到了我们想要的区块数据，准备返回
+            <span class="hljs-comment">//这就拿到了我们想要的区块数据，准备返回</span>
             block = current_block
 
-            //将游标（指针）左移
-            //2. 向左移动
+            <span class="hljs-comment">//将游标（指针）左移</span>
+            <span class="hljs-comment">//2. 向左移动</span>
             it.current_point = current_block.PrevBlockHash
         }
-        return nil
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>
     })
 
 
-    return block
+    <span class="hljs-keyword">return</span> block
 </code></pre>
 <h2 id="4-调用迭代器访问函数">4. 调用迭代器访问函数</h2>
 <p>直接讲下面的代码替换原main.go内容</p>
-<pre><code class="lang-go">package main
+<pre><code class="lang-go"><span class="hljs-keyword">package</span> main
 
-import &quot;fmt&quot;
+<span class="hljs-keyword">import</span> <span class="hljs-string">&quot;fmt&quot;</span>
 
-func main() {
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> {
 
     bc := NewBlockChain()
-    bc.AddBlock(&quot;HelloWorld!&quot;)
-    bc.AddBlock(&quot;Hello Itcast!&quot;)
-    bc.AddBlock(&quot;Hello i11111!&quot;)
+    bc.AddBlock(<span class="hljs-string">&quot;HelloWorld!&quot;</span>)
+    bc.AddBlock(<span class="hljs-string">&quot;Hello Itcast!&quot;</span>)
+    bc.AddBlock(<span class="hljs-string">&quot;Hello i11111!&quot;</span>)
 
-    //定义迭代器
+    <span class="hljs-comment">//定义迭代器</span>
     it := NewBlockChainIterator(bc)
 
-    for {
-        //调用迭代器访问函数，返回当前block，并且向左移动
+    <span class="hljs-keyword">for</span> {
+        <span class="hljs-comment">//调用迭代器访问函数，返回当前block，并且向左移动</span>
         block := it.GetBlockAndMoveLeft()
 
-        fmt.Println(&quot; ============== =============&quot;)
-        fmt.Printf(&quot;Version : %d\n&quot;, block.Version)
-        fmt.Printf(&quot;PrevBlockHash : %x\n&quot;, block.PrevBlockHash)
-        fmt.Printf(&quot;Hash : %x\n&quot;, block.Hash)
-        fmt.Printf(&quot;MerkleRoot : %x\n&quot;, block.MerkleRoot)
-        fmt.Printf(&quot;TimeStamp : %d\n&quot;, block.TimeStamp)
-        fmt.Printf(&quot;Difficuty : %d\n&quot;, block.Difficuty)
-        fmt.Printf(&quot;Nonce : %d\n&quot;, block.Nonce)
-        fmt.Printf(&quot;Data : %s\n&quot;, block.Data)
+        fmt.Println(<span class="hljs-string">&quot; ============== =============&quot;</span>)
+        fmt.Printf(<span class="hljs-string">&quot;Version : %d\n&quot;</span>, block.Version)
+        fmt.Printf(<span class="hljs-string">&quot;PrevBlockHash : %x\n&quot;</span>, block.PrevBlockHash)
+        fmt.Printf(<span class="hljs-string">&quot;Hash : %x\n&quot;</span>, block.Hash)
+        fmt.Printf(<span class="hljs-string">&quot;MerkleRoot : %x\n&quot;</span>, block.MerkleRoot)
+        fmt.Printf(<span class="hljs-string">&quot;TimeStamp : %d\n&quot;</span>, block.TimeStamp)
+        fmt.Printf(<span class="hljs-string">&quot;Difficuty : %d\n&quot;</span>, block.Difficuty)
+        fmt.Printf(<span class="hljs-string">&quot;Nonce : %d\n&quot;</span>, block.Nonce)
+        fmt.Printf(<span class="hljs-string">&quot;Data : %s\n&quot;</span>, block.Data)
         pow := NewProofOfWork(block)
-        fmt.Printf(&quot;IsValid : %v\n&quot;, pow.IsValid())
+        fmt.Printf(<span class="hljs-string">&quot;IsValid : %v\n&quot;</span>, pow.IsValid())
 
-        //终止条件
-        if len(block.PrevBlockHash)  == 0 {
-            fmt.Println(&quot;print over!&quot;)
-            break
+        <span class="hljs-comment">//终止条件</span>
+        <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(block.PrevBlockHash)  == <span class="hljs-number">0</span> {
+            fmt.Println(<span class="hljs-string">&quot;print over!&quot;</span>)
+            <span class="hljs-keyword">break</span>
         }
     }
 }
@@ -3545,143 +3541,143 @@ func main() {
 ./block
 </code></pre><h2 id="2-执行结果">2. 执行结果</h2>
 <pre><code class="lang-go">duke ~/Desktop/code/v3$  ./block 
-target : 100000000000000000000000000000000000000000000000000000000000
-found hash : 00000d36d024711a949b9779e4d43a2a18a0707654f491a0f41840ad87f849d8, 3209217
-target : 100000000000000000000000000000000000000000000000000000000000
-found hash : 00000b552da1df46e5a7e39768b7d34bac2126ac4c0daec840d1e5656e412b3c, 1409047
-target : 100000000000000000000000000000000000000000000000000000000000
-found hash : 0000054ee9bd49cebe27eaf5ae23c77ba4640c14248814efa0b6323631a0dd9e, 1086036
-target : 100000000000000000000000000000000000000000000000000000000000
-found hash : 00000a6fddea8ef13c319882077606ae5c27e6ce8c62fb6f2ea2da818f6b8488, 580415
+target : <span class="hljs-number">100000000000000000000000000000000000000000000000000000000000</span>
+found hash : <span class="hljs-number">00000</span>d36d024711a949b9779e4d43a2a18a0707654f491a0f41840ad87f849d8, <span class="hljs-number">3209217</span>
+target : <span class="hljs-number">100000000000000000000000000000000000000000000000000000000000</span>
+found hash : <span class="hljs-number">00000</span>b552da1df46e5a7e39768b7d34bac2126ac4c0daec840d1e5656e412b3c, <span class="hljs-number">1409047</span>
+target : <span class="hljs-number">100000000000000000000000000000000000000000000000000000000000</span>
+found hash : <span class="hljs-number">0000054</span>ee9bd49cebe27eaf5ae23c77ba4640c14248814efa0b6323631a0dd9e, <span class="hljs-number">1086036</span>
+target : <span class="hljs-number">100000000000000000000000000000000000000000000000000000000000</span>
+found hash : <span class="hljs-number">00000</span>a6fddea8ef13c319882077606ae5c27e6ce8c62fb6f2ea2da818f6b8488, <span class="hljs-number">580415</span>
  ============== =============
-Version : 0
-PrevBlockHash : 0000054ee9bd49cebe27eaf5ae23c77ba4640c14248814efa0b6323631a0dd9e
-Hash : 00000a6fddea8ef13c319882077606ae5c27e6ce8c62fb6f2ea2da818f6b8488
+Version : <span class="hljs-number">0</span>
+PrevBlockHash : <span class="hljs-number">0000054</span>ee9bd49cebe27eaf5ae23c77ba4640c14248814efa0b6323631a0dd9e
+Hash : <span class="hljs-number">00000</span>a6fddea8ef13c319882077606ae5c27e6ce8c62fb6f2ea2da818f6b8488
 MerkleRoot : 
-TimeStamp : 1536323781
-Difficuty : 10
-Nonce : 580415
+TimeStamp : <span class="hljs-number">1536323781</span>
+Difficuty : <span class="hljs-number">10</span>
+Nonce : <span class="hljs-number">580415</span>
 Data : Hello i11111!
-is valid hash : 00000a6fddea8ef13c319882077606ae5c27e6ce8c62fb6f2ea2da818f6b8488, 580415
-IsValid : true
+is valid hash : <span class="hljs-number">00000</span>a6fddea8ef13c319882077606ae5c27e6ce8c62fb6f2ea2da818f6b8488, <span class="hljs-number">580415</span>
+IsValid : <span class="hljs-literal">true</span>
  ============== =============
-Version : 0
-PrevBlockHash : 00000b552da1df46e5a7e39768b7d34bac2126ac4c0daec840d1e5656e412b3c
-Hash : 0000054ee9bd49cebe27eaf5ae23c77ba4640c14248814efa0b6323631a0dd9e
+Version : <span class="hljs-number">0</span>
+PrevBlockHash : <span class="hljs-number">00000</span>b552da1df46e5a7e39768b7d34bac2126ac4c0daec840d1e5656e412b3c
+Hash : <span class="hljs-number">0000054</span>ee9bd49cebe27eaf5ae23c77ba4640c14248814efa0b6323631a0dd9e
 MerkleRoot : 
-TimeStamp : 1536323780
-Difficuty : 10
-Nonce : 1086036
+TimeStamp : <span class="hljs-number">1536323780</span>
+Difficuty : <span class="hljs-number">10</span>
+Nonce : <span class="hljs-number">1086036</span>
 Data : Hello Itcast!
-is valid hash : 0000054ee9bd49cebe27eaf5ae23c77ba4640c14248814efa0b6323631a0dd9e, 1086036
-IsValid : true
+is valid hash : <span class="hljs-number">0000054</span>ee9bd49cebe27eaf5ae23c77ba4640c14248814efa0b6323631a0dd9e, <span class="hljs-number">1086036</span>
+IsValid : <span class="hljs-literal">true</span>
  ============== =============
-Version : 0
-PrevBlockHash : 00000d36d024711a949b9779e4d43a2a18a0707654f491a0f41840ad87f849d8
-Hash : 00000b552da1df46e5a7e39768b7d34bac2126ac4c0daec840d1e5656e412b3c
+Version : <span class="hljs-number">0</span>
+PrevBlockHash : <span class="hljs-number">00000</span>d36d024711a949b9779e4d43a2a18a0707654f491a0f41840ad87f849d8
+Hash : <span class="hljs-number">00000</span>b552da1df46e5a7e39768b7d34bac2126ac4c0daec840d1e5656e412b3c
 MerkleRoot : 
-TimeStamp : 1536323778
-Difficuty : 10
-Nonce : 1409047
+TimeStamp : <span class="hljs-number">1536323778</span>
+Difficuty : <span class="hljs-number">10</span>
+Nonce : <span class="hljs-number">1409047</span>
 Data : HelloWorld!
-is valid hash : 00000b552da1df46e5a7e39768b7d34bac2126ac4c0daec840d1e5656e412b3c, 1409047
-IsValid : true
+is valid hash : <span class="hljs-number">00000</span>b552da1df46e5a7e39768b7d34bac2126ac4c0daec840d1e5656e412b3c, <span class="hljs-number">1409047</span>
+IsValid : <span class="hljs-literal">true</span>
  ============== =============
-Version : 0
+Version : <span class="hljs-number">0</span>
 PrevBlockHash : 
-Hash : 00000d36d024711a949b9779e4d43a2a18a0707654f491a0f41840ad87f849d8
+Hash : <span class="hljs-number">00000</span>d36d024711a949b9779e4d43a2a18a0707654f491a0f41840ad87f849d8
 MerkleRoot : 
-TimeStamp : 1536323775
-Difficuty : 10
-Nonce : 3209217
+TimeStamp : <span class="hljs-number">1536323775</span>
+Difficuty : <span class="hljs-number">10</span>
+Nonce : <span class="hljs-number">3209217</span>
 Data : Genesis Block!!!
-is valid hash : 00000d36d024711a949b9779e4d43a2a18a0707654f491a0f41840ad87f849d8, 3209217
-IsValid : true
-print over!
+is valid hash : <span class="hljs-number">00000</span>d36d024711a949b9779e4d43a2a18a0707654f491a0f41840ad87f849d8, <span class="hljs-number">3209217</span>
+IsValid : <span class="hljs-literal">true</span>
+<span class="hljs-built_in">print</span> over!
 </code></pre>
 <p>至此，对于数据库的操作已经全部完成，接下来就是去添加命令行，休息一会，喝杯茶吧。</p>
 <h1 id="八、命令行">八、命令行</h1>
 <p>创建命令行文件，填入如下代码，代码比较简单，请仔细分析。</p>
 <p>另，这里的实现有些笨重，比如需要反复自己解析os.Args数据，后面版本可以使用flag模块进行优化。</p>
-<pre><code class="lang-go">package main
+<pre><code class="lang-go"><span class="hljs-keyword">package</span> main
 
-import (
-    &quot;os&quot;
-    &quot;fmt&quot;
+<span class="hljs-keyword">import</span> (
+    <span class="hljs-string">&quot;os&quot;</span>
+    <span class="hljs-string">&quot;fmt&quot;</span>
 )
 
-type CLI struct {
+<span class="hljs-keyword">type</span> CLI <span class="hljs-keyword">struct</span> {
     bc *BlockChain
 }
 
-const Usage = `
+<span class="hljs-keyword">const</span> Usage = <span class="hljs-string">`
     ./blockchain addBlock --data DATA &quot;add a block&quot;
     ./blockchain printChain &quot;print block Chain&quot;
-`
+`</span>
 
-func (cli *CLI) Run() {
-    if len(os.Args) &lt; 2 {
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(cli *CLI)</span> <span class="hljs-title">Run</span><span class="hljs-params">()</span></span> {
+    <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(os.Args) &lt; <span class="hljs-number">2</span> {
         fmt.Println(Usage)
-        os.Exit(1)
+        os.Exit(<span class="hljs-number">1</span>)
     }
 
-    cmd := os.Args[1]
+    cmd := os.Args[<span class="hljs-number">1</span>]
 
-    switch cmd {
-    case &quot;addBlock&quot;:
-        if len(os.Args) &gt; 3 &amp;&amp; os.Args[2] == &quot;--data&quot; {
-            data := os.Args[3]
-            if data == &quot;&quot; {
-                fmt.Println(&quot;data should not be empty!&quot;)
-                os.Exit(1)
+    <span class="hljs-keyword">switch</span> cmd {
+    <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;addBlock&quot;</span>:
+        <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(os.Args) &gt; <span class="hljs-number">3</span> &amp;&amp; os.Args[<span class="hljs-number">2</span>] == <span class="hljs-string">&quot;--data&quot;</span> {
+            data := os.Args[<span class="hljs-number">3</span>]
+            <span class="hljs-keyword">if</span> data == <span class="hljs-string">&quot;&quot;</span> {
+                fmt.Println(<span class="hljs-string">&quot;data should not be empty!&quot;</span>)
+                os.Exit(<span class="hljs-number">1</span>)
             }
             cli.addBlock(data)
-        } else {
+        } <span class="hljs-keyword">else</span> {
             fmt.Println(Usage)
         }
-    case &quot;printChain&quot;:
+    <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;printChain&quot;</span>:
         cli.printChain()
-    default:
+    <span class="hljs-keyword">default</span>:
         fmt.Println(Usage)
     }
 }
 
-func (cli *CLI)addBlock(data string)  {
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(cli *CLI)</span><span class="hljs-title">addBlock</span><span class="hljs-params">(data <span class="hljs-keyword">string</span>)</span></span>  {
     cli.bc.AddBlock(data)
 }
 
-func (cli *CLI)printChain()  {
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(cli *CLI)</span><span class="hljs-title">printChain</span><span class="hljs-params">()</span></span>  {
 
-    //定义迭代器
+    <span class="hljs-comment">//定义迭代器</span>
     it := NewBlockChainIterator(cli.bc)
-    for {
+    <span class="hljs-keyword">for</span> {
 
         block := it.GetBlockAndMoveLeft()
 
-        fmt.Println(&quot; ============== =============&quot;)
-        fmt.Printf(&quot;Version : %d\n&quot;, block.Version)
-        fmt.Printf(&quot;PrevBlockHash : %x\n&quot;, block.PrevBlockHash)
-        fmt.Printf(&quot;Hash : %x\n&quot;, block.Hash)
-        fmt.Printf(&quot;MerkleRoot : %x\n&quot;, block.MerkleRoot)
-        fmt.Printf(&quot;TimeStamp : %d\n&quot;, block.TimeStamp)
-        fmt.Printf(&quot;Difficuty : %d\n&quot;, block.Difficuty)
-        fmt.Printf(&quot;Nonce : %d\n&quot;, block.Nonce)
-        fmt.Printf(&quot;Data : %s\n&quot;, block.Data)
+        fmt.Println(<span class="hljs-string">&quot; ============== =============&quot;</span>)
+        fmt.Printf(<span class="hljs-string">&quot;Version : %d\n&quot;</span>, block.Version)
+        fmt.Printf(<span class="hljs-string">&quot;PrevBlockHash : %x\n&quot;</span>, block.PrevBlockHash)
+        fmt.Printf(<span class="hljs-string">&quot;Hash : %x\n&quot;</span>, block.Hash)
+        fmt.Printf(<span class="hljs-string">&quot;MerkleRoot : %x\n&quot;</span>, block.MerkleRoot)
+        fmt.Printf(<span class="hljs-string">&quot;TimeStamp : %d\n&quot;</span>, block.TimeStamp)
+        fmt.Printf(<span class="hljs-string">&quot;Difficuty : %d\n&quot;</span>, block.Difficuty)
+        fmt.Printf(<span class="hljs-string">&quot;Nonce : %d\n&quot;</span>, block.Nonce)
+        fmt.Printf(<span class="hljs-string">&quot;Data : %s\n&quot;</span>, block.Data)
         pow := NewProofOfWork(block)
-        fmt.Printf(&quot;IsValid : %v\n&quot;, pow.IsValid())
+        fmt.Printf(<span class="hljs-string">&quot;IsValid : %v\n&quot;</span>, pow.IsValid())
 
 
-        if len(block.PrevBlockHash)  == 0 {
-            fmt.Println(&quot;print over!&quot;)
-            break
+        <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(block.PrevBlockHash)  == <span class="hljs-number">0</span> {
+            fmt.Println(<span class="hljs-string">&quot;print over!&quot;</span>)
+            <span class="hljs-keyword">break</span>
         }
     }
 }
 </code></pre>
 <p>修改main.go如下，主函数只做基本的调用，其余的都由命令行类进行调度即可，这符合模块化编程。</p>
-<pre><code class="lang-go">package main
+<pre><code class="lang-go"><span class="hljs-keyword">package</span> main
 
-func main() {
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> {
     bc := NewBlockChain()
     cli := CLI{bc}
     cli.Run()
@@ -3697,11 +3693,11 @@ func main() {
 </code></pre>
 <p>如果数据库文件不存在，程序会先进行数据库创建，即进行一次挖矿，如下：</p>
 <pre><code class="lang-go"> duke ~/Desktop/code/v3$  ./block 
-target : 100000000000000000000000000000000000000000000000000000000000
-found hash : 00000ae80985ec5ab56873dc5d4efd978a8b418cd50eee17584dda087632fe5f, 62170
+target : <span class="hljs-number">100000000000000000000000000000000000000000000000000000000000</span>
+found hash : <span class="hljs-number">00000</span>ae80985ec5ab56873dc5d4efd978a8b418cd50eee17584dda087632fe5f, <span class="hljs-number">62170</span>
 
-        addBlock --data DATA &quot;add a block&quot;
-        printChain &quot;print block Chain&quot;
+        addBlock --data DATA <span class="hljs-string">&quot;add a block&quot;</span>
+        printChain <span class="hljs-string">&quot;print block Chain&quot;</span>
 </code></pre>
 <p>==我们后面会把创建数据库操作也放到命令中去控制。==</p>
 <h2 id="1-命令测试">1. 命令测试</h2>
@@ -3717,128 +3713,179 @@ found hash : 00000ae80985ec5ab56873dc5d4efd978a8b418cd50eee17584dda087632fe5f, 6
 <p>如果想实现用命令行创建数据库，那么这两个必须分开成两个函数，分别实现上述的两个功能</p>
 <h2 id="1-创建区块链函数newblockchain">1. 创建区块链函数NewBlockChain</h2>
 <p>只负责创建，然后便退出程序。</p>
-<pre><code class="lang-go">//- 提供一个创建BlockChain的方法
-func NewBlockChain(address string) *BlockChain {  //&lt;</code></pre>
-<h2 id="2-获取区块链对象的函数">2. 获取区块链对象的函数</h2>
-<p>函数名字为：GetBlockChainObj调用这个方法时，确保区块链已经创建</p>
-<pre><code class="lang-go">//获取一个区块链实例
-func GetBlockChainObj() *BlockChain {
+<pre><code class="lang-go"><span class="hljs-comment">//- 提供一个创建BlockChain的方法</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">NewBlockChain</span><span class="hljs-params">(address <span class="hljs-keyword">string</span>)</span> *<span class="hljs-title">BlockChain</span></span> {  <span class="hljs-comment">//&lt;&lt;---添加了创建人的地址，后面会用到</span>
+    <span class="hljs-keyword">var</span> lastHash []<span class="hljs-keyword">byte</span>
 
-    var lastHash []byte
-    db, err := bolt.Open(blockChainDb, 0600, nil)
+    db, err := bolt.Open(blockChainDb, <span class="hljs-number">0600</span>, <span class="hljs-literal">nil</span>)
 
-    if err != nil {
-        fmt.Println(&quot;bolt.Open failed!&quot;, err)
-        os.Exit(1)
+    <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
+        fmt.Println(<span class="hljs-string">&quot;bolt.Open failed!&quot;</span>, err)
+        os.Exit(<span class="hljs-number">1</span>)
     }
 
-    db.View(func(tx *bolt.Tx) error {
-        bucket := tx.Bucket([]byte(blockBucket))
+    db.Update(<span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(tx *bolt.Tx)</span> <span class="hljs-title">error</span></span> {
+        bucket := tx.Bucket([]<span class="hljs-keyword">byte</span>(blockBucket))
 
-        var err error
-        if bucket == nil {
-            fmt.Println(&quot;bucket should not be nil!&quot;, err)
-            os.Exit(1)
+        <span class="hljs-keyword">var</span> err error
+        bucket, err = tx.CreateBucket([]<span class="hljs-keyword">byte</span>(blockBucket))
+        <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
+            fmt.Println(<span class="hljs-string">&quot;createBucket failed!&quot;</span>, err)
+            os.Exit(<span class="hljs-number">1</span>)
+        }
+
+        <span class="hljs-comment">//抽屉准备好了，开始写区块数据，区块哪里来？？</span>
+        genesisBlock := NewBlock(<span class="hljs-string">&quot;Genesis Block!!!&quot;</span>, []<span class="hljs-keyword">byte</span>{})
+
+        bucket.Put(genesisBlock.Hash, genesisBlock.Serialize() <span class="hljs-comment">/*block的字节流！*/</span>)
+        bucket.Put([]<span class="hljs-keyword">byte</span>(last), genesisBlock.Hash)
+
+        <span class="hljs-comment">//这个哈希此时是没有用的</span>
+        lastHash = genesisBlock.Hash
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>
+    })
+
+    <span class="hljs-comment">//还是要返回一个实例，便于关闭数据库</span>
+    <span class="hljs-keyword">return</span> &amp;BlockChain{db, lastHash}
+}
+</code></pre>
+<h2 id="2-获取区块链对象的函数">2. 获取区块链对象的函数</h2>
+<p>函数名字为：GetBlockChainObj调用这个方法时，确保区块链已经创建</p>
+<pre><code class="lang-go"><span class="hljs-comment">//获取一个区块链实例</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">GetBlockChainObj</span><span class="hljs-params">()</span> *<span class="hljs-title">BlockChain</span></span> {
+
+    <span class="hljs-keyword">var</span> lastHash []<span class="hljs-keyword">byte</span>
+    db, err := bolt.Open(blockChainDb, <span class="hljs-number">0600</span>, <span class="hljs-literal">nil</span>)
+
+    <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
+        fmt.Println(<span class="hljs-string">&quot;bolt.Open failed!&quot;</span>, err)
+        os.Exit(<span class="hljs-number">1</span>)
+    }
+
+    db.View(<span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(tx *bolt.Tx)</span> <span class="hljs-title">error</span></span> {
+        bucket := tx.Bucket([]<span class="hljs-keyword">byte</span>(blockBucket))
+
+        <span class="hljs-keyword">var</span> err error
+        <span class="hljs-keyword">if</span> bucket == <span class="hljs-literal">nil</span> {
+            fmt.Println(<span class="hljs-string">&quot;bucket should not be nil!&quot;</span>, err)
+            os.Exit(<span class="hljs-number">1</span>)
 
         }
 
-        //抽屉已经存在，直接读取即可
-        //获取最后一个区块的哈希
-        lastHash = bucket.Get([]byte(last))
-        return nil
+        <span class="hljs-comment">//抽屉已经存在，直接读取即可</span>
+        <span class="hljs-comment">//获取最后一个区块的哈希</span>
+        lastHash = bucket.Get([]<span class="hljs-keyword">byte</span>(last))
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>
     })
 
-    return &amp;BlockChain{db, lastHash}
+    <span class="hljs-keyword">return</span> &amp;BlockChain{db, lastHash}
 }
 </code></pre>
 <h2 id="3-添加数据库文件检查函数">3. 添加数据库文件检查函数</h2>
 <p>如果文件存在就不用创建，如果文件未创建请先创建。</p>
-<pre><code class="lang-go">func dbExists() bool {
-    if _, err := os.Stat(blockChainDb); os.IsNotExist(err) {
-        return false
+<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">dbExists</span><span class="hljs-params">()</span> <span class="hljs-title">bool</span></span> {
+    <span class="hljs-keyword">if</span> _, err := os.Stat(blockChainDb); os.IsNotExist(err) {
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>
     }
 
-    return true
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>
 }
 </code></pre>
 <p>在NewBlockChain中添加代码：</p>
-<pre><code class="lang-go">func NewBlockChain(address string) *BlockChain {
-    var lastHash []byte
+<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">NewBlockChain</span><span class="hljs-params">(address <span class="hljs-keyword">string</span>)</span> *<span class="hljs-title">BlockChain</span></span> {
+    <span class="hljs-keyword">var</span> lastHash []<span class="hljs-keyword">byte</span>
 
-    if dbExists() {   //</code></pre>
+    <span class="hljs-keyword">if</span> dbExists() {   <span class="hljs-comment">//&lt;---这里</span>
+        fmt.Println(<span class="hljs-string">&quot;blockchain already exist!&quot;</span>)
+        os.Exit(<span class="hljs-number">1</span>)
+    }
+
+    db, err := bolt.Open(blockChainDb, <span class="hljs-number">0600</span>, <span class="hljs-literal">nil</span>)
+    ...
+</code></pre>
 <p>在GetBlockChainObj中添加代码：</p>
-<pre><code class="lang-go">func GetBlockChainObj() *BlockChain {
+<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">GetBlockChainObj</span><span class="hljs-params">()</span> *<span class="hljs-title">BlockChain</span></span> {
 
-    var lastHash []byte
+    <span class="hljs-keyword">var</span> lastHash []<span class="hljs-keyword">byte</span>
 
-    if !dbExists() {  //</code></pre>
+    <span class="hljs-keyword">if</span> !dbExists() {  <span class="hljs-comment">//&lt;---这里</span>
+        fmt.Println(<span class="hljs-string">&quot;blockchain not exist, pls create first!&quot;</span>)
+        os.Exit(<span class="hljs-number">1</span>)
+    }
+
+    db, err := bolt.Open(blockChainDb, <span class="hljs-number">0600</span>, <span class="hljs-literal">nil</span>)
+</code></pre>
 <h2 id="4修改cli结构">4.修改CLI结构</h2>
 <p>切换到commandLine.go文件</p>
 <p>对象无需传递进来，使用一个创建方法提供。</p>
-<pre><code class="lang-go">type CLI struct {
-   //bc *BlockChain
+<pre><code class="lang-go"><span class="hljs-keyword">type</span> CLI <span class="hljs-keyword">struct</span> {
+   <span class="hljs-comment">//bc *BlockChain</span>
 }
 </code></pre>
 <p>更新Usage</p>
-<pre><code class="lang-go">const Usage = `
-    createBlockChain --address ADDRESS &quot;create a blockchian&quot; //</code></pre>
+<pre><code class="lang-go"><span class="hljs-keyword">const</span> Usage = <span class="hljs-string">`
+    createBlockChain --address ADDRESS &quot;create a blockchian&quot; //&lt;--这里
+    addBlock --data DATA &quot;add a block&quot;
+    printChain &quot;print block Chain&quot;
+`</span>
+</code></pre>
 <p>添加创建逻辑</p>
-<pre><code class="lang-go">func (cli *CLI)CreateBlockChain(address string) {
+<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(cli *CLI)</span><span class="hljs-title">CreateBlockChain</span><span class="hljs-params">(address <span class="hljs-keyword">string</span>)</span></span> {
     bc := NewBlockChain(address)
     err := bc.db.Close()
 
-    if err != nil {
-        //删除数据库
-        if dbExists() {
+    <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
+        <span class="hljs-comment">//删除数据库</span>
+        <span class="hljs-keyword">if</span> dbExists() {
             os.Remove(blockChainDb)
         }
-        fmt.Println(&quot;create blockchain failed!&quot;)
+        fmt.Println(<span class="hljs-string">&quot;create blockchain failed!&quot;</span>)
     }
 
-    fmt.Println(&quot;create blockchain successfully!&quot;)
+    fmt.Println(<span class="hljs-string">&quot;create blockchain successfully!&quot;</span>)
 }
 </code></pre>
 <p>在switch中添加调用</p>
-<pre><code class="lang-go">    switch cmd {
-    case &quot;createBlockChain&quot;:
-        if len(os.Args) &gt; 3 &amp;&amp; os.Args[2] == &quot;--address&quot; {
-            address := os.Args[3]
-            if address == &quot;&quot; {
-                fmt.Println(&quot;address should not be empty!&quot;)
-                os.Exit(1)
+<pre><code class="lang-go">    <span class="hljs-keyword">switch</span> cmd {
+    <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;createBlockChain&quot;</span>:
+        <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(os.Args) &gt; <span class="hljs-number">3</span> &amp;&amp; os.Args[<span class="hljs-number">2</span>] == <span class="hljs-string">&quot;--address&quot;</span> {
+            address := os.Args[<span class="hljs-number">3</span>]
+            <span class="hljs-keyword">if</span> address == <span class="hljs-string">&quot;&quot;</span> {
+                fmt.Println(<span class="hljs-string">&quot;address should not be empty!&quot;</span>)
+                os.Exit(<span class="hljs-number">1</span>)
             }
             cli.CreateBlockChain(address)
-        } else {
+        } <span class="hljs-keyword">else</span> {
             fmt.Println(Usage)
         }
-    case &quot;addBlock&quot;:
+    <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;addBlock&quot;</span>:
 </code></pre>
 <p>更新AddBlock命令</p>
 <p>此时需要我们调用GetBlockChainObj获取区块链对象</p>
-<pre><code class="lang-go">func (cli *CLI)addBlock(data string)  {
-    //cli.bc.AddBlock(data)
+<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(cli *CLI)</span><span class="hljs-title">addBlock</span><span class="hljs-params">(data <span class="hljs-keyword">string</span>)</span></span>  {
+    <span class="hljs-comment">//cli.bc.AddBlock(data)</span>
     bc := GetBlockChainObj()
     bc.AddBlock(data)
     bc.db.Close()
-    fmt.Println(&quot;add block successfully: &quot;, data)
+    fmt.Println(<span class="hljs-string">&quot;add block successfully: &quot;</span>, data)
 }
 </code></pre>
 <p>同理，更新printChain函数</p>
-<pre><code class="lang-go">func (cli *CLI)printChain()  {
+<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(cli *CLI)</span><span class="hljs-title">printChain</span><span class="hljs-params">()</span></span>  {
 
-    //定义迭代器
-    //it := NewBlockChainIterator(cli.bc)
+    <span class="hljs-comment">//定义迭代器</span>
+    <span class="hljs-comment">//it := NewBlockChainIterator(cli.bc)</span>
     bc := GetBlockChainObj()
     it := NewBlockChainIterator(bc)
-    for {
+    <span class="hljs-keyword">for</span> {
         ...
 </code></pre>
 <p>修改main.go文件如下</p>
-<pre><code class="lang-go">package main
+<pre><code class="lang-go"><span class="hljs-keyword">package</span> main
 
-func main() {
-    //bc := NewBlockChain()
-    //cli := CLI{bc}
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> {
+    <span class="hljs-comment">//bc := NewBlockChain()</span>
+    <span class="hljs-comment">//cli := CLI{bc}</span>
     cli := CLI{}
     cli.Run()
 </code></pre>
@@ -3885,7 +3932,7 @@ func main() {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第9节:day2-v3存储","level":"1.18.9","depth":2,"next":{"title":"第10节:day3-交易原理","level":"1.18.10","depth":2,"path":"11_精通比特币/day3-01-交易原理.md","ref":"11_精通比特币/day3-01-交易原理.md","articles":[]},"previous":{"title":"第8节:day2-v2挖矿","level":"1.18.8","depth":2,"path":"11_精通比特币/day2-01-v2挖矿.md","ref":"11_精通比特币/day2-01-v2挖矿.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"11_精通比特币/day2-02-v3存储.md","mtime":"2023-09-23T13:32:59.608Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第9节:day2-v3存储","level":"1.18.9","depth":2,"next":{"title":"第10节:day3-交易原理","level":"1.18.10","depth":2,"path":"11_精通比特币/day3-01-交易原理.md","ref":"11_精通比特币/day3-01-交易原理.md","articles":[]},"previous":{"title":"第8节:day2-v2挖矿","level":"1.18.8","depth":2,"path":"11_精通比特币/day2-01-v2挖矿.md","ref":"11_精通比特币/day2-01-v2挖矿.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"cn","gitbook":"*"},"file":{"path":"11_精通比特币/day2-02-v3存储.md","mtime":"2023-09-23T13:32:59.608Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3968,14 +4015,6 @@ func main() {
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

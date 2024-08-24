@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3030,38 +3026,38 @@
 </ul>
 <p>  <img src="assets/image-5022356.png" alt="image"></p>
 <h2 id="1-下载代码">1. 下载代码</h2>
-<pre><code class="lang-sh">git clone git@github.com:dukedaily/subgraph-demo-dapp.git
+<pre><code class="lang-sh">git <span class="hljs-built_in">clone</span> git@github.com:dukedaily/subgraph-demo-dapp.git
 </code></pre>
 <h2 id="2-部署合约">2. 部署合约</h2>
-<pre><code class="lang-Bash"># 进入合约目录
-cd subgraph-demo-dapp/contracts
+<pre><code class="lang-Bash"><span class="hljs-comment"># 进入合约目录</span>
+<span class="hljs-built_in">cd</span> subgraph-demo-dapp/contracts
 
-# 配置.env信息
-ETHERSCAN_API_KEY=&apos;&apos;
-ALCHEMY_KEY=&apos;&apos;
-INFURA_KEY=&apos;&apos;
+<span class="hljs-comment"># 配置.env信息</span>
+ETHERSCAN_API_KEY=<span class="hljs-string">&apos;&apos;</span>
+ALCHEMY_KEY=<span class="hljs-string">&apos;&apos;</span>
+INFURA_KEY=<span class="hljs-string">&apos;&apos;</span>
 
-MNEMONIC=&apos;&apos;
-PRIVATE_KEY=&apos;&apos;
+MNEMONIC=<span class="hljs-string">&apos;&apos;</span>
+PRIVATE_KEY=<span class="hljs-string">&apos;&apos;</span>
 
-# 安装
+<span class="hljs-comment"># 安装</span>
 npm i
 
-# 编译
+<span class="hljs-comment"># 编译</span>
 npm run compile
 
-# 部署：address: 0x48d2825f3238db40797dF659C97188d289401311
+<span class="hljs-comment"># 部署：address: 0x48d2825f3238db40797dF659C97188d289401311</span>
 npx hardhat run scripts/deploy.ts --network goerli
 
-# 初始化
+<span class="hljs-comment"># 初始化</span>
 npx hardhat run scripts/setup.ts --network goerli
 
-# verify
+<span class="hljs-comment"># verify</span>
 npx hardhat verify 0x48d2825f3238db40797dF659C97188d289401311 --network goerli
 </code></pre>
 <h2 id="3-配置subgraph">3. 配置subgraph</h2>
 <p>请查看具体文件：</p>
-<pre><code class="lang-sh"># 三个文件的关系：
+<pre><code class="lang-sh"><span class="hljs-comment"># 三个文件的关系：</span>
 subgraph.yaml：需要监听合约信息配置，包括：
     - 合约地址
     - 网络
@@ -3076,17 +3072,17 @@ src/mapping.ts；真正的映射逻辑，业务逻辑
     - NewGravatar -&gt; mappings -&gt; Gravatar -&gt; 入库
 </code></pre>
 <h2 id="4-启动graphnode（docker）">4. 启动graphnode（docker）</h2>
-<pre><code class="lang-sh"># 先修改监听的网络rpc: ethereum: &apos;goerli:https://ethereum-goerli-rpc.allthatnode.com&apos;
+<pre><code class="lang-sh"><span class="hljs-comment"># 先修改监听的网络rpc: ethereum: &apos;goerli:https://ethereum-goerli-rpc.allthatnode.com&apos;</span>
 
-# 确保docker已经启动
+<span class="hljs-comment"># 确保docker已经启动</span>
 docker-compose up
 </code></pre>
 <h2 id="5-创建subgraph（本地）">5. 创建subgraph（本地）</h2>
 <p>安装graph命令，负责编译、部署subgraph</p>
-<pre><code class="lang-sh">#npm
+<pre><code class="lang-sh"><span class="hljs-comment">#npm</span>
 npm install -g @graphprotocol/graph-cli 
 
-#yarn
+<span class="hljs-comment">#yarn</span>
 yarn global add @graphprotocol/graph-cli
 </code></pre>
 <p>生成&amp;编译：</p>
@@ -3094,10 +3090,10 @@ yarn global add @graphprotocol/graph-cli
 npm run build
 </code></pre>
 <p>创建subgraph并且部署在graphnode上：</p>
-<pre><code class="lang-sh"># 先创建subgraph
+<pre><code class="lang-sh"><span class="hljs-comment"># 先创建subgraph</span>
 yarn create-local
 
-# 后部署
+<span class="hljs-comment"># 后部署</span>
 yarn deploy-local
 </code></pre>
 <p><img src="assets/image-20220519221014419.png" alt="image-20220519221014419"></p>
@@ -3116,26 +3112,26 @@ yarn deploy-local
 <p><img src="assets/image-20220519221147734.png" alt="image-20220519221147734"></p>
 <h2 id="7-准备前端">7. 准备前端</h2>
 <p>进入到dapp文件夹，修改内容如下：</p>
-<pre><code class="lang-sh">#echo &quot;REACT_APP_GRAPHQL_ENDPOINT=http://localhost:8000/subgraphs/name/<github_username>/example-subgraph&quot; &gt; .env
+<pre><code class="lang-sh"><span class="hljs-comment">#echo &quot;REACT_APP_GRAPHQL_ENDPOINT=http://localhost:8000/subgraphs/name/&lt;GITHUB_USERNAME&gt;/example-subgraph&quot; &gt; .env</span>
 
 REACT_APP_GRAPHQL_ENDPOINT=http://127.0.0.1:8000/subgraphs/name/dukedaily/subgraph-demo
-</github_username></code></pre>
+</code></pre>
 <p>启动前端</p>
-<pre><code class="lang-sh">yarn install  # global VPN mode
+<pre><code class="lang-sh">yarn install  <span class="hljs-comment"># global VPN mode</span>
 yarn start
 </code></pre>
 <h2 id="8-安装有问题（可选）">8. 安装有问题（可选）</h2>
-<pre><code class="lang-sh"># 删除文件
+<pre><code class="lang-sh"><span class="hljs-comment"># 删除文件</span>
 rm -rf yarn.lock
 
-# 安装nvm，安装后需要配置文件，请仔细查看打印的log，有指导
+<span class="hljs-comment"># 安装nvm，安装后需要配置文件，请仔细查看打印的log，有指导</span>
 brew install nvm
 
-# 切换node版本，版本查询：https://www.npmjs.com/package/node
+<span class="hljs-comment"># 切换node版本，版本查询：https://www.npmjs.com/package/node</span>
 nvm install v10.24.1
 nvm use v10.24.1
 
-# 重新安装
+<span class="hljs-comment"># 重新安装</span>
 npm install
 </code></pre>
 <h2 id="9-查看效果">9. 查看效果</h2>
@@ -3172,7 +3168,7 @@ npm install
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第2节:实战教程","level":"1.14.3","depth":2,"next":{"title":"第3节:语法学习","level":"1.14.4","depth":2,"path":"07_subgraph/03_语法学习.md","ref":"07_subgraph/03_语法学习.md","articles":[]},"previous":{"title":"第1节:概述","level":"1.14.2","depth":2,"path":"07_subgraph/01_概述.md","ref":"07_subgraph/01_概述.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"07_subgraph/02_实战教程.md","mtime":"2023-09-23T13:48:35.084Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第2节:实战教程","level":"1.14.3","depth":2,"next":{"title":"第3节:语法学习","level":"1.14.4","depth":2,"path":"07_subgraph/03_语法学习.md","ref":"07_subgraph/03_语法学习.md","articles":[]},"previous":{"title":"第1节:概述","level":"1.14.2","depth":2,"path":"07_subgraph/01_概述.md","ref":"07_subgraph/01_概述.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"cn","gitbook":"*"},"file":{"path":"07_subgraph/02_实战教程.md","mtime":"2023-09-23T13:48:35.084Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3255,14 +3251,6 @@ npm install
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

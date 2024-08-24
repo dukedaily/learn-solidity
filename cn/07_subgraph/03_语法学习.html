@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3024,13 +3020,13 @@
 </blockquote>
 <h2 id="请求格式">请求格式</h2>
 <pre><code class="lang-js">{
-  useFlashloans(first: 5) {
+  <span class="hljs-function"><span class="hljs-title">useFlashloans</span>(<span class="hljs-params">first: <span class="hljs-number">5</span></span>)</span> {
     id
     user
     token
     tokenName
   }
-  stakePoolClaimeds(first: 5) {
+  <span class="hljs-function"><span class="hljs-title">stakePoolClaimeds</span>(<span class="hljs-params">first: <span class="hljs-number">5</span></span>)</span> {
     id
     user
     amount
@@ -3080,8 +3076,8 @@ _not_ends_with
 </code></pre>
 <p>举例：</p>
 <pre><code class="lang-js">{
-   //其中：deposit_gt 是deposit和 
-  applications(where: { deposit_gt: &quot;10000000000&quot; }) {  _gt的组合
+   <span class="hljs-comment">//其中：deposit_gt 是deposit和 </span>
+  <span class="hljs-function"><span class="hljs-title">applications</span>(<span class="hljs-params">where: { deposit_gt: <span class="hljs-string">&quot;10000000000&quot;</span> }</span>)</span> {  _gt的组合
     id
     whitelisted
     deposit
@@ -3090,7 +3086,7 @@ _not_ends_with
 </code></pre>
 <p>测试：</p>
 <pre><code class="lang-js">query sb {
-  simpleBlocks(where: { id_gt: &quot;13712600&quot;}){
+  <span class="hljs-function"><span class="hljs-title">simpleBlocks</span>(<span class="hljs-params">where: { id_gt: <span class="hljs-string">&quot;13712600&quot;</span>}</span>)</span>{
     id
   }
 }
@@ -3100,7 +3096,7 @@ _not_ends_with
 </code></pre>
 </li>
 <li><p>打印log使用技巧，必须有{}</p>
-<pre><code class="lang-js">log.info(&apos;***MARKET*** : underlyingAddress {}&apos;, [market.underlyingAddress.toHexString()])
+<pre><code class="lang-js">log.info(<span class="hljs-string">&apos;***MARKET*** : underlyingAddress {}&apos;</span>, [market.underlyingAddress.toHexString()])
 </code></pre>
 <p><img src="https://duke-typora.s3.amazonaws.com/ipic/2023-06-24-050012.png" alt="image-20230624130010204"></p>
 </li>
@@ -3122,74 +3118,74 @@ _not_ends_with
 <li><a href="https://www.bilibili.com/video/BV1RS4y1F7zw?spm_id_from=333.337.search-card.all.click&amp;vd_source=42fe91bf6d16ec8841b22ea520184d76" target="_blank">https://www.bilibili.com/video/BV1RS4y1F7zw?spm_id_from=333.337.search-card.all.click&amp;vd_source=42fe91bf6d16ec8841b22ea520184d76</a></li>
 </ol>
 <h2 id="schemagraphql">schema.graphql</h2>
-<pre><code class="lang-yaml">type UseFlashloan @entity {
-        id: ID!
-        user: String!
-    token: String!
-    tokenName: String!
-    amount: BigInt!
-    fee: BigInt!
-    block: BigInt!
-    time: BigInt!
+<pre><code class="lang-yaml"><span class="hljs-string">type</span> <span class="hljs-string">UseFlashloan</span> <span class="hljs-string">@entity</span> {
+        <span class="hljs-attr">id:</span> <span class="hljs-string">ID!</span>
+        <span class="hljs-attr">user:</span> <span class="hljs-string">String!</span>
+    <span class="hljs-attr">token:</span> <span class="hljs-string">String!</span>
+    <span class="hljs-attr">tokenName:</span> <span class="hljs-string">String!</span>
+    <span class="hljs-attr">amount:</span> <span class="hljs-string">BigInt!</span>
+    <span class="hljs-attr">fee:</span> <span class="hljs-string">BigInt!</span>
+    <span class="hljs-attr">block:</span> <span class="hljs-string">BigInt!</span>
+    <span class="hljs-attr">time:</span> <span class="hljs-string">BigInt!</span>
 }
 
-type StakePoolClaimed @entity {
-        id: ID!
-        user: String!
-        token: String!
-        block: BigInt!
-        time: BigInt!
+<span class="hljs-string">type</span> <span class="hljs-string">StakePoolClaimed</span> <span class="hljs-string">@entity</span> {
+        <span class="hljs-attr">id:</span> <span class="hljs-string">ID!</span>
+        <span class="hljs-attr">user:</span> <span class="hljs-string">String!</span>
+        <span class="hljs-attr">token:</span> <span class="hljs-string">String!</span>
+        <span class="hljs-attr">block:</span> <span class="hljs-string">BigInt!</span>
+        <span class="hljs-attr">time:</span> <span class="hljs-string">BigInt!</span>
 }
 
-type FlashTotalClaimed @entity {
-        id: ID!
-        amount: BigInt!
-        lashHash: String!
-        lastTime: BigInt!
+<span class="hljs-string">type</span> <span class="hljs-string">FlashTotalClaimed</span> <span class="hljs-string">@entity</span> {
+        <span class="hljs-attr">id:</span> <span class="hljs-string">ID!</span>
+        <span class="hljs-attr">amount:</span> <span class="hljs-string">BigInt!</span>
+        <span class="hljs-attr">lashHash:</span> <span class="hljs-string">String!</span>
+        <span class="hljs-attr">lastTime:</span> <span class="hljs-string">BigInt!</span>
 }
 
-type MerkleDistributor @entity {
-        id: ID!
-        index: BigInt!
-        amount: BigInt!
-        settleBlocNumber: BigInt!
+<span class="hljs-string">type</span> <span class="hljs-string">MerkleDistributor</span> <span class="hljs-string">@entity</span> {
+        <span class="hljs-attr">id:</span> <span class="hljs-string">ID!</span>
+        <span class="hljs-attr">index:</span> <span class="hljs-string">BigInt!</span>
+        <span class="hljs-attr">amount:</span> <span class="hljs-string">BigInt!</span>
+        <span class="hljs-attr">settleBlocNumber:</span> <span class="hljs-string">BigInt!</span>
 }
 
-type SimpleBlock @entity {
-        id: ID!
-        height: BigInt!
-        time: BigInt!
+<span class="hljs-string">type</span> <span class="hljs-string">SimpleBlock</span> <span class="hljs-string">@entity</span> {
+        <span class="hljs-attr">id:</span> <span class="hljs-string">ID!</span>
+        <span class="hljs-attr">height:</span> <span class="hljs-string">BigInt!</span>
+        <span class="hljs-attr">time:</span> <span class="hljs-string">BigInt!</span>
 }
 
-type NoHandlerUseFlashloan @entity {
-        id: ID!
-        list: [UseFlashloan!]!
+<span class="hljs-string">type</span> <span class="hljs-string">NoHandlerUseFlashloan</span> <span class="hljs-string">@entity</span> {
+        <span class="hljs-attr">id:</span> <span class="hljs-string">ID!</span>
+        <span class="hljs-attr">list:</span> [<span class="hljs-string">UseFlashloan!</span>]<span class="hljs-string">!</span>
 }
 
-type UserFlashloan @entity {
-        id: ID!
-        user: String!
-        reward: BigInt!
-        flashloan: BigInt!
-        claimed: Boolean!
+<span class="hljs-string">type</span> <span class="hljs-string">UserFlashloan</span> <span class="hljs-string">@entity</span> {
+        <span class="hljs-attr">id:</span> <span class="hljs-string">ID!</span>
+        <span class="hljs-attr">user:</span> <span class="hljs-string">String!</span>
+        <span class="hljs-attr">reward:</span> <span class="hljs-string">BigInt!</span>
+        <span class="hljs-attr">flashloan:</span> <span class="hljs-string">BigInt!</span>
+        <span class="hljs-attr">claimed:</span> <span class="hljs-string">Boolean!</span>
 }
 
-type FlashloanReward @eneity {
-        id: ID!
-        index: BigInt!
-        amount: BigInt!
-        settleBlocNumber: BigInt!
-        totalAmount: BigInt!
-        flashloanTotalAmount: BigInt!
-        list: [UserFlashloan!]!
+<span class="hljs-string">type</span> <span class="hljs-string">FlashloanReward</span> <span class="hljs-string">@eneity</span> {
+        <span class="hljs-attr">id:</span> <span class="hljs-string">ID!</span>
+        <span class="hljs-attr">index:</span> <span class="hljs-string">BigInt!</span>
+        <span class="hljs-attr">amount:</span> <span class="hljs-string">BigInt!</span>
+        <span class="hljs-attr">settleBlocNumber:</span> <span class="hljs-string">BigInt!</span>
+        <span class="hljs-attr">totalAmount:</span> <span class="hljs-string">BigInt!</span>
+        <span class="hljs-attr">flashloanTotalAmount:</span> <span class="hljs-string">BigInt!</span>
+        <span class="hljs-attr">list:</span> [<span class="hljs-string">UserFlashloan!</span>]<span class="hljs-string">!</span>
 }
 
-type FlashloanBalance @entity {
-        id: ID!
-        tokenName: String
-        fee: BigInt
-        balance: BigInt
-        time: BigInt
+<span class="hljs-string">type</span> <span class="hljs-string">FlashloanBalance</span> <span class="hljs-string">@entity</span> {
+        <span class="hljs-attr">id:</span> <span class="hljs-string">ID!</span>
+        <span class="hljs-attr">tokenName:</span> <span class="hljs-string">String</span>
+        <span class="hljs-attr">fee:</span> <span class="hljs-string">BigInt</span>
+        <span class="hljs-attr">balance:</span> <span class="hljs-string">BigInt</span>
+        <span class="hljs-attr">time:</span> <span class="hljs-string">BigInt</span>
 }
 </code></pre>
 
@@ -3219,7 +3215,7 @@ type FlashloanBalance @entity {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第3节:语法学习","level":"1.14.4","depth":2,"next":{"title":"第4节:支持的网络","level":"1.14.5","depth":2,"path":"07_subgraph/04_支持的网络.md","ref":"07_subgraph/04_支持的网络.md","articles":[]},"previous":{"title":"第2节:实战教程","level":"1.14.3","depth":2,"path":"07_subgraph/02_实战教程.md","ref":"07_subgraph/02_实战教程.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"07_subgraph/03_语法学习.md","mtime":"2023-09-23T13:24:56.281Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第3节:语法学习","level":"1.14.4","depth":2,"next":{"title":"第4节:支持的网络","level":"1.14.5","depth":2,"path":"07_subgraph/04_支持的网络.md","ref":"07_subgraph/04_支持的网络.md","articles":[]},"previous":{"title":"第2节:实战教程","level":"1.14.3","depth":2,"path":"07_subgraph/02_实战教程.md","ref":"07_subgraph/02_实战教程.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"cn","gitbook":"*"},"file":{"path":"07_subgraph/03_语法学习.md","mtime":"2023-09-23T13:24:56.281Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3302,14 +3298,6 @@ type FlashloanBalance @entity {
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

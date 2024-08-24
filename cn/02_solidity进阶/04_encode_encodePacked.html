@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3028,129 +3024,129 @@
 <li>abi.<strong>encodePacked</strong>：与abi.encode类似，但是生成的bytes是压缩过的（有些类型不会自动填充，无法传递给合约调用）。</li>
 <li>手册：<a href="https://docs.soliditylang.org/en/v0.8.13/abi-spec.html?highlight=abi.encodePacked#non-standard-packed-mode" target="_blank">https://docs.soliditylang.org/en/v0.8.13/abi-spec.html?highlight=abi.encodePacked#non-standard-packed-mode</a></li>
 </ol>
-<pre><code class="lang-js">// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
 
 contract AbiDecode {
     struct MyStruct {
         string name;
-        uint[2] nums;
+        uint[<span class="hljs-number">2</span>] nums;
     }
 
-    // input: 10, 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4, [1,&quot;2&quot;,3], [&quot;duke&quot;, [10,20]]
-    // output: 0x000000000000000000000000000000000000000000000000000000000000000a0000000000000000000000005b38da6a701c568545dcfcb03fcb875f56beddc40000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000030000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000030000000000000000000000000000000000000000000000000000000000000060000000000000000000000000000000000000000000000000000000000000000a0000000000000000000000000000000000000000000000000000000000000014000000000000000000000000000000000000000000000000000000000000000064756b6500000000000000000000000000000000000000000000000000000000
-    //  output长度：832位16进制字符（去除0x)，832 / 32 = 26 （一定是32字节的整数倍，不足填0）
-    function encode(
+    <span class="hljs-comment">// input: 10, 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4, [1,&quot;2&quot;,3], [&quot;duke&quot;, [10,20]]</span>
+    <span class="hljs-comment">// output: 0x000000000000000000000000000000000000000000000000000000000000000a0000000000000000000000005b38da6a701c568545dcfcb03fcb875f56beddc40000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000030000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000030000000000000000000000000000000000000000000000000000000000000060000000000000000000000000000000000000000000000000000000000000000a0000000000000000000000000000000000000000000000000000000000000014000000000000000000000000000000000000000000000000000000000000000064756b6500000000000000000000000000000000000000000000000000000000</span>
+    <span class="hljs-comment">//  output长度：832位16进制字符（去除0x)，832 / 32 = 26 （一定是32字节的整数倍，不足填0）</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">encode</span>(<span class="hljs-params">
         uint x,
         address addr,
         uint[] calldata arr,
         MyStruct calldata myStruct
-    ) external pure returns (bytes memory) {
-        return abi.encode(x, addr, arr, myStruct);
+    </span>) <span class="hljs-title">external</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bytes memory</span>) </span>{
+        <span class="hljs-keyword">return</span> abi.encode(x, addr, arr, myStruct);
     }
 
-    function decode(bytes calldata data)
-        external
-        pure
-        returns (
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">decode</span>(<span class="hljs-params">bytes calldata data</span>)
+        <span class="hljs-title">external</span>
+        <span class="hljs-title">pure</span>
+        <span class="hljs-title">returns</span> (<span class="hljs-params">
             uint x,
             address addr,
             uint[] memory arr,
             MyStruct memory myStruct
-        )
-    {
+        </span>)
+    </span>{
         (x, addr, arr, myStruct) = abi.decode(data, (uint, address, uint[], MyStruct));
 
-        /* decode output: 
+        <span class="hljs-comment">/* decode output: 
             0: uint256: x 10
             1: address: addr 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4
             2: uint256[]: arr 1,2,3
             3: tuple(string,uint256[2]): myStruct ,10,20
-        */
+        */</span>
     }
 
-    // 可以只decode其中部分字段，而不用全部decode，当前案例中，只有第一个字段被解析了，其余为默认值
-    function decodeLess(bytes calldata data)
-        external
-        pure
-        returns (
+    <span class="hljs-comment">// 可以只decode其中部分字段，而不用全部decode，当前案例中，只有第一个字段被解析了，其余为默认值</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">decodeLess</span>(<span class="hljs-params">bytes calldata data</span>)
+        <span class="hljs-title">external</span>
+        <span class="hljs-title">pure</span>
+        <span class="hljs-title">returns</span> (<span class="hljs-params">
             uint x,
             address addr,
             uint[] memory arr,
             MyStruct memory myStruct
-        )
-    {
+        </span>)
+    </span>{
         (x) = abi.decode(data, (uint));
 
-        /* decode output: 
+        <span class="hljs-comment">/* decode output: 
             0: uint256: x 10
             1: address: addr 0x0000000000000000000000000000000000000000
             2: uint256[]: arr
             3: tuple(string,uint256[2]): myStruct ,0,0
-        */
+        */</span>
     }
 
-    // input: -1, 0x42, 0x03, &quot;Hello, world!&quot;
-    function encodePacked(
+    <span class="hljs-comment">// input: -1, 0x42, 0x03, &quot;Hello, world!&quot;</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">encodePacked</span>(<span class="hljs-params">
         int16 x,
         bytes1 y,
         uint16 z,
         string memory s
-    ) external view returns (bytes memory) {
+    </span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bytes memory</span>) </span>{
 
-        // encodePacked 不支持struct和mapping
-        return abi.encodePacked(x, y, z, s);
+        <span class="hljs-comment">// encodePacked 不支持struct和mapping</span>
+        <span class="hljs-keyword">return</span> abi.encodePacked(x, y, z, s);
 
-        /*
+        <span class="hljs-comment">/*
         0xffff42000348656c6c6f2c20776f726c6421
           ^^^^                                 int16(-1)
               ^^                               bytes1(0x42)
                 ^^^^                           uint16(0x03)
                     ^^^^^^^^^^^^^^^^^^^^^^^^^^ string(&quot;Hello, world!&quot;) without a length field
-        */
+        */</span>
     }
 
-      // 可以用encodePacked来拼接字符串
-      // output string: ipfs://bafybeidmrsvehl4ehipm5qqvgegi33r6/100.json
-      function encodePackedTest() public  pure returns (string memory) {
-        string memory uri = &quot;ipfs://bafybeidmrsvehl4ehipm5qqvgegi33r6/&quot;;
-        return string(abi.encodePacked(uri, &quot;100&quot;, &quot;.json&quot;));
+      <span class="hljs-comment">// 可以用encodePacked来拼接字符串</span>
+      <span class="hljs-comment">// output string: ipfs://bafybeidmrsvehl4ehipm5qqvgegi33r6/100.json</span>
+      <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">encodePackedTest</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span>  <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-params">string memory</span>) </span>{
+        string memory uri = <span class="hljs-string">&quot;ipfs://bafybeidmrsvehl4ehipm5qqvgegi33r6/&quot;</span>;
+        <span class="hljs-keyword">return</span> string(abi.encodePacked(uri, <span class="hljs-string">&quot;100&quot;</span>, <span class="hljs-string">&quot;.json&quot;</span>));
     }
 }
 </code></pre>
 <h1 id="使用三方库：">使用三方库：</h1>
 <h2 id="web3js编码：">web3js编码：</h2>
-<pre><code class="lang-js">// encodeFunctionCall( abi ,参数 ) 得到编码
+<pre><code class="lang-js"><span class="hljs-comment">// encodeFunctionCall( abi ,参数 ) 得到编码</span>
 
 web3.eth.abi.encodeFunctionCall({
-    name: &apos;myMethod&apos;,
-    type: &apos;function&apos;,
-    inputs: [{
-        type: &apos;uint256&apos;,
-        name: &apos;myNumber&apos;
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&apos;myMethod&apos;</span>,
+    <span class="hljs-attr">type</span>: <span class="hljs-string">&apos;function&apos;</span>,
+    <span class="hljs-attr">inputs</span>: [{
+        <span class="hljs-attr">type</span>: <span class="hljs-string">&apos;uint256&apos;</span>,
+        <span class="hljs-attr">name</span>: <span class="hljs-string">&apos;myNumber&apos;</span>
     },{
-        type: &apos;string&apos;,
-        name: &apos;myString&apos;
+        <span class="hljs-attr">type</span>: <span class="hljs-string">&apos;string&apos;</span>,
+        <span class="hljs-attr">name</span>: <span class="hljs-string">&apos;myString&apos;</span>
     }]
-}, [&apos;2345675643&apos;, &apos;Hello!%&apos;]);
-&gt; &quot;0x24ee0097000000000000000000000000000000000000000000000000000000008bd02b7b0000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000748656c6c6f212500000000000000000000000000000000000000000000000000&quot;
+}, [<span class="hljs-string">&apos;2345675643&apos;</span>, <span class="hljs-string">&apos;Hello!%&apos;</span>]);
+&gt; <span class="hljs-string">&quot;0x24ee0097000000000000000000000000000000000000000000000000000000008bd02b7b0000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000748656c6c6f212500000000000000000000000000000000000000000000000000&quot;</span>
 </code></pre>
 <h2 id="web3js解码：">web3js解码：</h2>
 <p>解码时，要将得到的calldata的前四字节去掉，那是函数的selector，不应该参与参数解析。</p>
-<pre><code class="lang-js">//  let res = web3.eth.abi.decodeParameters(abi, calldata)
+<pre><code class="lang-js"><span class="hljs-comment">//  let res = web3.eth.abi.decodeParameters(abi, calldata)</span>
 
-async function main() {
-  let calldata = &apos;&apos; //太大了，删除，去下面线上链接中获取
-  let abi = [{ &quot;internalType&quot;: &quot;string&quot;, &quot;name&quot;: &quot;_id&quot;, &quot;type&quot;: &quot;string&quot; }, { &quot;internalType&quot;: &quot;string&quot;, &quot;name&quot;: &quot;_uniqueId&quot;, &quot;type&quot;: &quot;string&quot; }, { &quot;internalType&quot;: &quot;uint8&quot;, &quot;name&quot;: &quot;_assetFrom&quot;, &quot;type&quot;: &quot;uint8&quot; }, { &quot;internalType&quot;: &quot;uint8&quot;, &quot;name&quot;: &quot;_action&quot;, &quot;type&quot;: &quot;uint8&quot; }, { &quot;internalType&quot;: &quot;address&quot;, &quot;name&quot;: &quot;_srcToken&quot;, &quot;type&quot;: &quot;address&quot; }, { &quot;internalType&quot;: &quot;address&quot;, &quot;name&quot;: &quot;_dstToken&quot;, &quot;type&quot;: &quot;address&quot; }, { &quot;internalType&quot;: &quot;uint256&quot;, &quot;name&quot;: &quot;_srcAmount&quot;, &quot;type&quot;: &quot;uint256&quot; }, { &quot;internalType&quot;: &quot;uint256&quot;, &quot;name&quot;: &quot;_srcFeeAmount&quot;, &quot;type&quot;: &quot;uint256&quot; }, { &quot;internalType&quot;: &quot;bytes&quot;, &quot;name&quot;: &quot;_data&quot;, &quot;type&quot;: &quot;bytes&quot; }]
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">main</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">let</span> calldata = <span class="hljs-string">&apos;&apos;</span> <span class="hljs-comment">//太大了，删除，去下面线上链接中获取</span>
+  <span class="hljs-keyword">let</span> abi = [{ <span class="hljs-string">&quot;internalType&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>, <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;_id&quot;</span>, <span class="hljs-string">&quot;type&quot;</span>: <span class="hljs-string">&quot;string&quot;</span> }, { <span class="hljs-string">&quot;internalType&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>, <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;_uniqueId&quot;</span>, <span class="hljs-string">&quot;type&quot;</span>: <span class="hljs-string">&quot;string&quot;</span> }, { <span class="hljs-string">&quot;internalType&quot;</span>: <span class="hljs-string">&quot;uint8&quot;</span>, <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;_assetFrom&quot;</span>, <span class="hljs-string">&quot;type&quot;</span>: <span class="hljs-string">&quot;uint8&quot;</span> }, { <span class="hljs-string">&quot;internalType&quot;</span>: <span class="hljs-string">&quot;uint8&quot;</span>, <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;_action&quot;</span>, <span class="hljs-string">&quot;type&quot;</span>: <span class="hljs-string">&quot;uint8&quot;</span> }, { <span class="hljs-string">&quot;internalType&quot;</span>: <span class="hljs-string">&quot;address&quot;</span>, <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;_srcToken&quot;</span>, <span class="hljs-string">&quot;type&quot;</span>: <span class="hljs-string">&quot;address&quot;</span> }, { <span class="hljs-string">&quot;internalType&quot;</span>: <span class="hljs-string">&quot;address&quot;</span>, <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;_dstToken&quot;</span>, <span class="hljs-string">&quot;type&quot;</span>: <span class="hljs-string">&quot;address&quot;</span> }, { <span class="hljs-string">&quot;internalType&quot;</span>: <span class="hljs-string">&quot;uint256&quot;</span>, <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;_srcAmount&quot;</span>, <span class="hljs-string">&quot;type&quot;</span>: <span class="hljs-string">&quot;uint256&quot;</span> }, { <span class="hljs-string">&quot;internalType&quot;</span>: <span class="hljs-string">&quot;uint256&quot;</span>, <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;_srcFeeAmount&quot;</span>, <span class="hljs-string">&quot;type&quot;</span>: <span class="hljs-string">&quot;uint256&quot;</span> }, { <span class="hljs-string">&quot;internalType&quot;</span>: <span class="hljs-string">&quot;bytes&quot;</span>, <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;_data&quot;</span>, <span class="hljs-string">&quot;type&quot;</span>: <span class="hljs-string">&quot;bytes&quot;</span> }]
 
 
-  let res = web3.eth.abi.decodeParameters(abi, calldata)
-  console.log(&apos;res:&apos;, res)
+  <span class="hljs-keyword">let</span> res = web3.eth.abi.decodeParameters(abi, calldata)
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;res:&apos;</span>, res)
 }
 </code></pre>
 <p>在线案例：<a href="https://web3playground.io/QmSeHtJPLFxweiGB8ocFDXkCZao6Mt5oEJ4Ej66iY3RL1R" target="_blank">https://web3playground.io/QmSeHtJPLFxweiGB8ocFDXkCZao6Mt5oEJ4Ej66iY3RL1R</a></p>
 <h2 id="ethersjs">ethersjs</h2>
-<pre><code class="lang-js">let bytes2 = mock1Inch.interface.encodeFunctionData(&quot;swap&quot;, [ETH_ADDR, daiToken.address, 90])
+<pre><code class="lang-js"><span class="hljs-keyword">let</span> bytes2 = mock1Inch.interface.encodeFunctionData(<span class="hljs-string">&quot;swap&quot;</span>, [ETH_ADDR, daiToken.address, <span class="hljs-number">90</span>])
 </code></pre>
 
                                 
@@ -3179,7 +3175,7 @@ async function main() {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第4节:encode_encodePacked","level":"1.9.4","depth":2,"next":{"title":"第5节:call&staticcall","level":"1.9.5","depth":2,"path":"02_solidity进阶/05_call&staticcall.md","ref":"02_solidity进阶/05_call&staticcall.md","articles":[]},"previous":{"title":"第3节:payable","level":"1.9.3","depth":2,"path":"02_solidity进阶/03_payable.md","ref":"02_solidity进阶/03_payable.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"02_solidity进阶/04_encode_encodePacked.md","mtime":"2023-09-23T13:09:56.368Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第4节:encode_encodePacked","level":"1.9.4","depth":2,"next":{"title":"第5节:call&staticcall","level":"1.9.5","depth":2,"path":"02_solidity进阶/05_call&staticcall.md","ref":"02_solidity进阶/05_call&staticcall.md","articles":[]},"previous":{"title":"第3节:payable","level":"1.9.3","depth":2,"path":"02_solidity进阶/03_payable.md","ref":"02_solidity进阶/03_payable.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"cn","gitbook":"*"},"file":{"path":"02_solidity进阶/04_encode_encodePacked.md","mtime":"2023-09-23T13:09:56.368Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3262,14 +3258,6 @@ async function main() {
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

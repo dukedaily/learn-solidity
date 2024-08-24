@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3121,8 +3117,8 @@
 <ul>
 <li>创建私钥公钥，保存私钥，相当于钱包，可以存放多个地址。</li>
 </ul>
-<pre><code class="lang-sh"># 地址address：类似于钱包中不同的银行卡，2N7iL4hcMVQ2edktAwpkYQwQAha5EdsTAT8(由公钥生成)
-# 私钥：类似于每张银行卡有一个密码,(私钥可以解开地址)
+<pre><code class="lang-sh"><span class="hljs-comment"># 地址address：类似于钱包中不同的银行卡，2N7iL4hcMVQ2edktAwpkYQwQAha5EdsTAT8(由公钥生成)</span>
+<span class="hljs-comment"># 私钥：类似于每张银行卡有一个密码,(私钥可以解开地址)</span>
 </code></pre>
 <ul>
 <li><p>私钥-&gt; 公钥-&gt; 地址</p>
@@ -3149,8 +3145,8 @@
 <li><p>钱包客户端的钱包文件就是存储比特币私钥的数据库。私钥和公钥都 存放在比特币钱包的wallet.dat文件中。在多个地方安全地保管钱包文件可防止意外情况发生的时候恢复比特币。</p>
 </li>
 </ul>
-<pre><code class="lang-sh"># 钱包文件位置
-#在文件管理器地址栏中输入： %appdata%，可以快速进入
+<pre><code class="lang-sh"><span class="hljs-comment"># 钱包文件位置</span>
+<span class="hljs-comment">#在文件管理器地址栏中输入： %appdata%，可以快速进入</span>
 Windows 7/8/10 - C:\Users\{username}\AppData\Roaming\Bitcoin\wallet.dat
 
 
@@ -3250,24 +3246,24 @@ Linux ~/.bitcoin/wallet.dat
 <p><img src="assets/image-20221108123545367.png" alt="image-20221108123545367"></p>
 <h2 id="3-比特币总量">3. 比特币总量</h2>
 <p>2100万，2140年挖完（snappy截图对照）</p>
-<pre><code class="lang-go">func main() {
+<pre><code class="lang-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> {
 
-    total := 0.0        // 比特币总数
-    rewardCount := 50.0 // 奖励 BTC 的数量
-    blockInterval := 21 // 区块间隔，单位万
+    total := <span class="hljs-number">0.0</span>        <span class="hljs-comment">// 比特币总数</span>
+    rewardCount := <span class="hljs-number">50.0</span> <span class="hljs-comment">// 奖励 BTC 的数量</span>
+    blockInterval := <span class="hljs-number">21</span> <span class="hljs-comment">// 区块间隔，单位万</span>
 
-    for rewardCount &gt; 0 {
-        // 在区块间隔内，统一奖励（生成）rewardCount 个比特币
-        // 类型转换
-        sum := float64(blockInterval) * rewardCount
+    <span class="hljs-keyword">for</span> rewardCount &gt; <span class="hljs-number">0</span> {
+        <span class="hljs-comment">// 在区块间隔内，统一奖励（生成）rewardCount 个比特币</span>
+        <span class="hljs-comment">// 类型转换</span>
+        sum := <span class="hljs-keyword">float64</span>(blockInterval) * rewardCount
         total += sum
 
-        // 每挖到 21w 个矿，奖励减半
-        rewardCount *= 0.5
+        <span class="hljs-comment">// 每挖到 21w 个矿，奖励减半</span>
+        rewardCount *= <span class="hljs-number">0.5</span>
 
     }
 
-    fmt.Printf(&quot;比特币总数：%f 万\n&quot;, total)
+    fmt.Printf(<span class="hljs-string">&quot;比特币总数：%f 万\n&quot;</span>, total)
 }
 </code></pre>
 <h2 id="4-区块容量">4. 区块容量</h2>
@@ -3305,7 +3301,7 @@ Linux ~/.bitcoin/wallet.dat
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第3节:day1-比特币概述","level":"1.18.3","depth":2,"next":{"title":"第4节:day1-比特币依赖技术","level":"1.18.4","depth":2,"path":"11_精通比特币/day1-04-比特币依赖技术.md","ref":"11_精通比特币/day1-04-比特币依赖技术.md","articles":[]},"previous":{"title":"第2节:day1-比特币诞生背景","level":"1.18.2","depth":2,"path":"11_精通比特币/day1-02-比特币诞生背景.md","ref":"11_精通比特币/day1-02-比特币诞生背景.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"11_精通比特币/day1-03-比特币概述.md","mtime":"2023-09-23T13:32:34.394Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第3节:day1-比特币概述","level":"1.18.3","depth":2,"next":{"title":"第4节:day1-比特币依赖技术","level":"1.18.4","depth":2,"path":"11_精通比特币/day1-04-比特币依赖技术.md","ref":"11_精通比特币/day1-04-比特币依赖技术.md","articles":[]},"previous":{"title":"第2节:day1-比特币诞生背景","level":"1.18.2","depth":2,"path":"11_精通比特币/day1-02-比特币诞生背景.md","ref":"11_精通比特币/day1-02-比特币诞生背景.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"cn","gitbook":"*"},"file":{"path":"11_精通比特币/day1-03-比特币概述.md","mtime":"2023-09-23T13:32:34.394Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3388,14 +3384,6 @@ Linux ~/.bitcoin/wallet.dat
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

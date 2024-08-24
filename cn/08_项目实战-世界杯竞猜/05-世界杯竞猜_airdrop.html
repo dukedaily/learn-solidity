@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3082,31 +3078,31 @@
 </blockquote>
 <h2 id="部署奖励token">部署奖励Token</h2>
 <h3 id="worldcuptoken">WorldCupToken</h3>
-<pre><code class="lang-JavaScript">// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.9;
+<pre><code class="lang-JavaScript"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.9</span>;
 
-import &quot;@openzeppelin/contracts/token/ERC20/ERC20.sol&quot;;
+<span class="hljs-keyword">import</span> <span class="hljs-string">&quot;@openzeppelin/contracts/token/ERC20/ERC20.sol&quot;</span>;
 
-//合约继承，使用 is
+<span class="hljs-comment">//合约继承，使用 is</span>
 contract WorldCupToken is ERC20 {
-    // 2. 一次性mint出来，不允许后续mint
-    constructor(
+    <span class="hljs-comment">// 2. 一次性mint出来，不允许后续mint</span>
+    <span class="hljs-title">constructor</span>(<span class="hljs-params">
         string memory name_,
         string memory symbol_,
         uint256 totalSupply_
-    ) ERC20(name_, symbol_) {
+    </span>) <span class="hljs-title">ERC20</span>(<span class="hljs-params">name_, symbol_</span>) {
         _mint(msg.sender, totalSupply_);
     }
 }
 </code></pre>
 <h3 id="部署合约">部署合约</h3>
-<pre><code class="lang-sh"># 部署合约
+<pre><code class="lang-sh"><span class="hljs-comment"># 部署合约</span>
 npx hardhat run scripts/deployWorldCupToken --network goerli
 
-# 验证合约
-npx hardhat verify --contract contracts/tokens/WorldCupToken.sol:WorldCupToken  0x4c305227E762634CB7d3d9291e42b423eD45f1AD &quot;World Cup Token&quot; &quot;WCT&quot; 10000000000000000000000000 --network goerli
+<span class="hljs-comment"># 验证合约</span>
+npx hardhat verify --contract contracts/tokens/WorldCupToken.sol:WorldCupToken  0x4c305227E762634CB7d3d9291e42b423eD45f1AD <span class="hljs-string">&quot;World Cup Token&quot;</span> <span class="hljs-string">&quot;WCT&quot;</span> 10000000000000000000000000 --network goerli
 
-# 0x4c305227E762634CB7d3d9291e42b423eD45f1AD
+<span class="hljs-comment"># 0x4c305227E762634CB7d3d9291e42b423eD45f1AD</span>
 </code></pre>
 <h2 id="统计玩家play数据">统计玩家Play数据</h2>
 <p>回顾subgraph工作流程（上节介绍）</p>
@@ -3114,121 +3110,121 @@ npx hardhat verify --contract contracts/tokens/WorldCupToken.sol:WorldCupToken  
 <h3 id="编写配置文件">编写配置文件</h3>
 <p>将下面内容添加到subgraph.yaml中，其中包含对WorldCup合约的监听，以及对发放奖励合约（WorldCupDistributor）的监听。</p>
 <p><img src="assets/image-20221103200112151.png" alt="image-20221103200112151"></p>
-<pre><code class="lang-YAML">specVersion: 0.0.4
-schema:
-  file: ./schema.graphql
-dataSources:
-  - kind: ethereum
-    name: WorldCup
-    network: goerli
-    source:
-      # 监听世界杯主合约
-      address: &quot;0x0fd554503c88E9cE02D6f81799F928c8Aa202Dd3&quot;
-      abi: WorldCup
-      startBlock: 7813068
-      # ....
-      abis:
-        - name: WorldCup
-          file: ./abis/WorldCup.json
-      eventHandlers:
-        # 监听事件
-        - event: Play(uint8,address,uint8)
-          handler: handlePlay
-        - event: Finialize(uint8,uint256)
-          handler: handleFinialize
-        - event: ClaimReward(address,uint256)
-          handler: handleClaimReward
-      file: ./src/world-cup.ts
-  - kind: ethereum
-    name: WorldCupDistributor
-    network: goerli
-    source:
-      # 监听奖励合约
-      address: &quot;0x857c162eB34f3FA3f14A8A7F211017D2505df724&quot;
-      abi: WorldCupDistributor
-      startBlock: 7813265
-      # ...
-      abis:
-        - name: WorldCupDistributor
-          file: ./abis/WorldCupDistributor.json
-      eventHandlers:
-        # 监听事件
-        - event: DistributeReward(indexed bytes32,indexed uint256,uint256,uint256)
-          handler: handleDistributeReward
-        - event: Claimed(indexed address,indexed address,indexed uint256)
-          handler: handleClaimed
-      file: ./src/world-cup.ts
+<pre><code class="lang-YAML"><span class="hljs-attr">specVersion:</span> <span class="hljs-number">0.0</span><span class="hljs-number">.4</span>
+<span class="hljs-attr">schema:</span>
+  <span class="hljs-attr">file:</span> <span class="hljs-string">./schema.graphql</span>
+<span class="hljs-attr">dataSources:</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">kind:</span> <span class="hljs-string">ethereum</span>
+    <span class="hljs-attr">name:</span> <span class="hljs-string">WorldCup</span>
+    <span class="hljs-attr">network:</span> <span class="hljs-string">goerli</span>
+    <span class="hljs-attr">source:</span>
+      <span class="hljs-comment"># 监听世界杯主合约</span>
+      <span class="hljs-attr">address:</span> <span class="hljs-string">&quot;0x0fd554503c88E9cE02D6f81799F928c8Aa202Dd3&quot;</span>
+      <span class="hljs-attr">abi:</span> <span class="hljs-string">WorldCup</span>
+      <span class="hljs-attr">startBlock:</span> <span class="hljs-number">7813068</span>
+      <span class="hljs-comment"># ....</span>
+      <span class="hljs-attr">abis:</span>
+        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">WorldCup</span>
+          <span class="hljs-attr">file:</span> <span class="hljs-string">./abis/WorldCup.json</span>
+      <span class="hljs-attr">eventHandlers:</span>
+        <span class="hljs-comment"># 监听事件</span>
+        <span class="hljs-bullet">-</span> <span class="hljs-attr">event:</span> <span class="hljs-string">Play(uint8,address,uint8)</span>
+          <span class="hljs-attr">handler:</span> <span class="hljs-string">handlePlay</span>
+        <span class="hljs-bullet">-</span> <span class="hljs-attr">event:</span> <span class="hljs-string">Finialize(uint8,uint256)</span>
+          <span class="hljs-attr">handler:</span> <span class="hljs-string">handleFinialize</span>
+        <span class="hljs-bullet">-</span> <span class="hljs-attr">event:</span> <span class="hljs-string">ClaimReward(address,uint256)</span>
+          <span class="hljs-attr">handler:</span> <span class="hljs-string">handleClaimReward</span>
+      <span class="hljs-attr">file:</span> <span class="hljs-string">./src/world-cup.ts</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">kind:</span> <span class="hljs-string">ethereum</span>
+    <span class="hljs-attr">name:</span> <span class="hljs-string">WorldCupDistributor</span>
+    <span class="hljs-attr">network:</span> <span class="hljs-string">goerli</span>
+    <span class="hljs-attr">source:</span>
+      <span class="hljs-comment"># 监听奖励合约</span>
+      <span class="hljs-attr">address:</span> <span class="hljs-string">&quot;0x857c162eB34f3FA3f14A8A7F211017D2505df724&quot;</span>
+      <span class="hljs-attr">abi:</span> <span class="hljs-string">WorldCupDistributor</span>
+      <span class="hljs-attr">startBlock:</span> <span class="hljs-number">7813265</span>
+      <span class="hljs-comment"># ...</span>
+      <span class="hljs-attr">abis:</span>
+        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">WorldCupDistributor</span>
+          <span class="hljs-attr">file:</span> <span class="hljs-string">./abis/WorldCupDistributor.json</span>
+      <span class="hljs-attr">eventHandlers:</span>
+        <span class="hljs-comment"># 监听事件</span>
+        <span class="hljs-bullet">-</span> <span class="hljs-attr">event:</span> <span class="hljs-string">DistributeReward(indexed</span> <span class="hljs-string">bytes32,indexed</span> <span class="hljs-string">uint256,uint256,uint256)</span>
+          <span class="hljs-attr">handler:</span> <span class="hljs-string">handleDistributeReward</span>
+        <span class="hljs-bullet">-</span> <span class="hljs-attr">event:</span> <span class="hljs-string">Claimed(indexed</span> <span class="hljs-string">address,indexed</span> <span class="hljs-string">address,indexed</span> <span class="hljs-string">uint256)</span>
+          <span class="hljs-attr">handler:</span> <span class="hljs-string">handleClaimed</span>
+      <span class="hljs-attr">file:</span> <span class="hljs-string">./src/world-cup.ts</span>
 </code></pre>
 <h3 id="编写-schema">编写 Schema</h3>
 <p>schema.graphql，这些结构相当于数据库，用于在subgraph中存储计算后的数据。</p>
-<pre><code class="lang-YAML"># 玩家Player详情
-type PlayRecord @entity {
-  id: ID!
-  index: BigInt! # uint256
-  player: Bytes! # address
-  selectCountry: BigInt! # uint256
-  time: BigInt!
-  block: BigInt!
+<pre><code class="lang-YAML"><span class="hljs-comment"># 玩家Player详情</span>
+<span class="hljs-string">type</span> <span class="hljs-string">PlayRecord</span> <span class="hljs-string">@entity</span> {
+  <span class="hljs-attr">id:</span> <span class="hljs-string">ID!</span>
+  <span class="hljs-attr">index:</span> <span class="hljs-string">BigInt!</span> <span class="hljs-comment"># uint256</span>
+  <span class="hljs-attr">player:</span> <span class="hljs-string">Bytes!</span> <span class="hljs-comment"># address</span>
+  <span class="hljs-attr">selectCountry:</span> <span class="hljs-string">BigInt!</span> <span class="hljs-comment"># uint256</span>
+  <span class="hljs-attr">time:</span> <span class="hljs-string">BigInt!</span>
+  <span class="hljs-attr">block:</span> <span class="hljs-string">BigInt!</span>
 }
 
-# 球队winner详情
-type FinializeHistory @entity {
-  id: ID!
-  result: BigInt!
+<span class="hljs-comment"># 球队winner详情</span>
+<span class="hljs-string">type</span> <span class="hljs-string">FinializeHistory</span> <span class="hljs-string">@entity</span> {
+  <span class="hljs-attr">id:</span> <span class="hljs-string">ID!</span>
+  <span class="hljs-attr">result:</span> <span class="hljs-string">BigInt!</span>
 }
 
-# 玩家奖励详情（分配后）
-type PlayerDistribution @entity {
-  id: ID!
-  index: BigInt!
-  player: Bytes!
-  rewardAmt: BigInt!
-  weight: BigInt!
-  isClaimed: Boolean!
+<span class="hljs-comment"># 玩家奖励详情（分配后）</span>
+<span class="hljs-string">type</span> <span class="hljs-string">PlayerDistribution</span> <span class="hljs-string">@entity</span> {
+  <span class="hljs-attr">id:</span> <span class="hljs-string">ID!</span>
+  <span class="hljs-attr">index:</span> <span class="hljs-string">BigInt!</span>
+  <span class="hljs-attr">player:</span> <span class="hljs-string">Bytes!</span>
+  <span class="hljs-attr">rewardAmt:</span> <span class="hljs-string">BigInt!</span>
+  <span class="hljs-attr">weight:</span> <span class="hljs-string">BigInt!</span>
+  <span class="hljs-attr">isClaimed:</span> <span class="hljs-string">Boolean!</span>
 }
 
-# 更多部分参见源代码....
+<span class="hljs-comment"># 更多部分参见源代码....</span>
 </code></pre>
 <h3 id="监听play事件">监听Play事件</h3>
-<pre><code class="lang-JavaScript">export function handlePlay(event: Play): void {
-  // 统计所有的play事件，存储起来
-  // 1. get id 
-  let id = event.params._player.toHex() + &quot;#&quot; + event.params._currRound.toString() + &quot;#&quot; + event.block.timestamp.toHex();
+<pre><code class="lang-JavaScript"><span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handlePlay</span>(<span class="hljs-params">event: Play</span>): <span class="hljs-title">void</span> </span>{
+  <span class="hljs-comment">// 统计所有的play事件，存储起来</span>
+  <span class="hljs-comment">// 1. get id </span>
+  <span class="hljs-keyword">let</span> id = event.params._player.toHex() + <span class="hljs-string">&quot;#&quot;</span> + event.params._currRound.toString() + <span class="hljs-string">&quot;#&quot;</span> + event.block.timestamp.toHex();
 
-  // 2. create entity
-  let entity = new PlayRecord(id);
+  <span class="hljs-comment">// 2. create entity</span>
+  <span class="hljs-keyword">let</span> entity = <span class="hljs-keyword">new</span> PlayRecord(id);
 
-  // 3. set data
-  entity.index = BigInt.fromI32(event.params._currRound);
+  <span class="hljs-comment">// 3. set data</span>
+  entity.index = <span class="hljs-built_in">BigInt</span>.fromI32(event.params._currRound);
   entity.player = event.params._player;
-  entity.selectCountry = BigInt.fromI32(event.params._country);
+  entity.selectCountry = <span class="hljs-built_in">BigInt</span>.fromI32(event.params._country);
   entity.time = event.block.timestamp;
   entity.block = event.block.number;
 
-  // 4. save
+  <span class="hljs-comment">// 4. save</span>
   entity.save()
 
-  // 5. save nohandle play record
-  let noHandle = NeedToHandle.load(NO_HANDLE_ID);
-  if (!noHandle) {
-    noHandle = new NeedToHandle(NO_HANDLE_ID);
+  <span class="hljs-comment">// 5. save nohandle play record</span>
+  <span class="hljs-keyword">let</span> noHandle = NeedToHandle.load(NO_HANDLE_ID);
+  <span class="hljs-keyword">if</span> (!noHandle) {
+    noHandle = <span class="hljs-keyword">new</span> NeedToHandle(NO_HANDLE_ID);
     noHandle.list = [];
   }
 
-  // noHandle.list.push(id)
-  let list = noHandle.list;
+  <span class="hljs-comment">// noHandle.list.push(id)</span>
+  <span class="hljs-keyword">let</span> list = noHandle.list;
   list.push(id);
   noHandle.list = list;
 
   noHandle.save()
 }
 
-// 更多部分参见源代码....
+<span class="hljs-comment">// 更多部分参见源代码....</span>
 </code></pre>
 <h3 id="监听finalize事件">监听Finalize事件</h3>
-<pre><code class="lang-JavaScript">export function handleFinialize(event: Finialize): void {
-  let id = event.params._currRound.toString();
-  let entity = new FinializeHistory(id);
+<pre><code class="lang-JavaScript"><span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handleFinialize</span>(<span class="hljs-params">event: Finialize</span>): <span class="hljs-title">void</span> </span>{
+  <span class="hljs-keyword">let</span> id = event.params._currRound.toString();
+  <span class="hljs-keyword">let</span> entity = <span class="hljs-keyword">new</span> FinializeHistory(id);
 
   entity.result = event.params._country;
   entity.save();
@@ -3237,25 +3233,25 @@ type PlayerDistribution @entity {
 <h3 id="部署到subgraph">部署到subgraph</h3>
 <h3 id="方式一：自己部署graphnode节点">方式一：自己部署graphnode节点</h3>
 <p>这部分我们在上一节已经介绍，按顺序执行即可。</p>
-<pre><code class="lang-Bash"># 启动graphnode
+<pre><code class="lang-Bash"><span class="hljs-comment"># 启动graphnode</span>
 docker-compose up
 
-# 创建并
+<span class="hljs-comment"># 创建并</span>
 npm run codegen
 npm run build
 npm run create-local
 npm run deploy-local
 
-# Deployed to http://localhost:8000/subgraphs/name/duke/worldcup/graphql
+<span class="hljs-comment"># Deployed to http://localhost:8000/subgraphs/name/duke/worldcup/graphql</span>
 </code></pre>
 <h3 id="方式二：使用subgraph官方结点">方式二：使用subgraph官方结点</h3>
 <p><a href="https://thegraph.com/hosted-service/dashboard" target="_blank">https://thegraph.com/hosted-service/dashboard</a></p>
 <h3 id="获取请求play数据">获取请求Play数据</h3>
 <p>启动subgraph后，需要安静等待一会儿，等待数据同步完成后，我们便可以查询，由于之前已经使用3个用户发起过四次Play操作，所以得到结果如下：</p>
 <pre><code class="lang-JavaScript">{
-    playRecords(where: {
-      index: 0
-    }){
+    <span class="hljs-function"><span class="hljs-title">playRecords</span>(<span class="hljs-params">where: {
+      index: <span class="hljs-number">0</span>
+    }</span>)</span>{
       id
       index
       player
@@ -3327,30 +3323,30 @@ npm run deploy-local
 <p>原图：<a href="https://whimsical.com/Nfi7rAVqvYJd8mCLYHZYrx" target="_blank">https://whimsical.com/Nfi7rAVqvYJd8mCLYHZYrx</a></p>
 <p><img src="assets/image-20221103195541354.png" alt="image-20221103195541354"></p>
 <h3 id="分配奖励合约">分配奖励合约</h3>
-<pre><code class="lang-JavaScript">// SPDX-License-Identifier: GPL-2.0-or-later
-pragma solidity ^0.8.0;
+<pre><code class="lang-JavaScript"><span class="hljs-comment">// SPDX-License-Identifier: GPL-2.0-or-later</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.0</span>;
 
-import {IERC20} from &quot;@openzeppelin/contracts/token/ERC20/IERC20.sol&quot;;
-import &quot;./libraries/MerkleProof.sol&quot;;
-import &apos;./libraries/TransferHelper.sol&apos;;
+<span class="hljs-keyword">import</span> {IERC20} <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@openzeppelin/contracts/token/ERC20/IERC20.sol&quot;</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-string">&quot;./libraries/MerkleProof.sol&quot;</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-string">&apos;./libraries/TransferHelper.sol&apos;</span>;
 
-/// @notice use for claim reward
+<span class="hljs-comment">/// @notice use for claim reward</span>
 contract WorldCupDistributor {
-    // 省略部分代码，详见代码仓库 ....
+    <span class="hljs-comment">// 省略部分代码，详见代码仓库 ....</span>
 
-    function distributeReward(
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">distributeReward</span>(<span class="hljs-params">
         uint256 _index,
         uint256 _amount,
         uint256 _settleBlockNumber,
         bytes32 _merkleRoot
-    ) external onlyOwner {
+    </span>) <span class="hljs-title">external</span> <span class="hljs-title">onlyOwner</span> </span>{
         merkleRoot = _merkleRoot;
 
-        require(_index == merkleDistributors.length, &quot;index already exists&quot;);
-        uint256 currAmount = IERC20(token).balanceOf(address(this));
-        require(currAmount &gt;= _amount, &quot;Insufficient reward funds&quot;);
-        require(block.number &gt;= _settleBlockNumber, &quot;!blockNumber&quot;);
-        // ...
+        <span class="hljs-built_in">require</span>(_index == merkleDistributors.length, <span class="hljs-string">&quot;index already exists&quot;</span>);
+        uint256 currAmount = IERC20(token).balanceOf(address(<span class="hljs-built_in">this</span>));
+        <span class="hljs-built_in">require</span>(currAmount &gt;= _amount, <span class="hljs-string">&quot;Insufficient reward funds&quot;</span>);
+        <span class="hljs-built_in">require</span>(block.number &gt;= _settleBlockNumber, <span class="hljs-string">&quot;!blockNumber&quot;</span>);
+        <span class="hljs-comment">// ...</span>
 
         merkleDistributors.push(
             MerkleDistributor(_merkleRoot, _index, _amount, _settleBlockNumber)
@@ -3359,40 +3355,40 @@ contract WorldCupDistributor {
         emit DistributeReward(_merkleRoot, _index, _amount, _settleBlockNumber);
     }
 
-    function claim(
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">claim</span>(<span class="hljs-params">
         uint256 index,
         uint256 amount,
         bytes32[] calldata proof
-    ) external {
+    </span>) <span class="hljs-title">external</span> </span>{
         address user = msg.sender;
-        require(merkleDistributors.length &gt; index, &quot;Invalid index&quot;);
-        require(!isClaimed(index, user), &quot;Drop already claimed.&quot;);
+        <span class="hljs-built_in">require</span>(merkleDistributors.length &gt; index, <span class="hljs-string">&quot;Invalid index&quot;</span>);
+        <span class="hljs-built_in">require</span>(!isClaimed(index, user), <span class="hljs-string">&quot;Drop already claimed.&quot;</span>);
 
         MerkleDistributor storage merkleDistributor = merkleDistributors[index];
-        require(merkleDistributor.amount &gt;= amount, &quot;Not sufficient&quot;);
+        <span class="hljs-built_in">require</span>(merkleDistributor.amount &gt;= amount, <span class="hljs-string">&quot;Not sufficient&quot;</span>);
         bytes32 leaf = keccak256(abi.encodePacked(index, user, amount));
 
-        require(
-            // 核心校验逻辑
+        <span class="hljs-built_in">require</span>(
+            <span class="hljs-comment">// 核心校验逻辑</span>
             MerkleProof.verify(proof, merkleDistributor.merkleRoot, leaf),
-            &quot;Invalid proof.&quot;
+            <span class="hljs-string">&quot;Invalid proof.&quot;</span>
         );
 
         merkleDistributor.amount = merkleDistributor.amount - amount;
-        // 标识用户已经领取
-        claimedState[index][user] = true;
+        <span class="hljs-comment">// 标识用户已经领取</span>
+        claimedState[index][user] = <span class="hljs-literal">true</span>;
 
-        // 向用户转账
+        <span class="hljs-comment">// 向用户转账</span>
         address(token).safeTransfer(msg.sender, amount);
 
-        emit Claimed(address(this), user, amount);
+        emit Claimed(address(<span class="hljs-built_in">this</span>), user, amount);
     }
 }
 </code></pre>
 <h2 id="部署合约">部署合约</h2>
 <pre><code class="lang-Bash">npx hardhat scripts/deployDistributor.ts --network goerli
 
-# 0xF19233dFE30219F4D6200c02826B80e4347EF8BF
+<span class="hljs-comment"># 0xF19233dFE30219F4D6200c02826B80e4347EF8BF</span>
 
 npx hardhat verify 0xF19233dFE30219F4D6200c02826B80e4347EF8BF 0x4c305227E762634CB7d3d9291e42b423eD45f1AD  --network goerli
 </code></pre>
@@ -3415,36 +3411,82 @@ npx hardhat verify 0xF19233dFE30219F4D6200c02826B80e4347EF8BF 0x4c305227E762634C
 </li>
 </ul>
 <pre><code class="lang-JavaScript">监听奖励发放事件，进行计算：（核心逻辑）
-export function handleDistributeReward(event: DistributeReward): void {
-  // parse parameters first
-  let id = event.params.index.toString();
-  let rewardAmt = event.params.amount;
-  let index = event.params.index;
-  let settleBlockNumber = event.params.settleBlockNumber;
+<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handleDistributeReward</span>(<span class="hljs-params">event: DistributeReward</span>): <span class="hljs-title">void</span> </span>{
+  <span class="hljs-comment">// parse parameters first</span>
+  <span class="hljs-keyword">let</span> id = event.params.index.toString();
+  <span class="hljs-keyword">let</span> rewardAmt = event.params.amount;
+  <span class="hljs-keyword">let</span> index = event.params.index;
+  <span class="hljs-keyword">let</span> settleBlockNumber = event.params.settleBlockNumber;
 
-  // 找到当前发奖周期，查看哪个国家是winner
-  let winCountry = FinializeHistory.load(id)
-  if (!winCountry) {
-    return;
+  <span class="hljs-comment">// 找到当前发奖周期，查看哪个国家是winner</span>
+  <span class="hljs-keyword">let</span> winCountry = FinializeHistory.load(id)
+  <span class="hljs-keyword">if</span> (!winCountry) {
+    <span class="hljs-keyword">return</span>;
   }
 
-  let totalWeight = BigInt.fromI32(0)
-  let rewardActuallyAmt = BigInt.fromI32(0) 
-  let rewardHistoryList: string[] = []; // for history check usage
+  <span class="hljs-keyword">let</span> totalWeight = <span class="hljs-built_in">BigInt</span>.fromI32(<span class="hljs-number">0</span>)
+  <span class="hljs-keyword">let</span> rewardActuallyAmt = <span class="hljs-built_in">BigInt</span>.fromI32(<span class="hljs-number">0</span>) 
+  <span class="hljs-keyword">let</span> rewardHistoryList: string[] = []; <span class="hljs-comment">// for history check usage</span>
 
-  let noHandle = NeedToHandle.load(NO_HANDLE_ID);
-  if (noHandle) {
-    let group = new TypedMap<bytes, bigint>();
-    let currentList = noHandle.list; // current record
-    let newList: string[] = []; // record won&apos;t be used this time
-    log.warning(&quot;current list: &quot;, currentList)
+  <span class="hljs-keyword">let</span> noHandle = NeedToHandle.load(NO_HANDLE_ID);
+  <span class="hljs-keyword">if</span> (noHandle) {
+    <span class="hljs-keyword">let</span> group = <span class="hljs-keyword">new</span> TypedMap&lt;Bytes, <span class="hljs-built_in">BigInt</span>&gt;();
+    <span class="hljs-keyword">let</span> currentList = noHandle.list; <span class="hljs-comment">// current record</span>
+    <span class="hljs-keyword">let</span> newList: string[] = []; <span class="hljs-comment">// record won&apos;t be used this time</span>
+    log.warning(<span class="hljs-string">&quot;current list: &quot;</span>, currentList)
 
-    for (let i = 0; i &lt; currentList.length; i++) {
-      // 每个玩家都会得到奖励，默认权重weight为1
-      let playerWeight = BigInt.fromI32(1)
-      let record = PlayRecord.load(currentList[i]) as PlayRecord;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; currentList.length; i++) {
+      <span class="hljs-comment">// 每个玩家都会得到奖励，默认权重weight为1</span>
+      <span class="hljs-keyword">let</span> playerWeight = <span class="hljs-built_in">BigInt</span>.fromI32(<span class="hljs-number">1</span>)
+      <span class="hljs-keyword">let</span> record = PlayRecord.load(currentList[i]) <span class="hljs-keyword">as</span> PlayRecord;
 
-      if (record.block &gt; startBlock &amp;&amp; record.block </bytes,></code></pre>
+      <span class="hljs-keyword">if</span> (record.block &gt; startBlock &amp;&amp; record.block &lt;= endBlock) {
+        <span class="hljs-keyword">if</span> (winCountry.result == record.selectCountry) {
+          <span class="hljs-comment">// 如果当前用户猜中了，奖励翻倍（权重*2）</span>
+          playerWeight = playerWeight.times(<span class="hljs-built_in">BigInt</span>.fromI32(<span class="hljs-number">2</span>))
+        }
+
+        <span class="hljs-keyword">let</span> prevWeight = group.get(record.player)
+        <span class="hljs-keyword">if</span> (!prevWeight) {
+          prevWeight = <span class="hljs-built_in">BigInt</span>.fromI32(<span class="hljs-number">0</span>)
+        }
+
+        <span class="hljs-comment">// 更新当前用户权重到内存中，供下面👇进行奖励分配</span>
+        group.set(record.player, prevWeight.plus(playerWeight));
+        totalWeight = totalWeight.plus(playerWeight);
+      } <span class="hljs-keyword">else</span> {
+        <span class="hljs-comment">// 遍历所有的record，累加到player之上, block区间之外的，会添加到newList中</span>
+        newList.push(currentList[i]);
+      }
+    }
+
+    <span class="hljs-comment">// 便利所有的group，为每个人分配奖励数量，然后存储在UserDistribution中(供最终调用)</span>
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> j = <span class="hljs-number">0</span>; j &lt; group.entries.length; j++) {
+      <span class="hljs-keyword">let</span> player = group.entries[j].key;
+      <span class="hljs-keyword">let</span> weight = group.entries[j].value;
+
+      <span class="hljs-keyword">let</span> id = player.toString() + <span class="hljs-string">&quot;#&quot;</span> + index.toString()
+
+      log.warning(<span class="hljs-string">&quot;totalWeight: &quot;</span>, [totalWeight.toString()])
+      <span class="hljs-keyword">let</span> reward = rewardAmt.times(weight).div(totalWeight);
+
+      <span class="hljs-keyword">let</span> playerDistribution = <span class="hljs-keyword">new</span> PlayerDistribution(id);
+      playerDistribution.index = index;
+      playerDistribution.player = player;
+      playerDistribution.rewardAmt = reward;
+      playerDistribution.weight = weight;
+      playerDistribution.isClaimed = <span class="hljs-literal">false</span>;
+      playerDistribution.save();
+
+      rewardHistoryList.push(id);
+      rewardActuallyAmt = rewardActuallyAmt.plus(reward);
+    }
+
+    noHandle.list = newList;
+    noHandle.save();
+  }
+}
+</code></pre>
 <h3 id="查询分配结果">查询分配结果</h3>
 <ul>
 <li><p>第0期</p>
@@ -3550,7 +3592,7 @@ export function handleDistributeReward(event: DistributeReward): void {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第5节:世界杯竞猜_airdrop","level":"1.15.9","depth":2,"next":{"title":"第6节:世界杯竞猜_upgrade","level":"1.15.10","depth":2,"path":"08_项目实战-世界杯竞猜/06_世界杯竞猜_upgrade.md","ref":"08_项目实战-世界杯竞猜/06_世界杯竞猜_upgrade.md","articles":[]},"previous":{"title":"第4节:世界杯竞猜_subgraph","level":"1.15.8","depth":2,"path":"08_项目实战-世界杯竞猜/04_世界杯竞猜_subgraph.md","ref":"08_项目实战-世界杯竞猜/04_世界杯竞猜_subgraph.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"08_项目实战-世界杯竞猜/05-世界杯竞猜_airdrop.md","mtime":"2023-09-23T13:48:35.110Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第5节:世界杯竞猜_airdrop","level":"1.15.9","depth":2,"next":{"title":"第6节:世界杯竞猜_upgrade","level":"1.15.10","depth":2,"path":"08_项目实战-世界杯竞猜/06_世界杯竞猜_upgrade.md","ref":"08_项目实战-世界杯竞猜/06_世界杯竞猜_upgrade.md","articles":[]},"previous":{"title":"第4节:世界杯竞猜_subgraph","level":"1.15.8","depth":2,"path":"08_项目实战-世界杯竞猜/04_世界杯竞猜_subgraph.md","ref":"08_项目实战-世界杯竞猜/04_世界杯竞猜_subgraph.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"cn","gitbook":"*"},"file":{"path":"08_项目实战-世界杯竞猜/05-世界杯竞猜_airdrop.md","mtime":"2023-09-23T13:48:35.110Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3633,14 +3675,6 @@ export function handleDistributeReward(event: DistributeReward): void {
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

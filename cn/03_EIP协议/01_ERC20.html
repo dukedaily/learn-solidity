@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3023,142 +3019,142 @@
 <li>任何遵从<a href="https://eips.ethereum.org/EIPS/eip-20" target="_blank">EIP-20协议</a>（ERC20标准）的Contract都属于ERC20 Token</li>
 </ol>
 <h2 id="标准接口">标准接口</h2>
-<pre><code class="lang-js">// 6 REQUIRED FUNCTIONS
-function totalSupply() public view returns (uint256)
-function balanceOf(address _owner) public view returns (uint256 balance)
-function transfer(address _to, uint256 _value) public returns (bool success)
-function transferFrom(address _from, address _to, uint256 _value) public returns (bool success)
-function approve(address _spender, uint256 _value) public returns (bool success)
-function allowance(address _owner, address _spender) public view returns (uint256 remaining)
+<pre><code class="lang-js"><span class="hljs-comment">// 6 REQUIRED FUNCTIONS</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">totalSupply</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint256</span>)
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">balanceOf</span>(<span class="hljs-params">address _owner</span>) <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint256 balance</span>)
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">transfer</span>(<span class="hljs-params">address _to, uint256 _value</span>) <span class="hljs-title">public</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bool success</span>)
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">transferFrom</span>(<span class="hljs-params">address _from, address _to, uint256 _value</span>) <span class="hljs-title">public</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bool success</span>)
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">approve</span>(<span class="hljs-params">address _spender, uint256 _value</span>) <span class="hljs-title">public</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bool success</span>)
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">allowance</span>(<span class="hljs-params">address _owner, address _spender</span>) <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint256 remaining</span>)
 
-// 2 REQUIRED EVENTS
-event Transfer(address indexed _from, address indexed _to, uint256 _value)
-event Approval(address indexed _owner, address indexed _spender, uint256 _value)
+// 2 <span class="hljs-title">REQUIRED</span> <span class="hljs-title">EVENTS</span>
+<span class="hljs-title">event</span> <span class="hljs-title">Transfer</span>(<span class="hljs-params">address indexed _from, address indexed _to, uint256 _value</span>)
+<span class="hljs-title">event</span> <span class="hljs-title">Approval</span>(<span class="hljs-params">address indexed _owner, address indexed _spender, uint256 _value</span>)
 
-// 3. OPTIONAL FUNCTIONS
-function name() public view returns (string)
-function symbol() public view returns (string)
-function decimals() public view returns (uint8)
-</code></pre>
+// 3. <span class="hljs-title">OPTIONAL</span> <span class="hljs-title">FUNCTIONS</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">name</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">string</span>)
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">symbol</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">string</span>)
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">decimals</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint8</span>)
+</span></span></span></span></span></span></span></span></span></code></pre>
 <h2 id="分析">分析</h2>
-<pre><code class="lang-js">// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
 
-// https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.0.0/contracts/token/ERC20/IERC20.sol
+<span class="hljs-comment">// https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.0.0/contracts/token/ERC20/IERC20.sol</span>
 interface IERC20 {
-      // 6 REQUIRED FUNCTIONS
-      // 总发行量
-    function totalSupply() external view returns (uint);  // -&gt; 总发行量 100000000 * 10**decimals
+      <span class="hljs-comment">// 6 REQUIRED FUNCTIONS</span>
+      <span class="hljs-comment">// 总发行量</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">totalSupply</span>(<span class="hljs-params"></span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint</span>)</span>;  <span class="hljs-comment">// -&gt; 总发行量 100000000 * 10**decimals</span>
 
-      // 标准decimal： 18
-      // USDT: 6
-      // WBTC: 8
-    function balanceOf(address account) external view returns (uint); // 指定账户的余额
+      <span class="hljs-comment">// 标准decimal： 18</span>
+      <span class="hljs-comment">// USDT: 6</span>
+      <span class="hljs-comment">// WBTC: 8</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">balanceOf</span>(<span class="hljs-params">address account</span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint</span>)</span>; <span class="hljs-comment">// 指定账户的余额</span>
 
-    // 币的持有人直接调用，进行转账
-    function transfer(address recipient, uint amount) external returns (bool);
+    <span class="hljs-comment">// 币的持有人直接调用，进行转账</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">transfer</span>(<span class="hljs-params">address recipient, uint amount</span>) <span class="hljs-title">external</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bool</span>)</span>;
 
-      // 最常用的！！
-      // 1. 我这个owner对合约进行approve，此时approve内部会修改allowance变量
-      // 2. 合约内部调用transferFrom来支配owner的token
-    function transferFrom( // spender就是这个合约
-        address sender,    // owner
-        address recipient,    // 转给谁
-        uint amount // 金额
-    ) external returns (bool);
+      <span class="hljs-comment">// 最常用的！！</span>
+      <span class="hljs-comment">// 1. 我这个owner对合约进行approve，此时approve内部会修改allowance变量</span>
+      <span class="hljs-comment">// 2. 合约内部调用transferFrom来支配owner的token</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">transferFrom</span>(<span class="hljs-params"> <span class="hljs-comment">// spender就是这个合约</span>
+        address sender,    <span class="hljs-comment">// owner</span>
+        address recipient,    <span class="hljs-comment">// 转给谁</span>
+        uint amount <span class="hljs-comment">// 金额</span>
+    </span>) <span class="hljs-title">external</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bool</span>)</span>;
 
 
-    // owner: 币的持有人
-      // spender: 是指定帮助花费的代理人（被授权的人）
-    function allowance(address owner, address spender) external view returns (uint); // 授权的额度
+    <span class="hljs-comment">// owner: 币的持有人</span>
+      <span class="hljs-comment">// spender: 是指定帮助花费的代理人（被授权的人）</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">allowance</span>(<span class="hljs-params">address owner, address spender</span>) <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint</span>)</span>; <span class="hljs-comment">// 授权的额度</span>
 
-    // decimals view，这是一个public 的变量，自动提供了一个读取的方法 // 返回精度
-      // 持有人对spender进行授权，在approve内部，会调用msg.sender来知道owner是谁
-    function approve(address spender, uint amount) external returns (bool);
+    <span class="hljs-comment">// decimals view，这是一个public 的变量，自动提供了一个读取的方法 // 返回精度</span>
+      <span class="hljs-comment">// 持有人对spender进行授权，在approve内部，会调用msg.sender来知道owner是谁</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">approve</span>(<span class="hljs-params">address spender, uint amount</span>) <span class="hljs-title">external</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bool</span>)</span>;
 
-      // 2 REQUIRED EVENTS
-      // 事件
-    event Transfer(address indexed from, address indexed to, uint value);
+      <span class="hljs-comment">// 2 REQUIRED EVENTS</span>
+      <span class="hljs-comment">// 事件</span>
+    event Transfer(address indexed <span class="hljs-keyword">from</span>, address indexed to, uint value);
     event Approval(address indexed owner, address indexed spender, uint value);
 
-    // 3. OPTIONAL FUNCTIONS
-    function name() public view returns (string)
-    function symbol() public view returns (string)
-    function decimals() public view returns (uint8)
+    <span class="hljs-comment">// 3. OPTIONAL FUNCTIONS</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">name</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">string</span>)
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">symbol</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">string</span>)
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">decimals</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint8</span>)
 }
-</code></pre>
+</span></span></span></code></pre>
 <p>以下是ERC20的案例：</p>
-<pre><code class="lang-js">// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
 
-import &quot;./IERC20.sol&quot;;
+<span class="hljs-keyword">import</span> <span class="hljs-string">&quot;./IERC20.sol&quot;</span>;
 
 contract ERC20 is IERC20 {
     uint public totalSupply;
-    mapping(address =&gt; uint) public balanceOf;
-    mapping(address =&gt; mapping(address =&gt; uint)) public allowance;
-    string public name = &quot;Solidity by Example&quot;;
-    string public symbol = &quot;SOLBYEX&quot;;
-    uint8 public decimals = 18;
+    mapping(<span class="hljs-function"><span class="hljs-params">address</span> =&gt;</span> uint) public balanceOf;
+    mapping(<span class="hljs-function"><span class="hljs-params">address</span> =&gt;</span> mapping(<span class="hljs-function"><span class="hljs-params">address</span> =&gt;</span> uint)) public allowance;
+    string public name = <span class="hljs-string">&quot;Solidity by Example&quot;</span>;
+    string public symbol = <span class="hljs-string">&quot;SOLBYEX&quot;</span>;
+    uint8 public decimals = <span class="hljs-number">18</span>;
 
-    function transfer(address recipient, uint amount) external returns (bool) {
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">transfer</span>(<span class="hljs-params">address recipient, uint amount</span>) <span class="hljs-title">external</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bool</span>) </span>{
         balanceOf[msg.sender] -= amount;
         balanceOf[recipient] += amount;
         emit Transfer(msg.sender, recipient, amount);
-        return true;
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
     }
 
-    function approve(address spender, uint amount) external returns (bool) {
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">approve</span>(<span class="hljs-params">address spender, uint amount</span>) <span class="hljs-title">external</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bool</span>) </span>{
         allowance[msg.sender][spender] = amount;
         emit Approval(msg.sender, spender, amount);
-        return true;
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
     }
 
-    function transferFrom(
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">transferFrom</span>(<span class="hljs-params">
         address sender,
         address recipient,
         uint amount
-    ) external returns (bool) {
+    </span>) <span class="hljs-title">external</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bool</span>) </span>{
         allowance[sender][msg.sender] -= amount;
         balanceOf[sender] -= amount;
         balanceOf[recipient] += amount;
         emit Transfer(sender, recipient, amount);
-        return true;
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
     }
 
-    function mint(uint amount) external {
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">mint</span>(<span class="hljs-params">uint amount</span>) <span class="hljs-title">external</span> </span>{
         balanceOf[msg.sender] += amount;
         totalSupply += amount;
-        emit Transfer(address(0), msg.sender, amount);
+        emit Transfer(address(<span class="hljs-number">0</span>), msg.sender, amount);
     }
 
-    function burn(uint amount) external {
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">burn</span>(<span class="hljs-params">uint amount</span>) <span class="hljs-title">external</span> </span>{
         balanceOf[msg.sender] -= amount;
         totalSupply -= amount;
-        emit Transfer(msg.sender, address(0), amount);
+        emit Transfer(msg.sender, address(<span class="hljs-number">0</span>), amount);
     }
 }
 </code></pre>
 <p>可以使用openzeppelin库进行创建自己的token：</p>
-<pre><code class="lang-js">// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
 
-// import &quot;https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.0.0/contracts/token/ERC20/ERC20.sol&quot;;
-import &quot;@openzeppelin/contracts/token/ERC20/ERC20.sol&quot;;
+<span class="hljs-comment">// import &quot;https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.0.0/contracts/token/ERC20/ERC20.sol&quot;;</span>
+<span class="hljs-keyword">import</span> <span class="hljs-string">&quot;@openzeppelin/contracts/token/ERC20/ERC20.sol&quot;</span>;
 
 
 contract MyToken is ERC20 {
-    constructor(string memory name, string memory symbol) ERC20(name, symbol) {
-        // Mint 100 tokens to msg.sender
-        // Similar to how
-        // 1 dollar = 100 cents
-        // 1 token = 1 * (10 ** decimals)
-        _mint(msg.sender, 100 * 10**uint(decimals()));
+    <span class="hljs-title">constructor</span>(<span class="hljs-params">string memory name, string memory symbol</span>) <span class="hljs-title">ERC20</span>(<span class="hljs-params">name, symbol</span>) {
+        <span class="hljs-comment">// Mint 100 tokens to msg.sender</span>
+        <span class="hljs-comment">// Similar to how</span>
+        <span class="hljs-comment">// 1 dollar = 100 cents</span>
+        <span class="hljs-comment">// 1 token = 1 * (10 ** decimals)</span>
+        _mint(msg.sender, <span class="hljs-number">100</span> * <span class="hljs-number">10</span>**uint(decimals()));
     }
 
-    // 默认是18，可以进行override
-    function decimals() public view override returns (uint8) {
-        return 6;
+    <span class="hljs-comment">// 默认是18，可以进行override</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">decimals</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">override</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint8</span>) </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-number">6</span>;
     }
 }
 </code></pre>
@@ -3189,7 +3185,7 @@ contract MyToken is ERC20 {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第1节:ERC20","level":"1.10.1","depth":2,"next":{"title":"第2节:ERC721","level":"1.10.2","depth":2,"path":"03_EIP协议/02_ERC721.md","ref":"03_EIP协议/02_ERC721.md","articles":[]},"previous":{"title":"第三章:EIP协议","level":"1.10","depth":1,"path":"03_EIP协议/README.md","ref":"03_EIP协议/README.md","articles":[{"title":"第1节:ERC20","level":"1.10.1","depth":2,"path":"03_EIP协议/01_ERC20.md","ref":"03_EIP协议/01_ERC20.md","articles":[]},{"title":"第2节:ERC721","level":"1.10.2","depth":2,"path":"03_EIP协议/02_ERC721.md","ref":"03_EIP协议/02_ERC721.md","articles":[]},{"title":"第3节:ERC1155","level":"1.10.3","depth":2,"path":"03_EIP协议/03_ERC1155.md","ref":"03_EIP协议/03_ERC1155.md","articles":[]},{"title":"第4节:ERC165","level":"1.10.4","depth":2,"path":"03_EIP协议/04_ERC165.md","ref":"03_EIP协议/04_ERC165.md","articles":[]},{"title":"第5节:EIP2612","level":"1.10.5","depth":2,"path":"03_EIP协议/05_EIP2612.md","ref":"03_EIP协议/05_EIP2612.md","articles":[]},{"title":"第6节:EIP712","level":"1.10.6","depth":2,"path":"03_EIP协议/06_EIP712.md","ref":"03_EIP协议/06_EIP712.md","articles":[]},{"title":"第7节:ERC5114","level":"1.10.7","depth":2,"path":"03_EIP协议/07_ERC5114.md","ref":"03_EIP协议/07_ERC5114.md","articles":[]},{"title":"第8节:ERC1820","level":"1.10.8","depth":2,"path":"03_EIP协议/08_ERC1820.md","ref":"03_EIP协议/08_ERC1820.md","articles":[]},{"title":"第9节:ERC4626","level":"1.10.9","depth":2,"path":"03_EIP协议/09_ERC4626.md","ref":"03_EIP协议/09_ERC4626.md","articles":[]},{"title":"第10节:EIP1559","level":"1.10.10","depth":2,"path":"03_EIP协议/10_EIP1559.md","ref":"03_EIP协议/10_EIP1559.md","articles":[]},{"title":"第20节:NFT理念探讨","level":"1.10.11","depth":2,"path":"03_EIP协议/20_NFT理念探讨.md","ref":"03_EIP协议/20_NFT理念探讨.md","articles":[]},{"title":"第21节:Metaverse","level":"1.10.12","depth":2,"path":"03_EIP协议/21_metaverse.md","ref":"03_EIP协议/21_metaverse.md","articles":[]}]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"03_EIP协议/01_ERC20.md","mtime":"2023-03-21T14:01:27.000Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第1节:ERC20","level":"1.10.1","depth":2,"next":{"title":"第2节:ERC721","level":"1.10.2","depth":2,"path":"03_EIP协议/02_ERC721.md","ref":"03_EIP协议/02_ERC721.md","articles":[]},"previous":{"title":"第三章:EIP协议","level":"1.10","depth":1,"path":"03_EIP协议/README.md","ref":"03_EIP协议/README.md","articles":[{"title":"第1节:ERC20","level":"1.10.1","depth":2,"path":"03_EIP协议/01_ERC20.md","ref":"03_EIP协议/01_ERC20.md","articles":[]},{"title":"第2节:ERC721","level":"1.10.2","depth":2,"path":"03_EIP协议/02_ERC721.md","ref":"03_EIP协议/02_ERC721.md","articles":[]},{"title":"第3节:ERC1155","level":"1.10.3","depth":2,"path":"03_EIP协议/03_ERC1155.md","ref":"03_EIP协议/03_ERC1155.md","articles":[]},{"title":"第4节:ERC165","level":"1.10.4","depth":2,"path":"03_EIP协议/04_ERC165.md","ref":"03_EIP协议/04_ERC165.md","articles":[]},{"title":"第5节:EIP2612","level":"1.10.5","depth":2,"path":"03_EIP协议/05_EIP2612.md","ref":"03_EIP协议/05_EIP2612.md","articles":[]},{"title":"第6节:EIP712","level":"1.10.6","depth":2,"path":"03_EIP协议/06_EIP712.md","ref":"03_EIP协议/06_EIP712.md","articles":[]},{"title":"第7节:ERC5114","level":"1.10.7","depth":2,"path":"03_EIP协议/07_ERC5114.md","ref":"03_EIP协议/07_ERC5114.md","articles":[]},{"title":"第8节:ERC1820","level":"1.10.8","depth":2,"path":"03_EIP协议/08_ERC1820.md","ref":"03_EIP协议/08_ERC1820.md","articles":[]},{"title":"第9节:ERC4626","level":"1.10.9","depth":2,"path":"03_EIP协议/09_ERC4626.md","ref":"03_EIP协议/09_ERC4626.md","articles":[]},{"title":"第10节:EIP1559","level":"1.10.10","depth":2,"path":"03_EIP协议/10_EIP1559.md","ref":"03_EIP协议/10_EIP1559.md","articles":[]},{"title":"第20节:NFT理念探讨","level":"1.10.11","depth":2,"path":"03_EIP协议/20_NFT理念探讨.md","ref":"03_EIP协议/20_NFT理念探讨.md","articles":[]},{"title":"第21节:Metaverse","level":"1.10.12","depth":2,"path":"03_EIP协议/21_metaverse.md","ref":"03_EIP协议/21_metaverse.md","articles":[]}]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"cn","gitbook":"*"},"file":{"path":"03_EIP协议/01_ERC20.md","mtime":"2023-03-21T14:01:27.000Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3272,14 +3268,6 @@ contract MyToken is ERC20 {
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

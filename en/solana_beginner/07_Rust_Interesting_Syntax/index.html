@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -472,55 +468,55 @@
 <pre><code class="lang-sh">anchor new day_7
 </code></pre>
 <p>And update with the following code (be sure to replace with your program id).</p>
-<pre><code class="lang-rust">use anchor_lang::prelude::*;
+<pre><code class="lang-rust"><span class="hljs-keyword">use</span> anchor_lang::prelude::*;
 
-declare_id!(&quot;2V4BSWLCWVP5CmrxbcpKG1bqczwgirs43euQtHDJqwDa&quot;);
+declare_id!(<span class="hljs-string">&quot;2V4BSWLCWVP5CmrxbcpKG1bqczwgirs43euQtHDJqwDa&quot;</span>);
 
-pub fn add(a: u32, b: u32) -&gt; u32 {
+<span class="hljs-keyword">pub</span> <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">add</span></span>(a: <span class="hljs-built_in">u32</span>, b: <span class="hljs-built_in">u32</span>) -&gt; <span class="hljs-built_in">u32</span> {
     a + b
 }
 
-pub fn concat(s1: String, s2: String) -&gt; String {
-    format!(&quot;{}{}&quot;, s1, s2)
+<span class="hljs-keyword">pub</span> <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">concat</span></span>(s1: <span class="hljs-built_in">String</span>, s2: <span class="hljs-built_in">String</span>) -&gt; <span class="hljs-built_in">String</span> {
+    <span class="hljs-built_in">format!</span>(<span class="hljs-string">&quot;{}{}&quot;</span>, s1, s2)
 }
 
-#[program]
-pub mod day_7 {
-    use super::*;
+<span class="hljs-meta">#[program]</span>
+<span class="hljs-keyword">pub</span> <span class="hljs-keyword">mod</span> day_7 {
+    <span class="hljs-keyword">use</span> super::*;
 
-    pub fn copy_types(ctx: Context<initialize>) -&gt; Result<()> {
-        let a: u32 = 2;
-        let b: u32 = 3;
-        msg!(&quot;{} + {} = {}&quot;, a, b, add(a, b));
+    <span class="hljs-keyword">pub</span> <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">copy_types</span></span>(ctx: Context&lt;Initialize&gt;) -&gt; <span class="hljs-built_in">Result</span>&lt;()&gt; {
+        <span class="hljs-keyword">let</span> a: <span class="hljs-built_in">u32</span> = <span class="hljs-number">2</span>;
+        <span class="hljs-keyword">let</span> b: <span class="hljs-built_in">u32</span> = <span class="hljs-number">3</span>;
+        msg!(<span class="hljs-string">&quot;{} + {} = {}&quot;</span>, a, b, add(a, b));
 
-        let s1 = String::from(&quot;hello&quot;);
-        let s2 = String::from(&quot; world&quot;);
+        <span class="hljs-keyword">let</span> s1 = <span class="hljs-built_in">String</span>::from(<span class="hljs-string">&quot;hello&quot;</span>);
+        <span class="hljs-keyword">let</span> s2 = <span class="hljs-built_in">String</span>::from(<span class="hljs-string">&quot; world&quot;</span>);
 
-        // if s1 and s2 are copied, this could be a huge data transfer
-        // if the strings are very long
-        msg!(&quot;{}{}&quot;, s1, s2);
-        Ok(())
+        <span class="hljs-comment">// if s1 and s2 are copied, this could be a huge data transfer</span>
+        <span class="hljs-comment">// if the strings are very long</span>
+        msg!(<span class="hljs-string">&quot;{}{}&quot;</span>, s1, s2);
+        <span class="hljs-literal">Ok</span>(())
     }
 }
 
-#[derive(Accounts)]
-pub struct Initialize {}
-</()></initialize></code></pre>
+<span class="hljs-meta">#[derive(Accounts)]</span>
+<span class="hljs-keyword">pub</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Initialize</span></span> {}
+</code></pre>
 <p>add test file <code>tests/day_7.ts</code>: </p>
-<pre><code class="lang-ts">import * as anchor from &quot;@coral-xyz/anchor&quot;;
-import { Program } from &quot;@coral-xyz/anchor&quot;;
-import { Day7 } from &apos;../target/types/day_7&apos;;
+<pre><code class="lang-ts"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> anchor <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@coral-xyz/anchor&quot;</span>;
+<span class="hljs-keyword">import</span> { Program } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@coral-xyz/anchor&quot;</span>;
+<span class="hljs-keyword">import</span> { Day7 } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;../target/types/day_7&apos;</span>;
 
-describe(&quot;day_7&quot;, () =&gt; {
+describe(<span class="hljs-string">&quot;day_7&quot;</span>, <span class="hljs-function">() =&gt;</span> {
   anchor.setProvider(anchor.AnchorProvider.env());
-  const program = anchor.workspace.Day7 as Program<day7>;
+  <span class="hljs-keyword">const</span> program = anchor.workspace.Day7 <span class="hljs-keyword">as</span> Program&lt;Day7&gt;;
 
-  it(&quot;should succeed copy types!&quot;, async () =&gt; {
-    const tx = await program.methods.copyTypes().rpc();
-    console.log(&quot;You tx signature:&quot;, tx);
+  it(<span class="hljs-string">&quot;should succeed copy types!&quot;</span>, <span class="hljs-keyword">async</span> () =&gt; {
+    <span class="hljs-keyword">const</span> tx = <span class="hljs-keyword">await</span> program.methods.copyTypes().rpc();
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;You tx signature:&quot;</span>, tx);
   })
 })
-</day7></code></pre>
+</code></pre>
 <p>Result:</p>
 <p><img src="assets/image-20240725222202935.png" alt="image-20240725222202935"></p>
 <p>within this demo, both a and b are type of u32, means when pass to function <code>add</code>, only need to copy 4Bytes * 2 are copied, so they are copy type.</p>
@@ -528,173 +524,173 @@ describe(&quot;day_7&quot;, () =&gt; {
 <h2 id="ownership">Ownership</h2>
 <p>the ownership concept is only an issue with (apply to) non-copy-types: <code>Strings, vectors, structs</code>, and the usage is alike the term of<code>reference</code> in C++, let&apos;s dive into the details.</p>
 <p>add this function into the code base.</p>
-<pre><code class="lang-rust">    pub fn ownership(ctx: Context<initialize>) -&gt; Result<()> {
-        let s1 = String::from(&quot;hello&quot;);
-        let res = s1; // res become the owner of value: &quot;hello&quot;
+<pre><code class="lang-rust">    <span class="hljs-keyword">pub</span> <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">ownership</span></span>(ctx: Context&lt;Initialize&gt;) -&gt; <span class="hljs-built_in">Result</span>&lt;()&gt; {
+        <span class="hljs-keyword">let</span> s1 = <span class="hljs-built_in">String</span>::from(<span class="hljs-string">&quot;hello&quot;</span>);
+        <span class="hljs-keyword">let</span> res = s1; <span class="hljs-comment">// res become the owner of value: &quot;hello&quot;</span>
 
-        msg!(&quot;{:?}&quot;, s1); // this line won&apos;t compile, cos s1 is no longer the owner of value: &quot;hello&quot;
-        msg!(&quot;{:?}&quot;, res);
+        msg!(<span class="hljs-string">&quot;{:?}&quot;</span>, s1); <span class="hljs-comment">// this line won&apos;t compile, cos s1 is no longer the owner of value: &quot;hello&quot;</span>
+        msg!(<span class="hljs-string">&quot;{:?}&quot;</span>, res);
 
-        Ok(())
+        <span class="hljs-literal">Ok</span>(())
     }
-</()></initialize></code></pre>
+</code></pre>
 <p>and you will see this error after compilation.</p>
 <p><img src="assets/image-20240726082430991.png" alt="image-20240726082430991"></p>
 <p>To fix the code above we have two options: use the &amp; operator or clone s1.</p>
 <h2 id="borrowing">Borrowing</h2>
 <p><strong>To give another variable or function a view of an owned variable, we prepend it with: </strong> <strong>&amp;</strong>.</p>
-<pre><code class="lang-rust">    pub fn ownership(ctx: Context<initialize>) -&gt; Result<()> {
-        let s1 = String::from(&quot;hello&quot;);
-        let res = &amp;s1;
+<pre><code class="lang-rust">    <span class="hljs-keyword">pub</span> <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">ownership</span></span>(ctx: Context&lt;Initialize&gt;) -&gt; <span class="hljs-built_in">Result</span>&lt;()&gt; {
+        <span class="hljs-keyword">let</span> s1 = <span class="hljs-built_in">String</span>::from(<span class="hljs-string">&quot;hello&quot;</span>);
+        <span class="hljs-keyword">let</span> res = &amp;s1;
 
-        msg!(&quot;s1 under view: {:?}&quot;, s1);
-        msg!(&quot;res view s1: {:?}&quot;, res);
+        msg!(<span class="hljs-string">&quot;s1 under view: {:?}&quot;</span>, s1);
+        msg!(<span class="hljs-string">&quot;res view s1: {:?}&quot;</span>, res);
 
-        let s2 = String::from(&quot;world&quot;);
-        let res2 = s2;
-        msg!(&quot;res2 owns s2: {:?}&quot;, res2);
+        <span class="hljs-keyword">let</span> s2 = <span class="hljs-built_in">String</span>::from(<span class="hljs-string">&quot;world&quot;</span>);
+        <span class="hljs-keyword">let</span> res2 = s2;
+        msg!(<span class="hljs-string">&quot;res2 owns s2: {:?}&quot;</span>, res2);
 
-        Ok(())
+        <span class="hljs-literal">Ok</span>(())
     }
-</()></initialize></code></pre>
+</code></pre>
 <p>s2 can now view <code>String::from(&quot;hello&quot;)</code> but not own it, it will holds a reference to the string value in s1, <strong>but s1 still holds its original string value</strong>.</p>
 <p>in rust, we the techitical word of what we are calling <code>view only</code> is : borrowing.</p>
 <p><img src="assets/image-20240726084933412.png" alt="image-20240726084933412"></p>
 <h2 id="borrowing-copy-type">Borrowing (copy-type)</h2>
-<pre><code class="lang-rust">    pub fn borrow_integer(ctx: Context<initialize>) -&gt; Result<()> {
-        let a = 10;
-        let b = &amp;a;
-        let c = a;
+<pre><code class="lang-rust">    <span class="hljs-keyword">pub</span> <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">borrow_integer</span></span>(ctx: Context&lt;Initialize&gt;) -&gt; <span class="hljs-built_in">Result</span>&lt;()&gt; {
+        <span class="hljs-keyword">let</span> a = <span class="hljs-number">10</span>;
+        <span class="hljs-keyword">let</span> b = &amp;a;
+        <span class="hljs-keyword">let</span> c = a;
 
-        msg!(&quot;a: {:?}&quot;, a);
-        msg!(&quot;b: {:?}&quot;, b);
-        msg!(&quot;c: {:?}&quot;, c);
-        Ok(())
+        msg!(<span class="hljs-string">&quot;a: {:?}&quot;</span>, a);
+        msg!(<span class="hljs-string">&quot;b: {:?}&quot;</span>, b);
+        msg!(<span class="hljs-string">&quot;c: {:?}&quot;</span>, c);
+        <span class="hljs-literal">Ok</span>(())
     }
-</()></initialize></code></pre>
+</code></pre>
 <p>a, b, c all hold a new copy of value 10, the underlying reason is that the overhead is negligible.</p>
 <p><img src="assets/image-20240726091005029.png" alt="image-20240726091005029"></p>
 <h2 id="clone-a-object">Clone a object</h2>
 <p>if a var of a non-copy-type is being borrowed, it cannot be reassigned, check the code below.</p>
-<pre><code class="lang-rust">    pub fn clone_test(ctx: Context<initialize>) -&gt; Result<()> {
-        let mut s1 = String::from(&quot;hello&quot;);
-        // let y = &amp;s1; // comment this line
+<pre><code class="lang-rust">    <span class="hljs-keyword">pub</span> <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">clone_test</span></span>(ctx: Context&lt;Initialize&gt;) -&gt; <span class="hljs-built_in">Result</span>&lt;()&gt; {
+        <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut</span> s1 = <span class="hljs-built_in">String</span>::from(<span class="hljs-string">&quot;hello&quot;</span>);
+        <span class="hljs-comment">// let y = &amp;s1; // comment this line</span>
 
-        s1 = s1 + &quot; world&quot;;
-        // msg!(&quot;y : {:?}&quot;, y); // comment this line
-        msg!(&quot;s1: {:?}&quot;, s1);
-        Ok(())
+        s1 = s1 + <span class="hljs-string">&quot; world&quot;</span>;
+        <span class="hljs-comment">// msg!(&quot;y : {:?}&quot;, y); // comment this line</span>
+        msg!(<span class="hljs-string">&quot;s1: {:?}&quot;</span>, s1);
+        <span class="hljs-literal">Ok</span>(())
     }
-</()></initialize></code></pre>
+</code></pre>
 <p>everything works now, then we uncomment two lines above, and the complier will complain:</p>
-<pre><code class="lang-rust">    pub fn clone_test(ctx: Context<initialize>) -&gt; Result<()> {
-        let mut s1 = String::from(&quot;hello&quot;);
-        let y = &amp;s1;
+<pre><code class="lang-rust">    <span class="hljs-keyword">pub</span> <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">clone_test</span></span>(ctx: Context&lt;Initialize&gt;) -&gt; <span class="hljs-built_in">Result</span>&lt;()&gt; {
+        <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut</span> s1 = <span class="hljs-built_in">String</span>::from(<span class="hljs-string">&quot;hello&quot;</span>);
+        <span class="hljs-keyword">let</span> y = &amp;s1;
 
-        s1 = s1 + &quot; world&quot;;
-        msg!(&quot;y : {:?}&quot;, y);
-        msg!(&quot;s1: {:?}&quot;, s1);
-        Ok(())
+        s1 = s1 + <span class="hljs-string">&quot; world&quot;</span>;
+        msg!(<span class="hljs-string">&quot;y : {:?}&quot;</span>, y);
+        msg!(<span class="hljs-string">&quot;s1: {:?}&quot;</span>, s1);
+        <span class="hljs-literal">Ok</span>(())
     }
-</()></initialize></code></pre>
+</code></pre>
 <p><img src="assets/image-20240726085555156.png" alt="image-20240726085555156"></p>
 <p>in order to make it work, we can not borrow anymore, instead of we <code>clone</code>.</p>
 <pre><code class="lang-rust">
-    pub fn clone_test(ctx: Context<initialize>) -&gt; Result<()> {
-        let mut s1 = String::from(&quot;hello&quot;);
-        // let y = &amp;s1;
-        let y = s1.clone(); // add this line
+    <span class="hljs-keyword">pub</span> <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">clone_test</span></span>(ctx: Context&lt;Initialize&gt;) -&gt; <span class="hljs-built_in">Result</span>&lt;()&gt; {
+        <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut</span> s1 = <span class="hljs-built_in">String</span>::from(<span class="hljs-string">&quot;hello&quot;</span>);
+        <span class="hljs-comment">// let y = &amp;s1;</span>
+        <span class="hljs-keyword">let</span> y = s1.clone(); <span class="hljs-comment">// add this line</span>
 
-        s1 = s1 + &quot; world&quot;;
-        msg!(&quot;y : {:?}&quot;, y);
-        msg!(&quot;s1: {:?}&quot;, s1);
-        Ok(())
+        s1 = s1 + <span class="hljs-string">&quot; world&quot;</span>;
+        msg!(<span class="hljs-string">&quot;y : {:?}&quot;</span>, y);
+        msg!(<span class="hljs-string">&quot;s1: {:?}&quot;</span>, s1);
+        <span class="hljs-literal">Ok</span>(())
     }
-</()></initialize></code></pre>
+</code></pre>
 <p>Now, y has an entire copy of s1, no constraint anymore.</p>
 <p><img src="assets/image-20240726090212372.png" alt="image-20240726090212372"></p>
 <p>Interesting thing: if we only comment the <code>msg!</code>line and keep the borrowing line, it still work.</p>
-<pre><code class="lang-rust">    pub fn clone_test(ctx: Context<initialize>) -&gt; Result<()> {
-        let mut s1 = String::from(&quot;hello&quot;);
-        let y = &amp;s1;
+<pre><code class="lang-rust">    <span class="hljs-keyword">pub</span> <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">clone_test</span></span>(ctx: Context&lt;Initialize&gt;) -&gt; <span class="hljs-built_in">Result</span>&lt;()&gt; {
+        <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut</span> s1 = <span class="hljs-built_in">String</span>::from(<span class="hljs-string">&quot;hello&quot;</span>);
+        <span class="hljs-keyword">let</span> y = &amp;s1;
 
-        s1 = s1 + &quot; world&quot;;
-        // msg!(&quot;y : {:?}&quot;, y);
-        msg!(&quot;s1: {:?}&quot;, s1);
-        Ok(())
+        s1 = s1 + <span class="hljs-string">&quot; world&quot;</span>;
+        <span class="hljs-comment">// msg!(&quot;y : {:?}&quot;, y);</span>
+        msg!(<span class="hljs-string">&quot;s1: {:?}&quot;</span>, s1);
+        <span class="hljs-literal">Ok</span>(())
     }
-</()></initialize></code></pre>
+</code></pre>
 <h2 id="generic-types">Generic types</h2>
 <p>Rust also supports generic types, eliminating the need to write multiple functions for different types with the same logic.</p>
-<pre><code class="lang-rust">use anchor_lang::prelude::*;
+<pre><code class="lang-rust"><span class="hljs-keyword">use</span> anchor_lang::prelude::*;
 
-declare_id!(&quot;2V4BSWLCWVP5CmrxbcpKG1bqczwgirs43euQtHDJqwDa&quot;);
+declare_id!(<span class="hljs-string">&quot;2V4BSWLCWVP5CmrxbcpKG1bqczwgirs43euQtHDJqwDa&quot;</span>);
 
-#[program]
-pub mod day_7 {
-    use super::*;
-         // The rest...
+<span class="hljs-meta">#[program]</span>
+<span class="hljs-keyword">pub</span> <span class="hljs-keyword">mod</span> day_7 {
+    <span class="hljs-keyword">use</span> super::*;
+         <span class="hljs-comment">// The rest...</span>
 
-    pub fn generic_type_test(ctx: Context<initialize>) -&gt; Result<()> {
-        let my_values1 = MyValues {
-            foo: 42,
-            bar: &quot;hello&quot;.to_string(),
+    <span class="hljs-keyword">pub</span> <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">generic_type_test</span></span>(ctx: Context&lt;Initialize&gt;) -&gt; <span class="hljs-built_in">Result</span>&lt;()&gt; {
+        <span class="hljs-keyword">let</span> my_values1 = MyValues {
+            foo: <span class="hljs-number">42</span>,
+            bar: <span class="hljs-string">&quot;hello&quot;</span>.to_string(),
         };
 
-        let my_values2 = MyValues {
-            foo: true,
-            bar: [1, 2, 3],
+        <span class="hljs-keyword">let</span> my_values2 = MyValues {
+            foo: <span class="hljs-literal">true</span>,
+            bar: [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>],
         };
 
-        msg!(&quot;my_values1: {:?}&quot;, my_values1);
-        msg!(&quot;my_values2: {:?}&quot;, my_values2);
-        Ok(())
+        msg!(<span class="hljs-string">&quot;my_values1: {:?}&quot;</span>, my_values1);
+        msg!(<span class="hljs-string">&quot;my_values2: {:?}&quot;</span>, my_values2);
+        <span class="hljs-literal">Ok</span>(())
     }
 }
 
-#[derive(Accounts)]
-pub struct Initialize {}
+<span class="hljs-meta">#[derive(Accounts)]</span>
+<span class="hljs-keyword">pub</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Initialize</span></span> {}
 
-// derive the debug trait so we can print the struct to the console
-#[derive(Debug)]
-struct MyValues<t, u> {
+<span class="hljs-comment">// derive the debug trait so we can print the struct to the console</span>
+<span class="hljs-meta">#[derive(Debug)]</span>
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">MyValues</span></span>&lt;T, U&gt; {
     foo: T,
     bar: U,
 }
-</t,></()></initialize></code></pre>
+</code></pre>
 <p>we can reuse this MyValues type on different types.</p>
 <p><img src="assets/image-20240726231659108.png" alt="image-20240726231659108"></p>
 <h2 id="options">Options</h2>
-<pre><code class="lang-rust">fn main() {
-    let v = Vec::from([1,2,3,4,5]);
+<pre><code class="lang-rust"><span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">main</span></span>() {
+    <span class="hljs-keyword">let</span> v = <span class="hljs-built_in">Vec</span>::from([<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>]);
 
-    assert!(v.iter().max() == 5);
+    <span class="hljs-built_in">assert!</span>(v.iter().max() == <span class="hljs-number">5</span>);
 }
 </code></pre>
 <p>The code fails to compile with the following error:</p>
-<pre><code class="lang-js">6 |     assert!(v.iter().max() == 5);
-  |                               ^ expected `Option<&{integer}>`, found integer
-</&{integer}></code></pre>
+<pre><code class="lang-js"><span class="hljs-number">6</span> |     assert!(v.iter().max() == <span class="hljs-number">5</span>);
+  |                               ^ expected <span class="hljs-string">`Option&lt;&amp;{integer}&gt;`</span>, found integer
+</code></pre>
 <p>The output of max() is not an integer due to the corner case that the vector v might be empty.</p>
 <p>To handle this corner case, rust returns an Option instead. An Option is an enum which can contain either the expected value, or a special value that indicates “nothing was there.”</p>
 <p><code>option</code> comes together with <code>enum</code>, if the value of a type is empty, rust will return a value of type option, create new program</p>
 <pre><code class="lang-sh">anchor new day_7_1
 </code></pre>
 <p>update with with the code below.</p>
-<pre><code class="lang-rust">    pub fn option_test(ctx: Context<initialize>) -&gt; Result<()> {
-        let v = Vec::from([1, 2, 3, 4, 5]);
-        // assert!(v.iter().max() == 5); // wrong
-        assert!(v.iter().max().unwrap() == &amp;5); // correct
-        Ok(())
+<pre><code class="lang-rust">    <span class="hljs-keyword">pub</span> <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">option_test</span></span>(ctx: Context&lt;Initialize&gt;) -&gt; <span class="hljs-built_in">Result</span>&lt;()&gt; {
+        <span class="hljs-keyword">let</span> v = <span class="hljs-built_in">Vec</span>::from([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>]);
+        <span class="hljs-comment">// assert!(v.iter().max() == 5); // wrong</span>
+        <span class="hljs-built_in">assert!</span>(v.iter().max().unwrap() == &amp;<span class="hljs-number">5</span>); <span class="hljs-comment">// correct</span>
+        <span class="hljs-literal">Ok</span>(())
     }
-</()></initialize></code></pre>
+</code></pre>
 <p>To turn an Option into the underlying type, we use unwrap(). unwrap() will cause a panic if we received “nothing”, so we should only use it in situations where we want the panic to occur or we are sure we won’t get a empty value.</p>
 <h2 id="the-deref-operator-">The deref Operator *</h2>
 <p>as you may notice, we use <code>&amp;0</code> instead of <code>0</code>, cos the return type of <code>unwrap()</code> is a <code>view</code>, so we need to use &amp; ahead.</p>
-<pre><code class="lang-rust">        assert!(v.iter().max().unwrap() == &amp;5); // correct
+<pre><code class="lang-rust">        <span class="hljs-built_in">assert!</span>(v.iter().max().unwrap() == &amp;<span class="hljs-number">5</span>); <span class="hljs-comment">// correct</span>
 </code></pre>
 <p>to convert the view of an integer backward to a regular integer, we can use * operator to deference.</p>
-<pre><code class="lang-rust">        assert!(*v.iter().max().unwrap() == 5); // correct
+<pre><code class="lang-rust">        <span class="hljs-built_in">assert!</span>(*v.iter().max().unwrap() == <span class="hljs-number">5</span>); <span class="hljs-comment">// correct</span>
 </code></pre>
 <p>You can think of * as &quot;undoing&quot; a &amp; without disturbing the original value.</p>
 <h2 id="result-type">Result Type</h2>
@@ -703,18 +699,18 @@ struct MyValues<t, u> {
 <p>in day_4, we return either error or ok in this function</p>
 <p><img src="assets/image-20240728103805491.png" alt="image-20240728103805491"></p>
 <p>if we trace back and we will get it&apos;s definition like this:</p>
-<pre><code class="lang-rust">pub enum Result<t, e> {
-    /// Contains the success value
-    #[lang = &quot;Ok&quot;]
-    #[stable(feature = &quot;rust1&quot;, since = &quot;1.0.0&quot;)]
-    Ok(#[stable(feature = &quot;rust1&quot;, since = &quot;1.0.0&quot;)] T),
+<pre><code class="lang-rust"><span class="hljs-keyword">pub</span> <span class="hljs-class"><span class="hljs-keyword">enum</span> <span class="hljs-title">Result</span></span>&lt;T, E&gt; {
+    <span class="hljs-comment">/// Contains the success value</span>
+    <span class="hljs-meta">#[lang = <span class="hljs-meta-string">&quot;Ok&quot;</span>]</span>
+    <span class="hljs-meta">#[stable(feature = <span class="hljs-meta-string">&quot;rust1&quot;</span>, since = <span class="hljs-meta-string">&quot;1.0.0&quot;</span>)]</span>
+    <span class="hljs-literal">Ok</span>(<span class="hljs-meta">#[stable(feature = <span class="hljs-meta-string">&quot;rust1&quot;</span>, since = <span class="hljs-meta-string">&quot;1.0.0&quot;</span>)]</span> T),
 
-    /// Contains the error value
-    #[lang = &quot;Err&quot;]
-    #[stable(feature = &quot;rust1&quot;, since = &quot;1.0.0&quot;)]
-    Err(#[stable(feature = &quot;rust1&quot;, since = &quot;1.0.0&quot;)] E),
+    <span class="hljs-comment">/// Contains the error value</span>
+    <span class="hljs-meta">#[lang = <span class="hljs-meta-string">&quot;Err&quot;</span>]</span>
+    <span class="hljs-meta">#[stable(feature = <span class="hljs-meta-string">&quot;rust1&quot;</span>, since = <span class="hljs-meta-string">&quot;1.0.0&quot;</span>)]</span>
+    <span class="hljs-literal">Err</span>(<span class="hljs-meta">#[stable(feature = <span class="hljs-meta-string">&quot;rust1&quot;</span>, since = <span class="hljs-meta-string">&quot;1.0.0&quot;</span>)]</span> E),
 }
-</t,></code></pre>
+</code></pre>
 <h2 id="operator-">Operator ?</h2>
 <p>The ? operator can only be ued in functions that return a <code>Result</code>as it is syntactic sugar for returning either Err or Ok.</p>
 <ul>
@@ -722,65 +718,66 @@ struct MyValues<t, u> {
 <li>?: can be used only on Result.</li>
 </ul>
 <p>let test it, udpate the code:</p>
-<pre><code class="lang-rust">use anchor_lang::prelude::*;
-use borsh::{BorshDeserialize, BorshSerialize};
+<pre><code class="lang-rust"><span class="hljs-keyword">use</span> anchor_lang::prelude::*;
+<span class="hljs-keyword">use</span> borsh::{BorshDeserialize, BorshSerialize};
 
-declare_id!(&quot;DjFyT85igx13HFU7uLuqozGaPw6HiQX31PCNLThCCspf&quot;);
+declare_id!(<span class="hljs-string">&quot;DjFyT85igx13HFU7uLuqozGaPw6HiQX31PCNLThCCspf&quot;</span>);
 
-#[program]
-pub mod day_7_1 {
-    use super::*;
+<span class="hljs-meta">#[program]</span>
+<span class="hljs-keyword">pub</span> <span class="hljs-keyword">mod</span> day_7_1 {
+    <span class="hljs-keyword">use</span> super::*;
 
-    pub fn encode_and_decode(ctx: Context<initialize>) -&gt; Result<()> {
-        let init_person: Person = Person {
-            name: &quot;Alice&quot;.to_string(),
-            age: 30,
+    <span class="hljs-keyword">pub</span> <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">encode_and_decode</span></span>(ctx: Context&lt;Initialize&gt;) -&gt; <span class="hljs-built_in">Result</span>&lt;()&gt; {
+        <span class="hljs-keyword">let</span> init_person: Person = Person {
+            name: <span class="hljs-string">&quot;Alice&quot;</span>.to_string(),
+            age: <span class="hljs-number">30</span>,
         };
 
-        let encoded_data: Vec<u8> = init_person.try_to_vec().unwrap();
-        msg!(&quot;Encoded data: {:?}&quot;, encoded_data);
+        <span class="hljs-keyword">let</span> encoded_data: <span class="hljs-built_in">Vec</span>&lt;<span class="hljs-built_in">u8</span>&gt; = init_person.try_to_vec().unwrap();
+        msg!(<span class="hljs-string">&quot;Encoded data: {:?}&quot;</span>, encoded_data);
 
-        let data: Person = decode(ctx, encoded_data)?;
-        msg!(&quot;Decoded data: {:?}&quot;, data);
-        Ok(())
+        <span class="hljs-keyword">let</span> data: Person = decode(ctx, encoded_data)?;
+        msg!(<span class="hljs-string">&quot;Decoded data: {:?}&quot;</span>, data);
+        <span class="hljs-literal">Ok</span>(())
     }
 
-    // pub fn decode(ctx: Context<initialize>, encoded_data: Vec<u8>) -&gt; Result<person> { &lt;<--- this won't compile, why?? pub fn decode(ctx: context<initialize>, encoded_data: Vec<u8>) -&gt; Result<(person)> {
-        let decoded_data: Person = Person::try_from_slice(&amp;encoded_data).unwrap();
-        Ok(decoded_data)
-        // Ok(())
+    <span class="hljs-comment">// pub fn decode(ctx: Context&lt;Initialize&gt;, encoded_data: Vec&lt;u8&gt;) -&gt; Result&lt;Person&gt; { &lt;&lt;--- this won&apos;t compile, why??</span>
+    <span class="hljs-keyword">pub</span> <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">decode</span></span>(ctx: Context&lt;Initialize&gt;, encoded_data: <span class="hljs-built_in">Vec</span>&lt;<span class="hljs-built_in">u8</span>&gt;) -&gt; <span class="hljs-built_in">Result</span>&lt;(Person)&gt; {
+        <span class="hljs-keyword">let</span> decoded_data: Person = Person::try_from_slice(&amp;encoded_data).unwrap();
+        <span class="hljs-literal">Ok</span>(decoded_data)
+        <span class="hljs-comment">// Ok(())</span>
     }
 }
 
-#[derive(Accounts)]
-pub struct Initialize {}
+<span class="hljs-meta">#[derive(Accounts)]</span>
+<span class="hljs-keyword">pub</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Initialize</span></span> {}
 
-#[derive(BorshSerialize, BorshDeserialize, Debug)]
-pub struct Person {
-    name: String,
-    age: u32,
+<span class="hljs-meta">#[derive(BorshSerialize, BorshDeserialize, Debug)]</span>
+<span class="hljs-keyword">pub</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Person</span></span> {
+    name: <span class="hljs-built_in">String</span>,
+    age: <span class="hljs-built_in">u32</span>,
 }
-</(person)></u8></---></person></u8></initialize></u8></()></initialize></code></pre>
+</code></pre>
 <p>update test file:</p>
-<pre><code class="lang-ts">import * as anchor from &quot;@coral-xyz/anchor&quot;;
-import { Program } from &quot;@coral-xyz/anchor&quot;;
-import { Day71 } from &apos;../target/types/day_7_1&apos;;
+<pre><code class="lang-ts"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> anchor <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@coral-xyz/anchor&quot;</span>;
+<span class="hljs-keyword">import</span> { Program } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@coral-xyz/anchor&quot;</span>;
+<span class="hljs-keyword">import</span> { Day71 } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;../target/types/day_7_1&apos;</span>;
 
-describe(&quot;day_7_1&quot;, () =&gt; {
+describe(<span class="hljs-string">&quot;day_7_1&quot;</span>, <span class="hljs-function">() =&gt;</span> {
   anchor.setProvider(anchor.AnchorProvider.env());
-  const program = anchor.workspace.Day7_1 as Program<day71>;
+  <span class="hljs-keyword">const</span> program = anchor.workspace.Day7_1 <span class="hljs-keyword">as</span> Program&lt;Day71&gt;;
 
-  it(&quot;should succeed test option!&quot;, async () =&gt; {
-    const tx = await program.methods.optionTest().rpc();
-    console.log(&quot;You tx signature:&quot;, tx);
+  it(<span class="hljs-string">&quot;should succeed test option!&quot;</span>, <span class="hljs-keyword">async</span> () =&gt; {
+    <span class="hljs-keyword">const</span> tx = <span class="hljs-keyword">await</span> program.methods.optionTest().rpc();
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;You tx signature:&quot;</span>, tx);
   })
 
-  it(&quot;should succeed test ? operator!&quot;, async () =&gt; {
-    const tx = await program.methods.encodeAndDecode().rpc();
-    console.log(&quot;You tx signature:&quot;, tx);
+  it(<span class="hljs-string">&quot;should succeed test ? operator!&quot;</span>, <span class="hljs-keyword">async</span> () =&gt; {
+    <span class="hljs-keyword">const</span> tx = <span class="hljs-keyword">await</span> program.methods.encodeAndDecode().rpc();
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;You tx signature:&quot;</span>, tx);
   })
 })
-</day71></code></pre>
+</code></pre>
 <p>run:</p>
 <p><img src="assets/image-20240728120442976.png" alt="image-20240728120442976"></p>
 <h2 id="key-takeaways">Key Takeaways</h2>
@@ -824,7 +821,7 @@ describe(&quot;day_7_1&quot;, () =&gt; {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"07_Rust_Interesting_Syntax","level":"2.2","depth":1,"next":{"title":"08_Function-like_procedural_macro","level":"2.3","depth":1,"path":"solana_beginner/08_Function-like_procedural_macro/README.md","ref":"solana_beginner/08_Function-like_procedural_macro/README.md","articles":[]},"previous":{"title":"06_Rust_Basic_Syntax","level":"2.1","depth":1,"path":"solana_beginner/06_Rust_Basic_Syntax/README.md","ref":"solana_beginner/06_Rust_Basic_Syntax/README.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"en","gitbook":"*"},"file":{"path":"solana_beginner/07_Rust_Interesting_Syntax/README.md","mtime":"2024-08-07T13:16:05.500Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"../..","book":{"language":"en"}});
+            gitbook.page.hasChanged({"page":{"title":"07_Rust_Interesting_Syntax","level":"2.2","depth":1,"next":{"title":"08_Function-like_procedural_macro","level":"2.3","depth":1,"path":"solana_beginner/08_Function-like_procedural_macro/README.md","ref":"solana_beginner/08_Function-like_procedural_macro/README.md","articles":[]},"previous":{"title":"06_Rust_Basic_Syntax","level":"2.1","depth":1,"path":"solana_beginner/06_Rust_Basic_Syntax/README.md","ref":"solana_beginner/06_Rust_Basic_Syntax/README.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"en","gitbook":"*"},"file":{"path":"solana_beginner/07_Rust_Interesting_Syntax/README.md","mtime":"2024-08-23T23:09:27.883Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"../..","book":{"language":"en"}});
         });
     </script>
 </div>
@@ -907,14 +904,6 @@ describe(&quot;day_7_1&quot;, () =&gt; {
     
         
         <script src="../../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3029,60 +3025,60 @@
 <li>如果对map类型使用delete，什么都不会发生；</li>
 <li>但如果对map类型中的一个键使用delete，则会删除与该键相关的值。</li>
 </ol>
-<pre><code class="lang-js">// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
 
 contract  Delete {
-    //01. string 
-    string public str1 = &quot;hello&quot;;
+    <span class="hljs-comment">//01. string </span>
+    string public str1 = <span class="hljs-string">&quot;hello&quot;</span>;
 
-    function deleteStr() public {
-        delete str1;
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">deleteStr</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> </span>{
+        <span class="hljs-keyword">delete</span> str1;
     }
 
-    function setStr(string memory input) public {
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setStr</span>(<span class="hljs-params">string memory input</span>) <span class="hljs-title">public</span> </span>{
         str1 = input;
     }
 
-    //02. array 对于固定长度的数组，会删除每个元素的值，但是数组长度不变
-    uint256[10] public arry1 = [1,2,3,4,5];
+    <span class="hljs-comment">//02. array 对于固定长度的数组，会删除每个元素的值，但是数组长度不变</span>
+    uint256[<span class="hljs-number">10</span>] public arry1 = [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>];
 
-    function deleteFiexedArry() public {
-        delete arry1;
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">deleteFiexedArry</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> </span>{
+        <span class="hljs-keyword">delete</span> arry1;
     }
 
-    //03. array new
+    <span class="hljs-comment">//03. array new</span>
     uint256[] arry2 ;
-    function setArray2() public {
-        arry2 = new uint256[](10);
-        for (uint256 i = 0; i&lt; arry2.length; i++) {
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setArray2</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> </span>{
+        arry2 = <span class="hljs-keyword">new</span> uint256[](<span class="hljs-number">10</span>);
+        <span class="hljs-keyword">for</span> (uint256 i = <span class="hljs-number">0</span>; i&lt; arry2.length; i++) {
             arry2[i] = i;
         }
     }
 
-    function getArray2() public view returns(uint256[] memory) {
-        return arry2;
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getArray2</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span>(<span class="hljs-params">uint256[] memory</span>) </span>{
+        <span class="hljs-keyword">return</span> arry2;
     }
 
-    function deleteArray2() public {
-        delete arry2;
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">deleteArray2</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> </span>{
+        <span class="hljs-keyword">delete</span> arry2;
     }
 
-    //04. mapping
-    mapping(uint256 =&gt; string) public m1;
+    <span class="hljs-comment">//04. mapping</span>
+    mapping(<span class="hljs-function"><span class="hljs-params">uint256</span> =&gt;</span> string) public m1;
 
-    function setMap() public {
-        m1[0] = &quot;hello&quot;;
-        m1[1] = &quot;world&quot;;
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setMap</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> </span>{
+        m1[<span class="hljs-number">0</span>] = <span class="hljs-string">&quot;hello&quot;</span>;
+        m1[<span class="hljs-number">1</span>] = <span class="hljs-string">&quot;world&quot;</span>;
     }
 
-    //Mapping不允许直接使用delete，但是可以对mapping的元素进行指定删除
-    // function deleteM1() public {
-    //     delete m1;
-    // }    
+    <span class="hljs-comment">//Mapping不允许直接使用delete，但是可以对mapping的元素进行指定删除</span>
+    <span class="hljs-comment">// function deleteM1() public {</span>
+    <span class="hljs-comment">//     delete m1;</span>
+    <span class="hljs-comment">// }    </span>
 
-    function deleteMapping(uint256 i) public {
-        delete m1[i];
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">deleteMapping</span>(<span class="hljs-params">uint256 i</span>) <span class="hljs-title">public</span> </span>{
+        <span class="hljs-keyword">delete</span> m1[i];
     }
 }
 </code></pre>
@@ -3113,7 +3109,7 @@ contract  Delete {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第13节:delete","level":"1.9.13","depth":2,"next":{"title":"第14节:try_catch","level":"1.9.14","depth":2,"path":"02_solidity进阶/14_try_catch.md","ref":"02_solidity进阶/14_try_catch.md","articles":[]},"previous":{"title":"第12节:new_create2","level":"1.9.12","depth":2,"path":"02_solidity进阶/12_new_create2.md","ref":"02_solidity进阶/12_new_create2.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"02_solidity进阶/13_delete.md","mtime":"2023-09-23T13:10:34.349Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第13节:delete","level":"1.9.13","depth":2,"next":{"title":"第14节:try_catch","level":"1.9.14","depth":2,"path":"02_solidity进阶/14_try_catch.md","ref":"02_solidity进阶/14_try_catch.md","articles":[]},"previous":{"title":"第12节:new_create2","level":"1.9.12","depth":2,"path":"02_solidity进阶/12_new_create2.md","ref":"02_solidity进阶/12_new_create2.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"cn","gitbook":"*"},"file":{"path":"02_solidity进阶/13_delete.md","mtime":"2023-09-23T13:10:34.349Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3196,14 +3192,6 @@ contract  Delete {
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

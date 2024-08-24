@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3036,11 +3032,11 @@
 <li>receive() external payable：msg.data为空时调用（为接收ether而生，仅solidity 0.6版本之后)</li>
 <li>fallback() external payable：msg.data非空时调用（为执行default逻辑而生，<strong>顺便支持接收ether</strong>）</li>
 </ol>
-<pre><code class="lang-js">// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: MIT</span>
+pragma solidity ^<span class="hljs-number">0.8</span><span class="hljs-number">.13</span>;
 
 contract ReceiveEther {
-    /*
+    <span class="hljs-comment">/*
     Which function is called, fallback() or receive()?
 
                 sender ether
@@ -3054,54 +3050,54 @@ contract ReceiveEther {
         yes     no
        /          \
   receive()     fallback()
-  */
+  */</span>
 
     string public message;
 
-    // Function to receive Ether. msg.data must be empty
+    <span class="hljs-comment">// Function to receive Ether. msg.data must be empty</span>
     receive() external payable {
-        message = &quot;receive called!&quot;;
+        message = <span class="hljs-string">&quot;receive called!&quot;</span>;
     }
 
-    // Fallback function is called when msg.data is not empty
+    <span class="hljs-comment">// Fallback function is called when msg.data is not empty</span>
     fallback() external payable {
-        message = &quot;fallback called!&quot;;
+        message = <span class="hljs-string">&quot;fallback called!&quot;</span>;
     }
 
-    function getBalance() public view returns (uint) {
-        return address(this).balance;
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getBalance</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint</span>) </span>{
+        <span class="hljs-keyword">return</span> address(<span class="hljs-built_in">this</span>).balance;
     }
 
-    function setMsg(string memory _msg) public {
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setMsg</span>(<span class="hljs-params">string memory _msg</span>) <span class="hljs-title">public</span> </span>{
         message = _msg;
     }
 }
 
 contract SendEther {
-    function sendViaTransfer(address payable _to) public payable {
-        // This function is no longer recommended for sending Ether. (不建议使用)
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sendViaTransfer</span>(<span class="hljs-params">address payable _to</span>) <span class="hljs-title">public</span> <span class="hljs-title">payable</span> </span>{
+        <span class="hljs-comment">// This function is no longer recommended for sending Ether. (不建议使用)</span>
         _to.transfer(msg.value);
     }
 
-    function sendViaSend(address payable _to) public payable {
-        // Send returns a boolean value indicating success or failure.
-        // This function is not recommended for sending Ether. (不建议使用)
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sendViaSend</span>(<span class="hljs-params">address payable _to</span>) <span class="hljs-title">public</span> <span class="hljs-title">payable</span> </span>{
+        <span class="hljs-comment">// Send returns a boolean value indicating success or failure.</span>
+        <span class="hljs-comment">// This function is not recommended for sending Ether. (不建议使用)</span>
         bool sent = _to.send(msg.value);
-        require(sent, &quot;Failed to send Ether&quot;);
+        <span class="hljs-built_in">require</span>(sent, <span class="hljs-string">&quot;Failed to send Ether&quot;</span>);
     }
 
-    function sendViaCallFallback(address payable _to) public payable {
-        // Call returns a boolean value indicating success or failure.
-        // This is the current recommended method to use. (推荐使用)
-        (bool sent, bytes memory data) = _to.call{value: msg.value}(abi.encodeWithSignature(&quot;noExistFuncTest()&quot;));
-        require(sent, &quot;Failed to send Ether&quot;);
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sendViaCallFallback</span>(<span class="hljs-params">address payable _to</span>) <span class="hljs-title">public</span> <span class="hljs-title">payable</span> </span>{
+        <span class="hljs-comment">// Call returns a boolean value indicating success or failure.</span>
+        <span class="hljs-comment">// This is the current recommended method to use. (推荐使用)</span>
+        (bool sent, bytes memory data) = _to.call{<span class="hljs-attr">value</span>: msg.value}(abi.encodeWithSignature(<span class="hljs-string">&quot;noExistFuncTest()&quot;</span>));
+        <span class="hljs-built_in">require</span>(sent, <span class="hljs-string">&quot;Failed to send Ether&quot;</span>);
     }
 
-    function sendViaCallReceive(address payable _to) public payable {
-        // Call returns a boolean value indicating success or failure.
-        // This is the current recommended method to use.(推荐使用)
-        (bool sent, bytes memory data) = _to.call{value: msg.value}(&quot;&quot;);
-        require(sent, &quot;Failed to send Ether&quot;);
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sendViaCallReceive</span>(<span class="hljs-params">address payable _to</span>) <span class="hljs-title">public</span> <span class="hljs-title">payable</span> </span>{
+        <span class="hljs-comment">// Call returns a boolean value indicating success or failure.</span>
+        <span class="hljs-comment">// This is the current recommended method to use.(推荐使用)</span>
+        (bool sent, bytes memory data) = _to.call{<span class="hljs-attr">value</span>: msg.value}(<span class="hljs-string">&quot;&quot;</span>);
+        <span class="hljs-built_in">require</span>(sent, <span class="hljs-string">&quot;Failed to send Ether&quot;</span>);
     }
 }
 </code></pre>
@@ -3142,7 +3138,7 @@ contract SendEther {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第8节:send_ether","level":"1.9.8","depth":2,"next":{"title":"第9节:delegatecall","level":"1.9.9","depth":2,"path":"02_solidity进阶/09_delegatecall.md","ref":"02_solidity进阶/09_delegatecall.md","articles":[]},"previous":{"title":"第7节:selector","level":"1.9.7","depth":2,"path":"02_solidity进阶/07_selector.md","ref":"02_solidity进阶/07_selector.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"02_solidity进阶/08_send_ether.md","mtime":"2023-09-23T13:10:14.457Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第8节:send_ether","level":"1.9.8","depth":2,"next":{"title":"第9节:delegatecall","level":"1.9.9","depth":2,"path":"02_solidity进阶/09_delegatecall.md","ref":"02_solidity进阶/09_delegatecall.md","articles":[]},"previous":{"title":"第7节:selector","level":"1.9.7","depth":2,"path":"02_solidity进阶/07_selector.md","ref":"02_solidity进阶/07_selector.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"cn","gitbook":"*"},"file":{"path":"02_solidity进阶/08_send_ether.md","mtime":"2023-09-23T13:10:14.457Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3225,14 +3221,6 @@ contract SendEther {
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

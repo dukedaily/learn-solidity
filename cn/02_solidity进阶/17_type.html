@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3028,9 +3024,61 @@
 <li>type(x).creattionCode: 合约部署时的bytecode；</li>
 <li>type(x).runtimeCode: 合约运行时的bytecode，一般是构造函数数据，但是当constructor中有汇编时会有不同（没有仔细了解）。</li>
 </ul>
-<pre><code class="lang-js">// SPDX-License-Identifier: GPL-3.0
+<pre><code class="lang-js"><span class="hljs-comment">// SPDX-License-Identifier: GPL-3.0</span>
 
-pragma solidity &gt;=0.7.0 </code></pre>
+pragma solidity &gt;=<span class="hljs-number">0.7</span><span class="hljs-number">.0</span> &lt;<span class="hljs-number">0.9</span><span class="hljs-number">.0</span>;
+
+<span class="hljs-comment">/**
+ * <span class="hljs-doctag">@title <span class="hljs-variable">Storage</span></span>
+ * <span class="hljs-doctag">@dev </span>Store &amp; retrieve value in a variable
+ */</span>
+contract Storage {
+    string public str;
+    <span class="hljs-function"><span class="hljs-title">constructor</span>(<span class="hljs-params">string memory _str</span>)</span> {
+        str = _str;
+    }
+
+    uint256 number;
+
+
+    <span class="hljs-comment">/**
+     * <span class="hljs-doctag">@dev </span>Store value in variable
+     * <span class="hljs-doctag">@param </span>num value to store
+     */</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">store</span>(<span class="hljs-params">uint256 num</span>) <span class="hljs-title">public</span> </span>{
+        number = num;
+    }
+
+    <span class="hljs-comment">/**
+     * <span class="hljs-doctag">@dev </span>Return value 
+     * <span class="hljs-doctag">@return </span>value of &apos;number&apos;
+     */</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">retrieve</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint256</span>)</span>{
+        <span class="hljs-keyword">return</span> number;
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getInfo</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span>(<span class="hljs-params">string memory name</span>) </span>{
+        name = type(Storage).name;
+
+        <span class="hljs-comment">// creationCode 和runtimeCode不能在这个合约自己内部使用，防止会出现循环调用问题</span>
+        <span class="hljs-comment">// creationCode = type(Storage).creationCode;</span>
+        <span class="hljs-comment">// runtimeCode = new type(Storage).runtimeCode;</span>
+
+    }
+}
+
+contract TestStorage {
+    Storage s;
+    <span class="hljs-function"><span class="hljs-title">constructor</span>(<span class="hljs-params">Storage _address</span>)</span> {
+        s = _address;
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getInfo</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span>(<span class="hljs-params">bytes memory creationCode, bytes memory runtimeCode</span>) </span>{
+        creationCode = type(Storage).creationCode;
+        runtimeCode = type(Storage).runtimeCode;
+    }
+}
+</code></pre>
 <p>更多内容：<a href="https://docs.soliditylang.org/en/v0.6.5/units-and-global-variables.html#meta-type" target="_blank">https://docs.soliditylang.org/en/v0.6.5/units-and-global-variables.html#meta-type</a></p>
 
                                 
@@ -3059,7 +3107,7 @@ pragma solidity &gt;=0.7.0 </code></pre>
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第17节:type","level":"1.9.17","depth":2,"next":{"title":"第18节:assembly","level":"1.9.18","depth":2,"path":"02_solidity进阶/18_assembly.md","ref":"02_solidity进阶/18_assembly.md","articles":[]},"previous":{"title":"第16节:节约gas","level":"1.9.16","depth":2,"path":"02_solidity进阶/16_节约gas.md","ref":"02_solidity进阶/16_节约gas.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"02_solidity进阶/17_type.md","mtime":"2023-09-23T13:11:03.661Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第17节:type","level":"1.9.17","depth":2,"next":{"title":"第18节:assembly","level":"1.9.18","depth":2,"path":"02_solidity进阶/18_assembly.md","ref":"02_solidity进阶/18_assembly.md","articles":[]},"previous":{"title":"第16节:节约gas","level":"1.9.16","depth":2,"path":"02_solidity进阶/16_节约gas.md","ref":"02_solidity进阶/16_节约gas.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"cn","gitbook":"*"},"file":{"path":"02_solidity进阶/17_type.md","mtime":"2023-09-23T13:11:03.661Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3142,14 +3190,6 @@ pragma solidity &gt;=0.7.0 </code></pre>
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         

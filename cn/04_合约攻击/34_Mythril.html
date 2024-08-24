@@ -36,10 +36,6 @@
                 
             
                 
-                <link rel="stylesheet" href="../../gitbook/honkit-plugin-mermaid/mermaid.css">
-                
-            
-                
                 <link rel="stylesheet" href="../../gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
@@ -3023,100 +3019,100 @@
 <h2 id="install（local）">Install（local）</h2>
 <pre><code class="lang-sh">pip3 install mythril
 
-# 如果报错，请依次执行
+<span class="hljs-comment"># 如果报错，请依次执行</span>
 python3.10 -m pip install --upgrade pip
 
-# 大概率是这个包缺失
+<span class="hljs-comment"># 大概率是这个包缺失</span>
 pip install maturin
 </code></pre>
 <h2 id="install（docker）">Install（docker）</h2>
 <pre><code class="lang-sh">docker pull mythril/myth
 </code></pre>
 <h3 id="help">help</h3>
-<pre><code class="lang-sh">docker run mythril/myth --help
+<pre><code class="lang-sh">docker run mythril/myth --<span class="hljs-built_in">help</span>
 
-# 以下是输出内容
+<span class="hljs-comment"># 以下是输出内容</span>
 positional arguments:
-  {safe-functions,analyze,a,disassemble,d,list-detectors,read-storage,function-to-hash,hash-to-address,version,help}
+  {safe-functions,analyze,a,disassemble,d,list-detectors,read-storage,function-to-hash,hash-to-address,version,<span class="hljs-built_in">help</span>}
                         Commands
-    safe-functions      Check functions which are completely safe using
+    safe-functions      Check <span class="hljs-built_in">functions</span> <span class="hljs-built_in">which</span> are completely safe using
                         symbolic execution
     analyze (a)         Triggers the analysis of the smart contract
     disassemble (d)     Disassembles the smart contract
     list-detectors      Lists available detection modules
     read-storage        Retrieves storage slots from a given address through
                         rpc
-    function-to-hash    Returns the hash signature of the function
-    hash-to-address     converts the hashes in the blockchain to ethereum
+    function-to-hash    Returns the <span class="hljs-built_in">hash</span> signature of the <span class="hljs-keyword">function</span>
+    hash-to-address     converts the hashes <span class="hljs-keyword">in</span> the blockchain to ethereum
                         address
     version             Outputs the version
 
 optional arguments:
-  -h, --help            show this help message and exit
-  -v LOG_LEVEL          log level (0-5)
+  -h, --<span class="hljs-built_in">help</span>            show this <span class="hljs-built_in">help</span> message and <span class="hljs-built_in">exit</span>
+  -v LOG_LEVEL          <span class="hljs-built_in">log</span> level (0-5)
 </code></pre>
 <h3 id="disassemble">disassemble</h3>
-<pre><code class="lang-sh">docker run mythril/myth disassemble -c &quot;0x6060&quot;
+<pre><code class="lang-sh">docker run mythril/myth disassemble -c <span class="hljs-string">&quot;0x6060&quot;</span>
 </code></pre>
 <p><img src="https://duke-typora.s3.ap-southeast-1.amazonaws.com/uPic/image-20221207111351251.png" alt="image-20221207111351251"></p>
 <h3 id="analyze">analyze</h3>
-<pre><code class="lang-sh"># 指定文件
-myth analyze <solidity-file>
-docker run -v $(pwd):/tmp mythril/myth analyze /tmp/<solidity-file>
+<pre><code class="lang-sh"><span class="hljs-comment"># 指定文件</span>
+myth analyze &lt;solidity-file&gt;
+docker run -v $(<span class="hljs-built_in">pwd</span>):/tmp mythril/myth analyze /tmp/&lt;solidity-file&gt;
 
-# 指定地址
-myth analyze -a <contract-address>
-docker run mythril/myth analyze -a <contract-address>
-</contract-address></contract-address></solidity-file></solidity-file></code></pre>
+<span class="hljs-comment"># 指定地址</span>
+myth analyze -a &lt;contract-address&gt;
+docker run mythril/myth analyze -a &lt;contract-address&gt;
+</code></pre>
 <h2 id="演示案例">演示案例</h2>
 <p>创建文件test.sol，内容如下：</p>
 <pre><code class="lang-js">contract Exceptions {
 
-    uint256[8] myarray;
-    uint counter = 0;
-    function assert1() public pure {
-        uint256 i = 1;
+    uint256[<span class="hljs-number">8</span>] myarray;
+    uint counter = <span class="hljs-number">0</span>;
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">assert1</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> <span class="hljs-title">pure</span> </span>{
+        uint256 i = <span class="hljs-number">1</span>;
 
-          // 会报错，因为assert一般不用来校验参数，而是校验状态变量。
-        assert(i == 0); 
+          <span class="hljs-comment">// 会报错，因为assert一般不用来校验参数，而是校验状态变量。</span>
+        assert(i == <span class="hljs-number">0</span>); 
     }
-    function counter_increase() public {
-        counter+=1;
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">counter_increase</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> </span>{
+        counter+=<span class="hljs-number">1</span>;
     }
-    function assert5(uint input_x) public view{
-        require(counter&gt;2);
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">assert5</span>(<span class="hljs-params">uint input_x</span>) <span class="hljs-title">public</span> <span class="hljs-title">view</span></span>{
+        <span class="hljs-built_in">require</span>(counter&gt;<span class="hljs-number">2</span>);
 
-          // 会报错，因为assert一般不用来校验参数，而是校验状态变量。
-        assert(input_x &gt; 10);
+          <span class="hljs-comment">// 会报错，因为assert一般不用来校验参数，而是校验状态变量。</span>
+        assert(input_x &gt; <span class="hljs-number">10</span>);
     }
-    function assert2() public pure {
-        uint256 i = 1;
-        assert(i &gt; 0);
-    }
-
-    function assert3(uint256 input) public pure {
-        assert(input != 23);
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">assert2</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> <span class="hljs-title">pure</span> </span>{
+        uint256 i = <span class="hljs-number">1</span>;
+        assert(i &gt; <span class="hljs-number">0</span>);
     }
 
-    function require_is_fine(uint256 input) public pure {
-        require(input != 23);
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">assert3</span>(<span class="hljs-params">uint256 input</span>) <span class="hljs-title">public</span> <span class="hljs-title">pure</span> </span>{
+        assert(input != <span class="hljs-number">23</span>);
     }
 
-    function this_is_fine(uint256 input) public pure {
-        if (input &gt; 0) {
-            uint256 i = 1/input;
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">require_is_fine</span>(<span class="hljs-params">uint256 input</span>) <span class="hljs-title">public</span> <span class="hljs-title">pure</span> </span>{
+        <span class="hljs-built_in">require</span>(input != <span class="hljs-number">23</span>);
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">this_is_fine</span>(<span class="hljs-params">uint256 input</span>) <span class="hljs-title">public</span> <span class="hljs-title">pure</span> </span>{
+        <span class="hljs-keyword">if</span> (input &gt; <span class="hljs-number">0</span>) {
+            uint256 i = <span class="hljs-number">1</span>/input;
         }
     }
 
-    function this_is_find_2(uint256 index) public view {
-        if (index &lt; 8) {
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">this_is_find_2</span>(<span class="hljs-params">uint256 index</span>) <span class="hljs-title">public</span> <span class="hljs-title">view</span> </span>{
+        <span class="hljs-keyword">if</span> (index &lt; <span class="hljs-number">8</span>) {
             uint256 i = myarray[index];
         }
     }
 }
 </code></pre>
 <p>执行命令：</p>
-<pre><code class="lang-sh">docker run -v $(pwd):/tmp mythril/myth analyze /tmp/test.sol
+<pre><code class="lang-sh">docker run -v $(<span class="hljs-built_in">pwd</span>):/tmp mythril/myth analyze /tmp/test.sol
 </code></pre>
 <p>Output如下，<a href="https://gist.github.com/dukedaily/ad605df57251bc0e908581112a2d2924" target="_blank">点击查看完整输出</a></p>
 <script src="https://gist.github.com/dukedaily/ad605df57251bc0e908581112a2d2924.js"></script>
@@ -3159,7 +3155,7 @@ docker run mythril/myth analyze -a <contract-address>
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"第34节:Mythril","level":"1.11.23","depth":2,"next":{"title":"第35节:Slither","level":"1.11.24","depth":2,"path":"04_合约攻击/35_Slither.md","ref":"04_合约攻击/35_Slither.md","articles":[]},"previous":{"title":"第33节:Solgraph","level":"1.11.22","depth":2,"path":"04_合约攻击/33_Solgraph.md","ref":"04_合约攻击/33_Solgraph.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console","honkit-plugin-mermaid"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"honkit-plugin-mermaid":{"theme":"default"},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"esversion":"2022","nodeversion":"18.12.0","npmversion":"8.19.2","triplebackticks":"```","console":"<a class=\"gitbook-plugin-js-console\" aria-hidden=\"true\"></a>"},"language":"cn","gitbook":"*"},"file":{"path":"04_合约攻击/34_Mythril.md","mtime":"2023-03-21T14:01:27.000Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-23T16:27:32.019Z"},"basePath":"..","book":{"language":"cn"}});
+            gitbook.page.hasChanged({"page":{"title":"第34节:Mythril","level":"1.11.23","depth":2,"next":{"title":"第35节:Slither","level":"1.11.24","depth":2,"path":"04_合约攻击/35_Slither.md","ref":"04_合约攻击/35_Slither.md","articles":[]},"previous":{"title":"第33节:Solgraph","level":"1.11.22","depth":2,"path":"04_合约攻击/33_Solgraph.md","ref":"04_合约攻击/33_Solgraph.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"cn","gitbook":"*"},"file":{"path":"04_合约攻击/34_Mythril.md","mtime":"2023-03-21T14:01:27.000Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T00:11:31.715Z"},"basePath":"..","book":{"language":"cn"}});
         });
     </script>
 </div>
@@ -3242,14 +3238,6 @@ docker run mythril/myth analyze -a <contract-address>
     
         
         <script src="../../gitbook/gitbook-plugin-js-console/console-ui.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid-load.js"></script>
-        
-    
-        
-        <script src="../../gitbook/honkit-plugin-mermaid/mermaid.min.js"></script>
         
     
         
