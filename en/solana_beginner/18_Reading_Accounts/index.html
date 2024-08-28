@@ -449,7 +449,195 @@
                             
                                 <section class="normal markdown-section">
                                 
-                                
+                                <h1 id="read-account-data">Read account data</h1>
+<p>In this tutorial, we will discuss how to read data from Solana storage account.</p>
+<p>in general there are 4 ways we can leverage:</p>
+<ol>
+<li>Using command: <code>solana account &lt;address&gt;</code>, we showed before.</li>
+<li>Reading within the contract, recall what did before in:<code>lib.rs</code></li>
+<li><strong>Using anchor library: this is applicable for anchor programs</strong>, this is the commonly used one which we will focus on.</li>
+<li>Fetching from raw data with solana web3 js library.</li>
+</ol>
+<h2 id="read-in-anchor">Read In Anchor</h2>
+<p>we can create a new program with the same code as day_17(without the Get() function releated)</p>
+<pre><code class="lang-sh">anchor new day_18
+</code></pre>
+<pre><code class="lang-rust"><span class="hljs-keyword">use</span> anchor_lang::prelude::*;
+<span class="hljs-keyword">use</span> std::mem::size_of;
+
+declare_id!(<span class="hljs-string">&quot;5cesgJ7ENbdnpqPQdnNci2dHAVYxKyP2rxSp37SxesWF&quot;</span>);
+
+<span class="hljs-meta">#[program]</span>
+<span class="hljs-keyword">pub</span> <span class="hljs-keyword">mod</span> day_18 {
+    <span class="hljs-keyword">use</span> super::*;
+
+    <span class="hljs-keyword">pub</span> <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">initialize</span></span>(ctx: Context&lt;Initialize&gt;) -&gt; <span class="hljs-built_in">Result</span>&lt;()&gt; {
+        <span class="hljs-literal">Ok</span>(())
+    }
+
+    <span class="hljs-comment">// new code</span>
+    <span class="hljs-keyword">pub</span> <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">set</span></span>(ctx: Context&lt;Set&gt;, x: <span class="hljs-built_in">u64</span>) -&gt; <span class="hljs-built_in">Result</span>&lt;()&gt; {
+        ctx.accounts.my_storage_set.x = x;
+        <span class="hljs-literal">Ok</span>(())
+    }
+}
+
+<span class="hljs-comment">// new code</span>
+<span class="hljs-meta">#[derive(Accounts)]</span>
+<span class="hljs-keyword">pub</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Set</span></span>&lt;<span class="hljs-symbol">&apos;info</span>&gt; {
+    <span class="hljs-meta">#[account(mut, seeds=[]</span>, bump)]
+    <span class="hljs-keyword">pub</span> my_storage_set: Account&lt;<span class="hljs-symbol">&apos;info</span>, MyStorage&gt;,
+}
+
+<span class="hljs-meta">#[account]</span>
+<span class="hljs-keyword">pub</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">MyStorage</span></span> {
+    x: <span class="hljs-built_in">u64</span>,
+}
+
+<span class="hljs-meta">#[derive(Accounts)]</span>
+<span class="hljs-keyword">pub</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Initialize</span></span>&lt;<span class="hljs-symbol">&apos;info</span>&gt; {
+    <span class="hljs-meta">#[account(init, payer=signer, space=size_of::&lt;MyStorage&gt;()+8,seeds=[]</span>, bump)]
+    <span class="hljs-keyword">pub</span> my_storage_account: Account&lt;<span class="hljs-symbol">&apos;info</span>, MyStorage&gt;,
+
+    <span class="hljs-meta">#[account(mut)]</span>
+    <span class="hljs-keyword">pub</span> signer: Signer&lt;<span class="hljs-symbol">&apos;info</span>&gt;,
+
+    <span class="hljs-keyword">pub</span> system_program: Program&lt;<span class="hljs-symbol">&apos;info</span>, System&gt;,
+}
+</code></pre>
+<p>add test case and run it</p>
+<pre><code class="lang-ts"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> anchor <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@coral-xyz/anchor&quot;</span>;
+<span class="hljs-keyword">import</span> { Program } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@coral-xyz/anchor&quot;</span>;
+<span class="hljs-keyword">import</span> { Day18 } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;../target/types/day_18&apos;</span>;
+
+describe(<span class="hljs-string">&quot;day_18&quot;</span>, <span class="hljs-function">() =&gt;</span> {
+  anchor.setProvider(anchor.AnchorProvider.env());
+  <span class="hljs-keyword">const</span> program = anchor.workspace.Day18 <span class="hljs-keyword">as</span> Program&lt;Day18&gt;;
+
+  it(<span class="hljs-string">&quot;should initialized!&quot;</span>, <span class="hljs-keyword">async</span> () =&gt; {
+    <span class="hljs-keyword">const</span> seeds = []
+    <span class="hljs-keyword">const</span> [myStorage, _bump] = anchor.web3.PublicKey.findProgramAddressSync(seeds, program.programId);
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;myStorage account raw: &apos;</span>, myStorage);
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;myStorage account: &apos;</span>, myStorage.toBase58());
+
+    <span class="hljs-keyword">await</span> program.methods.initialize().accounts({
+      <span class="hljs-attr">myStorageAccount</span>: myStorage
+    }).rpc();
+
+    <span class="hljs-keyword">const</span> value = <span class="hljs-keyword">new</span> anchor.BN(<span class="hljs-number">200</span>)
+    <span class="hljs-keyword">const</span> tx = <span class="hljs-keyword">await</span> program.methods.set(value).accounts({
+      <span class="hljs-attr">myStorageSet</span>: myStorage
+    }).rpc();
+
+    <span class="hljs-comment">// ADD new code here!!!!</span>
+    <span class="hljs-keyword">const</span> v = <span class="hljs-keyword">await</span> program.account.myStorage.fetch(myStorage);
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;fetch value: &apos;</span>, v.x.toNumber());
+  })
+});
+</code></pre>
+<p>the only difference here is adding these new lines:</p>
+<pre><code class="lang-ts">    <span class="hljs-comment">// ADD new code here!!!!</span>
+    <span class="hljs-keyword">const</span> v = <span class="hljs-keyword">await</span> program.account.myStorage.fetch(myStorage);
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;fetch value: &apos;</span>, v.x.toNumber());
+</code></pre>
+<p>we will fetch data from the myStorage and disaply in decimalism</p>
+<p><img src="assets/image-20240827215800203.png" alt="image-20240827215800203"></p>
+<h2 id="idl-vs-abi">IDL vs ABI</h2>
+<p>The reason Anchor can help us parse the <code>myStorage</code> struct is due to its use of IDL (Interface Definition Language), which we discussed on <a href="../03_Anchor_Program_IDL/">day 03</a>.</p>
+<p>An IDL serves a similar purpose to an ABI (Application Binary Interface) in Ethereum: it acts as a guide to interpret the bytecode of a program (or smart contract).</p>
+<p><img src="assets/image-20240827220501308.png" alt="image-20240827220501308"></p>
+<h2 id="read-outside-anchor">Read Outside Anchor</h2>
+<p>Recall what we would do when we want to make a sc call in Ethereum, we will need to get two things ready: <strong>the address</strong> and <strong>the abi</strong>, and we need create a smarc-contract instance by using <strong>ethers.js</strong> or web3.js before we make the call.</p>
+<p>Similarly here in Solana, we also need two things in place first:</p>
+<ul>
+<li>the program id</li>
+<li>the IDL</li>
+</ul>
+<p>let&apos;s create a new .ts file: <code>day_18_1.ts</code> under <strong>/tests</strong>, assuming this is our Frontend, and we want to call x in myStorage.</p>
+<pre><code class="lang-ts"><span class="hljs-keyword">import</span> { PublicKey } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;@solana/web3.js&apos;</span>;
+<span class="hljs-keyword">import</span> { Program, AnchorProvider, Idl, web3 } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;@coral-xyz/anchor&apos;</span>;
+<span class="hljs-keyword">import</span> fs <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;fs&apos;</span>;
+
+<span class="hljs-keyword">const</span> idlFile = fs.readFileSync(<span class="hljs-string">&apos;../target/idl/day_18.json&apos;</span>, <span class="hljs-string">&apos;utf8&apos;</span>);
+<span class="hljs-keyword">const</span> idl: Idl = <span class="hljs-built_in">JSON</span>.parse(idlFile);
+
+<span class="hljs-comment">// Set environment variables</span>
+process.env.ANCHOR_PROVIDER_URL = <span class="hljs-string">&apos;http://127.0.0.1:8899&apos;</span>;
+process.env.ANCHOR_WALLET = <span class="hljs-string">&apos;/Users/xxxx/.config/solana/id.json&apos;</span>;
+
+<span class="hljs-comment">// Create a provider</span>
+<span class="hljs-keyword">const</span> provider = AnchorProvider.env();
+
+<span class="hljs-comment">// Create the program interface</span>
+<span class="hljs-keyword">const</span> program = <span class="hljs-keyword">new</span> Program(idl, provider);
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getXValueFromStorageAccount</span>(<span class="hljs-params">storageAccountPublicKey: PublicKey</span>) </span>{
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-keyword">const</span> account = <span class="hljs-keyword">await</span> program.account[<span class="hljs-string">&apos;myStorage&apos;</span>].fetch(storageAccountPublicKey);
+    <span class="hljs-keyword">const</span> xValue = account.x;
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;X value:&apos;</span>, xValue.toNumber());
+    <span class="hljs-keyword">return</span> xValue;
+  } <span class="hljs-keyword">catch</span> (error) {
+    <span class="hljs-built_in">console</span>.error(<span class="hljs-string">&apos;Error fetching storage account data:&apos;</span>, error);
+    <span class="hljs-keyword">throw</span> error;
+  }
+}
+
+<span class="hljs-comment">// Derive the PDA for myStorage</span>
+<span class="hljs-keyword">const</span> seeds = [];
+<span class="hljs-keyword">const</span> [myStorage, bump] = web3.PublicKey.findProgramAddressSync(seeds, program.programId);
+
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;myStorage account raw:&apos;</span>, myStorage);
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;myStorage account:&apos;</span>, myStorage.toBase58());
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">main</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">await</span> getXValueFromStorageAccount(myStorage);
+}
+
+main().catch(<span class="hljs-built_in">console</span>.error);
+</code></pre>
+<p>here, we create a separate test file to simulate the Frontend,  initializing a program and fetch data from storage account directly.</p>
+<ul>
+<li>get myStorage address by using web3.js library.</li>
+<li>initializing program with idl and provider</li>
+</ul>
+<p>let&apos;s run the script by the following cmd, <strong>NOTE:</strong>  be sure to run the code under <code>/tests/</code> folder</p>
+<pre><code class="lang-sh">ts-node day_18_1.ts
+</code></pre>
+<p><img src="assets/image-20240828091240703.png" alt="image-20240828091240703"></p>
+<p>fantastic!</p>
+<h2 id="getaccountinfo">getAccountInfo</h2>
+<p>the last method to fetch data of an account it to call: <code>getAccountInfo</code>, it will return the full information of that account, including the data field.</p>
+<p>let&apos;s add a new function to <strong>day_18_1.ts</strong>:</p>
+<pre><code class="lang-ts"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getXValueFromAccount</span>(<span class="hljs-params">storageAccountPublicKey: PublicKey</span>) </span>{
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-keyword">const</span> info = <span class="hljs-keyword">await</span> provider.connection.getAccountInfo(storageAccountPublicKey);
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;Account info:&apos;</span>, info);
+  } <span class="hljs-keyword">catch</span> (error) {
+    <span class="hljs-built_in">console</span>.error(<span class="hljs-string">&apos;Error fetching storage account data:&apos;</span>, error);
+    <span class="hljs-keyword">throw</span> error;
+  }
+}
+</code></pre>
+<p>call in main()</p>
+<pre><code class="lang-ts"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">main</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">await</span> getXValueFromStorageAccount(myStorage);
+  <span class="hljs-keyword">await</span> getXValueFromAccount(myStorage);
+}
+</code></pre>
+<p>run above cmd again and you will get the info of this account:</p>
+<p><img src="assets/image-20240828091815189.png" alt="image-20240828091815189"></p>
+<p>this is the end, four methods to fetch data has fully covered!</p>
+<h2 id="key-takeaways">Key takeaways</h2>
+<ul>
+<li>How to initialize a solana program?  <strong>idl and program id</strong>, we didn&apos;t set the programId cos it&apos;s already provided by the idl json file.</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li>original article: <a href="https://www.rareskills.io/post/solana-read-account-data" target="_blank">https://www.rareskills.io/post/solana-read-account-data</a></li>
+<li>source code: <a href="https://github.com/dukedaily/solana-expert-code/tree/day_18" target="_blank">https://github.com/dukedaily/solana-expert-code/tree/day_18</a></li>
+</ul>
+
                                 
                                 </section>
                             
@@ -476,7 +664,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"18_Reading_Accounts","level":"4.3","depth":1,"next":{"title":"19_Mappings","level":"4.4","depth":1,"path":"solana_beginner/19_Mappings/README.md","ref":"solana_beginner/19_Mappings/README.md","articles":[]},"previous":{"title":"17_Storage","level":"4.2","depth":1,"path":"solana_beginner/17_Write_To_Storage/README.md","ref":"solana_beginner/17_Write_To_Storage/README.md","articles":[]},"dir":"neutral"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"en","gitbook":"*"},"file":{"path":"solana_beginner/18_Reading_Accounts/README.md","mtime":"2024-08-19T22:05:20.084Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-24T15:38:04.098Z"},"basePath":"../..","book":{"language":"en"}});
+            gitbook.page.hasChanged({"page":{"title":"18_Reading_Accounts","level":"4.3","depth":1,"next":{"title":"19_Mappings","level":"4.4","depth":1,"path":"solana_beginner/19_Mappings/README.md","ref":"solana_beginner/19_Mappings/README.md","articles":[]},"previous":{"title":"17_Storage","level":"4.2","depth":1,"path":"solana_beginner/17_Write_To_Storage/README.md","ref":"solana_beginner/17_Write_To_Storage/README.md","articles":[]},"dir":"ltr"},"config":{"plugins":["heading-anchors@1.0.3","ga@1.0.1","richquotes@0.0.9","github@2.0.0","language-picker","toggle-chapters","codeblock-label","-search","-lunr","page-toc-button","include-codeblock","js-console"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"github":{"url":"https://github.com/dukedaily/solidity-expert"},"codeblock-label":{},"fontsettings":{"theme":"white","family":"sans","size":2},"js-console":{},"richquotes":{"default":false},"heading-anchors":{},"highlight":{},"page-toc-button":{},"ga":{"configuration":"auto","token":"UA-51680040-3"},"include-codeblock":{"check":false,"edit":false,"lang":"","fixlang":false,"template":"default","theme":"chrome","unindent":false},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"toggle-chapters":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"en","gitbook":"*"},"file":{"path":"solana_beginner/18_Reading_Accounts/README.md","mtime":"2024-08-28T01:21:50.431Z","type":"markdown"},"gitbook":{"version":"3.7.3","time":"2024-08-28T01:22:58.246Z"},"basePath":"../..","book":{"language":"en"}});
         });
     </script>
 </div>
